@@ -21,7 +21,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.1.0 linux-x64 node-v10.12.0
+kourou/0.1.1 linux-x64 node-v10.12.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -65,5 +65,5 @@ OPTIONS
   -v, --version=version  [default: 2] Core-version of the instance to spawn
 ```
 
-_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.1.0/src/commands/instance/spawn.ts)_
+_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.1.1/src/commands/instance/spawn.ts)_
 <!-- commandsstop -->
