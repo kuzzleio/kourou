@@ -1,0 +1,72 @@
+{
+  "name": "kourou",
+  "description": "Manage and pilot your Kuzzle instances",
+  "version": "0.0.0",
+  "author": "Luca Marchesini @xbill82",
+  "bin": {
+    "kourou": "./bin/run"
+  },
+  "bugs": "https://github.com/kuzzleio/kourou/issues",
+  "dependencies": {
+    "@oclif/command": "^1.5.19",
+    "@oclif/config": "^1.13.3",
+    "@oclif/plugin-help": "^2.2.2",
+    "chalk": "^3.0.0",
+    "compare-version": "^0.1.2",
+    "execa": "^3.4.0",
+    "listr": "^0.14.3",
+    "node-emoji": "^1.10.0",
+    "tslib": "^1.10.0"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1.22.2",
+    "@oclif/test": "^1.2.5",
+    "@types/chai": "^4.2.7",
+    "@types/compare-version": "^0.1.31",
+    "@types/listr": "^0.14.2",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^10.17.9",
+    "@types/node-emoji": "^1.8.1",
+    "chai": "^4.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-oclif": "^3.1.0",
+    "eslint-config-oclif-typescript": "^0.1.0",
+    "globby": "^10.0.1",
+    "mocha": "^5.2.0",
+    "nyc": "^14.1.1",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "https://github.com/kuzzleio/kourou",
+  "keywords": [
+    "kuzzle",
+    "CLI"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "oclif": {
+    "commands": "./lib/commands",
+    "bin": "kourou",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
+  "repository": "kuzzleio/kourou",
+  "scripts": {
+    "postpack": "rm -f oclif.manifest.json",
+    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "types": "lib/index.d.ts"
+}
