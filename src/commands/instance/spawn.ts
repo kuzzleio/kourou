@@ -13,16 +13,16 @@ const MIN_MAX_MAP_COUNT = 262144
 const MIN_DOCO_VERSION = '1.12.0'
 
 export default class InstanceSpawn extends Kommand {
-  static description = 'Spawn a new Kuzzle instance';
+  static description = 'Spawn a new Kuzzle instance'
 
   static flags = {
     help: flags.help({ char: 'h' }),
     version: flags.string({
       char: 'v',
       description: 'Core-version of the instance to spawn',
-      default: '2',
-    }),
-  };
+      default: '2'
+    })
+  }
 
   /**
    * @override
@@ -59,14 +59,14 @@ export default class InstanceSpawn extends Kommand {
       '-f',
       dockerComposeFileName,
       'up',
-      '-d',
+      '-d'
     ])
 
     cli.action.start(
       ` ${emoji.get('rocket')} Kuzzle version ${flags.version} is launching`,
       undefined,
       {
-        stdout: true,
+        stdout: true
       }
     )
 
@@ -93,9 +93,7 @@ export default class InstanceSpawn extends Kommand {
         this.log(
           chalk.grey('If you want to investigate the problem, try running')
         )
-        this.log(
-          chalk.grey(`  docker-compose -f ${this.getDocoFileName()} up`)
-        )
+        this.log(chalk.grey(`  docker-compose -f ${this.getDocoFileName()} up`))
         this.log('')
         throw new Error('docker-compose exited witn non-zero status')
       }
@@ -137,7 +135,7 @@ export default class InstanceSpawn extends Kommand {
               'No docker-compose found. Are you sure docker-compose is installed?'
             )
           }
-        },
+        }
       },
       {
         title: `vm.max_map_count is greater than ${MIN_MAX_MAP_COUNT}`,
@@ -145,7 +143,7 @@ export default class InstanceSpawn extends Kommand {
           try {
             const sysctl = await execa('/sbin/sysctl', [
               '-n',
-              'vm.max_map_count',
+              'vm.max_map_count'
             ])
             if (sysctl.exitCode !== 0) {
               throw new Error('Something went wrong checking vm.max_map_count')
@@ -160,8 +158,8 @@ export default class InstanceSpawn extends Kommand {
           } catch (error) {
             throw new Error('Something went wrong checking vm.max_map_count')
           }
-        },
-      },
+        }
+      }
     ])
 
     try {
