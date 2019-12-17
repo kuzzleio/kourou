@@ -1,0 +1,5 @@
+{
+  "editor.formatOnSave": true,
+  "vetur.format.defaultFormatter.ts": "vscode-typescript",
+  "vetur.format.defaultFormatter.js": "prettier-eslint"
+}
