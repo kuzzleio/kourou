@@ -8,14 +8,15 @@ The CLI that helps you manage your Kuzzle instances.
 [![License](https://img.shields.io/npm/l/kourou.svg)](https://github.com/kuzzleio/kourou/blob/master/package.json)
 
 <!-- toc -->
-* [kourou](#kourou)
-* [Usage](#usage)
-* [Commands](#commands)
-<!-- tocstop -->
+
+- [Usage](#usage)
+- [Commands](#commands)
+  <!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g kourou
 $ kourou COMMAND
@@ -27,13 +28,15 @@ USAGE
   $ kourou COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`kourou help [COMMAND]`](#kourou-help-command)
-* [`kourou instance:spawn`](#kourou-instancespawn)
+
+- [`kourou help [COMMAND]`](#kourou-help-command)
+- [`kourou instance:spawn`](#kourou-instancespawn)
 
 ## `kourou help [COMMAND]`
 
@@ -66,4 +69,9 @@ OPTIONS
 ```
 
 _See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.1.1/src/commands/instance/spawn.ts)_
+
 <!-- commandsstop -->
+
+# Where does this weird name comes from?
+
+We liked the idea that this CLI is like a launchpad for the Kuzzle rocket. The place where you launch and pilot your Kuzzle instance. The place where the European Space Agency launches their rockets is in the country near the city of [Kourou](https://www.wikiwand.com/en/Kourou), in French Guiana, so we liked the idea that the Kuzzle rockets would take off from there.
