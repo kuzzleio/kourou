@@ -14,7 +14,7 @@ const MIN_DOCO_VERSION: string = "1.12.0";
 const EXIT_NOOK_PREREQUISITES: number = 1;
 
 export default class InstanceSpawn extends Kommand {
-  static description = "describe the command here";
+  static description = "Spawn a new Kuzzle instance";
 
   static flags = {
     help: flags.help({ char: "h" }),
@@ -27,7 +27,7 @@ export default class InstanceSpawn extends Kommand {
 
   async run() {
     this.log(``);
-    this.log(`${printCliName()} - Spawn a new Kuzzle instance`);
+    this.log(`${printCliName()} - ${InstanceSpawn.description}`);
     this.log(``);
 
     const { flags } = this.parse(InstanceSpawn);

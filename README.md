@@ -57,16 +57,14 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.2
 
 ## `kourou instance:spawn [FILE]`
 
-describe the command here
+Spawn a new Kuzzle instance
 
 ```
 USAGE
-  $ kourou instance:spawn [FILE]
+  $ kourou instance:spawn
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -v --version Core-version of the instance to spawn
 ```
 
 _See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.0.0/src/commands/instance/spawn.ts)_
