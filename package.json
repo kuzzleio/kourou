@@ -1,7 +1,7 @@
 {
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Luca Marchesini @xbill82",
   "bin": {
     "kourou": "./bin/run"

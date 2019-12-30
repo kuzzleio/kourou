@@ -8,35 +8,33 @@ The CLI that helps you manage your Kuzzle instances.
 [![License](https://img.shields.io/npm/l/kourou.svg)](https://github.com/kuzzleio/kourou/blob/master/package.json)
 
 <!-- toc -->
-
-- [Usage](#usage)
-- [Commands](#commands)
-  <!-- tocstop -->
+* [kourou](#kourou)
+* [Usage](#usage)
+* [Commands](#commands)
+* [Where does this weird name comes from?](#where-does-this-weird-name-comes-from)
+<!-- tocstop -->
 
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.1.1 linux-x64 node-v10.12.0
+kourou/0.1.2 linux-x64 node-v10.12.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-
-- [`kourou help [COMMAND]`](#kourou-help-command)
-- [`kourou instance:spawn`](#kourou-instancespawn)
+* [`kourou help [COMMAND]`](#kourou-help-command)
+* [`kourou instance:spawn`](#kourou-instancespawn)
 
 ## `kourou help [COMMAND]`
 
@@ -53,7 +51,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.2/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
 
 ## `kourou instance:spawn`
 
@@ -68,8 +66,7 @@ OPTIONS
   -v, --version=version  [default: 2] Core-version of the instance to spawn
 ```
 
-_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.1.1/src/commands/instance/spawn.ts)_
-
+_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.1.2/src/commands/instance/spawn.ts)_
 <!-- commandsstop -->
 
 # Where does this weird name comes from?
