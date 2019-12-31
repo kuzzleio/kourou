@@ -1,0 +1,38 @@
+jobs:
+  include:
+    - stage: Tests
+      name: "Kourou Lint"
+      language: node_js
+      node_js: 12
+      cache:
+        directories:
+          - ~/.npm
+          - ~/.cache
+          - node_modules # NPM packages
+
+      install:
+        - cd $TRAVIS_BUILD_DIR/backend
+        - npm install --silent --unsafe-perm
+        - npm install --silent --unsafe-perm --only=dev
+
+      script:
+        - npm run test:lint
+
+    - stage: Tests
+      name: "Kourou Functional Tests"
+      language: node_js
+      node_js: 12
+      cache:
+        directories:
+          - ~/.npm
+          - ~/.cache
+          - node_modules # NPM packages
+
+      install:
+        - cd $TRAVIS_BUILD_DIR/backend
+        - npm install --silent --unsafe-perm
+        - npm install --silent --unsafe-perm --only=dev
+
+      script:
+        - bash features/run-kuzzle-stack.sh
+        - npm run test:functional

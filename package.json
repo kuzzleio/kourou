@@ -30,6 +30,7 @@
     "@types/node": "^10.17.13",
     "@types/node-emoji": "^1.8.1",
     "chai": "^4.2.0",
+    "cucumber": "^6.0.5",
     "eslint": "^5.16.0",
     "eslint-config-oclif": "^3.1.0",
     "eslint-config-oclif-typescript": "^0.1.0",
@@ -37,7 +38,9 @@
     "mocha": "^5.2.0",
     "nyc": "^14.1.1",
     "prettier-eslint": "^9.0.1",
+    "tslint": "^5.20.1",
     "ts-node": "^8.5.4",
+    "should": "^13.2.3",
     "typescript": "^3.7.4"
   },
   "engines": {
@@ -69,7 +72,9 @@
     "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif-dev readme && git add README.md"
+    "version": "oclif-dev readme && git add README.md",
+    "test:lint": "./node_modules/.bin/tslint './src/**/*.ts'",
+    "test:functional": "./node_modules/.bin/cucumber-js"
   },
   "types": "lib/index.d.ts"
 }
