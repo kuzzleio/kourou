@@ -16,7 +16,7 @@ export default class InstanceSpawn extends Kommand {
   static description = 'Spawn a new Kuzzle instance'
 
   static flags = {
-    help: flags.help({ char: 'h' }),
+    help: flags.help(),
     version: flags.string({
       char: 'v',
       description: 'Core-version of the instance to spawn',
@@ -210,7 +210,7 @@ services:
       case '1':
         return '5.6.10'
       case '2':
-        return '7.4.0'
+        return '7'
       default:
         throw new Error(`Invalid Kuzzle Core version number: ${kuzzleVersion}`)
     }
