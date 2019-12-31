@@ -22,7 +22,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.1.2 linux-x64 node-v10.12.0
+kourou/0.1.2 linux-x64 node-v12.13.1
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -30,11 +30,101 @@ USAGE
 ```
 <!-- usagestop -->
 
+## Connect and authenticate to Kuzzle API
+
+Commands that needs to send requests to Kuzzle API can specify the Kuzzle server address and authentication informations.
+
+By command line:
+```
+  -h, --host=host                [default: localhost] Kuzzle server host
+  -p, --port=port                [default: 7512] Kuzzle server port
+  --username=username            [default: anonymous] Kuzzle user
+  --password=password            Kuzzle user password
+  --ssl                          [default: true for port 443] Use SSL to connect to Kuzzle
+```
+
+By environment variables:
+```
+  KUZZLE_HOST                [default: localhost] Kuzzle server host
+  KUZZLE_PORT                [default: 7512] Kuzzle server port
+  KUZZLE_USERNAME            [default: anonymous] Kuzzle user
+  KUZZLE_PASSWORD            Kuzzle user password
+  KUZZLE_SSL                 Use SSL to connect to Kuzzle
+```
+
 # Commands
 
 <!-- commands -->
+* [`kourou api-key:create`](#kourou-api-keycreate)
+* [`kourou api-key:delete`](#kourou-api-keydelete)
+* [`kourou api-key:search`](#kourou-api-keysearch)
 * [`kourou help [COMMAND]`](#kourou-help-command)
 * [`kourou instance:spawn`](#kourou-instancespawn)
+
+## `kourou api-key:create`
+
+Creates a new API Key for an user
+
+```
+USAGE
+  $ kourou api-key:create
+
+OPTIONS
+  -d, --description=description  (required) API Key description
+  -h, --host=host                [default: localhost] Kuzzle server host
+  -p, --port=port                [default: 7512] Kuzzle server port
+  -u, --user=user                (required) User kuid
+  --expire=expire                [default: -1] API Key validity
+  --help                         show CLI help
+  --id=id                        API Key unique ID
+  --password=password            Kuzzle user password
+  --ssl                          Use SSL to connect to Kuzzle
+  --username=username            [default: anonymous] Kuzzle user
+```
+
+_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.1.2/src/commands/api-key/create.ts)_
+
+## `kourou api-key:delete`
+
+Deletes a new API Key for an user
+
+```
+USAGE
+  $ kourou api-key:delete
+
+OPTIONS
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  -u, --user=user      (required) User kuid
+  --help               show CLI help
+  --id=id              API Key unique ID
+  --password=password  Kuzzle user password
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle user
+```
+
+_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.1.2/src/commands/api-key/delete.ts)_
+
+## `kourou api-key:search`
+
+List an user API Keys
+
+```
+USAGE
+  $ kourou api-key:search
+
+OPTIONS
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  -u, --user=user      (required) User kuid
+  --filter=filter      Filter to match the API Key descriptions
+  --help               show CLI help
+  --password=password  Kuzzle user password
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle user
+```
+
+_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.1.2/src/commands/api-key/search.ts)_
 
 ## `kourou help [COMMAND]`
 
@@ -62,8 +152,8 @@ USAGE
   $ kourou instance:spawn
 
 OPTIONS
-  -h, --help             show CLI help
   -v, --version=version  [default: 2] Core-version of the instance to spawn
+  --help                 show CLI help
 ```
 
 _See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.1.2/src/commands/instance/spawn.ts)_
