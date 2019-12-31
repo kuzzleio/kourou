@@ -2,7 +2,7 @@
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
   "version": "0.1.2",
-  "author": "Luca Marchesini @xbill82",
+  "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kourou": "./bin/run"
   },
@@ -57,7 +57,7 @@
     "kuzzle",
     "CLI"
   ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
