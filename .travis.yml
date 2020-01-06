@@ -61,6 +61,7 @@ jobs:
       install:
         - npm install
       deploy:
+        edge: true
         provider: npm
         skip_cleanup: true
         email: support@kuzzle.io
