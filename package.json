@@ -38,7 +38,6 @@
     "mocha": "^5.2.0",
     "nyc": "^14.1.1",
     "prettier-eslint": "^9.0.1",
-    "tslint": "^5.20.1",
     "ts-node": "^8.5.4",
     "should": "^13.2.3",
     "typescript": "^3.7.4"
@@ -69,12 +68,11 @@
   "repository": "kuzzleio/kourou",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
-    "posttest": "eslint . --ext .ts --config .eslintrc",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "test": "npm run test:lint && npm run test:functional",
     "version": "oclif-dev readme && git add README.md",
-    "test:lint": "./node_modules/.bin/tslint './src/**/*.ts' --fix",
-    "test:functional": "./node_modules/.bin/cucumber-js"
+    "test:lint": "eslint . --fix --ext .ts --config .eslintrc",
+    "test:functional": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\" && ./node_modules/.bin/cucumber-js"
   },
   "types": "lib/index.d.ts"
 }
