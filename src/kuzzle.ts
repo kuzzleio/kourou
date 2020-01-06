@@ -1,5 +1,5 @@
 import { flags } from "@oclif/command";
-import { Http, Kuzzle } from "kuzzle-sdk";
+const { Http, Kuzzle } = require("kuzzle-sdk");
 
 export const kuzzleFlags = {
   host: flags.string({
@@ -26,7 +26,7 @@ export const kuzzleFlags = {
   }),
 };
 export class KuzzleSDK {
-  public sdk: Kuzzle;
+  public sdk: any;
   private host: string;
   private port: number;
   private ssl: boolean;
