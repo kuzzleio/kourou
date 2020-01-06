@@ -66,7 +66,7 @@ jobs:
         skip_cleanup: true
         email: support@kuzzle.io
         api_key:
-          secure: "JBREVHZdyifFh+tc1R5olUClFedAW4FtYZqSC3Kc3tMcIsCcfJx07PmCOBtc71LjKLUR2jL4Fy4T98t877pNjAOCmmhUzUnr85XRglDcbJKdm5bmM6AyolqfOZeHt1MMnqwZsQHzeIuHTWy+BvIlZbsENqkDnAUwJ1FB+gvCdGUbsVCzvS18NAfB4S8r/1aYJNB2bzugHwIOdc+tO175pAvrKrrhqk3Hdklq4Vho4J2x1UdDm9Eoct0qzSUP3r8xHz1SQmy+pbYtxi0LlKzO6kTKYuuIA7JeUXbxPsEd93QOeP39qdxboagxeW8+1NgBHDJ0Adq+1lJcvel21bCDL0el2emZfLWWDUymVEhREVtNvABPo42r5Od4BwK10roFmXdGxvdQ0R3erYQi/O5/tkyE2S+tp6qy2eDdg4wbjpS+aSK6ppLazcOhPDFNcZ1KOk0p5OB9/eFTR02zXFcOEo2+YdPc/sg8xw6LBa0gMj0YA9MrnHWDZkhov8jZrDRwupN/mnEq9f1hGdjrBFkv275aVH5NwzJ1M/1B3voAtjfEu2+9VNAgmkcb2ECTQFXsVusvRMWLbLkvfzFbdgRBsnM+/BcQss8RDgzR9NmQhlyRoCTUf5enzd3wgukJoNSiKeccaXckd+tG3zYTIHafNFhQoxTlne/kz1bC2FYrX7c="
+          secure: "J1JpQS8HNaA3HSnSD5HQWiWTGaAk5PapaZNCBMSDhoRo+bgROS64B/eVFLY+qIlilSleRbJ8My2Wh1Iv6vqg4/M0NGTzfkRPbqFW5LD/gXj9Am+r7K5M3S0q48aplPSYS+cBVhxlQAL/pLBUryxwGIvcGYI0GMY6S91nNKVdh/meGOJOpQgr+6TVBua8gvAHONckEu/d8iPv3YDsR3McIDAvLVgHxmRNC4iF5UcUnqsTEWiF23DJEAH7g5cjEcLBLJ+76WLIF2whmjFuc+JIvFBNws2IGPLA5ycjIbJYzDdA6v9Db8FdmfSgQLU660tmd/hVLaUI7P+Db2wthVm3Tk0BWjlnVQnzYPEC4klu+RhhGuK3icrTJ6ljWnbkMXGhP0L21NMiFpY9QfjW03T//d4h+kqLtrFo97xfZ1iPPzy7Lpzycb3dwDIPya/Bqi8xLuMS7jyJuAxaissFRNE3sTmXKS+IkjHgkSlh8t1Cc1DacDO7flGH6o/7TPtiKaTu8E92uzHuOvx4lqwxrkWpy3PBH6j1TsgFLk8oJbUcStuG3Bt4JU/j/y/8vIgjxlcueqyVRv7wwpxUlIRz66Qxz6Ygoo4/OSue+UGNFVEvBYZW9+F2nr/62v2BLbVWCfXjnGyDTZsmTtleBOjFk2JIAKupgIsz8LnBdXvVOot2USI="
         on:
           repo: kuzzleio/kourou
           all_branches: true
