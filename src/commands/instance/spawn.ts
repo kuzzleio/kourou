@@ -6,7 +6,9 @@ import compareVersion from "compare-version";
 import execa from "execa";
 import { writeFileSync } from "fs";
 import Listr from "listr";
+import net from "net";
 import emoji from "node-emoji";
+import { version } from "punycode";
 import { Kommand, printCliName } from "../../common";
 
 const MIN_MAX_MAP_COUNT = 262144;
@@ -17,6 +19,10 @@ export default class InstanceSpawn extends Kommand {
 
   public static flags = {
     help: flags.help(),
+    check: flags.boolean({
+      description: "Check prerequisite before running Kuzzle",
+      default: false,
+    }),
     version: flags.string({
       char: "v",
       description: "Core-version of the instance to spawn",
@@ -28,39 +34,32 @@ export default class InstanceSpawn extends Kommand {
    * @override
    */
   public async run() {
-    this.log("");
-    this.log(`${printCliName()} - ${InstanceSpawn.description}`);
-    this.log("");
+    this.log(`\n${printCliName()} - ${InstanceSpawn.description}\n`);
 
     const { flags: userFlags } = this.parse(InstanceSpawn);
-    const dockerComposeFileName: string = this.getDocoFileName();
+    const portIndex = await this.findAvailablePort();
+    const dockerComposeFileName = `/tmp/kuzzle-stack-${portIndex}.yml`;
 
-    if ((await this.checkPrerequisites()) === true) {
-      this.log("");
+    const successfullCheck = userFlags.check
+      ? await this.checkPrerequisites()
+      : true;
+
+    if (userFlags.check && successfullCheck) {
       this.log(
-        `${emoji.get("ok_hand")} Prerequisites are ${chalk.green.bold("OK")}!`,
-      );
-    } else {
-      this.log("");
+        `\n${emoji.get("ok_hand")} Prerequisites are ${chalk.green.bold("OK")}!`);
+    } else if (userFlags.check && !successfullCheck) {
       throw new Error(
-        `${emoji.get(
-          "shrug",
-        )} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle.`,
-      );
+        `${emoji.get("shrug")} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle.`);
     }
 
-    this.log("");
     this.log(
-      chalk.grey(`Writing docker-compose file to ${dockerComposeFileName}...`),
+      chalk.grey(`\nWriting docker-compose file to ${dockerComposeFileName}...`),
     );
-    writeFileSync(dockerComposeFileName, this.generateDocoFile(userFlags.version));
+    writeFileSync(dockerComposeFileName, this.generateDocoFile(userFlags.version, portIndex));
 
-    const doco: ChildProcess = spawn("docker-compose", [
-      "-f",
-      dockerComposeFileName,
-      "up",
-      "-d",
-    ]);
+    const doco: ChildProcess = spawn(
+      "docker-compose",
+      ["-f", dockerComposeFileName, "-p", `stack-${portIndex}`, "up", "-d"]);
 
     cli.action.start(
       ` ${emoji.get("rocket")} Kuzzle version ${userFlags.version} is launching`,
@@ -73,17 +72,18 @@ export default class InstanceSpawn extends Kommand {
     doco.on("close", (docoCode) => {
       if (docoCode === 0) {
         cli.action.stop("done");
-        this.log("");
         this.log(
-          `${emoji.get("thumbsup")} ${chalk.bold(
+          `\n${emoji.get("thumbsup")} ${chalk.bold(
             "Kuzzle is booting",
-          )} in the background right now.`,
-        );
+          )} in the background right now.`);
         this.log(chalk.grey("To watch the logs, run"));
         this.log(
-          chalk.grey(`  docker-compose -f ${this.getDocoFileName()} logs -f`),
+          chalk.grey(`  docker-compose -f ${dockerComposeFileName} -p stack-${portIndex} logs -f\n`),
         );
-        this.log("");
+        this.log(`  Kuzzle port: ${7512 + portIndex}`);
+        this.log(`  MQTT port: ${1883 + portIndex}`);
+        this.log(`  Node.js debugger port: ${9229 + portIndex}`);
+        this.log(`  Elasticsearch port: ${9200 + portIndex}`);
       } else {
         cli.action.stop(
           chalk.red(
@@ -93,8 +93,7 @@ export default class InstanceSpawn extends Kommand {
         this.log(
           chalk.grey("If you want to investigate the problem, try running"),
         );
-        this.log(chalk.grey(`  docker-compose -f ${this.getDocoFileName()} up`));
-        this.log("");
+        this.log(chalk.grey(`  docker-compose -f ${dockerComposeFileName} -p stack-${portIndex} up\n`));
         throw new Error("docker-compose exited witn non-zero status");
       }
     });
@@ -114,17 +113,17 @@ export default class InstanceSpawn extends Kommand {
                 "Unable to read docker-compose verson. This is weird.",
               );
             }
-            const version = matches.length > 0 ? matches[1] : null;
+            const docoVersion = matches.length > 0 ? matches[1] : null;
 
-            if (version === null) {
+            if (docoVersion === null) {
               throw new Error(
-                "Unable to read docker-compose verson. This is weird.",
+                "Unable to read docker-compose version. This is weird.",
               );
             }
             try {
-              if (compareVersion(version, MIN_DOCO_VERSION) === -1) {
+              if (compareVersion(docoVersion, MIN_DOCO_VERSION) === -1) {
                 throw new Error(
-                  `The detected version of docker-compose (${version}) is not recent enough (${MIN_DOCO_VERSION})`,
+                  `The detected version of docker-compose (${docoVersion}) is not recent enough (${MIN_DOCO_VERSION})`,
                 );
               }
             } catch (error) {
@@ -171,48 +170,113 @@ export default class InstanceSpawn extends Kommand {
     }
   }
 
-  public getDocoFileName(): string {
-    return "/tmp/kuzzle-stack.yml";
+  private generateDocoFile(kuzzleMajor: string, portIndex: number): string {
+    if (kuzzleMajor === "1") {
+      return kuzzleStackV1(portIndex);
+
+    }
+
+    return kuzzleStackV2(portIndex);
   }
 
-  public generateDocoFile(version = "2"): string {
-    return `version: '3'
+  private isPortAvailable(port: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const tester = net.createServer()
+        .once("error", (error) => {
+          if (!error.message.match(/EADDRINUSE/)) {
+            reject(error);
+          }
+          resolve(false);
+        })
+        .once("listening", () => {
+          tester
+            .once("close", () => resolve(true))
+            .close();
+        })
+        .listen(port);
+    });
+  }
+
+  private async findAvailablePort(): Promise<number> {
+    let i = 0;
+
+    while (true) {
+      if (await this.isPortAvailable(7512 + i)) {
+        return i;
+      }
+      i++;
+    }
+  }
+}
+
+const kuzzleStackV1 = (increment: number): string => `
+version: '3'
 
 services:
   kuzzle:
-    image: kuzzleio/kuzzle:${version}
+    image: kuzzleio/kuzzle:1
     ports:
-      - "7512:7512"
-      - "1883:1883"
+      - "${7512 + increment}:7512"
+      - "${1883 + increment}:1883"
+      - "${9229 + increment}:9229"
     cap_add:
       - SYS_PTRACE
     depends_on:
       - redis
       - elasticsearch
     environment:
-      - kuzzle_services__storageEngine__client__node=http://elasticsearch:9200
+      - kuzzle_services__db__client__host=http://elasticsearch:9200
       - kuzzle_services__internalCache__node__host=redis
       - kuzzle_services__memoryStorage__node__host=redis
-      - kuzzle_server__protocols__mqtt__enabled=true
-      - NODE_ENV=production
+      - NODE_ENV=development
+      - DEBUG=kuzzle:*,-kuzzle:entry-point:protocols:websocket
 
   redis:
     image: redis:5
 
   elasticsearch:
-    image: kuzzleio/elasticsearch:${this.getESVersion(version)}
+    image: kuzzleio/elasticsearch:5.6.10
+    ports:
+      - "${9200 + increment}:9200"
     ulimits:
-      nofile: 65536`;
-  }
+      nofile: 65536
+    environment:
+      - cluster.name=kuzzle
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+`;
 
-  public getESVersion(kuzzleVersion: string): string {
-    switch (kuzzleVersion) {
-      case "1":
-        return "5.6.10";
-      case "2":
-        return "7";
-      default:
-        throw new Error(`Invalid Kuzzle Core version number: ${kuzzleVersion}`);
-    }
-  }
-}
+const kuzzleStackV2 = (increment: number): string => `
+version: '3'
+
+services:
+  kuzzle:
+    image: kuzzleio/kuzzle:2
+    ports:
+      - "${7512 + increment}:7512"
+      - "${1883 + increment}:1883"
+      - "${9229 + increment}:9229"
+    cap_add:
+      - SYS_PTRACE
+    depends_on:
+      - redis
+      - elasticsearch
+    environment:
+    - kuzzle_services__storageEngine__client__node=http://elasticsearch:9200
+    - kuzzle_services__internalCache__node__host=redis
+    - kuzzle_services__memoryStorage__node__host=redis
+    - kuzzle_server__protocols__mqtt__enabled=true
+    - kuzzle_server__protocols__mqtt__developmentMode=false
+    - kuzzle_limits__loginsPerSecond=50
+    - NODE_ENV=development
+    - DEBUG=kuzzle:*,-kuzzle:entry-point:protocols:websocket
+
+  redis:
+    image: redis:5
+
+  elasticsearch:
+    image: kuzzleio/elasticsearch:7
+    ports:
+      - "${9200 + increment}:9200"
+    ulimits:
+      nofile: 65536
+`;

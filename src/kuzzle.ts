@@ -1,4 +1,5 @@
 import { flags } from "@oclif/command";
+// tslint:disable-next-line
 const { Http, Kuzzle } = require("kuzzle-sdk");
 
 export const kuzzleFlags = {

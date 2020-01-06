@@ -153,6 +153,7 @@ USAGE
 
 OPTIONS
   -v, --version=version  [default: 2] Core-version of the instance to spawn
+  --check                Check prerequisite before running Kuzzle
   --help                 show CLI help
 ```
 
