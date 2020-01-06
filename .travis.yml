@@ -1,56 +1,56 @@
 jobs:
   include:
-    - stage: Tests
-      name: "Kourou Lint"
-      language: node_js
-      node_js: 12
-      cache:
-        directories:
-          - ~/.npm
-          - ~/.cache
-          - node_modules # NPM packages
+    # - stage: Tests
+    #   name: "Kourou Lint"
+    #   language: node_js
+    #   node_js: 12
+    #   cache:
+    #     directories:
+    #       - ~/.npm
+    #       - ~/.cache
+    #       - node_modules # NPM packages
 
-      install:
-        - npm install --silent --unsafe-perm
-        - npm install --silent --unsafe-perm --only=dev
+    #   install:
+    #     - npm install --silent --unsafe-perm
+    #     - npm install --silent --unsafe-perm --only=dev
 
-      script:
-        - npm run test:lint
+    #   script:
+    #     - npm run test:lint
 
-    - stage: Tests
-      name: "Kourou Functional Stdout Tests"
-      language: node_js
-      node_js: 12
-      cache:
-        directories:
-          - ~/.npm
-          - ~/.cache
-          - node_modules # NPM packages
+    # - stage: Tests
+    #   name: "Kourou Functional Stdout Tests"
+    #   language: node_js
+    #   node_js: 12
+    #   cache:
+    #     directories:
+    #       - ~/.npm
+    #       - ~/.cache
+    #       - node_modules # NPM packages
 
-      install:
-        - npm install --silent --unsafe-perm
-        - npm install --silent --unsafe-perm --only=dev
+    #   install:
+    #     - npm install --silent --unsafe-perm
+    #     - npm install --silent --unsafe-perm --only=dev
 
-      script:
-        - npm run test:functional:stdout
+    #   script:
+    #     - npm run test:functional:stdout
 
-    - stage: Tests
-      name: "Kourou Functional Cucumber Tests"
-      language: node_js
-      node_js: 12
-      cache:
-        directories:
-          - ~/.npm
-          - ~/.cache
-          - node_modules # NPM packages
+    # - stage: Tests
+    #   name: "Kourou Functional Cucumber Tests"
+    #   language: node_js
+    #   node_js: 12
+    #   cache:
+    #     directories:
+    #       - ~/.npm
+    #       - ~/.cache
+    #       - node_modules # NPM packages
 
-      install:
-        - npm install --silent --unsafe-perm
-        - npm install --silent --unsafe-perm --only=dev
+    #   install:
+    #     - npm install --silent --unsafe-perm
+    #     - npm install --silent --unsafe-perm --only=dev
 
-      script:
-        - bash features/run-kuzzle-stack.sh
-        - npm run test:functional:cucumber
+    #   script:
+    #     - bash features/run-kuzzle-stack.sh
+    #     - npm run test:functional:cucumber
 
     - stage: Deploy
       name: Deploy Kourou on NPM
@@ -65,7 +65,7 @@ jobs:
         skip_cleanup: true
         email: support@kuzzle.io
         api_key:
-          secure: "SF/UsGFDNM+YO3OaMCan/i1hB1mS5z9uVEiBdGhREG+XCmjjkh8vplqInRASZpVRYcyczuHZIZ1yW1TsK5ZF/wyFu4SKMfw2kyLFtAOCOrBONXQICd0H/B5Aj17fbN8slSJPX6upauBGykWJ89StFbYqrEBUVoDfRUGu3A6gxMbzhGQBCnbTRg73VFTZRZRsR5uiHg6O4nZFfQgbUMuO9NvA3lDO5i6HIgaW5vbEPhMtcN5MYus3078HN71xftLkQUF4B23zO8GuC9ktNCUfF+OIqhm9m77DT61oQQ0vWlRxipwtFTnCHGZxTVnmgXLUv18lprreuY2e6HQTavrbeJbAZTuaQ1Hbgkc8u/gyzZoaTlN498QLEE4w72MXcAIUFVLBsxyXbbuuEwxZ5FhIX6pMyl0uh7Hs3owiRvZ5kJU8R6k62+9d1auobJ0zk46ZUlkMy7jbDjGQCQ9ooqONoaKoLT0rS8khngAgoTmVi07IjVPVhkczTYaS/eH37RlnMwBRdTiwl3KXkDzJCA5zDqaO6F78YH0e89GBKMZ8IqiZmVVwnqMyW5icTNZmiGTUw5T7lNzVhVY64H2TrlFJs8nyMaHKHXtK/G7zk5pI346r70etl66wQWG01Diuci9ima1fensJERIaZbsU0TZ5SCnbLpmb46Qq2ekwlVbyCAQ="
+          secure: W5ZnIHFdqai+xS07E1FwHglQU5zg3eJrYIrhtEQXuWT4iIh4IoiG/MGIAFt0hNwLPQigPGnaiy7W/i5/c5QsJAhIZTLE3CHFVH1OeePqYzF9G4PnpeydY/YiVAKjH5JpHqpnFI/q9Lz6ahvxtFfYxTaOoEXPyVRUaP8yWSmjVYnfDIqVbXxiZAhRO/y6DLmS+1dgjnAuiX1izI4D2A/HM1F6MdYTZhWlmYq9es3X5lPMq/AipEqVThmNes2d13Hv5OaVXXbMjDgPlbfwLhZiwCECd7UxvD1gPx2mSkaduDChb+QNdQP2LpYgjQsClPNROjwXUHgVgzarQdiYFMnwlExchQAgFnIMH9kuHIfww313BVCd4lc4lZEaB6Ijcn7KQnTsCIQBRm6PvouvUbQCTesZQ4uFNchLCwLuHs+FGTe1SMTfrC1Zm/0njs755NmWriiV3GIoVCQb90vqE/52WVvs12A5jbvQvnxrJ/auNKxyxpe4idp0hnDYe504IdCVT3s91/cw2tTRkAnFOMAQvIkZJ47Um/rH2o9LKgfOn0bxNudxVvKzhI5dHbRWgbXgpVVb2z3cxLRlPSSI9vjR69VW4OK2yz0Tjjmga12c86rTK/79aYvHC7xugr5Qs1c1iFl9UE2tEgwSPxGhLQ1HUCbpoN30CX5h3NhCwvbNujE=
         on:
           repo: kuzzleio/kourou
           all_branches: true
