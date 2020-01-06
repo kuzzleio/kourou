@@ -72,7 +72,9 @@
     "test": "npm run test:lint && npm run test:functional",
     "version": "oclif-dev readme && git add README.md",
     "test:lint": "eslint . --fix --ext .ts --config .eslintrc",
-    "test:functional": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\" && ./node_modules/.bin/cucumber-js"
+    "test:functional": "npm run test:functional:stdout && npm run test:functional:cucumber",
+    "test:functional:stdout": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "test:functional:cucumber": "./node_modules/.bin/cucumber-js"
   },
   "types": "lib/index.d.ts"
 }
