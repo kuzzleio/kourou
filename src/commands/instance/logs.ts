@@ -64,7 +64,7 @@ export class InstanceLogs extends Command {
     const containersList: string[] = containersListProcess.stdout.replace(/"/g, '').split('\n')
 
     return containersList.filter(containerName => {
-      if (containerName.includes('kuzzle')
+      if ( containerName.includes('kuzzle')
         && !containerName.includes('redis')
         && !containerName.includes('elasticsearch')
       ) {
@@ -75,5 +75,4 @@ export class InstanceLogs extends Command {
   }
 
 }
-
 
