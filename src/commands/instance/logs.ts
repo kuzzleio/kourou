@@ -31,9 +31,11 @@ export class InstanceLogs extends Command {
       }])
       instance = responses.instance!
     }
+
     try {
       await this.showInstanceLogs(instance, followOption)
-    } catch {
+    }
+    catch {
       this.warn('Something went wrong while showing your kuzzle instance logs')
     }
 
@@ -56,7 +58,8 @@ export class InstanceLogs extends Command {
 
     try {
       containersListProcess = await execa('docker', ['ps', '--format', '"{{.Names}}"'])
-    } catch {
+    }
+    catch {
       this.warn('Something went wrong while getting kuzzle running instances list')
       return
     }
