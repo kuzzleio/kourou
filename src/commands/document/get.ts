@@ -1,0 +1,35 @@
+import { flags } from '@oclif/command'
+import { Kommand, printCliName } from '../../common'
+import { kuzzleFlags, KuzzleSDK } from '../../kuzzle'
+
+export default class DocumentGet extends Kommand {
+  static description = 'Get a document'
+
+  static flags = {
+    help: flags.help(),
+    ...kuzzleFlags
+  }
+
+  static args = [
+    { name: 'index', description: 'Index name', required: true },
+    { name: 'collection', description: 'Collection name', required: true },
+    { name: 'id', description: 'Document ID', required: true }]
+
+  async run() {
+    this.log('')
+    this.log(`${printCliName()} - ${DocumentGet.description}`)
+    this.log('')
+
+    const { args, flags: userFlags } = this.parse(DocumentGet)
+
+    const sdk = new KuzzleSDK(userFlags)
+    await sdk.init()
+
+    const document = await sdk.document.get(
+      args.index,
+      args.collection,
+      args.id)
+
+    console.log(JSON.stringify(document, null, 2))
+  }
+}
