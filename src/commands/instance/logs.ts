@@ -3,7 +3,6 @@ import * as inquirer from 'inquirer'
 import execa from 'execa'
 
 export class InstanceLogs extends Command {
-
   static flags = {
     instance: flags.string({
       char: 'i',
@@ -17,13 +16,13 @@ export class InstanceLogs extends Command {
 
   async run() {
     const { flags } = this.parse(InstanceLogs)
-    let instance: string = flags.instance!;
-    let followOption: boolean = flags.follow
+    let instance: string = flags.instance!
+    const followOption: boolean = flags.follow
 
     if (!instance) {
       const instancesList = await this.getInstancesList()
 
-      let responses: any = await inquirer.prompt([{
+      const responses: any = await inquirer.prompt([{
         name: 'instance',
         message: 'On which kuzzle instance do you want to see the logs',
         type: 'list',
@@ -34,11 +33,9 @@ export class InstanceLogs extends Command {
 
     try {
       await this.showInstanceLogs(instance, followOption)
-    }
-    catch {
+    } catch {
       this.warn('Something went wrong while showing your kuzzle instance logs')
     }
-
   }
 
   private async showInstanceLogs(instanceName: string, followOption: boolean) {
@@ -58,8 +55,7 @@ export class InstanceLogs extends Command {
 
     try {
       containersListProcess = await execa('docker', ['ps', '--format', '"{{.Names}}"'])
-    }
-    catch {
+    } catch {
       this.warn('Something went wrong while getting kuzzle running instances list')
       return
     }
@@ -67,15 +63,14 @@ export class InstanceLogs extends Command {
     const containersList: string[] = containersListProcess.stdout.replace(/"/g, '').split('\n')
 
     return containersList.filter(containerName => {
-      if ( containerName.includes('kuzzle')
-        && !containerName.includes('redis')
-        && !containerName.includes('elasticsearch')
+      if (containerName.includes('kuzzle') &&
+        !containerName.includes('redis') &&
+        !containerName.includes('elasticsearch')
       ) {
         return true
       }
       return false
-    });
+    })
   }
-
 }
 
