@@ -33,8 +33,7 @@ export default class DocumentGet extends Kommand {
         args.id)
 
       this.log(JSON.stringify(document, null, 2))
-    }
-    catch (error) {
+    } catch (error) {
       this.log(error.message)
     }
   }

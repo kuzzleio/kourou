@@ -43,34 +43,31 @@ export class InstanceLogs extends Command {
     if (followOption) {
       args.push('-f')
     }
+
     const instanceLogs = execa('docker', args)
 
     instanceLogs.stdout.pipe(process.stdout)
     instanceLogs.stderr.pipe(process.stderr)
+
     await instanceLogs
   }
 
-  private async getInstancesList(): Promise<string[] | undefined> {
+  private async getInstancesList(): Promise<string[]> {
     let containersListProcess
 
     try {
       containersListProcess = await execa('docker', ['ps', '--format', '"{{.Names}}"'])
     } catch {
       this.warn('Something went wrong while getting kuzzle running instances list')
-      return
+      return []
     }
 
     const containersList: string[] = containersListProcess.stdout.replace(/"/g, '').split('\n')
 
-    return containersList.filter(containerName => {
-      if (containerName.includes('kuzzle') &&
+    return containersList.filter(containerName =>
+      (containerName.includes('kuzzle') &&
         !containerName.includes('redis') &&
-        !containerName.includes('elasticsearch')
-      ) {
-        return true
-      }
-      return false
-    })
+        !containerName.includes('elasticsearch')))
   }
 }
 
