@@ -70,4 +70,8 @@ export class KuzzleSDK {
   get document() {
     return this.sdk.document
   }
+
+  get collection() {
+    return this.sdk.collection
+  }
 }

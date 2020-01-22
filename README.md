@@ -58,6 +58,8 @@ By environment variables:
 * [`kourou api-key:create`](#kourou-api-keycreate)
 * [`kourou api-key:delete`](#kourou-api-keydelete)
 * [`kourou api-key:search`](#kourou-api-keysearch)
+* [`kourou collection:dump INDEX COLLECTION`](#kourou-collectiondump-index-collection)
+* [`kourou collection:restore PATH`](#kourou-collectionrestore-path)
 * [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
 * [`kourou help [COMMAND]`](#kourou-help-command)
 * [`kourou instance:logs`](#kourou-instancelogs)
@@ -127,6 +129,56 @@ OPTIONS
 ```
 
 _See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/api-key/search.ts)_
+
+## `kourou collection:dump INDEX COLLECTION`
+
+Dump an entire collection content (JSONL format)
+
+```
+USAGE
+  $ kourou collection:dump INDEX COLLECTION
+
+ARGUMENTS
+  INDEX       Index name
+  COLLECTION  Collection name
+
+OPTIONS
+  -h, --host=host          [default: localhost] Kuzzle server host
+  -p, --port=port          [default: 7512] Kuzzle server port
+  --batch-size=batch-size  [default: 5000] Maximum batch size (see limits.documentsFetchCount config)
+  --help                   show CLI help
+  --password=password      Kuzzle user password
+  --path=path              Dump directory (default: index name)
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle user
+```
+
+_See code: [src/commands/collection/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/collection/dump.ts)_
+
+## `kourou collection:restore PATH`
+
+Restore the content of a previously dumped collection
+
+```
+USAGE
+  $ kourou collection:restore PATH
+
+ARGUMENTS
+  PATH  Dump file path
+
+OPTIONS
+  -h, --host=host          [default: localhost] Kuzzle server host
+  -p, --port=port          [default: 7512] Kuzzle server port
+  --batch-size=batch-size  [default: 5000] Maximum batch size (see limits.documentsFetchCount config)
+  --collection=collection  If set, override the collection destination name
+  --help                   show CLI help
+  --index=index            If set, override the index destination name
+  --password=password      Kuzzle user password
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle user
+```
+
+_See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/collection/restore.ts)_
 
 ## `kourou document:get INDEX COLLECTION ID`
 
