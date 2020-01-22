@@ -3,7 +3,7 @@ import { Kommand, printCliName } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../kuzzle'
 import * as fs from 'fs'
 import chalk from 'chalk'
-import restoreCollection from '../../support/restoreCollection'
+import restoreCollection from '../../support/restore-collection'
 
 export default class IndexRestore extends Kommand {
   static description = 'Restore the content of a previously dumped index'

@@ -1,7 +1,7 @@
 import { flags } from '@oclif/command'
 import { Kommand, printCliName } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../kuzzle'
-import dumpCollection from '../../support/dumpCollection'
+import dumpCollection from '../../support/dump-collection'
 import * as fs from 'fs'
 import chalk from 'chalk'
 
