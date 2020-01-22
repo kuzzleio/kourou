@@ -22,7 +22,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.3.0 linux-x64 node-v10.16.0
+kourou/0.3.0 linux-x64 node-v12.13.1
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -58,6 +58,7 @@ By environment variables:
 * [`kourou api-key:create`](#kourou-api-keycreate)
 * [`kourou api-key:delete`](#kourou-api-keydelete)
 * [`kourou api-key:search`](#kourou-api-keysearch)
+* [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
 * [`kourou help [COMMAND]`](#kourou-help-command)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
@@ -126,6 +127,30 @@ OPTIONS
 ```
 
 _See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/api-key/search.ts)_
+
+## `kourou document:get INDEX COLLECTION ID`
+
+Get a document
+
+```
+USAGE
+  $ kourou document:get INDEX COLLECTION ID
+
+ARGUMENTS
+  INDEX       Index name
+  COLLECTION  Collection name
+  ID          Document ID
+
+OPTIONS
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  --help               show CLI help
+  --password=password  Kuzzle user password
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle user
+```
+
+_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/document/get.ts)_
 
 ## `kourou help [COMMAND]`
 

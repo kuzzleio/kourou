@@ -2,7 +2,7 @@ Feature: Api Key Management
 
   @security
   Scenario: Create an API Key
-    When I run the command "api-key:create" with:
+    When I run the command "api-key:create" with flags:
       | --user        | "gordon"       |
       | --description | "Test api key" |
       | --id          | "gordon-key"   |
@@ -18,7 +18,7 @@ Feature: Api Key Management
       | _id              | "gordon-key"   |
       | userId           | "gordon"       |
       | body.description | "Test api key" |
-    When I run the command "api-key:delete" with:
+    When I run the command "api-key:delete" with flags:
       | --user | "gordon"     |
       | --id   | "gordon-key" |
     Then I successfully call the route "security":"searchApiKeys" with args:
@@ -35,7 +35,7 @@ Feature: Api Key Management
       | _id              | "gordon-key-2"  |
       | userId           | "gordon"        |
       | body.description | "Other api key" |
-    When I run the command "api-key:search" with:
+    When I run the command "api-key:search" with flags:
       | --user   | "gordon" |
       | --filter | "Test"   |
     Then I should match stdout with "gordon-key"

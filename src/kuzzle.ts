@@ -66,4 +66,8 @@ export class KuzzleSDK {
   public query(request: any) {
     return this.sdk.query(request)
   }
+
+  get document() {
+    return this.sdk.document
+  }
 }
