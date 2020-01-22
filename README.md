@@ -22,7 +22,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.4.0 linux-x64 node-v12.13.1
+kourou/0.5.0 linux-x64 node-v12.13.1
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -62,6 +62,8 @@ By environment variables:
 * [`kourou collection:restore PATH`](#kourou-collectionrestore-path)
 * [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
 * [`kourou help [COMMAND]`](#kourou-help-command)
+* [`kourou index:dump INDEX`](#kourou-indexdump-index)
+* [`kourou index:restore PATH`](#kourou-indexrestore-path)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
 
@@ -86,7 +88,7 @@ OPTIONS
   --username=username            [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/api-key/create.ts)_
+_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/api-key/create.ts)_
 
 ## `kourou api-key:delete`
 
@@ -107,7 +109,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/api-key/delete.ts)_
+_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/api-key/delete.ts)_
 
 ## `kourou api-key:search`
 
@@ -128,7 +130,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/api-key/search.ts)_
+_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/api-key/search.ts)_
 
 ## `kourou collection:dump INDEX COLLECTION`
 
@@ -153,7 +155,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/collection/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/collection/dump.ts)_
+_See code: [src/commands/collection/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/collection/dump.ts)_
 
 ## `kourou collection:restore PATH`
 
@@ -178,7 +180,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/collection/restore.ts)_
+_See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/collection/restore.ts)_
 
 ## `kourou document:get INDEX COLLECTION ID`
 
@@ -202,7 +204,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/document/get.ts)_
+_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/document/get.ts)_
 
 ## `kourou help [COMMAND]`
 
@@ -221,6 +223,54 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
 
+## `kourou index:dump INDEX`
+
+Dump an entire index content (JSONL format)
+
+```
+USAGE
+  $ kourou index:dump INDEX
+
+ARGUMENTS
+  INDEX  Index name
+
+OPTIONS
+  -h, --host=host          [default: localhost] Kuzzle server host
+  -p, --port=port          [default: 7512] Kuzzle server port
+  --batch-size=batch-size  [default: 5000] Maximum batch size (see limits.documentsFetchCount config)
+  --help                   show CLI help
+  --password=password      Kuzzle user password
+  --path=path              Dump directory (default: index name)
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle user
+```
+
+_See code: [src/commands/index/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/index/dump.ts)_
+
+## `kourou index:restore PATH`
+
+Restore the content of a previously dumped index
+
+```
+USAGE
+  $ kourou index:restore PATH
+
+ARGUMENTS
+  PATH  Dump directory or file
+
+OPTIONS
+  -h, --host=host          [default: localhost] Kuzzle server host
+  -p, --port=port          [default: 7512] Kuzzle server port
+  --batch-size=batch-size  [default: 5000] Maximum batch size (see limits.documentsFetchCount config)
+  --help                   show CLI help
+  --index=index            If set, override the index destination name
+  --password=password      Kuzzle user password
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle user
+```
+
+_See code: [src/commands/index/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/index/restore.ts)_
+
 ## `kourou instance:logs`
 
 ```
@@ -232,7 +282,7 @@ OPTIONS
   -i, --instance=instance  Kuzzle instance name
 ```
 
-_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/instance/logs.ts)_
+_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/instance/logs.ts)_
 
 ## `kourou instance:spawn`
 
@@ -248,7 +298,7 @@ OPTIONS
   --help                 show CLI help
 ```
 
-_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/instance/spawn.ts)_
+_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/instance/spawn.ts)_
 <!-- commandsstop -->
 
 # Where does this weird name comes from?
