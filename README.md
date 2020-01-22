@@ -22,7 +22,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.3.0 linux-x64 node-v12.13.1
+kourou/0.4.0 linux-x64 node-v12.13.1
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -86,7 +86,7 @@ OPTIONS
   --username=username            [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/api-key/create.ts)_
+_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/api-key/create.ts)_
 
 ## `kourou api-key:delete`
 
@@ -107,7 +107,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/api-key/delete.ts)_
+_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/api-key/delete.ts)_
 
 ## `kourou api-key:search`
 
@@ -128,7 +128,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/api-key/search.ts)_
+_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/api-key/search.ts)_
 
 ## `kourou collection:dump INDEX COLLECTION`
 
@@ -153,7 +153,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/collection/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/collection/dump.ts)_
+_See code: [src/commands/collection/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/collection/dump.ts)_
 
 ## `kourou collection:restore PATH`
 
@@ -178,7 +178,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/collection/restore.ts)_
+_See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/collection/restore.ts)_
 
 ## `kourou document:get INDEX COLLECTION ID`
 
@@ -202,7 +202,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/document/get.ts)_
+_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/document/get.ts)_
 
 ## `kourou help [COMMAND]`
 
@@ -232,7 +232,7 @@ OPTIONS
   -i, --instance=instance  Kuzzle instance name
 ```
 
-_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/instance/logs.ts)_
+_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/instance/logs.ts)_
 
 ## `kourou instance:spawn`
 
@@ -248,7 +248,7 @@ OPTIONS
   --help                 show CLI help
 ```
 
-_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.3.0/src/commands/instance/spawn.ts)_
+_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.4.0/src/commands/instance/spawn.ts)_
 <!-- commandsstop -->
 
 # Where does this weird name comes from?
