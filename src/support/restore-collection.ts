@@ -1,6 +1,8 @@
 import chalk from 'chalk'
 import * as fs from 'fs'
-import * as ndjson from 'ndjson'
+
+// tslint:disable-next-line
+const ndjson = require('ndjson')
 
 function handleError(log: any, dumpFile: string, error: any) {
   if (error.status === 206) {

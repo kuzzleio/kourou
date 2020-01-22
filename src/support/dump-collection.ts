@@ -1,5 +1,7 @@
-import * as ndjson from 'ndjson'
 import * as fs from 'fs'
+
+// tslint:disable-next-line
+const ndjson = require('ndjson')
 
 async function dumpCollection(sdk: any, index: string, collection: string, batchSize: number, path: string) {
   const filename = `${path}/collection-${collection}.jsonl`
