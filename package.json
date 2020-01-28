@@ -1,7 +1,7 @@
 {
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
-  "version": "0.3.0",
+  "version": "0.5.0",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kourou": "./bin/run"
@@ -19,6 +19,7 @@
     "inquirer": "^7.0.3",
     "kuzzle-sdk": "^7.0.1",
     "listr": "^0.14.3",
+    "ndjson": "^1.5.0",
     "node-emoji": "^1.10.0",
     "tslib": "^1.10.0"
   },
@@ -72,7 +73,7 @@
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "version": "oclif-dev readme && git add README.md",
-    "test:lint": "eslint . --fix --ext .ts --config .eslintrc",
+    "test:lint": "eslint . --ext .ts --config .eslintrc",
     "test:functional": "npm run test:functional:stdout && npm run test:functional:cucumber",
     "test:functional:stdout": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "test:functional:cucumber": "./node_modules/.bin/cucumber-js"

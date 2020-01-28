@@ -9,6 +9,8 @@
     "indent": "off",
     "no-await-in-loop": "off",
     "node/no-deprecated-api": "off",
-    "unicorn/no-abusive-eslint-disable": "off"
+    "unicorn/no-abusive-eslint-disable": "off",
+    "brace-style": "off",
+    "operator-linebreak": "off"
   }
 }
