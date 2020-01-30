@@ -1,6 +1,6 @@
 import { flags } from '@oclif/command'
 import { Kommand, printCliName } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../kuzzle'
+import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 
 class ApiKeyCreate extends Kommand {
   public static description = 'Creates a new API Key for an user';

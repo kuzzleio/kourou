@@ -66,6 +66,9 @@ By environment variables:
 * [`kourou index:restore PATH`](#kourou-indexrestore-path)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
+* [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
+* [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
+* [`kourou vault:show SECRETS-FILE KEY`](#kourou-vaultshow-secrets-file-key)
 
 ## `kourou api-key:create`
 
@@ -299,6 +302,62 @@ OPTIONS
 ```
 
 _See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/instance/spawn.ts)_
+
+## `kourou vault:add SECRETS-FILE KEY VALUE`
+
+Add an encrypted key to a secrets file
+
+```
+USAGE
+  $ kourou vault:add SECRETS-FILE KEY VALUE
+
+ARGUMENTS
+  SECRETS-FILE  Secrets file
+  KEY           Path to the key (lodash style)
+  VALUE         Value to encrypt
+
+OPTIONS
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+```
+
+_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/vault/add.ts)_
+
+## `kourou vault:encrypt FILE`
+
+Encrypt an entire file
+
+```
+USAGE
+  $ kourou vault:encrypt FILE
+
+ARGUMENTS
+  FILE  File to encrypt
+
+OPTIONS
+  -f, --force                    Overwrite the output file if it already exists
+  -o, --output-file=output-file  Output file (default: <file>.enc.json)
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+```
+
+_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/vault/encrypt.ts)_
+
+## `kourou vault:show SECRETS-FILE KEY`
+
+Display an encrypted key on stdout
+
+```
+USAGE
+  $ kourou vault:show SECRETS-FILE KEY
+
+ARGUMENTS
+  SECRETS-FILE  Secrets file
+  KEY           Path to the key (lodash style)
+
+OPTIONS
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+```
+
+_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/vault/show.ts)_
 <!-- commandsstop -->
 
 # Where does this weird name comes from?

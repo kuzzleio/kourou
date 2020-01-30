@@ -1,6 +1,6 @@
 import { flags } from '@oclif/command'
 import { Kommand, printCliName } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../kuzzle'
+import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 
 export default class DocumentGet extends Kommand {
   static description = 'Get a document'
