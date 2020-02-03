@@ -2,8 +2,7 @@ Feature: Api Key Management
 
   @security
   Scenario: Create an API Key
-    When I run the command "api-key:create" with flags:
-      | --user        | "gordon"       |
+    When I run the command "api-key:create gordon" with flags:
       | --description | "Test api key" |
       | --id          | "gordon-key"   |
     Then I successfully call the route "security":"searchApiKeys" with args:
@@ -18,9 +17,8 @@ Feature: Api Key Management
       | _id              | "gordon-key"   |
       | userId           | "gordon"       |
       | body.description | "Test api key" |
-    When I run the command "api-key:delete" with flags:
-      | --user | "gordon"     |
-      | --id   | "gordon-key" |
+    When I run the command "api-key:delete gordon" with flags:
+      | --id | "gordon-key" |
     Then I successfully call the route "security":"searchApiKeys" with args:
       | userId | "gordon" |
     And I should receive a empty "hits" array
@@ -35,8 +33,7 @@ Feature: Api Key Management
       | _id              | "gordon-key-2"  |
       | userId           | "gordon"        |
       | body.description | "Other api key" |
-    When I run the command "api-key:search" with flags:
-      | --user   | "gordon" |
-      | --filter | "Test"   |
+    When I run the command "api-key:search gordon" with flags:
+      | --filter | "Test" |
     Then I should match stdout with "gordon-key"
     And I should not match stdout with "gordon-key-2"

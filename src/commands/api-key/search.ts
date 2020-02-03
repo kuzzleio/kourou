@@ -7,23 +7,22 @@ class ApiKeySearch extends Kommand {
 
   public static flags = {
     help: flags.help(),
-    user: flags.string({
-      char: 'u',
-      description: 'User kuid',
-      required: true,
-    }),
     filter: flags.string({
       description: 'Filter to match the API Key descriptions',
     }),
     ...kuzzleFlags,
   };
 
+  static args = [
+    { name: 'user', description: 'User kuid', required: true },
+  ]
+
   public async run() {
     this.log('')
     this.log(`${printCliName()} - ${ApiKeySearch.description}`)
     this.log('')
 
-    const { flags: userFlags } = this.parse(ApiKeySearch)
+    const { flags: userFlags, args } = this.parse(ApiKeySearch)
 
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init()
@@ -31,7 +30,7 @@ class ApiKeySearch extends Kommand {
     const request = {
       controller: 'security',
       action: 'searchApiKeys',
-      userId: userFlags.user,
+      userId: args.user,
       body: {},
       from: 0,
       size: 100,
@@ -48,7 +47,7 @@ class ApiKeySearch extends Kommand {
     try {
       const { result } = await sdk.query(request)
 
-      this.log(`${result.total} API Keys found for user ${userFlags.user}`)
+      this.log(`${result.total} API Keys found for user ${args.user}`)
 
       if (result.total !== 0) {
         this.log('')

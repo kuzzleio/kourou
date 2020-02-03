@@ -14,6 +14,8 @@ The CLI that helps you manage your Kuzzle instances.
 * [Where does this weird name comes from?](#where-does-this-weird-name-comes-from)
 <!-- tocstop -->
 
+:warning: This project is actually in beta and breaking changes may occur until the 1.0.0
+
 # Usage
 
 <!-- usage -->
@@ -55,9 +57,9 @@ By environment variables:
 # Commands
 
 <!-- commands -->
-* [`kourou api-key:create`](#kourou-api-keycreate)
-* [`kourou api-key:delete`](#kourou-api-keydelete)
-* [`kourou api-key:search`](#kourou-api-keysearch)
+* [`kourou api-key:create USER`](#kourou-api-keycreate-user)
+* [`kourou api-key:delete USER`](#kourou-api-keydelete-user)
+* [`kourou api-key:search USER`](#kourou-api-keysearch-user)
 * [`kourou collection:dump INDEX COLLECTION`](#kourou-collectiondump-index-collection)
 * [`kourou collection:restore PATH`](#kourou-collectionrestore-path)
 * [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
@@ -70,19 +72,21 @@ By environment variables:
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
 * [`kourou vault:show SECRETS-FILE KEY`](#kourou-vaultshow-secrets-file-key)
 
-## `kourou api-key:create`
+## `kourou api-key:create USER`
 
 Creates a new API Key for an user
 
 ```
 USAGE
-  $ kourou api-key:create
+  $ kourou api-key:create USER
+
+ARGUMENTS
+  USER  User kuid
 
 OPTIONS
   -d, --description=description  (required) API Key description
   -h, --host=host                [default: localhost] Kuzzle server host
   -p, --port=port                [default: 7512] Kuzzle server port
-  -u, --user=user                (required) User kuid
   --expire=expire                [default: -1] API Key validity
   --help                         show CLI help
   --id=id                        API Key unique ID
@@ -93,18 +97,20 @@ OPTIONS
 
 _See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/api-key/create.ts)_
 
-## `kourou api-key:delete`
+## `kourou api-key:delete USER`
 
 Deletes a new API Key for an user
 
 ```
 USAGE
-  $ kourou api-key:delete
+  $ kourou api-key:delete USER
+
+ARGUMENTS
+  USER  User kuid
 
 OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
-  -u, --user=user      (required) User kuid
   --help               show CLI help
   --id=id              API Key unique ID
   --password=password  Kuzzle user password
@@ -114,18 +120,20 @@ OPTIONS
 
 _See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/api-key/delete.ts)_
 
-## `kourou api-key:search`
+## `kourou api-key:search USER`
 
 List an user API Keys
 
 ```
 USAGE
-  $ kourou api-key:search
+  $ kourou api-key:search USER
+
+ARGUMENTS
+  USER  User kuid
 
 OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
-  -u, --user=user      (required) User kuid
   --filter=filter      Filter to match the API Key descriptions
   --help               show CLI help
   --password=password  Kuzzle user password
@@ -317,7 +325,7 @@ ARGUMENTS
   VALUE         Value to encrypt
 
 OPTIONS
-  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+  --vault-key=vault-key  [default: fHaHTUrdbW9fQWmpme1DMAfUCRAw55FRMa3d6jljFXY=] Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
 _See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/vault/add.ts)_
@@ -336,7 +344,9 @@ ARGUMENTS
 OPTIONS
   -f, --force                    Overwrite the output file if it already exists
   -o, --output-file=output-file  Output file (default: <file>.enc.json)
-  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+
+  --vault-key=vault-key          [default: fHaHTUrdbW9fQWmpme1DMAfUCRAw55FRMa3d6jljFXY=] Kuzzle Vault Key (or
+                                 KUZZLE_VAULT_KEY)
 ```
 
 _See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/vault/encrypt.ts)_
@@ -354,7 +364,7 @@ ARGUMENTS
   KEY           Path to the key (lodash style)
 
 OPTIONS
-  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+  --vault-key=vault-key  [default: fHaHTUrdbW9fQWmpme1DMAfUCRAw55FRMa3d6jljFXY=] Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
 _See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/vault/show.ts)_

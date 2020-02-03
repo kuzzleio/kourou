@@ -7,23 +7,22 @@ class ApiKeyDelete extends Kommand {
 
   public static flags = {
     help: flags.help(),
-    user: flags.string({
-      char: 'u',
-      description: 'User kuid',
-      required: true,
-    }),
     id: flags.string({
       description: 'API Key unique ID',
     }),
     ...kuzzleFlags,
   };
 
+  static args = [
+    { name: 'user', description: 'User kuid', required: true },
+  ]
+
   public async run() {
     this.log('')
     this.log(`${printCliName()} - ${ApiKeyDelete.description}`)
     this.log('')
 
-    const { flags: userFlags } = this.parse(ApiKeyDelete)
+    const { flags: userFlags, args } = this.parse(ApiKeyDelete)
 
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init()
@@ -33,13 +32,13 @@ class ApiKeyDelete extends Kommand {
       action: 'deleteApiKey',
       refresh: 'wait_for',
       _id: userFlags.id,
-      userId: userFlags.user,
+      userId: args.user,
     }
 
     try {
       const { result } = await sdk.query(request)
 
-      this.log(`Successfully deleted API Key "${result._id}" of user "${userFlags.user}"`)
+      this.log(`Successfully deleted API Key "${result._id}" of user "${args.user}"`)
     } catch (error) {
       this.logError(error.message)
     }

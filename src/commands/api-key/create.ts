@@ -7,11 +7,6 @@ class ApiKeyCreate extends Kommand {
 
   public static flags = {
     help: flags.help(),
-    user: flags.string({
-      char: 'u',
-      description: 'User kuid',
-      required: true,
-    }),
     description: flags.string({
       char: 'd',
       description: 'API Key description',
@@ -27,12 +22,16 @@ class ApiKeyCreate extends Kommand {
     ...kuzzleFlags,
   };
 
+  static args = [
+    { name: 'user', description: 'User kuid', required: true },
+  ]
+
   public async run() {
     this.log('')
     this.log(`${printCliName()} - ${ApiKeyCreate.description}`)
     this.log('')
 
-    const { flags: userFlags } = this.parse(ApiKeyCreate)
+    const { args, flags: userFlags } = this.parse(ApiKeyCreate)
 
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init()
@@ -41,7 +40,7 @@ class ApiKeyCreate extends Kommand {
       controller: 'security',
       action: 'createApiKey',
       _id: userFlags.id,
-      userId: userFlags.user,
+      userId: args.user,
       expiresIn: userFlags.expire,
       refresh: 'wait_for',
       body: {
