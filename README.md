@@ -22,7 +22,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.5.0 linux-x64 node-v12.13.1
+kourou/0.6.0 linux-x64 node-v12.13.1
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -91,7 +91,7 @@ OPTIONS
   --username=username            [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/api-key/create.ts)_
+_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/api-key/create.ts)_
 
 ## `kourou api-key:delete`
 
@@ -112,7 +112,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/api-key/delete.ts)_
+_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/api-key/delete.ts)_
 
 ## `kourou api-key:search`
 
@@ -133,7 +133,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/api-key/search.ts)_
+_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/api-key/search.ts)_
 
 ## `kourou collection:dump INDEX COLLECTION`
 
@@ -158,7 +158,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/collection/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/collection/dump.ts)_
+_See code: [src/commands/collection/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/collection/dump.ts)_
 
 ## `kourou collection:restore PATH`
 
@@ -183,7 +183,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/collection/restore.ts)_
+_See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/collection/restore.ts)_
 
 ## `kourou document:get INDEX COLLECTION ID`
 
@@ -207,7 +207,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/document/get.ts)_
+_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/document/get.ts)_
 
 ## `kourou help [COMMAND]`
 
@@ -248,7 +248,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/index/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/index/dump.ts)_
+_See code: [src/commands/index/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/index/dump.ts)_
 
 ## `kourou index:restore PATH`
 
@@ -272,7 +272,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/index/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/index/restore.ts)_
+_See code: [src/commands/index/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/index/restore.ts)_
 
 ## `kourou instance:logs`
 
@@ -285,7 +285,7 @@ OPTIONS
   -i, --instance=instance  Kuzzle instance name
 ```
 
-_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/instance/logs.ts)_
+_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/instance/logs.ts)_
 
 ## `kourou instance:spawn`
 
@@ -301,7 +301,7 @@ OPTIONS
   --help                 show CLI help
 ```
 
-_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/instance/spawn.ts)_
+_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/instance/spawn.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
@@ -320,7 +320,7 @@ OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
-_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/vault/add.ts)_
+_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/vault/add.ts)_
 
 ## `kourou vault:encrypt FILE`
 
@@ -339,7 +339,7 @@ OPTIONS
   --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
-_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/vault/encrypt.ts)_
+_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/vault/encrypt.ts)_
 
 ## `kourou vault:show SECRETS-FILE KEY`
 
@@ -357,7 +357,7 @@ OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
-_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/vault/show.ts)_
+_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/vault/show.ts)_
 <!-- commandsstop -->
 
 # Where does this weird name comes from?
