@@ -49,7 +49,7 @@ class ApiKeyCreate extends Kommand {
     try {
       const { result } = await sdk.query(request)
 
-      this.log(`Successfully created API Key "${result._id}" for user "${userFlags.user}"`)
+      this.log(`Successfully created API Key "${result._id}" for user "${args.user}"`)
       this.log(result._source.token)
     } catch (error) {
       this.logError(error.message)
