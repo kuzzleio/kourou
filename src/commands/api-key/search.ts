@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import { Kommand, printCliName } from '../../common'
+import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 
 class ApiKeySearch extends Kommand {
@@ -18,9 +18,7 @@ class ApiKeySearch extends Kommand {
   ]
 
   public async run() {
-    this.log('')
-    this.log(`${printCliName()} - ${ApiKeySearch.description}`)
-    this.log('')
+    this.printCommand()
 
     const { flags: userFlags, args } = this.parse(ApiKeySearch)
 

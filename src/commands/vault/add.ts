@@ -1,4 +1,4 @@
-import { Kommand, printCliName } from '../../common'
+import { Kommand } from '../../common'
 import { flags } from '@oclif/command'
 import * as _ from 'lodash'
 import chalk from 'chalk'
@@ -23,9 +23,7 @@ export class VaultAdd extends Kommand {
   ]
 
   async run() {
-    this.log('')
-    this.log(`${printCliName()} - ${VaultAdd.description}`)
-    this.log('')
+    this.printCommand()
 
     const { args, flags: userFlags } = this.parse(VaultAdd)
 

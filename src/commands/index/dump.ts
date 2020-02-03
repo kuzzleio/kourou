@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import { Kommand, printCliName } from '../../common'
+import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import dumpCollection from '../../support/dump-collection'
 import * as fs from 'fs'
@@ -25,9 +25,7 @@ export default class IndexDump extends Kommand {
   ]
 
   async run() {
-    this.log('')
-    this.log(`${printCliName()} - ${IndexDump.description}`)
-    this.log('')
+    this.printCommand()
 
     const { args, flags: userFlags } = this.parse(IndexDump)
 

@@ -1,8 +1,9 @@
-import { Command, flags } from '@oclif/command'
+import { Kommand } from '../../common'
+import { flags } from '@oclif/command'
 import * as inquirer from 'inquirer'
 import execa from 'execa'
 
-export class InstanceLogs extends Command {
+export class InstanceLogs extends Kommand {
   static flags = {
     instance: flags.string({
       char: 'i',
@@ -15,6 +16,8 @@ export class InstanceLogs extends Command {
   }
 
   async run() {
+    this.printCommand()
+
     const { flags } = this.parse(InstanceLogs)
     let instance: string = flags.instance!
     const followOption: boolean = flags.follow
