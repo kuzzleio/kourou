@@ -312,7 +312,7 @@ USAGE
   $ kourou vault:add SECRETS-FILE KEY VALUE
 
 ARGUMENTS
-  SECRETS-FILE  Secrets file
+  SECRETS-FILE  Encrypted secrets file
   KEY           Path to the key (lodash style)
   VALUE         Value to encrypt
 
@@ -331,7 +331,7 @@ USAGE
   $ kourou vault:encrypt FILE
 
 ARGUMENTS
-  FILE  File to encrypt
+  FILE  File containing unencrypted secrets
 
 OPTIONS
   -f, --force                    Overwrite the output file if it already exists
@@ -350,7 +350,7 @@ USAGE
   $ kourou vault:show SECRETS-FILE KEY
 
 ARGUMENTS
-  SECRETS-FILE  Secrets file
+  SECRETS-FILE  Encrypted secrets file
   KEY           Path to the key (lodash style)
 
 OPTIONS

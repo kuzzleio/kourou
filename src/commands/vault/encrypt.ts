@@ -1,5 +1,4 @@
 import { Kommand, printCliName } from '../../common'
-import { vaultFlags, vaultArgs } from '../../support/vault'
 import * as _ from 'lodash'
 import chalk from 'chalk'
 import { flags } from '@oclif/command'
@@ -19,11 +18,14 @@ export class VaultEncrypt extends Kommand {
       char: 'o',
       description: 'Output file (default: <file>.enc.json)'
     }),
-    ...vaultFlags
+    'vault-key': flags.string({
+      description: 'Kuzzle Vault Key (or KUZZLE_VAULT_KEY)',
+      default: process.env.KUZZLE_VAULT_KEY,
+    }),
   }
 
   static args = [
-    { name: 'file', description: 'File to encrypt', required: true }
+    { name: 'file', description: 'File containing unencrypted secrets', required: true }
   ]
 
   async run() {

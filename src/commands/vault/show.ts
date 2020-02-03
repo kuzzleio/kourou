@@ -1,5 +1,5 @@
 import { Kommand, printCliName } from '../../common'
-import { vaultFlags, vaultArgs } from '../../support/vault'
+import { flags } from '@oclif/command'
 import * as _ from 'lodash'
 import chalk from 'chalk'
 
@@ -10,11 +10,14 @@ export class VaultShow extends Kommand {
   static description = 'Display an encrypted key on stdout'
 
   static flags = {
-    ...vaultFlags
+    'vault-key': flags.string({
+      description: 'Kuzzle Vault Key (or KUZZLE_VAULT_KEY)',
+      default: process.env.KUZZLE_VAULT_KEY,
+    }),
   }
 
   static args = [
-    ...vaultArgs,
+    { name: 'secrets-file', description: 'Encrypted secrets file', required: true },
     { name: 'key', description: 'Path to the key (lodash style)', required: true },
   ]
 
