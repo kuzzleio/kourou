@@ -3,7 +3,6 @@ import { flags } from '@oclif/command'
 import * as _ from 'lodash'
 import chalk from 'chalk'
 
-// tslint:disable-next-line
 const Vault = require('kuzzle-vault')
 
 export class VaultAdd extends Kommand {
