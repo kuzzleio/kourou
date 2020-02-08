@@ -14,7 +14,7 @@ The CLI that helps you manage your Kuzzle instances.
 * [Where does this weird name comes from?](#where-does-this-weird-name-comes-from)
 <!-- tocstop -->
 
-:warning: This project is actually in beta and breaking changes may occur until the 1.0.0
+:warning: This project is currently in beta and breaking changes may occur until the 1.0.0
 
 # Usage
 
@@ -74,7 +74,7 @@ By environment variables:
 
 ## `kourou api-key:create USER`
 
-Creates a new API Key for an user
+Creates a new API Key for a user.
 
 ```
 USAGE
@@ -99,7 +99,7 @@ _See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/b
 
 ## `kourou api-key:delete USER`
 
-Deletes a new API Key for an user
+Deletes a user's API Key.
 
 ```
 USAGE
@@ -122,7 +122,7 @@ _See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/b
 
 ## `kourou api-key:search USER`
 
-List an user API Keys
+Lists a user's API Keys.
 
 ```
 USAGE
@@ -313,7 +313,7 @@ _See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/b
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
-Add an encrypted key to a secrets file
+Adds an encrypted key to a secrets file
 
 ```
 USAGE
@@ -332,7 +332,7 @@ _See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v
 
 ## `kourou vault:encrypt FILE`
 
-Encrypt an entire file
+Encrypts an entire file.
 
 ```
 USAGE
@@ -353,7 +353,7 @@ _See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/bl
 
 ## `kourou vault:show SECRETS-FILE KEY`
 
-Display an encrypted key on stdout
+Prints an encrypted key.
 
 ```
 USAGE
