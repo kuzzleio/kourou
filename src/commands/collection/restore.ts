@@ -1,6 +1,6 @@
 import { flags } from '@oclif/command'
-import { Kommand, printCliName } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../kuzzle'
+import { Kommand } from '../../common'
+import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import chalk from 'chalk'
 import restoreCollection from '../../support/restore-collection'
 
@@ -36,9 +36,7 @@ export default class CollectionRestore extends Kommand {
   }
 
   async runSafe() {
-    this.log('')
-    this.log(`${printCliName()} - ${CollectionRestore.description}`)
-    this.log('')
+    this.printCommand()
 
     const { args, flags: userFlags } = this.parse(CollectionRestore)
 

@@ -1,4 +1,6 @@
 const
+  _ = require('lodash'),
+  fs = require('fs'),
   execa = require('execa'),
   {
     Then
@@ -14,7 +16,7 @@ Then('I run the command {string} with flags:', async function (command, dataTabl
     flags.push(value);
   }
 
-  const { stdout } = await execa('./bin/run', [command, ...flags])
+  const { stdout } = await execa('./bin/run', [...command.split(' '), ...flags])
 
   this.props.result = stdout;
 });
@@ -40,4 +42,16 @@ Then(/I should( not)? match stdout with "(.*?)"/, function (not, rawRegexp) {
   else {
     should(this.props.result).match(regexp);
   }
+});
+
+Then('a JSON file {string} containing:', function (filename, dataTable) {
+  const
+    content = {},
+    contentRaw = this.parseObject(dataTable);
+
+  for (const [path, value] of Object.entries(contentRaw)) {
+    _.set(content, path, value);
+  }
+
+  fs.writeFileSync(filename, JSON.stringify(content, null, 2));
 });

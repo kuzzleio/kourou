@@ -1,6 +1,6 @@
 import { flags } from '@oclif/command'
-import { Kommand, printCliName } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../kuzzle'
+import { Kommand } from '../../common'
+import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 
 export default class DocumentGet extends Kommand {
   static description = 'Get a document'
@@ -26,9 +26,7 @@ export default class DocumentGet extends Kommand {
   }
 
   async runSafe() {
-    this.log('')
-    this.log(`${printCliName()} - ${DocumentGet.description}`)
-    this.log('')
+    this.printCommand()
 
     const { args, flags: userFlags } = this.parse(DocumentGet)
 

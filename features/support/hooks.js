@@ -1,6 +1,7 @@
 'use strict';
 
 const
+  fs = require('fs'),
   { After, Before, BeforeAll } = require('cucumber'),
   testMappings = require('../fixtures/mappings'),
   testSecurities = require('../fixtures/securities'),
@@ -94,4 +95,19 @@ Before({ tags: '@mappings' }, async function () {
     body: testFixtures,
     refresh: 'wait_for'
   });
+});
+
+// vault hooks =================================================================
+
+Before({ tags: '@vault' }, async function () {
+  const files = [
+    'test-secrets.json',
+    'test-secrets.enc.json',
+  ];
+
+  for (const file of files) {
+    if (fs.existsSync(file)) {
+      fs.unlinkSync(file);
+    }
+  }
 });
