@@ -63,6 +63,7 @@ By environment variables:
 * [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
 * [`kourou es:get INDEX ID`](#kourou-esget-index-id)
 * [`kourou es:insert INDEX`](#kourou-esinsert-index)
+* [`kourou es:list-index`](#kourou-eslist-index)
 * [`kourou help [COMMAND]`](#kourou-help-command)
 * [`kourou index:dump INDEX`](#kourou-indexdump-index)
 * [`kourou index:restore PATH`](#kourou-indexrestore-path)
@@ -248,6 +249,23 @@ OPTIONS
 ```
 
 _See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/es/insert.ts)_
+
+## `kourou es:list-index`
+
+List available ES indexes
+
+```
+USAGE
+  $ kourou es:list-index
+
+OPTIONS
+  -g, --grep=grep  Match output with pattern
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/list-index.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/es/list-index.ts)_
 
 ## `kourou help [COMMAND]`
 
