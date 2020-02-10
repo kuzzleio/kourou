@@ -8,7 +8,7 @@ import { writeFileSync } from 'fs'
 import Listr from 'listr'
 import net from 'net'
 import emoji from 'node-emoji'
-import { Kommand, printCliName } from '../../common'
+import { Kommand } from '../../common'
 
 const MIN_MAX_MAP_COUNT = 262144
 const MIN_DOCO_VERSION = '1.12.0'
@@ -104,7 +104,7 @@ export default class InstanceSpawn extends Kommand {
    * @override
    */
   public async run() {
-    this.log(`\n${printCliName()} - ${InstanceSpawn.description}\n`)
+    this.printCommand()
 
     const { flags: userFlags } = this.parse(InstanceSpawn)
     const portIndex = await this.findAvailablePort()

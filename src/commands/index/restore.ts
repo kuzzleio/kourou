@@ -1,6 +1,6 @@
 import { flags } from '@oclif/command'
-import { Kommand, printCliName } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../kuzzle'
+import { Kommand } from '../../common'
+import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import * as fs from 'fs'
 import chalk from 'chalk'
 import restoreCollection from '../../support/restore-collection'
@@ -25,9 +25,7 @@ export default class IndexRestore extends Kommand {
   ]
 
   async run() {
-    this.log('')
-    this.log(`${printCliName()} - ${IndexRestore.description}`)
-    this.log('')
+    this.printCommand()
 
     const { args, flags: userFlags } = this.parse(IndexRestore)
 
