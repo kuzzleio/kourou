@@ -105,10 +105,10 @@ export default class InstanceSpawn extends Kommand {
    */
   public async run() {
     try {
-      await this.runSafe();
+      await this.runSafe()
     }
     catch (error) {
-      this.logError(error);
+      this.logError(error)
     }
   }
 

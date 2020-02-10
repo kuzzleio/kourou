@@ -32,10 +32,10 @@ export default class EsInsert extends Kommand {
 
   async run() {
     try {
-      await this.runSafe();
+      await this.runSafe()
     }
     catch (error) {
-      this.logError(error);
+      this.logError(error)
     }
   }
 
@@ -46,21 +46,22 @@ export default class EsInsert extends Kommand {
 
     const { args, flags: userFlags } = this.parse(EsInsert)
 
-    const node = `http://${userFlags.host}:${userFlags.port}`;
-    const esClient = new Client({ node });
+    const node = `http://${userFlags.host}:${userFlags.port}`
+    const esClient = new Client({ node })
     const esRequest = {
       index: args.index,
       id: userFlags.id,
       body: userFlags.body,
-    };
-
+    }
+    console.log(esRequest)
     try {
-      const document = await esClient.index(esRequest);
+      const { body } = await esClient.index(esRequest)
 
-      this.log(JSON.stringify(document.body, null, 2))
-    } catch (error) {
+      this.log(JSON.stringify(body, null, 2))
+    }
+    catch (error) {
       this.log(JSON.stringify(error, null, 2))
-      this.log(error.message);
+      this.log(error.message)
     }
   }
 }

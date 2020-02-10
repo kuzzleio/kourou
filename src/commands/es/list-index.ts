@@ -2,8 +2,8 @@ import { flags } from '@oclif/command'
 import { Kommand, printCliName } from '../../common'
 import { Client } from '@elastic/elasticsearch'
 
-export default class EsGet extends Kommand {
-  static description = 'Get a document from ES'
+export default class EsListIndex extends Kommand {
+  static description = 'List available ES indexes'
 
   static flags = {
     help: flags.help(),
@@ -17,12 +17,11 @@ export default class EsGet extends Kommand {
       description: 'Elasticsearch server port',
       default: process.env.KUZZLE_PORT || '9200',
     }),
+    grep: flags.string({
+      char: 'g',
+      description: 'Match output with pattern',
+    })
   }
-
-  static args = [
-    { name: 'index', description: 'ES Index name', required: true },
-    { name: 'id', description: 'Document ID', required: true }
-  ]
 
   async run() {
     try {
@@ -35,22 +34,25 @@ export default class EsGet extends Kommand {
 
   async runSafe() {
     this.log('')
-    this.log(`${printCliName()} - ${EsGet.description}`)
+    this.log(`${printCliName()} - ${EsListIndex.description}`)
     this.log('')
 
-    const { args, flags: userFlags } = this.parse(EsGet)
+    const { flags: userFlags } = this.parse(EsListIndex)
 
     const node = `http://${userFlags.host}:${userFlags.port}`
     const esClient = new Client({ node })
-    const esRequest = {
-      index: args.index,
-      id: args.id
-    }
 
     try {
-      const { body } = await esClient.get(esRequest)
+      const { body } = await esClient.cat.indices({ format: 'json' })
+      // nice typescript destructuring syntax (:
+      const indexes: string[] = body
+        .map(({ index }: { index: string }) => index)
+        .filter((index: string) => (
+          userFlags.grep ? index.match(new RegExp(userFlags.grep)) : true
+        ))
+        .sort()
 
-      this.log(JSON.stringify(body, null, 2))
+      this.log(JSON.stringify(indexes, null, 2))
     }
     catch (error) {
       this.log(JSON.stringify(error, null, 2))

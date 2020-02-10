@@ -27,10 +27,10 @@ export default class CollectionDump extends Kommand {
 
   async run() {
     try {
-      await this.runSafe();
+      await this.runSafe()
     }
     catch (error) {
-      this.logError(error);
+      this.logError(error)
     }
   }
 
