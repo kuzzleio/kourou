@@ -22,7 +22,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.5.0 linux-x64 node-v12.13.1
+kourou/0.5.0 linux-x64 node-v12.15.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -61,6 +61,8 @@ By environment variables:
 * [`kourou collection:dump INDEX COLLECTION`](#kourou-collectiondump-index-collection)
 * [`kourou collection:restore PATH`](#kourou-collectionrestore-path)
 * [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
+* [`kourou es:get INDEX ID`](#kourou-esget-index-id)
+* [`kourou es:insert INDEX`](#kourou-esinsert-index)
 * [`kourou help [COMMAND]`](#kourou-help-command)
 * [`kourou index:dump INDEX`](#kourou-indexdump-index)
 * [`kourou index:restore PATH`](#kourou-indexrestore-path)
@@ -206,6 +208,47 @@ OPTIONS
 
 _See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/document/get.ts)_
 
+## `kourou es:get INDEX ID`
+
+Get a document from ES
+
+```
+USAGE
+  $ kourou es:get INDEX ID
+
+ARGUMENTS
+  INDEX  ES Index name
+  ID     Document ID
+
+OPTIONS
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/get.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/es/get.ts)_
+
+## `kourou es:insert INDEX`
+
+Insert a document directly into ES (will replace if exists)
+
+```
+USAGE
+  $ kourou es:insert INDEX
+
+ARGUMENTS
+  INDEX  ES Index name
+
+OPTIONS
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --body=body      [default: {}] Document body in JSON
+  --help           show CLI help
+  --id=id          Document ID
+```
+
+_See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v0.5.0/src/commands/es/insert.ts)_
+
 ## `kourou help [COMMAND]`
 
 display help for kourou
@@ -261,7 +304,7 @@ ARGUMENTS
 OPTIONS
   -h, --host=host          [default: localhost] Kuzzle server host
   -p, --port=port          [default: 7512] Kuzzle server port
-  --batch-size=batch-size  [default: 5000] Maximum batch size (see limits.documentsFetchCount config)
+  --batch-size=batch-size  [default: 5000] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
   --index=index            If set, override the index destination name
   --password=password      Kuzzle user password
