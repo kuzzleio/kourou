@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import { Kommand, printCliName } from '../../common'
+import { Kommand } from '../../common'
 import { Client } from '@elastic/elasticsearch'
 
 export default class EsGet extends Kommand {
@@ -34,9 +34,7 @@ export default class EsGet extends Kommand {
   }
 
   async runSafe() {
-    this.log('')
-    this.log(`${printCliName()} - ${EsGet.description}`)
-    this.log('')
+    this.printCommand()
 
     const { args, flags: userFlags } = this.parse(EsGet)
 

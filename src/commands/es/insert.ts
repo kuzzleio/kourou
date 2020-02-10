@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import { Kommand, printCliName } from '../../common'
+import { Kommand } from '../../common'
 import { Client } from '@elastic/elasticsearch'
 
 export default class EsInsert extends Kommand {
@@ -40,9 +40,7 @@ export default class EsInsert extends Kommand {
   }
 
   async runSafe() {
-    this.log('')
-    this.log(`${printCliName()} - ${EsInsert.description}`)
-    this.log('')
+    this.printCommand()
 
     const { args, flags: userFlags } = this.parse(EsInsert)
 
@@ -53,7 +51,7 @@ export default class EsInsert extends Kommand {
       id: userFlags.id,
       body: userFlags.body,
     }
-    console.log(esRequest)
+
     try {
       const { body } = await esClient.index(esRequest)
 

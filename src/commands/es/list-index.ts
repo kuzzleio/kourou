@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import { Kommand, printCliName } from '../../common'
+import { Kommand } from '../../common'
 import { Client } from '@elastic/elasticsearch'
 
 export default class EsListIndex extends Kommand {
@@ -33,9 +33,7 @@ export default class EsListIndex extends Kommand {
   }
 
   async runSafe() {
-    this.log('')
-    this.log(`${printCliName()} - ${EsListIndex.description}`)
-    this.log('')
+    this.printCommand()
 
     const { flags: userFlags } = this.parse(EsListIndex)
 
