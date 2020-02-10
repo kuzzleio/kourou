@@ -325,7 +325,7 @@ ARGUMENTS
   VALUE         Value to encrypt
 
 OPTIONS
-  --vault-key=vault-key  [default: fHaHTUrdbW9fQWmpme1DMAfUCRAw55FRMa3d6jljFXY=] Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
 _See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/vault/add.ts)_
@@ -344,9 +344,7 @@ ARGUMENTS
 OPTIONS
   -f, --force                    Overwrite the output file if it already exists
   -o, --output-file=output-file  Output file (default: <file>.enc.json)
-
-  --vault-key=vault-key          [default: fHaHTUrdbW9fQWmpme1DMAfUCRAw55FRMa3d6jljFXY=] Kuzzle Vault Key (or
-                                 KUZZLE_VAULT_KEY)
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
 _See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/vault/encrypt.ts)_
@@ -364,7 +362,7 @@ ARGUMENTS
   KEY           Path to the key (lodash style)
 
 OPTIONS
-  --vault-key=vault-key  [default: fHaHTUrdbW9fQWmpme1DMAfUCRAw55FRMa3d6jljFXY=] Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
 _See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/vault/show.ts)_
