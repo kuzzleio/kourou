@@ -27,6 +27,15 @@ export default class CollectionRestore extends Kommand {
   ]
 
   async run() {
+    try {
+      await this.runSafe();
+    }
+    catch (error) {
+      this.logError(error);
+    }
+  }
+
+  async runSafe() {
     this.log('')
     this.log(`${printCliName()} - ${CollectionRestore.description}`)
     this.log('')

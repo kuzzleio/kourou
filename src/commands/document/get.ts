@@ -17,6 +17,15 @@ export default class DocumentGet extends Kommand {
   ]
 
   async run() {
+    try {
+      await this.runSafe();
+    }
+    catch (error) {
+      this.logError(error);
+    }
+  }
+
+  async runSafe() {
     this.log('')
     this.log(`${printCliName()} - ${DocumentGet.description}`)
     this.log('')

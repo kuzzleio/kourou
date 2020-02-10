@@ -26,6 +26,15 @@ export default class CollectionDump extends Kommand {
   ]
 
   async run() {
+    try {
+      await this.runSafe();
+    }
+    catch (error) {
+      this.logError(error);
+    }
+  }
+
+  async runSafe() {
     this.log('')
     this.log(`${printCliName()} - ${CollectionDump.description}`)
     this.log('')

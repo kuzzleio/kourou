@@ -11,7 +11,7 @@ export default class IndexRestore extends Kommand {
   static flags = {
     help: flags.help({}),
     'batch-size': flags.string({
-      description: 'Maximum batch size (see limits.documentsFetchCount config)',
+      description: 'Maximum batch size (see limits.documentsWriteCount config)',
       default: '5000'
     }),
     index: flags.string({
@@ -25,6 +25,15 @@ export default class IndexRestore extends Kommand {
   ]
 
   async run() {
+    try {
+      await this.runSafe();
+    }
+    catch (error) {
+      this.logError(error);
+    }
+  }
+
+  async runSafe() {
     this.log('')
     this.log(`${printCliName()} - ${IndexRestore.description}`)
     this.log('')

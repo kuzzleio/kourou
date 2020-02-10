@@ -28,6 +28,15 @@ class ApiKeyCreate extends Kommand {
   };
 
   public async run() {
+    try {
+      await this.runSafe();
+    }
+    catch (error) {
+      this.logError(error);
+    }
+  }
+
+  async runSafe() {
     this.log('')
     this.log(`${printCliName()} - ${ApiKeyCreate.description}`)
     this.log('')
