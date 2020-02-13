@@ -326,7 +326,7 @@ ARGUMENTS
 OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
-  --arg=arg            Additional argument. Could be many. (eg: "--arg refresh:wait_for")
+  --arg=arg            Additional argument. Repeatable. (eg: "--arg refresh:wait_for")
   --body=body          Request body in JSON format.
   --help               show CLI help
   --password=password  Kuzzle user password
