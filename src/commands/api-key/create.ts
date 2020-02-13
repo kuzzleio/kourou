@@ -3,7 +3,7 @@ import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 
 class ApiKeyCreate extends Kommand {
-  public static description = 'Creates a new API Key for an user';
+  public static description = 'Creates a new API Key for a user';
 
   public static flags = {
     help: flags.help(),

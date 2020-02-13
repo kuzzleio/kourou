@@ -6,7 +6,7 @@ import chalk from 'chalk'
 const Vault = require('kuzzle-vault')
 
 export class VaultShow extends Kommand {
-  static description = 'Display an encrypted key on stdout'
+  static description = 'Prints an encrypted key on stdout'
 
   static flags = {
     'vault-key': flags.string({

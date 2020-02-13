@@ -6,7 +6,7 @@ import { flags } from '@oclif/command'
 const Vault = require('kuzzle-vault')
 
 export class VaultEncrypt extends Kommand {
-  static description = 'Encrypt an entire file'
+  static description = 'Encrypts an entire file'
 
   static flags = {
     force: flags.boolean({
