@@ -326,7 +326,7 @@ ARGUMENTS
 OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
-  --arg=arg            Additional argument. Could be many. (eg: "--arg refresh:wait_for")
+  --arg=arg            Additional argument. Repeatable. (eg: "--arg refresh:wait_for")
   --body=body          Request body in JSON format.
   --help               show CLI help
   --password=password  Kuzzle user password
@@ -357,7 +357,7 @@ _See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v
 
 ## `kourou vault:encrypt FILE`
 
-Encrypts an entire file
+Encrypts an entire file.
 
 ```
 USAGE
@@ -376,7 +376,7 @@ _See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/bl
 
 ## `kourou vault:show SECRETS-FILE KEY`
 
-Prints an encrypted key on stdout
+Prints an encrypted key.
 
 ```
 USAGE
