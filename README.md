@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.6.0 linux-x64 node-v12.13.1
+kourou/0.6.0 linux-x64 node-v12.16.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -68,13 +68,14 @@ By environment variables:
 * [`kourou index:restore PATH`](#kourou-indexrestore-path)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
+* [`kourou query ACTIONNAME`](#kourou-query-actionname)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
 * [`kourou vault:show SECRETS-FILE KEY`](#kourou-vaultshow-secrets-file-key)
 
 ## `kourou api-key:create USER`
 
-Creates a new API Key for a user.
+Creates a new API Key for an user
 
 ```
 USAGE
@@ -99,7 +100,7 @@ _See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/b
 
 ## `kourou api-key:delete USER`
 
-Deletes a user's API Key.
+Deletes a new API Key for an user
 
 ```
 USAGE
@@ -122,7 +123,7 @@ _See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/b
 
 ## `kourou api-key:search USER`
 
-Lists a user's API Keys.
+List an user API Keys
 
 ```
 USAGE
@@ -311,9 +312,33 @@ OPTIONS
 
 _See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/instance/spawn.ts)_
 
+## `kourou query ACTIONNAME`
+
+Executes an API query
+
+```
+USAGE
+  $ kourou query ACTIONNAME
+
+ARGUMENTS
+  ACTIONNAME  Controller and action (eg: "server:now")
+
+OPTIONS
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  --arg=arg            Additional argument. Could be many. (eg: "--arg refresh:wait_for")
+  --body=body          [default: {}] Request body in JSON format.
+  --help               show CLI help
+  --password=password  Kuzzle user password
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle user
+```
+
+_See code: [src/commands/query.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/query.ts)_
+
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
-Adds an encrypted key to a secrets file
+Add an encrypted key to a secrets file
 
 ```
 USAGE
@@ -332,7 +357,7 @@ _See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v
 
 ## `kourou vault:encrypt FILE`
 
-Encrypts an entire file.
+Encrypt an entire file
 
 ```
 USAGE
@@ -351,7 +376,7 @@ _See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/bl
 
 ## `kourou vault:show SECRETS-FILE KEY`
 
-Prints an encrypted key.
+Display an encrypted key on stdout
 
 ```
 USAGE

@@ -10,7 +10,6 @@ import net from 'net'
 import emoji from 'node-emoji'
 import { Kommand } from '../../common'
 
-
 const MIN_MAX_MAP_COUNT = 262144
 const MIN_DOCO_VERSION = '1.12.0'
 
@@ -129,7 +128,7 @@ export default class InstanceSpawn extends Kommand {
     writeFileSync(docoFilename, this.generateDocoFile(userFlags.version, portIndex))
 
     // clean up
-    await execa('docker-compose', ['-f', docoFilename, '-p', `stack-${portIndex}`, 'down']);
+    await execa('docker-compose', ['-f', docoFilename, '-p', `stack-${portIndex}`, 'down'])
 
     const doco: ChildProcess = spawn(
       'docker-compose',

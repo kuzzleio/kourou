@@ -40,13 +40,13 @@ class Query extends Kommand {
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init()
 
-    const [controller, action] = args.actionName.split(':');
+    const [controller, action] = args.actionName.split(':')
 
-    const requestArgs: any = {};
+    const requestArgs: any = {}
 
     for (const keyValue of userFlags.arg) {
-      const [key, value] = keyValue.split(':');
-      requestArgs[key] = value;
+      const [key, value] = keyValue.split(':')
+      requestArgs[key] = value
     }
 
     const request = {
@@ -54,7 +54,7 @@ class Query extends Kommand {
       action,
       ...requestArgs,
       body: JSON.parse(userFlags.body),
-    };
+    }
 
     try {
       const response = await sdk.query(request)
