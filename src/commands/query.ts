@@ -13,8 +13,7 @@ class Query extends Kommand {
       multiple: true
     }),
     body: flags.string({
-      description: 'Request body in JSON format.',
-      default: '{}'
+      description: 'Request body in JSON format.'
     }),
     ...kuzzleFlags,
   };
@@ -53,7 +52,7 @@ class Query extends Kommand {
       controller,
       action,
       ...requestArgs,
-      body: JSON.parse(userFlags.body),
+      body: JSON.parse(userFlags.body || '{}'),
     }
 
     try {

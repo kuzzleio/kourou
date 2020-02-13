@@ -327,7 +327,7 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --arg=arg            Additional argument. Could be many. (eg: "--arg refresh:wait_for")
-  --body=body          [default: {}] Request body in JSON format.
+  --body=body          Request body in JSON format.
   --help               show CLI help
   --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
