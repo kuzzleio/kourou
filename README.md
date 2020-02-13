@@ -68,7 +68,7 @@ By environment variables:
 * [`kourou index:restore PATH`](#kourou-indexrestore-path)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
-* [`kourou query ACTIONNAME`](#kourou-query-actionname)
+* [`kourou query CONTROLLER:ACTION`](#kourou-query-controlleraction)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
 * [`kourou vault:show SECRETS-FILE KEY`](#kourou-vaultshow-secrets-file-key)
@@ -312,16 +312,16 @@ OPTIONS
 
 _See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.8.0/src/commands/instance/spawn.ts)_
 
-## `kourou query ACTIONNAME`
+## `kourou query CONTROLLER:ACTION`
 
 Executes an API query
 
 ```
 USAGE
-  $ kourou query ACTIONNAME
+  $ kourou query CONTROLLER:ACTION
 
 ARGUMENTS
-  ACTIONNAME  Controller and action (eg: "server:now")
+  CONTROLLER:ACTION  Controller and action (eg: "server:now")
 
 OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host

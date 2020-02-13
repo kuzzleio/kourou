@@ -19,7 +19,7 @@ class Query extends Kommand {
   };
 
   static args = [
-    { name: 'actionName', description: 'Controller and action (eg: "server:now")', required: true },
+    { name: 'controller:action', description: 'Controller and action (eg: "server:now")', required: true },
   ]
 
   async run() {
@@ -39,7 +39,7 @@ class Query extends Kommand {
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init()
 
-    const [controller, action] = args.actionName.split(':')
+    const [controller, action] = args['controller:action'].split(':')
 
     const requestArgs: any = {}
 
