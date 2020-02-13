@@ -43,7 +43,7 @@ class Query extends Kommand {
 
     const requestArgs: any = {}
 
-    for (const keyValue of userFlags.arg) {
+    for (const keyValue of userFlags.arg || []) {
       const [key, value] = keyValue.split(':')
       requestArgs[key] = value
     }
