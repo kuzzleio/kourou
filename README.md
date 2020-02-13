@@ -100,7 +100,7 @@ _See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/b
 
 ## `kourou api-key:delete USER`
 
-Deletes a new API Key for an user
+Deletes a user's API Key.
 
 ```
 USAGE
