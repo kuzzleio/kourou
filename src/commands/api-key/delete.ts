@@ -3,7 +3,7 @@ import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 
 class ApiKeyDelete extends Kommand {
-  public static description = 'Deletes a new API Key for an user';
+  public static description = 'Deletes an API key.';
 
   public static flags = {
     help: flags.help(),
@@ -18,6 +18,15 @@ class ApiKeyDelete extends Kommand {
   ]
 
   public async run() {
+    try {
+      await this.runSafe()
+    }
+    catch (error) {
+      this.logError(error)
+    }
+  }
+
+  async runSafe() {
     this.printCommand()
 
     const { flags: userFlags, args } = this.parse(ApiKeyDelete)

@@ -1,10 +1,12 @@
 import * as fs from 'fs'
+import cli from 'cli-ux'
 
 // tslint:disable-next-line
 const ndjson = require('ndjson')
 
-async function dumpCollection(sdk: any, index: string, collection: string, batchSize: number, path: string) {
-  const filename = `${path}/collection-${collection}.jsonl`
+export async function dumpCollectionData(sdk: any, index: string, collection: string, batchSize: number, path: string) {
+  const collectionDir = `${path}/${collection}`
+  const filename = `${collectionDir}/documents.jsonl`
   const writeStream = fs.createWriteStream(filename)
   const waitWrite = new Promise(resolve => writeStream.on('finish', resolve))
   const ndjsonStream = ndjson.serialize()
@@ -19,6 +21,8 @@ async function dumpCollection(sdk: any, index: string, collection: string, batch
 
   ndjsonStream.on('data', (line: string) => writeStream.write(line))
 
+  fs.mkdirSync(collectionDir, { recursive: true })
+
   await new Promise(resolve => {
     if (ndjsonStream.write({ index: index, collection })) {
       resolve()
@@ -29,9 +33,13 @@ async function dumpCollection(sdk: any, index: string, collection: string, batch
 
   let results = await sdk.document.search(index, collection, {}, options)
 
+  const progressBar = cli.progress({
+    format: `Dumping ${collection} |{bar}| {percentage}% || {value}/{total} documents`
+  })
+  progressBar.start(results.total, 0)
+
   do {
-    process.stdout.write(`  ${results.fetched}/${results.total} documents dumped`)
-    process.stdout.write('\r')
+    progressBar.update(results.fetched)
 
     for (const hit of results.hits) {
       const document = {
@@ -45,10 +53,26 @@ async function dumpCollection(sdk: any, index: string, collection: string, batch
     }
   } while ((results = await results.next()))
 
+  progressBar.stop()
   ndjsonStream.end()
   writeStream.end()
 
   return waitWrite
 }
 
-export default dumpCollection
+export async function dumpCollectionMappings(sdk: any, index: string, collection: string, path: string) {
+  const collectionDir = `${path}/${collection}`
+  const filename = `${collectionDir}/mappings.json`
+
+  fs.mkdirSync(collectionDir, { recursive: true })
+
+  const mappings = await sdk.collection.getMapping(index, collection)
+
+  const content = {
+    [index]: {
+      [collection]: mappings
+    }
+  }
+
+  fs.writeFileSync(filename, JSON.stringify(content, null, 2))
+}

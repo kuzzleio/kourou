@@ -3,7 +3,7 @@ import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import * as fs from 'fs'
 import chalk from 'chalk'
-import restoreCollection from '../../support/restore-collection'
+import { restoreCollectionData, restoreCollectionMappings } from '../../support/restore-collection'
 
 export default class IndexRestore extends Kommand {
   static description = 'Restore the content of a previously dumped index'
@@ -11,11 +11,14 @@ export default class IndexRestore extends Kommand {
   static flags = {
     help: flags.help({}),
     'batch-size': flags.string({
-      description: 'Maximum batch size (see limits.documentsFetchCount config)',
-      default: '5000'
+      description: 'Maximum batch size (see limits.documentsWriteCount config)',
+      default: '200'
     }),
     index: flags.string({
       description: 'If set, override the index destination name',
+    }),
+    'no-mappings': flags.boolean({
+      description: 'Skip collections mappings'
     }),
     ...kuzzleFlags,
   }
@@ -25,6 +28,15 @@ export default class IndexRestore extends Kommand {
   ]
 
   async run() {
+    try {
+      await this.runSafe()
+    }
+    catch (error) {
+      this.logError(error)
+    }
+  }
+
+  async runSafe() {
     this.printCommand()
 
     const { args, flags: userFlags } = this.parse(IndexRestore)
@@ -37,25 +49,34 @@ export default class IndexRestore extends Kommand {
 
     if (index) {
       this.log(chalk.green(`[✔] Start importing dump from ${args.path} in index ${index}`))
-    } else {
+    }
+    else {
       this.log(chalk.green(`[✔] Start importing dump from ${args.path} in same index`))
     }
 
-    const dumpFiles = fs.readdirSync(args.path).map(f => `${args.path}/${f}`)
+    const dumpDirs = fs.readdirSync(args.path).map(f => `${args.path}/${f}`)
 
     try {
-      for (const dumpFile of dumpFiles) {
-        await restoreCollection(
+      for (const dumpDir of dumpDirs) {
+        if (!userFlags['no-mappings']) {
+          await restoreCollectionMappings(
+            sdk,
+            dumpDir,
+            index)
+        }
+
+        await restoreCollectionData(
           sdk,
           this.log.bind(this),
           Number(userFlags['batch-size']),
-          dumpFile,
+          dumpDir,
           index)
 
         if (index) {
-          this.log(chalk.green(`[✔] Dump file ${dumpFile} imported in index ${index}`))
-        } else {
-          this.log(chalk.green(`[✔] Dump file ${dumpFile} imported`))
+          this.log(chalk.green(`[✔] Dump directory ${dumpDir} imported in index ${index}`))
+        }
+        else {
+          this.log(chalk.green(`[✔] Dump directory ${dumpDir} imported`))
         }
       }
     } catch (error) {

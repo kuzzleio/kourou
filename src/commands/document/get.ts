@@ -3,7 +3,7 @@ import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 
 export default class DocumentGet extends Kommand {
-  static description = 'Get a document'
+  static description = 'Gets a document'
 
   static flags = {
     help: flags.help(),
@@ -17,6 +17,15 @@ export default class DocumentGet extends Kommand {
   ]
 
   async run() {
+    try {
+      await this.runSafe()
+    }
+    catch (error) {
+      this.logError(error)
+    }
+  }
+
+  async runSafe() {
     this.printCommand()
 
     const { args, flags: userFlags } = this.parse(DocumentGet)

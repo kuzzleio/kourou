@@ -3,7 +3,7 @@ import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 
 class ApiKeyCreate extends Kommand {
-  public static description = 'Creates a new API Key for an user';
+  public static description = 'Creates a new API Key for a user';
 
   public static flags = {
     help: flags.help(),
@@ -27,6 +27,15 @@ class ApiKeyCreate extends Kommand {
   ]
 
   public async run() {
+    try {
+      await this.runSafe()
+    }
+    catch (error) {
+      this.logError(error)
+    }
+  }
+
+  async runSafe() {
     this.printCommand()
 
     const { args, flags: userFlags } = this.parse(ApiKeyCreate)

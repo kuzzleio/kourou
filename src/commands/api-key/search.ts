@@ -3,7 +3,7 @@ import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 
 class ApiKeySearch extends Kommand {
-  public static description = 'List an user API Keys';
+  public static description = 'Lists a user\'s API Keys.';
 
   public static flags = {
     help: flags.help(),
@@ -18,6 +18,15 @@ class ApiKeySearch extends Kommand {
   ]
 
   public async run() {
+    try {
+      await this.runSafe()
+    }
+    catch (error) {
+      this.logError(error)
+    }
+  }
+
+  async runSafe() {
     this.printCommand()
 
     const { flags: userFlags, args } = this.parse(ApiKeySearch)

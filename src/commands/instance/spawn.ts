@@ -104,11 +104,20 @@ export default class InstanceSpawn extends Kommand {
    * @override
    */
   public async run() {
+    try {
+      await this.runSafe()
+    }
+    catch (error) {
+      this.logError(error)
+    }
+  }
+
+  async runSafe() {
     this.printCommand()
 
     const { flags: userFlags } = this.parse(InstanceSpawn)
     const portIndex = await this.findAvailablePort()
-    const dockerComposeFileName = `/tmp/kuzzle-stack-${portIndex}.yml`
+    const docoFilename = `/tmp/kuzzle-stack-${portIndex}.yml`
 
     const successfullCheck = userFlags.check ?
       await this.checkPrerequisites() :
@@ -123,13 +132,16 @@ export default class InstanceSpawn extends Kommand {
     }
 
     this.log(
-      chalk.grey(`\nWriting docker-compose file to ${dockerComposeFileName}...`),
+      chalk.grey(`\nWriting docker-compose file to ${docoFilename}...`),
     )
-    writeFileSync(dockerComposeFileName, this.generateDocoFile(userFlags.version, portIndex))
+    writeFileSync(docoFilename, this.generateDocoFile(userFlags.version, portIndex))
+
+    // clean up
+    await execa('docker-compose', ['-f', docoFilename, '-p', `stack-${portIndex}`, 'down'])
 
     const doco: ChildProcess = spawn(
       'docker-compose',
-      ['-f', dockerComposeFileName, '-p', `stack-${portIndex}`, 'up', '-d'])
+      ['-f', docoFilename, '-p', `stack-${portIndex}`, 'up', '-d'])
 
     cli.action.start(
       ` ${emoji.get('rocket')} Kuzzle version ${userFlags.version} is launching`,
@@ -148,7 +160,7 @@ export default class InstanceSpawn extends Kommand {
           )} in the background right now.`)
         this.log(chalk.grey('To watch the logs, run'))
         this.log(
-          chalk.grey(`  docker-compose -f ${dockerComposeFileName} -p stack-${portIndex} logs -f\n`),
+          chalk.grey(`  docker-compose -f ${docoFilename} -p stack-${portIndex} logs -f\n`),
         )
         this.log(`  Kuzzle port: ${7512 + portIndex}`)
         this.log(`  MQTT port: ${1883 + portIndex}`)
@@ -163,7 +175,7 @@ export default class InstanceSpawn extends Kommand {
         this.log(
           chalk.grey('If you want to investigate the problem, try running'),
         )
-        this.log(chalk.grey(`  docker-compose -f ${dockerComposeFileName} -p stack-${portIndex} up\n`))
+        this.log(chalk.grey(`  docker-compose -f ${docoFilename} -p stack-${portIndex} up\n`))
         throw new Error('docker-compose exited witn non-zero status')
       }
     })

@@ -1,7 +1,7 @@
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
-import dumpCollection from '../../support/dump-collection'
+import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-collection'
 import * as fs from 'fs'
 import chalk from 'chalk'
 
@@ -11,11 +11,11 @@ export default class CollectionDump extends Kommand {
   static flags = {
     help: flags.help({}),
     path: flags.string({
-      description: 'Dump directory (default: index name)',
+      description: 'Dump root directory (default: index name)',
     }),
     'batch-size': flags.string({
       description: 'Maximum batch size (see limits.documentsFetchCount config)',
-      default: '5000'
+      default: '2000'
     }),
     ...kuzzleFlags,
   }
@@ -26,6 +26,15 @@ export default class CollectionDump extends Kommand {
   ]
 
   async run() {
+    try {
+      await this.runSafe()
+    }
+    catch (error) {
+      this.logError(error)
+    }
+  }
+
+  async runSafe() {
     this.printCommand()
 
     const { args, flags: userFlags } = this.parse(CollectionDump)
@@ -35,11 +44,17 @@ export default class CollectionDump extends Kommand {
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init()
 
-    this.log(`Dumping collection "${args.index}:${args.collection}" in ${path}/ ...`)
+    this.log(chalk.green(`Dumping collection "${args.index}:${args.collection}" in ${path}/ ...`))
 
     fs.mkdirSync(path, { recursive: true })
 
-    await dumpCollection(
+    await dumpCollectionMappings(
+      sdk,
+      args.index,
+      args.collection,
+      path)
+
+    await dumpCollectionData(
       sdk,
       args.index,
       args.collection,

@@ -1,13 +1,14 @@
 {
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kourou": "./bin/run"
   },
   "bugs": "https://github.com/kuzzleio/kourou/issues",
   "dependencies": {
+    "@elastic/elasticsearch": "^7.6.0",
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.13.3",
     "@oclif/plugin-help": "^2.2.3",
