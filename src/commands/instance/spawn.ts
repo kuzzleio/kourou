@@ -104,6 +104,15 @@ export default class InstanceSpawn extends Kommand {
    * @override
    */
   public async run() {
+    try {
+      await this.runSafe()
+    }
+    catch (error) {
+      this.logError(error)
+    }
+  }
+
+  async runSafe() {
     this.printCommand()
 
     const { flags: userFlags } = this.parse(InstanceSpawn)

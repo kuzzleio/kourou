@@ -16,6 +16,15 @@ export class InstanceLogs extends Kommand {
   }
 
   async run() {
+    try {
+      await this.runSafe()
+    }
+    catch (error) {
+      this.warn(error)
+    }
+  }
+
+  async runSafe() {
     this.printCommand()
 
     const { flags } = this.parse(InstanceLogs)
