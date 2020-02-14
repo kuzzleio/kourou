@@ -23,12 +23,12 @@ function handleError(log: any, dumpFile: string, error: any) {
   }
   else {
     log(chalk.red(error.message))
-    throw error;
+    throw error
   }
 }
 
 export async function restoreCollectionData(sdk: any, log: any, batchSize: number, dumpDir: string, index?: string, collection?: string) {
-  const dumpFile = `${dumpDir}/documents.jsonl`;
+  const dumpFile = `${dumpDir}/documents.jsonl`
   const mWriteRequest = {
     controller: 'bulk',
     action: 'mWrite',
@@ -131,18 +131,18 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
  * @returns {Promise}
  */
 export async function restoreCollectionMappings(sdk: any, dumpDir: string, index?: string, collection?: string) {
-  const dumpFile = `${dumpDir}/mappings.json`;
-  const content: any = JSON.parse(fs.readFileSync(dumpFile, 'utf8'));
+  const dumpFile = `${dumpDir}/mappings.json`
+  const content: any = JSON.parse(fs.readFileSync(dumpFile, 'utf8'))
 
-  const srcIndex: any = Object.keys(content)[0];
-  const srcCollection: any = Object.keys(content[srcIndex])[0];
+  const srcIndex: any = Object.keys(content)[0]
+  const srcCollection: any = Object.keys(content[srcIndex])[0]
 
-  const dstIndex: any = index || srcIndex;
-  const dstCollection: any = collection || srcCollection;
+  const dstIndex: any = index || srcIndex
+  const dstCollection: any = collection || srcCollection
 
-  if (! await sdk.index.exists(dstIndex)) {
+  if (!await sdk.index.exists(dstIndex)) {
     await sdk.index.create(dstIndex)
   }
 
-  return sdk.collection.create(dstIndex, dstCollection, content[srcIndex][srcCollection]);
+  return sdk.collection.create(dstIndex, dstCollection, content[srcIndex][srcCollection])
 }

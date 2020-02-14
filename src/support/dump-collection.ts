@@ -35,11 +35,11 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
 
   const progressBar = cli.progress({
     format: `Dumping ${collection} |{bar}| {percentage}% || {value}/{total} documents`
-  });
-  progressBar.start(results.total, 0);
+  })
+  progressBar.start(results.total, 0)
 
   do {
-    progressBar.update(results.fetched);
+    progressBar.update(results.fetched)
 
     for (const hit of results.hits) {
       const document = {
@@ -66,13 +66,13 @@ export async function dumpCollectionMappings(sdk: any, index: string, collection
 
   fs.mkdirSync(collectionDir, { recursive: true })
 
-  const mappings = await sdk.collection.getMapping(index, collection);
+  const mappings = await sdk.collection.getMapping(index, collection)
 
   const content = {
     [index]: {
       [collection]: mappings
     }
-  };
+  }
 
-  fs.writeFileSync(filename, JSON.stringify(content, null, 2));
+  fs.writeFileSync(filename, JSON.stringify(content, null, 2))
 }

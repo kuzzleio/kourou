@@ -56,7 +56,7 @@ export default class IndexDump extends Kommand {
           Number(userFlags['batch-size']),
           path)
 
-        cli.action.stop();
+        cli.action.stop()
       }
     }
 
