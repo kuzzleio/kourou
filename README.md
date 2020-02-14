@@ -263,7 +263,7 @@ _See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v
 
 ## `kourou es:list-index`
 
-List available ES indexes
+Lists available ES indexes
 
 ```
 USAGE
