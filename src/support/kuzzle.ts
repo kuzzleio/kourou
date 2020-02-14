@@ -18,7 +18,7 @@ export const kuzzleFlags = {
     default: Boolean(process.env.KUZZLE_SSL) || undefined,
   }),
   username: flags.string({
-    description: 'Kuzzle user',
+    description: 'Kuzzle username (local strategy)',
     default: process.env.KUZZLE_USERNAME || 'anonymous',
   }),
   password: flags.string({

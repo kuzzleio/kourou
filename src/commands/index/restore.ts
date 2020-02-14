@@ -17,9 +17,8 @@ export default class IndexRestore extends Kommand {
     index: flags.string({
       description: 'If set, override the index destination name',
     }),
-    mappings: flags.boolean({
-      description: 'Restore collections mappings',
-      default: true
+    'no-mappings': flags.boolean({
+      description: 'Skip collections mappings'
     }),
     ...kuzzleFlags,
   }
@@ -59,10 +58,12 @@ export default class IndexRestore extends Kommand {
 
     try {
       for (const dumpDir of dumpDirs) {
-        await restoreCollectionMappings(
-          sdk,
-          dumpDir,
-          index)
+        if (!userFlags['no-mappings']) {
+          await restoreCollectionMappings(
+            sdk,
+            dumpDir,
+            index)
+        }
 
         await restoreCollectionData(
           sdk,

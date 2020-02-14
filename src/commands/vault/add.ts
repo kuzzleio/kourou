@@ -6,7 +6,7 @@ import chalk from 'chalk'
 const Vault = require('kuzzle-vault')
 
 export class VaultAdd extends Kommand {
-  static description = 'Add an encrypted key to a secrets file'
+  static description = 'Adds an encrypted key to a secrets file'
 
   static flags = {
     'vault-key': flags.string({
