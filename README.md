@@ -222,7 +222,7 @@ _See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blo
 
 ## `kourou es:get INDEX ID`
 
-Get a document from ES
+Gets a document from ES
 
 ```
 USAGE
