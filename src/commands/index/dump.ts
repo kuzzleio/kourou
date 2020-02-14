@@ -26,6 +26,15 @@ export default class IndexDump extends Kommand {
   ]
 
   async run() {
+    try {
+      await this.runSafe()
+    }
+    catch (error) {
+      this.logError(error)
+    }
+  }
+
+  async runSafe() {
     this.printCommand()
 
     const { args, flags: userFlags } = this.parse(IndexDump)

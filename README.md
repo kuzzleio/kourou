@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.6.0 linux-x64 node-v12.13.1
+kourou/0.7.0 linux-x64 node-v12.15.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -63,6 +63,9 @@ By environment variables:
 * [`kourou collection:dump INDEX COLLECTION`](#kourou-collectiondump-index-collection)
 * [`kourou collection:restore PATH`](#kourou-collectionrestore-path)
 * [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
+* [`kourou es:get INDEX ID`](#kourou-esget-index-id)
+* [`kourou es:insert INDEX`](#kourou-esinsert-index)
+* [`kourou es:list-index`](#kourou-eslist-index)
 * [`kourou help [COMMAND]`](#kourou-help-command)
 * [`kourou index:dump INDEX`](#kourou-indexdump-index)
 * [`kourou index:restore PATH`](#kourou-indexrestore-path)
@@ -74,7 +77,7 @@ By environment variables:
 
 ## `kourou api-key:create USER`
 
-Creates a new API Key for a user.
+Creates a new API Key for an user
 
 ```
 USAGE
@@ -95,11 +98,11 @@ OPTIONS
   --username=username            [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/api-key/create.ts)_
+_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/api-key/create.ts)_
 
 ## `kourou api-key:delete USER`
 
-Deletes a user's API Key.
+Deletes a new API Key for an user
 
 ```
 USAGE
@@ -118,11 +121,11 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/api-key/delete.ts)_
+_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/api-key/delete.ts)_
 
 ## `kourou api-key:search USER`
 
-Lists a user's API Keys.
+List an user API Keys
 
 ```
 USAGE
@@ -141,7 +144,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/api-key/search.ts)_
+_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/api-key/search.ts)_
 
 ## `kourou collection:dump INDEX COLLECTION`
 
@@ -166,7 +169,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/collection/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/collection/dump.ts)_
+_See code: [src/commands/collection/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/collection/dump.ts)_
 
 ## `kourou collection:restore PATH`
 
@@ -191,7 +194,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/collection/restore.ts)_
+_See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/collection/restore.ts)_
 
 ## `kourou document:get INDEX COLLECTION ID`
 
@@ -215,7 +218,65 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/document/get.ts)_
+_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/document/get.ts)_
+
+## `kourou es:get INDEX ID`
+
+Gets a document from ES
+
+```
+USAGE
+  $ kourou es:get INDEX ID
+
+ARGUMENTS
+  INDEX  ES Index name
+  ID     Document ID
+
+OPTIONS
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/get.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/es/get.ts)_
+
+## `kourou es:insert INDEX`
+
+Inserts a document directly into ES (will replace if exists)
+
+```
+USAGE
+  $ kourou es:insert INDEX
+
+ARGUMENTS
+  INDEX  ES Index name
+
+OPTIONS
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --body=body      [default: {}] Document body in JSON
+  --help           show CLI help
+  --id=id          Document ID
+```
+
+_See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/es/insert.ts)_
+
+## `kourou es:list-index`
+
+Lists available ES indexes
+
+```
+USAGE
+  $ kourou es:list-index
+
+OPTIONS
+  -g, --grep=grep  Match output with pattern
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/list-index.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/es/list-index.ts)_
 
 ## `kourou help [COMMAND]`
 
@@ -256,7 +317,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/index/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/index/dump.ts)_
+_See code: [src/commands/index/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/index/dump.ts)_
 
 ## `kourou index:restore PATH`
 
@@ -272,7 +333,7 @@ ARGUMENTS
 OPTIONS
   -h, --host=host          [default: localhost] Kuzzle server host
   -p, --port=port          [default: 7512] Kuzzle server port
-  --batch-size=batch-size  [default: 5000] Maximum batch size (see limits.documentsFetchCount config)
+  --batch-size=batch-size  [default: 5000] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
   --index=index            If set, override the index destination name
   --password=password      Kuzzle user password
@@ -280,7 +341,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle user
 ```
 
-_See code: [src/commands/index/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/index/restore.ts)_
+_See code: [src/commands/index/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/index/restore.ts)_
 
 ## `kourou instance:logs`
 
@@ -293,7 +354,7 @@ OPTIONS
   -i, --instance=instance  Kuzzle instance name
 ```
 
-_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/instance/logs.ts)_
+_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/instance/logs.ts)_
 
 ## `kourou instance:spawn`
 
@@ -309,11 +370,11 @@ OPTIONS
   --help                 show CLI help
 ```
 
-_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/instance/spawn.ts)_
+_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/instance/spawn.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
-Adds an encrypted key to a secrets file
+Add an encrypted key to a secrets file
 
 ```
 USAGE
@@ -328,11 +389,11 @@ OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
-_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/vault/add.ts)_
+_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/vault/add.ts)_
 
 ## `kourou vault:encrypt FILE`
 
-Encrypts an entire file.
+Encrypt an entire file
 
 ```
 USAGE
@@ -347,11 +408,11 @@ OPTIONS
   --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
-_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/vault/encrypt.ts)_
+_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/vault/encrypt.ts)_
 
 ## `kourou vault:show SECRETS-FILE KEY`
 
-Prints an encrypted key.
+Display an encrypted key on stdout
 
 ```
 USAGE
@@ -365,7 +426,7 @@ OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
-_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/vault/show.ts)_
+_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/vault/show.ts)_
 <!-- commandsstop -->
 
 # Where does this weird name comes from?
