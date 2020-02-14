@@ -74,4 +74,8 @@ export class KuzzleSDK {
   get collection() {
     return this.sdk.collection
   }
+
+  get index() {
+    return this.sdk.index
+  }
 }

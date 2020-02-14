@@ -14,8 +14,8 @@ Feature: Index Commands
       | "the-hive2"        | { "city": "hcmc", "district": 2 } |
     When I run the command "index:dump" with args:
       | "nyc-open-data" |
-    And I truncate the collection "nyc-open-data":"yellow-taxi"
-    And I truncate the collection "nyc-open-data":"green-taxi"
+    And I successfully call the route "index":"delete" with args:
+      | "nyc-open-data" |
     And I run the command "index:restore" with args:
       | "nyc-open-data" |
     Then The document "chuon-chuon-kim2" content match:
@@ -31,4 +31,10 @@ Feature: Index Commands
     And The document "the-hive" content match:
       | city     | "hcmc" |
       | district | 2      |
+    Then I successfully call the route "collection":"getMapping" with args:
+      | "nyc-open-data" |
+      | "yellow-taxi"   |
+    And The property "properties" of the result should match:
+      | city | { "type": "keyword" } |
+      | name | { "type": "keyword" } |
 
