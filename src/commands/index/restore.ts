@@ -49,10 +49,6 @@ export default class IndexRestore extends Kommand {
     const dumpDirs = fs.readdirSync(args.path).map(f => `${args.path}/${f}`)
 
     try {
-      if (! await sdk.index.exists(index)) {
-        await sdk.index.create(index);
-      }
-
       for (const dumpDir of dumpDirs) {
         await restoreCollectionMappings(
           sdk,
