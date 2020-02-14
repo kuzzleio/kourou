@@ -222,7 +222,7 @@ _See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blo
 
 ## `kourou es:get INDEX ID`
 
-Get a document from ES
+Gets a document from ES
 
 ```
 USAGE
@@ -242,7 +242,7 @@ _See code: [src/commands/es/get.ts](https://github.com/kuzzleio/kourou/blob/v0.7
 
 ## `kourou es:insert INDEX`
 
-Insert a document directly into ES (will replace if exists)
+Inserts a document directly into ES (will replace if exists)
 
 ```
 USAGE
@@ -263,7 +263,7 @@ _See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v
 
 ## `kourou es:list-index`
 
-List available ES indexes
+Lists available ES indexes
 
 ```
 USAGE

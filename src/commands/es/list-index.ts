@@ -3,7 +3,7 @@ import { Kommand } from '../../common'
 import { Client } from '@elastic/elasticsearch'
 
 export default class EsListIndex extends Kommand {
-  static description = 'List available ES indexes'
+  static description = 'Lists available ES indexes'
 
   static flags = {
     help: flags.help(),
