@@ -242,7 +242,7 @@ _See code: [src/commands/es/get.ts](https://github.com/kuzzleio/kourou/blob/v0.7
 
 ## `kourou es:insert INDEX`
 
-Insert a document directly into ES (will replace if exists)
+Inserts a document directly into ES (will replace if exists)
 
 ```
 USAGE
