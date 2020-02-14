@@ -4,6 +4,8 @@ import * as inquirer from 'inquirer'
 import execa from 'execa'
 
 export class InstanceLogs extends Kommand {
+  static description = 'Displays the logs of a running Kuzzle'
+
   static flags = {
     instance: flags.string({
       char: 'i',

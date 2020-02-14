@@ -19,9 +19,8 @@ export default class CollectionRestore extends Kommand {
     collection: flags.string({
       description: 'If set, override the collection destination name',
     }),
-    mappings: flags.boolean({
-      description: 'Restore the collection mappings',
-      default: true
+    'no-mappings': flags.boolean({
+      description: 'Skip collection mappings'
     }),
     ...kuzzleFlags,
   }
@@ -54,7 +53,7 @@ export default class CollectionRestore extends Kommand {
     this.log(chalk.green(`[✔] Start importing dump from ${args.path}`))
 
     try {
-      if (userFlags.mappings) {
+      if (!userFlags['no-mappings']) {
         await restoreCollectionMappings(
           sdk,
           args.path,

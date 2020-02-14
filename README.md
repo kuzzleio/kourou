@@ -190,7 +190,7 @@ OPTIONS
   --collection=collection  If set, override the collection destination name
   --help                   show CLI help
   --index=index            If set, override the index destination name
-  --mappings               Restore the collection mappings
+  --no-mappings            Skip collection mappings
   --password=password      Kuzzle user password
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
@@ -200,7 +200,7 @@ _See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kour
 
 ## `kourou document:get INDEX COLLECTION ID`
 
-Get a document
+Gets a document
 
 ```
 USAGE
@@ -338,7 +338,7 @@ OPTIONS
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
   --index=index            If set, override the index destination name
-  --mappings               Restore collections mappings
+  --no-mappings            Skip collections mappings
   --password=password      Kuzzle user password
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
@@ -347,6 +347,8 @@ OPTIONS
 _See code: [src/commands/index/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.6.0/src/commands/index/restore.ts)_
 
 ## `kourou instance:logs`
+
+Displays the logs of a running Kuzzle
 
 ```
 USAGE
