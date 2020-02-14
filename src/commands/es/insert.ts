@@ -3,7 +3,7 @@ import { Kommand } from '../../common'
 import { Client } from '@elastic/elasticsearch'
 
 export default class EsInsert extends Kommand {
-  static description = 'Insert a document directly into ES (will replace if exists)'
+  static description = 'Inserts a document directly into ES (will replace if exists)'
 
   static flags = {
     body: flags.string({
