@@ -3,6 +3,8 @@ module.exports = {
   'nyc-open-data': {
     'yellow-taxi': {
       properties: {
+        name: { type: "keyword" },
+        city: { type: "keyword" },
       }
     }
   }

@@ -20,13 +20,15 @@ function handleError(log: any, dumpFile: string, error: any) {
     serialize.end()
 
     log(chalk.red(`[ℹ] Error importing ${dumpFile}. See errors in ${errorFile}`))
-  } else {
-    log(chalk.red(error.message))
   }
-  throw error
+  else {
+    log(chalk.red(error.message))
+    throw error
+  }
 }
 
-function restoreCollection(sdk: any, log: any, batchSize: number, dumpFile: string, index?: string, collection?: string) {
+export async function restoreCollectionData(sdk: any, log: any, batchSize: number, dumpDir: string, index?: string, collection?: string) {
+  const dumpFile = `${dumpDir}/documents.jsonl`
   const mWriteRequest = {
     controller: 'bulk',
     action: 'mWrite',
@@ -37,9 +39,8 @@ function restoreCollection(sdk: any, log: any, batchSize: number, dumpFile: stri
     }
   }
 
-  return new Promise(resolve => {
-    let
-      total = 0
+  return new Promise((resolve, reject) => {
+    let total = 0
     let headerSkipped = false
     let documents: any[] = []
 
@@ -55,20 +56,28 @@ function restoreCollection(sdk: any, log: any, batchSize: number, dumpFile: stri
 
             readStream.pause()
 
-            sdk.query(mWriteRequest)
-              .catch((error: any) => {
-                handleError(log, dumpFile, error)
-                readStream.resume()
-              })
+            sdk
+              .query(mWriteRequest)
               .then(() => {
                 total += mWriteRequest.body.documents.length
-                process.stdout.write(`  ${total} documents handled`)
+                process.stdout.write(`  ${total} documents imported`)
                 process.stdout.write('\r')
 
                 readStream.resume()
               })
+              .catch((error: any) => {
+                try {
+                  handleError(log, dumpFile, error)
+                  readStream.resume()
+                }
+                catch (error) {
+                  readStream.end()
+                  reject(error)
+                }
+              })
           }
-        } else {
+        }
+        else {
           headerSkipped = true
           mWriteRequest.index = index || obj.index
           mWriteRequest.collection = collection || obj.collection
@@ -78,20 +87,62 @@ function restoreCollection(sdk: any, log: any, batchSize: number, dumpFile: stri
         if (documents.length > 0) {
           mWriteRequest.body.documents = documents
 
-          sdk.query(mWriteRequest)
-            .catch((error: any) => handleError(log, dumpFile, error))
+          sdk
+            .query(mWriteRequest)
+            .catch((error: any) => {
+              try {
+                handleError(log, dumpFile, error)
+              }
+              catch (error) {
+                reject(error)
+              }
+            })
             .then(() => {
               total += mWriteRequest.body.documents.length
-              process.stdout.write(`  ${total} documents handled`)
+              process.stdout.write(`  ${total} documents imported`)
               process.stdout.write('\r')
 
               resolve()
             })
-        } else {
+        }
+        else {
           resolve()
         }
       })
   })
 }
 
-export default restoreCollection
+/**
+ * Imports mappings from a collection mappings dump
+ * Expected format:
+ * {
+ *   index: {
+ *     collection: {
+ *       // mappings
+ *     }
+ *   }
+ * }
+ *
+ * @param sdk - Kuzzle SDK instance
+ * @param dumpDir - Path to the collection dump dir
+ * @param index - Override index name
+ * @param collection - Override collection name
+ *
+ * @returns {Promise}
+ */
+export async function restoreCollectionMappings(sdk: any, dumpDir: string, index?: string, collection?: string) {
+  const dumpFile = `${dumpDir}/mappings.json`
+  const content: any = JSON.parse(fs.readFileSync(dumpFile, 'utf8'))
+
+  const srcIndex: any = Object.keys(content)[0]
+  const srcCollection: any = Object.keys(content[srcIndex])[0]
+
+  const dstIndex: any = index || srcIndex
+  const dstCollection: any = collection || srcCollection
+
+  if (!await sdk.index.exists(dstIndex)) {
+    await sdk.index.create(dstIndex)
+  }
+
+  return sdk.collection.create(dstIndex, dstCollection, content[srcIndex][srcCollection])
+}

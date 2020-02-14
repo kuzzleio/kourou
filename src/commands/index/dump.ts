@@ -1,8 +1,9 @@
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
-import dumpCollection from '../../support/dump-collection'
+import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-collection'
 import * as fs from 'fs'
+import cli from 'cli-ux'
 import chalk from 'chalk'
 
 export default class IndexDump extends Kommand {
@@ -15,7 +16,7 @@ export default class IndexDump extends Kommand {
     }),
     'batch-size': flags.string({
       description: 'Maximum batch size (see limits.documentsFetchCount config)',
-      default: '5000'
+      default: '2000'
     }),
     ...kuzzleFlags,
   }
@@ -43,7 +44,7 @@ export default class IndexDump extends Kommand {
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init()
 
-    this.log(`Dumping index "${args.index}" in ${path}/ ...`)
+    this.log(chalk.green(`Dumping index "${args.index}" in ${path}/ ...`))
 
     fs.mkdirSync(path, { recursive: true })
 
@@ -51,15 +52,23 @@ export default class IndexDump extends Kommand {
 
     for (const collection of collections) {
       if (collection.type !== 'realtime') {
-        await dumpCollection(
+        await dumpCollectionMappings(
+          sdk,
+          args.index,
+          collection.name,
+          path)
+
+        await dumpCollectionData(
           sdk,
           args.index,
           collection.name,
           Number(userFlags['batch-size']),
           path)
 
-        this.log(chalk.green(`[✔] Collection ${args.index}:${collection.name} dumped`))
+        cli.action.stop()
       }
     }
+
+    this.log(chalk.green(`[✔] Index ${args.index} dumped`))
   }
 }
