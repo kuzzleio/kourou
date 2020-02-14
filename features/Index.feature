@@ -12,10 +12,12 @@ Feature: Index Commands
       | _id                | body                              |
       | "chuon-chuon-kim2" | { "city": "hcmc", "district": 1 } |
       | "the-hive2"        | { "city": "hcmc", "district": 2 } |
+    # index:dump
     When I run the command "index:dump" with args:
       | "nyc-open-data" |
     And I successfully call the route "index":"delete" with args:
-      | "nyc-open-data" |
+      | index | "nyc-open-data" |
+    # index:restore
     And I run the command "index:restore" with args:
       | "nyc-open-data" |
     Then The document "chuon-chuon-kim2" content match:
@@ -32,8 +34,8 @@ Feature: Index Commands
       | city     | "hcmc" |
       | district | 2      |
     Then I successfully call the route "collection":"getMapping" with args:
-      | "nyc-open-data" |
-      | "yellow-taxi"   |
+      | index      | "nyc-open-data" |
+      | collection | "yellow-taxi"   |
     And The property "properties" of the result should match:
       | city | { "type": "keyword" } |
       | name | { "type": "keyword" } |
