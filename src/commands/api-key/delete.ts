@@ -3,7 +3,7 @@ import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 
 class ApiKeyDelete extends Kommand {
-  public static description = 'Deletes a new API Key for a user';
+  public static description = 'Deletes an API key.';
 
   public static flags = {
     help: flags.help(),
