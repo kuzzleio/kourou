@@ -3,7 +3,7 @@ import { Kommand } from '../../common'
 import { Client } from '@elastic/elasticsearch'
 
 export default class EsGet extends Kommand {
-  static description = 'Get a document from ES'
+  static description = 'Gets a document from ES'
 
   static flags = {
     help: flags.help(),
