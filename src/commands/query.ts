@@ -9,7 +9,7 @@ class Query extends Kommand {
   public static flags = {
     help: flags.help(),
     arg: flags.string({
-      description: 'Additional argument. Repeatable. (eg: "--arg refresh:wait_for")',
+      description: 'Additional argument. Repeatable. (eg: "--arg refresh=wait_for")',
       multiple: true
     }),
     body: flags.string({
@@ -44,7 +44,7 @@ class Query extends Kommand {
     const requestArgs: any = {}
 
     for (const keyValue of userFlags.arg || []) {
-      const [key, value] = keyValue.split(':')
+      const [key, value] = keyValue.split('=')
       requestArgs[key] = value
     }
 
