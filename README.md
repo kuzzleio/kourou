@@ -62,6 +62,7 @@ By environment variables:
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
 * [`kourou collection:dump INDEX COLLECTION`](#kourou-collectiondump-index-collection)
 * [`kourou collection:restore PATH`](#kourou-collectionrestore-path)
+* [`kourou document:create INDEX COLLECTION`](#kourou-documentcreate-index-collection)
 * [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
 * [`kourou es:get INDEX ID`](#kourou-esget-index-id)
 * [`kourou es:insert INDEX`](#kourou-esinsert-index)
@@ -72,6 +73,7 @@ By environment variables:
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
 * [`kourou query CONTROLLER:ACTION`](#kourou-query-controlleraction)
+* [`kourou securities:dump`](#kourou-securitiesdump)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
 * [`kourou vault:show SECRETS-FILE KEY`](#kourou-vaultshow-secrets-file-key)
@@ -197,6 +199,32 @@ OPTIONS
 ```
 
 _See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/collection/restore.ts)_
+
+## `kourou document:create INDEX COLLECTION`
+
+Creates a document
+
+```
+USAGE
+  $ kourou document:create INDEX COLLECTION
+
+ARGUMENTS
+  INDEX       Index name
+  COLLECTION  Collection name
+
+OPTIONS
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  --body=body          (required) Request body in JSON format.
+  --help               show CLI help
+  --id=id              Optionnal document ID
+  --password=password  Kuzzle user password
+  --replace            Replace the document if it already exists.
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/document/create.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/document/create.ts)_
 
 ## `kourou document:get INDEX COLLECTION ID`
 
@@ -400,6 +428,27 @@ OPTIONS
 ```
 
 _See code: [src/commands/query.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/query.ts)_
+
+## `kourou securities:dump`
+
+Dump Kuzzle securities (roles, profiles and users)
+
+```
+USAGE
+  $ kourou securities:dump
+
+OPTIONS
+  -h, --host=host          [default: localhost] Kuzzle server host
+  -p, --port=port          [default: 7512] Kuzzle server port
+  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+  --help                   show CLI help
+  --password=password      Kuzzle user password
+  --path=path              [default: securities] Dump directory
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/securities/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/securities/dump.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 

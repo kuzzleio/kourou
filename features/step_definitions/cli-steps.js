@@ -6,6 +6,37 @@ const
     Then
   } = require('cucumber');
 
+Then('I run the command {string} with:', async function (command, dataTable) {
+  const args = [];
+  const flags = [];
+
+  for (const columns of dataTable.rawTable) {
+    const type = columns[0];
+
+    if (type === 'arg') {
+      args.push(columns[1]);
+    }
+    else {
+      flags.push(columns[1]);
+
+      // Could be boolean flag
+      if (columns[2]) {
+        flags.push(columns[2]);
+      }
+    }
+  }
+
+  try {
+    const { stdout } = await execa('./bin/run', [...command.split(' '), ...args, ...flags])
+
+    this.props.result = stdout;
+  }
+  catch (error) {
+    console.error(error)
+    throw error;
+  }
+});
+
 Then('I run the command {string} with flags:', async function (command, dataTable) {
   const flagsObject = this.parseObject(dataTable);
 

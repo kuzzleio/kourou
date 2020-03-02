@@ -32,19 +32,11 @@ class ApiKeySearch extends Kommand {
     const { flags: userFlags, args } = this.parse(ApiKeySearch)
 
     const sdk = new KuzzleSDK(userFlags)
-    await sdk.init()
+    await sdk.init(this.log)
 
-    const request = {
-      controller: 'security',
-      action: 'searchApiKeys',
-      userId: args.user,
-      body: {},
-      from: 0,
-      size: 100,
-    }
-
+    let query = {}
     if (userFlags.filter) {
-      request.body = {
+      query = {
         match: {
           description: userFlags.filter,
         },
@@ -52,7 +44,13 @@ class ApiKeySearch extends Kommand {
     }
 
     try {
-      const { result } = await sdk.query(request)
+      const result = await sdk.security.searchApiKeys(
+        args.user,
+        query,
+        {
+          from: 0,
+          size: 100
+        })
 
       this.log(`${result.total} API Keys found for user ${args.user}`)
 

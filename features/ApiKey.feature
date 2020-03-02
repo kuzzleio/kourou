@@ -33,7 +33,8 @@ Feature: Api Key Management
       | _id              | "gordon-key-2"  |
       | userId           | "gordon"        |
       | body.description | "Other api key" |
-    When I run the command "api-key:search gordon" with flags:
-      | --filter | "Test" |
+    When I run the command "api-key:search" with:
+      | arg  | gordon   |        |
+      | flag | --filter | "Test" |
     Then I should match stdout with "gordon-key"
     And I should not match stdout with "gordon-key-2"

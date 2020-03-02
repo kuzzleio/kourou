@@ -39,7 +39,7 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
     }
   }
 
-  return new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     let total = 0
     let headerSkipped = false
     let documents: any[] = []
@@ -110,6 +110,10 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
         }
       })
   })
+
+  const count = await sdk.document.count(mWriteRequest.index, mWriteRequest.collection)
+
+  log(chalk.green(`[ℹ] Successfully imported ${count} documents in "${mWriteRequest.index}:${mWriteRequest.collection}"`))
 }
 
 /**
@@ -123,12 +127,10 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
  *   }
  * }
  *
- * @param sdk - Kuzzle SDK instance
- * @param dumpDir - Path to the collection dump dir
- * @param index - Override index name
- * @param collection - Override collection name
- *
- * @returns {Promise}
+ * @param {Kuzzle} sdk - Kuzzle SDK instance
+ * @param {String} dumpDir - Path to the collection dump dir
+ * @param {String} index - Override index name
+ * @param {String} collection - Override collection name
  */
 export async function restoreCollectionMappings(sdk: any, dumpDir: string, index?: string, collection?: string) {
   const dumpFile = `${dumpDir}/mappings.json`

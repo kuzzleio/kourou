@@ -16,6 +16,7 @@ export abstract class Kommand extends Command {
   }
 
   public logError(message?: string | undefined, ...args: any[]): void {
-    return this.log(chalk.red(message), ...args)
+    process.exitCode = 1
+    return this.error(chalk.red(message), ...args)
   }
 }
