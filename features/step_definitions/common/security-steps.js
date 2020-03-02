@@ -11,7 +11,7 @@ Given('I create a profile {string} with the following policies:', async function
   for (const [roleId, restrictedTo] of Object.entries(data)) {
     policies.push({ roleId, restrictedTo });
   }
-  this.props.result = await this.sdk.security.createProfile(profileId, {policies});
+  this.props.result = await this.sdk.security.createProfile(profileId, { policies });
 });
 
 Given('I create a role {string} with the following API rights:', async function (roleId, dataTable) {
@@ -96,3 +96,14 @@ Given('The role {string} should match:', async function (roleId, dataTable) {
     should(actions).match(role.controllers[controller].actions);
   }
 });
+
+Given('The profile {string} should match', async function (profileId, dataTable) {
+  const expectedPolicies = [];
+  const profile = await this.sdk.security.getProfile(profileId);
+
+  for (const [roleId, restrictedTo] of Object.entries(this.parseObject(dataTable))) {
+    expectedPolicies.push({ roleId, restrictedTo });
+  }
+  console.log({ expectedPolicies, policies: profile.policies })
+  should(profile.policies).match(expectedPolicies);
+})
