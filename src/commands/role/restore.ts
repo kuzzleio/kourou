@@ -2,9 +2,7 @@ import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import * as fs from 'fs'
-import cli from 'cli-ux'
 import chalk from 'chalk'
-import _ from 'lodash'
 
 export default class RoleRestore extends Kommand {
   private batchSize?: string;
@@ -52,7 +50,7 @@ export default class RoleRestore extends Kommand {
 
     this.log(`Restoring roles from ${filename} ...`)
 
-    const roles = JSON.parse(fs.readFileSync(filename, 'utf-8'));
+    const roles = JSON.parse(fs.readFileSync(filename, 'utf-8'))
 
     await this._restoreRoles(roles)
 
@@ -62,8 +60,8 @@ export default class RoleRestore extends Kommand {
   async _restoreRoles(roles: any) {
     const promises = Object.entries(roles).map(([roleId, role]) => {
       return this.sdk.security.createOrReplaceRole(roleId, role, { force: true })
-    });
+    })
 
-    await Promise.all(promises);
+    await Promise.all(promises)
   }
 }

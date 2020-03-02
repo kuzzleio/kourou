@@ -87,23 +87,20 @@ Given('The role {string} should match the default one', async function (roleId) 
   }
 });
 
-Given('The role {string} should match:', async function (roleId, dataTable) {
-  const
-    controllers = this.parseObject(dataTable),
-    role = await this.sdk.security.getRole(roleId);
-
-  for (const [controller, actions] of Object.entries(controllers)) {
-    should(actions).match(role.controllers[controller].actions);
-  }
-});
-
-Given('The profile {string} should match', async function (profileId, dataTable) {
+Given('The profile {string} should match:', async function (profileId, dataTable) {
   const expectedPolicies = [];
   const profile = await this.sdk.security.getProfile(profileId);
 
   for (const [roleId, restrictedTo] of Object.entries(this.parseObject(dataTable))) {
     expectedPolicies.push({ roleId, restrictedTo });
   }
-  console.log({ expectedPolicies, policies: profile.policies })
+
   should(profile.policies).match(expectedPolicies);
+})
+
+Given('The role {string} should match:', async function (roleId, dataTable) {
+  const expectedControllers = this.parseObject(dataTable);
+  const role = await this.sdk.security.getRole(roleId);
+
+  should(role.controllers).match(expectedControllers);
 })

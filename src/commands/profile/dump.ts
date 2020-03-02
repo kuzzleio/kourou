@@ -2,9 +2,7 @@ import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import * as fs from 'fs'
-import cli from 'cli-ux'
 import chalk from 'chalk'
-import _ from 'lodash'
 
 export default class ProfileDump extends Kommand {
   private batchSize?: string;
@@ -67,17 +65,18 @@ export default class ProfileDump extends Kommand {
       size: this.batchSize
     }
 
-    let result = await this.sdk.security.searchProfiles({}, options);
+    let result = await this.sdk.security.searchProfiles({}, options)
 
-    const profiles: any = {};
+    const profiles: any = {}
 
-    do {
+    while (result) {
       result.hits.forEach((hit: any) => {
         profiles[hit._id] = { policies: hit.policies }
-      });
+      })
 
-    } while (result = await result.next())
+      result = await result.next()
+    }
 
-    return profiles;
+    return profiles
   }
 }
