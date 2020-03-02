@@ -33,6 +33,7 @@ Then('I run the command {string} with:', async function (command, dataTable) {
   }
   catch (error) {
     console.error(error)
+
     throw error;
   }
 });
@@ -47,9 +48,16 @@ Then('I run the command {string} with flags:', async function (command, dataTabl
     flags.push(value);
   }
 
-  const { stdout } = await execa('./bin/run', [...command.split(' '), ...flags])
+  try {
+    const { stdout } = await execa('./bin/run', [...command.split(' '), ...flags])
 
-  this.props.result = stdout;
+    this.props.result = stdout;
+  }
+  catch (error) {
+    console.error(error)
+
+    throw error;
+  }
 });
 
 Then('I run the command {string} with args:', async function (command, dataTable) {
@@ -59,9 +67,16 @@ Then('I run the command {string} with args:', async function (command, dataTable
     args.push(JSON.parse(row[0]));
   }
 
-  const { stdout } = await execa('./bin/run', [command, ...args])
+  try {
+    const { stdout } = await execa('./bin/run', [command, ...args])
 
-  this.props.result = stdout;
+    this.props.result = stdout;
+  }
+  catch (error) {
+    console.error(error)
+
+    throw error;
+  }
 });
 
 Then(/I should( not)? match stdout with "(.*?)"/, function (not, rawRegexp) {
