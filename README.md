@@ -73,7 +73,6 @@ By environment variables:
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
 * [`kourou query CONTROLLER:ACTION`](#kourou-query-controlleraction)
-* [`kourou securities:dump`](#kourou-securitiesdump)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
 * [`kourou vault:show SECRETS-FILE KEY`](#kourou-vaultshow-secrets-file-key)
@@ -428,27 +427,6 @@ OPTIONS
 ```
 
 _See code: [src/commands/query.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/query.ts)_
-
-## `kourou securities:dump`
-
-Dump Kuzzle securities (roles, profiles and users)
-
-```
-USAGE
-  $ kourou securities:dump
-
-OPTIONS
-  -h, --host=host          [default: localhost] Kuzzle server host
-  -p, --port=port          [default: 7512] Kuzzle server port
-  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-  --help                   show CLI help
-  --password=password      Kuzzle user password
-  --path=path              [default: securities] Dump directory
-  --ssl                    Use SSL to connect to Kuzzle
-  --username=username      [default: anonymous] Kuzzle username (local strategy)
-```
-
-_See code: [src/commands/securities/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/securities/dump.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
