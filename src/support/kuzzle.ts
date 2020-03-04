@@ -60,10 +60,12 @@ export class KuzzleSDK {
     await this.sdk.connect()
 
     if (this.username !== 'anonymous') {
-      await this.sdk.auth.login('local', {
+      const credentials = {
         username: this.username,
         password: this.password,
-      })
+      }
+
+      await this.sdk.auth.login('local', credentials, '60s')
     }
   }
 
