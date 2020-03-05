@@ -11,12 +11,12 @@ export default class RoleDump extends Kommand {
 
   private sdk?: any;
 
-  static description = 'Dump Kuzzle roles'
+  static description = 'Dumps Kuzzle roles'
 
   static flags = {
     help: flags.help({}),
     path: flags.string({
-      description: 'Dump directory',
+      description: 'Dumps directory',
       default: 'roles'
     }),
     'batch-size': flags.string({

@@ -11,7 +11,7 @@ export default class ProfileRestore extends Kommand {
 
   private sdk?: any;
 
-  static description = 'Restore previously dumped Kuzzle profiles'
+  static description = 'Restores previously dumped Kuzzle profiles'
 
   static flags = {
     help: flags.help({}),
