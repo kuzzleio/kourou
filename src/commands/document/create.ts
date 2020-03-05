@@ -11,7 +11,7 @@ export default class DocumentCreate extends Kommand {
       required: true
     }),
     id: flags.string({
-      description: 'Optionnal document ID'
+      description: 'Optional document ID'
     }),
     replace: flags.boolean({
       description: 'Replaces the document if it already exists.'
