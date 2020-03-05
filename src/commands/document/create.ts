@@ -14,7 +14,7 @@ export default class DocumentCreate extends Kommand {
       description: 'Optionnal document ID'
     }),
     replace: flags.boolean({
-      description: 'Replace the document if it already exists.'
+      description: 'Replaces the document if it already exists.'
     }),
     help: flags.help(),
     ...kuzzleFlags
