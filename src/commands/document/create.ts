@@ -7,7 +7,7 @@ export default class DocumentCreate extends Kommand {
 
   static flags = {
     body: flags.string({
-      description: 'Request body in JSON format',
+      description: 'Document body in JSON format',
       required: true
     }),
     id: flags.string({

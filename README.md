@@ -72,7 +72,11 @@ By environment variables:
 * [`kourou index:restore PATH`](#kourou-indexrestore-path)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
+* [`kourou profile:dump`](#kourou-profiledump)
+* [`kourou profile:restore PATH`](#kourou-profilerestore-path)
 * [`kourou query CONTROLLER:ACTION`](#kourou-query-controlleraction)
+* [`kourou role:dump`](#kourou-roledump)
+* [`kourou role:restore PATH`](#kourou-rolerestore-path)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
 * [`kourou vault:show SECRETS-FILE KEY`](#kourou-vaultshow-secrets-file-key)
@@ -214,11 +218,11 @@ ARGUMENTS
 OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
-  --body=body          (required) Request body in JSON format
+  --body=body          (required) Document body in JSON format
   --help               show CLI help
   --id=id              Optional document ID
   --password=password  Kuzzle user password
-  --replace            Replace the document if it already exists
+  --replace            Replaces the document if it already exists
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -404,6 +408,50 @@ OPTIONS
 
 _See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/instance/spawn.ts)_
 
+## `kourou profile:dump`
+
+Dumps Kuzzle profiles
+
+```
+USAGE
+  $ kourou profile:dump
+
+OPTIONS
+  -h, --host=host          [default: localhost] Kuzzle server host
+  -p, --port=port          [default: 7512] Kuzzle server port
+  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+  --help                   show CLI help
+  --password=password      Kuzzle user password
+  --path=path              [default: profiles] Dump directory
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/profile/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/profile/dump.ts)_
+
+## `kourou profile:restore PATH`
+
+Restores previously dumped Kuzzle profiles
+
+```
+USAGE
+  $ kourou profile:restore PATH
+
+ARGUMENTS
+  PATH  Dump file
+
+OPTIONS
+  -h, --host=host          [default: localhost] Kuzzle server host
+  -p, --port=port          [default: 7512] Kuzzle server port
+  --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
+  --help                   show CLI help
+  --password=password      Kuzzle user password
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/profile/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/profile/restore.ts)_
+
 ## `kourou query CONTROLLER:ACTION`
 
 Executes an API query
@@ -427,6 +475,50 @@ OPTIONS
 ```
 
 _See code: [src/commands/query.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/query.ts)_
+
+## `kourou role:dump`
+
+Dumps Kuzzle roles
+
+```
+USAGE
+  $ kourou role:dump
+
+OPTIONS
+  -h, --host=host          [default: localhost] Kuzzle server host
+  -p, --port=port          [default: 7512] Kuzzle server port
+  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+  --help                   show CLI help
+  --password=password      Kuzzle user password
+  --path=path              [default: roles] Dump directory
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/role/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/role/dump.ts)_
+
+## `kourou role:restore PATH`
+
+Restores previously dumped Kuzzle roles
+
+```
+USAGE
+  $ kourou role:restore PATH
+
+ARGUMENTS
+  PATH  Dump file
+
+OPTIONS
+  -h, --host=host          [default: localhost] Kuzzle server host
+  -p, --port=port          [default: 7512] Kuzzle server port
+  --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
+  --help                   show CLI help
+  --password=password      Kuzzle user password
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/role/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/role/restore.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
