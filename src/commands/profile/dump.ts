@@ -11,7 +11,7 @@ export default class ProfileDump extends Kommand {
 
   private sdk?: any;
 
-  static description = 'Dump Kuzzle profiles'
+  static description = 'Dumps Kuzzle profiles'
 
   static flags = {
     help: flags.help({}),

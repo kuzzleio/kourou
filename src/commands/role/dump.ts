@@ -16,7 +16,7 @@ export default class RoleDump extends Kommand {
   static flags = {
     help: flags.help({}),
     path: flags.string({
-      description: 'Dumps directory',
+      description: 'Dump directory',
       default: 'roles'
     }),
     'batch-size': flags.string({

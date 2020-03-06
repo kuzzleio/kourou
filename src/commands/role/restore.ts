@@ -23,7 +23,7 @@ export default class RoleRestore extends Kommand {
   }
 
   static args = [
-    { name: 'path', description: 'Dumps file', required: true },
+    { name: 'path', description: 'Dump file', required: true },
   ]
 
   async run() {

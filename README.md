@@ -410,7 +410,7 @@ _See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/b
 
 ## `kourou profile:dump`
 
-Dump Kuzzle profiles
+Dumps Kuzzle profiles
 
 ```
 USAGE
@@ -431,7 +431,7 @@ _See code: [src/commands/profile/dump.ts](https://github.com/kuzzleio/kourou/blo
 
 ## `kourou profile:restore PATH`
 
-Restore previously dumped Kuzzle profiles
+Restores previously dumped Kuzzle profiles
 
 ```
 USAGE
@@ -478,7 +478,7 @@ _See code: [src/commands/query.ts](https://github.com/kuzzleio/kourou/blob/v0.7.
 
 ## `kourou role:dump`
 
-Dump Kuzzle roles
+Dumps Kuzzle roles
 
 ```
 USAGE
