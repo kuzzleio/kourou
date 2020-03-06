@@ -7,14 +7,14 @@ export default class DocumentCreate extends Kommand {
 
   static flags = {
     body: flags.string({
-      description: 'Request body in JSON format.',
+      description: 'Request body in JSON format',
       required: true
     }),
     id: flags.string({
       description: 'Optional document ID'
     }),
     replace: flags.boolean({
-      description: 'Replaces the document if it already exists.'
+      description: 'Replaces the document if it already exists'
     }),
     help: flags.help(),
     ...kuzzleFlags
