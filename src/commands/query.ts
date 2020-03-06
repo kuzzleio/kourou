@@ -9,7 +9,8 @@ class Query extends Kommand {
   public static flags = {
     help: flags.help(),
     arg: flags.string({
-      description: 'Additional argument. Repeatable. (eg: "--arg refresh=wait_for")',
+      char: 'a',
+      description: 'Additional argument. Repeatable. (e.g. "-a refresh=wait_for")',
       multiple: true
     }),
     body: flags.string({
