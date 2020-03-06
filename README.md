@@ -499,7 +499,7 @@ _See code: [src/commands/role/dump.ts](https://github.com/kuzzleio/kourou/blob/v
 
 ## `kourou role:restore PATH`
 
-Restore previously dumped Kuzzle roles
+Restores previously dumped Kuzzle roles
 
 ```
 USAGE

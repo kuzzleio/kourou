@@ -11,7 +11,7 @@ export default class RoleRestore extends Kommand {
 
   private sdk?: any;
 
-  static description = 'Restore previously dumped Kuzzle roles'
+  static description = 'Restores previously dumped Kuzzle roles'
 
   static flags = {
     help: flags.help({}),
@@ -23,7 +23,7 @@ export default class RoleRestore extends Kommand {
   }
 
   static args = [
-    { name: 'path', description: 'Dump file', required: true },
+    { name: 'path', description: 'Dumps file', required: true },
   ]
 
   async run() {
