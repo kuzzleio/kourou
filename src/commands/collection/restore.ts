@@ -48,7 +48,7 @@ export default class CollectionRestore extends Kommand {
 
     const sdk = new KuzzleSDK(userFlags)
 
-    await sdk.init()
+    await sdk.init(this.log)
 
     this.log(chalk.green(`[✔] Start importing dump from ${args.path}`))
 

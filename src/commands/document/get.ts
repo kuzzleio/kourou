@@ -31,7 +31,7 @@ export default class DocumentGet extends Kommand {
     const { args, flags: userFlags } = this.parse(DocumentGet)
 
     const sdk = new KuzzleSDK(userFlags)
-    await sdk.init()
+    await sdk.init(this.log)
 
     try {
       const document = await sdk.document.get(

@@ -62,6 +62,7 @@ By environment variables:
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
 * [`kourou collection:dump INDEX COLLECTION`](#kourou-collectiondump-index-collection)
 * [`kourou collection:restore PATH`](#kourou-collectionrestore-path)
+* [`kourou document:create INDEX COLLECTION`](#kourou-documentcreate-index-collection)
 * [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
 * [`kourou es:get INDEX ID`](#kourou-esget-index-id)
 * [`kourou es:insert INDEX`](#kourou-esinsert-index)
@@ -197,6 +198,32 @@ OPTIONS
 ```
 
 _See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/collection/restore.ts)_
+
+## `kourou document:create INDEX COLLECTION`
+
+Creates a document
+
+```
+USAGE
+  $ kourou document:create INDEX COLLECTION
+
+ARGUMENTS
+  INDEX       Index name
+  COLLECTION  Collection name
+
+OPTIONS
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  --body=body          (required) Request body in JSON format
+  --help               show CLI help
+  --id=id              Optional document ID
+  --password=password  Kuzzle user password
+  --replace            Replace the document if it already exists
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/document/create.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/document/create.ts)_
 
 ## `kourou document:get INDEX COLLECTION ID`
 

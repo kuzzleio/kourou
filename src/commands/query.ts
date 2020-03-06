@@ -37,15 +37,15 @@ class Query extends Kommand {
     const { args, flags: userFlags } = this.parse(Query)
 
     const sdk = new KuzzleSDK(userFlags)
-    await sdk.init()
+    await sdk.init(this.log)
 
     const [controller, action] = args['controller:action'].split(':')
 
     const requestArgs: any = {}
 
     for (const keyValue of userFlags.arg || []) {
-      const [key, value] = keyValue.split('=')
-      requestArgs[key] = value
+      const [key, ...value] = keyValue.split('=')
+      requestArgs[key] = value.join()
     }
 
     const request = {
