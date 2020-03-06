@@ -68,7 +68,18 @@
     "bin": "kourou",
     "plugins": [
       "@oclif/plugin-help"
-    ]
+    ],
+    "topics": {
+      "api-key": { "description": "manage API keys" },
+      "collection": { "description": "dump or restore an entire data collection" },
+      "document": { "description": "push or retrieve documents from the data storage" },
+      "es": { "description": "low-level access to Elasticsearch" },
+      "index": { "description": "dump or restore an entire data index"},
+      "instance": { "description": "manage Kuzzle instances" },
+      "profile": { "description": "manage user profiles" },
+      "role": { "description": "manage user roles" },
+      "vault": { "description": "manage then encrypted vault" }
+    }
   },
   "repository": "kuzzleio/kourou",
   "scripts": {
