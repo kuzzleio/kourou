@@ -214,11 +214,11 @@ ARGUMENTS
 OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
-  --body=body          (required) Request body in JSON format.
+  --body=body          (required) Request body in JSON format
   --help               show CLI help
   --id=id              Optional document ID
   --password=password  Kuzzle user password
-  --replace            Replace the document if it already exists.
+  --replace            Replace the document if it already exists
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
