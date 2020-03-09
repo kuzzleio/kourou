@@ -58,7 +58,7 @@ class Query extends Kommand {
     }
 
     // try to read stdin, otherwise use the "body" flag
-    const body = await this.fromStdin(JSON.parse(userFlags.body))
+    const body = await this.fromStdin(userFlags.body)
 
     const request = {
       controller,

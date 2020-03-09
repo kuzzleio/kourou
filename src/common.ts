@@ -22,10 +22,17 @@ export abstract class Kommand extends Command {
   /**
    * Reads a value from STDIN or return the default value.
    * This method can parse both JSON string and JS string
+   *
+   * @param {String} defaultValue - Default value if nothing is written on STDIN
+   *
+   * @returns {Promise<String>} Parsed input
    */
   fromStdin(defaultValue: string) {
     return new Promise(resolve => {
-      let input: any = defaultValue
+      if (process.stdin.isTTY) {
+        resolve(this._parseInput(defaultValue))
+      }
+      let input: any;
 
       process.stdin.on('data', data => {
         input = data.toString()
