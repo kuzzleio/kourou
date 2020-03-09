@@ -39,7 +39,7 @@ jobs:
       language: node_js
       node_js: 12
       env:
-        - NODE_env=test
+        - NODE_ENV=test
       cache:
         directories:
           - ~/.npm
