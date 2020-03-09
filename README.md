@@ -218,13 +218,17 @@ ARGUMENTS
 OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
-  --body=body          (required) Document body in JSON format
+  --body=body          [default: {}] Document body. Will be read from STDIN if available (JS or JSON format)
   --help               show CLI help
   --id=id              Optional document ID
   --password=password  Kuzzle user password
   --replace            Replaces the document if it already exists
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLES
+  kourou document:create iot sensors --body '{network: "sigfox"}'
+  kourou document:create iot sensors < document.json
 ```
 
 _See code: [src/commands/document/create.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/document/create.ts)_
@@ -464,14 +468,20 @@ ARGUMENTS
   CONTROLLER:ACTION  Controller and action (eg: "server:now")
 
 OPTIONS
+  -a, --arg=arg        Additional argument. Repeatable. (e.g. "-a refresh=wait_for")
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
-  --arg=arg            Additional argument. Repeatable. (eg: "--arg refresh=wait_for")
-  --body=body          Request body in JSON format.
+  --body=body          Request body in JSON format. Will be read from STDIN if available (JS or JSON format)
   --help               show CLI help
   --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLES
+  kourou query document:get --arg index=iot --arg collection=sensors --arg _id=sigfox-42
+  kourou query collection:create --arg index=iot --arg collection=sensors --body '{dynamic: "strict"}'
+  kourou query admin:loadMappings < mappings.json
+  echo '{name: "Aschen"}' | kourou query document:create --arg index=iot --arg collection=sensors
 ```
 
 _See code: [src/commands/query.ts](https://github.com/kuzzleio/kourou/blob/v0.7.0/src/commands/query.ts)_

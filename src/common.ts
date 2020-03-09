@@ -22,7 +22,6 @@ export abstract class Kommand extends Command {
   /**
    * Reads a value from STDIN or return the default value.
    * This method can parse both JSON string and JS string
-   * @param defaultValue
    */
   fromStdin(defaultValue: string) {
     return new Promise(resolve => {
@@ -30,14 +29,14 @@ export abstract class Kommand extends Command {
 
       process.stdin.on('data', data => {
         input = data.toString()
-      });
+      })
 
       process.stdin.on('end', () => resolve(this._parseInput(input)))
-    });
+    })
   }
 
   public _parseInput(input: string) {
+    // eslint-disable-next-line no-eval
     return eval(`var o = ${input}; o`)
   }
-
 }
