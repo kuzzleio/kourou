@@ -5,10 +5,15 @@ import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 export default class DocumentCreate extends Kommand {
   static description = 'Creates a document'
 
+  static examples = [
+    'kourou document:create iot sensors --body \'{network: "sigfox"}\'',
+    'kourou document:create iot sensors < document.json',
+  ]
+
   static flags = {
     body: flags.string({
-      description: 'Document body in JSON format',
-      required: true
+      description: 'Document body. Will be read from STDIN if available (JS or JSON format)',
+      default: '{}'
     }),
     id: flags.string({
       description: 'Optional document ID'
@@ -42,10 +47,10 @@ export default class DocumentCreate extends Kommand {
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init(this.log)
 
+    const body = this.fromStdin(userFlags.body)
+
     try {
       let document: any
-
-      const body = JSON.parse(userFlags.body)
 
       if (userFlags.replace) {
         document = await sdk.document.replace(

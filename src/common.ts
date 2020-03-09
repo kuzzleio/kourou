@@ -16,7 +16,28 @@ export abstract class Kommand extends Command {
   }
 
   public logError(message?: string | undefined, ...args: any[]): void {
-    process.exitCode = 1
     return this.error(chalk.red(message), ...args)
   }
+
+  /**
+   * Reads a value from STDIN or return the default value.
+   * This method can parse both JSON string and JS string
+   * @param defaultValue
+   */
+  fromStdin(defaultValue: string) {
+    return new Promise(resolve => {
+      let input: any = defaultValue
+
+      process.stdin.on('data', data => {
+        input = data.toString()
+      });
+
+      process.stdin.on('end', () => resolve(this._parseInput(input)))
+    });
+  }
+
+  public _parseInput(input: string) {
+    return eval(`var o = ${input}; o`)
+  }
+
 }
