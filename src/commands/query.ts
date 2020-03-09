@@ -62,7 +62,7 @@ class Query extends Kommand {
       this.log(JSON.stringify(response, null, 2))
     }
     catch (error) {
-      this.logError(`${error.stack || error.message}\n${JSON.stringify(error, 0, 2)}`)
+      this.logError(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
     }
   }
 }
