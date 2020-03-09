@@ -31,8 +31,10 @@ export abstract class Kommand extends Command {
     return new Promise(resolve => {
       if (process.stdin.isTTY) {
         resolve(this._parseInput(defaultValue))
+        return
       }
-      let input: any;
+
+      let input: any
 
       process.stdin.on('data', data => {
         input = data.toString()
