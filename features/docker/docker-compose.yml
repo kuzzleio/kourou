@@ -23,7 +23,7 @@ services:
       - kuzzle_services__storageEngine__client__node=http://elasticsearch:9200
       - kuzzle_services__internalCache__node__host=redis
       - kuzzle_services__memoryStorage__node__host=redis
-      - NODE_ENV=development
+      - NODE_ENV=test
       - DEBUG=kuzzle:*,-kuzzle:entry-point:protocols:websocket
 
   redis:

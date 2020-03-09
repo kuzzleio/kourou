@@ -1,6 +1,7 @@
 import { Command } from '@oclif/command'
 import chalk from 'chalk'
 import emoji from 'node-emoji'
+import fs from 'fs'
 
 export abstract class Kommand extends Command {
   public printCommand() {
@@ -29,18 +30,15 @@ export abstract class Kommand extends Command {
    */
   fromStdin(defaultValue: string) {
     return new Promise(resolve => {
-      if (process.stdin.isTTY) {
+      // cucumber mess with stdin so I have to do this trick
+      if (process.env.NODE_ENV === 'test' || process.stdin.isTTY) {
         resolve(this._parseInput(defaultValue))
         return
       }
 
-      let input: any
+      const input = fs.readFileSync(0, 'utf8')
 
-      process.stdin.on('data', data => {
-        input = data.toString()
-      })
-
-      process.stdin.on('end', () => resolve(this._parseInput(input)))
+      resolve(this._parseInput(input))
     })
   }
 

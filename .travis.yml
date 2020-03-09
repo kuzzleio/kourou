@@ -38,6 +38,8 @@ jobs:
       name: "Kourou Functional Cucumber Tests"
       language: node_js
       node_js: 12
+      env:
+        - NODE_env=test
       cache:
         directories:
           - ~/.npm
