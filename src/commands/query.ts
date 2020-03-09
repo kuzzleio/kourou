@@ -21,7 +21,8 @@ class Query extends Kommand {
       multiple: true
     }),
     body: flags.string({
-      description: 'Request body in JSON format. Will be read from STDIN if available (JS or JSON format)'
+      description: 'Request body in JS or JSON format. Will be read from STDIN if available.',
+      default: '{}'
     }),
     ...kuzzleFlags,
   };
@@ -57,7 +58,7 @@ class Query extends Kommand {
     }
 
     // try to read stdin, otherwise use the "body" flag
-    const body = await this.fromStdin(JSON.parse(userFlags.body || '{}'))
+    const body = await this.fromStdin(JSON.parse(userFlags.body))
 
     const request = {
       controller,

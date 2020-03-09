@@ -12,7 +12,7 @@ export default class DocumentCreate extends Kommand {
 
   static flags = {
     body: flags.string({
-      description: 'Document body. Will be read from STDIN if available (JS or JSON format)',
+      description: 'Document body in JS or JSON format. Will be read from STDIN if available',
       default: '{}'
     }),
     id: flags.string({

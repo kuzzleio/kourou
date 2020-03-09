@@ -218,7 +218,7 @@ ARGUMENTS
 OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
-  --body=body          [default: {}] Document body. Will be read from STDIN if available (JS or JSON format)
+  --body=body          [default: {}] Document body in JS or JSON format. Will be read from STDIN if available
   --help               show CLI help
   --id=id              Optional document ID
   --password=password  Kuzzle user password
@@ -471,7 +471,7 @@ OPTIONS
   -a, --arg=arg        Additional argument. Repeatable. (e.g. "-a refresh=wait_for")
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
-  --body=body          Request body in JSON format. Will be read from STDIN if available (JS or JSON format)
+  --body=body          [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
   --help               show CLI help
   --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
