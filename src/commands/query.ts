@@ -6,6 +6,13 @@ import chalk from 'chalk'
 class Query extends Kommand {
   public static description = 'Executes an API query';
 
+  public static examples = [
+    'kourou query document:get --arg index=iot --arg collection=sensors --arg _id=sigfox-42',
+    'kourou query collection:create --arg index=iot --arg collection=sensors --body \'{dynamic: "strict"}\'',
+    'kourou query admin:loadMappings < mappings.json',
+    'echo \'{name: "Aschen"}\' | kourou query document:create --arg index=iot --arg collection=sensors'
+  ]
+
   public static flags = {
     help: flags.help(),
     arg: flags.string({
@@ -14,7 +21,8 @@ class Query extends Kommand {
       multiple: true
     }),
     body: flags.string({
-      description: 'Request body in JSON format.'
+      description: 'Request body in JS or JSON format. Will be read from STDIN if available.',
+      default: '{}'
     }),
     ...kuzzleFlags,
   };
@@ -49,11 +57,14 @@ class Query extends Kommand {
       requestArgs[key] = value.join()
     }
 
+    // try to read stdin, otherwise use the "body" flag
+    const body = await this.fromStdin(userFlags.body)
+
     const request = {
       controller,
       action,
       ...requestArgs,
-      body: JSON.parse(userFlags.body || '{}'),
+      body,
     }
 
     try {
