@@ -45,7 +45,7 @@ export default class IndexRestore extends Kommand {
 
     const sdk = new KuzzleSDK(userFlags)
 
-    await sdk.init()
+    await sdk.init(this.log)
 
     if (index) {
       this.log(chalk.green(`[✔] Start importing dump from ${args.path} in index ${index}`))

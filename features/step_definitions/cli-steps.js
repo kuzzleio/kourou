@@ -6,6 +6,38 @@ const
     Then
   } = require('cucumber');
 
+Then('I run the command {string} with:', async function (command, dataTable) {
+  const args = [];
+  const flags = [];
+
+  for (const columns of dataTable.rawTable) {
+    const type = columns[0];
+
+    if (type === 'arg') {
+      args.push(columns[1]);
+    }
+    else {
+      flags.push(columns[1]);
+
+      // Could be boolean flag
+      if (columns[2]) {
+        flags.push(columns[2]);
+      }
+    }
+  }
+
+  try {
+    const { stdout } = await execa('./bin/run', [...command.split(' '), ...args, ...flags])
+
+    this.props.result = stdout;
+  }
+  catch (error) {
+    console.error(error)
+
+    throw error;
+  }
+});
+
 Then('I run the command {string} with flags:', async function (command, dataTable) {
   const flagsObject = this.parseObject(dataTable);
 
@@ -16,9 +48,16 @@ Then('I run the command {string} with flags:', async function (command, dataTabl
     flags.push(value);
   }
 
-  const { stdout } = await execa('./bin/run', [...command.split(' '), ...flags])
+  try {
+    const { stdout } = await execa('./bin/run', [...command.split(' '), ...flags])
 
-  this.props.result = stdout;
+    this.props.result = stdout;
+  }
+  catch (error) {
+    console.error(error)
+
+    throw error;
+  }
 });
 
 Then('I run the command {string} with args:', async function (command, dataTable) {
@@ -28,9 +67,16 @@ Then('I run the command {string} with args:', async function (command, dataTable
     args.push(JSON.parse(row[0]));
   }
 
-  const { stdout } = await execa('./bin/run', [command, ...args])
+  try {
+    const { stdout } = await execa('./bin/run', [command, ...args])
 
-  this.props.result = stdout;
+    this.props.result = stdout;
+  }
+  catch (error) {
+    console.error(error)
+
+    throw error;
+  }
 });
 
 Then(/I should( not)? match stdout with "(.*?)"/, function (not, rawRegexp) {

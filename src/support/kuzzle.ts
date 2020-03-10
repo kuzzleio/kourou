@@ -1,4 +1,6 @@
 import { flags } from '@oclif/command'
+import chalk from 'chalk'
+
 // tslint:disable-next-line
 const { Http, Kuzzle } = require('kuzzle-sdk')
 
@@ -47,19 +49,23 @@ export class KuzzleSDK {
     this.password = options.password
   }
 
-  public async init() {
+  public async init(log: any) {
     this.sdk = new Kuzzle(new Http(this.host, {
       port: this.port,
       sslConnection: this.ssl,
     }))
 
+    log(chalk.green(`[ℹ] Connecting to http${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`))
+
     await this.sdk.connect()
 
     if (this.username !== 'anonymous') {
-      await this.sdk.auth.login('local', {
+      const credentials = {
         username: this.username,
         password: this.password,
-      })
+      }
+
+      await this.sdk.auth.login('local', credentials, '60s')
     }
   }
 
@@ -77,5 +83,9 @@ export class KuzzleSDK {
 
   get index() {
     return this.sdk.index
+  }
+
+  get security() {
+    return this.sdk.security
   }
 }

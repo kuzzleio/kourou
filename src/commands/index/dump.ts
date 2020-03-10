@@ -42,7 +42,7 @@ export default class IndexDump extends Kommand {
     const path = userFlags.path || args.index
 
     const sdk = new KuzzleSDK(userFlags)
-    await sdk.init()
+    await sdk.init(this.log)
 
     this.log(chalk.green(`Dumping index "${args.index}" in ${path}/ ...`))
 

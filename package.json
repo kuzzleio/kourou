@@ -1,7 +1,7 @@
 {
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kourou": "./bin/run"
@@ -15,10 +15,9 @@
     "@types/inquirer": "^6.5.0",
     "chalk": "^3.0.0",
     "cli-ux": "^5.4.1",
-    "compare-version": "^0.1.2",
     "execa": "^3.4.0",
-    "inquirer": "^7.0.3",
-    "kuzzle-sdk": "^7.0.1",
+    "inquirer": "^7.0.6",
+    "kuzzle-sdk": "^7.1.0",
     "kuzzle-vault": "^1.0.2",
     "listr": "^0.14.3",
     "ndjson": "^1.5.0",
@@ -28,7 +27,7 @@
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
     "@oclif/test": "^1.2.5",
-    "@types/chai": "^4.2.7",
+    "@types/chai": "^4.2.10",
     "@types/compare-version": "^0.1.31",
     "@types/listr": "^0.14.2",
     "@types/mocha": "^5.2.7",
@@ -43,8 +42,8 @@
     "mocha": "^5.2.0",
     "nyc": "^14.1.1",
     "prettier-eslint": "^9.0.1",
-    "ts-node": "^8.5.4",
     "should": "^13.2.3",
+    "ts-node": "^8.5.4",
     "typescript": "^3.7.4"
   },
   "engines": {
@@ -68,7 +67,36 @@
     "bin": "kourou",
     "plugins": [
       "@oclif/plugin-help"
-    ]
+    ],
+    "topics": {
+      "api-key": {
+        "description": "manage API keys"
+      },
+      "collection": {
+        "description": "dump or restore an entire data collection"
+      },
+      "document": {
+        "description": "push or retrieve documents from the data storage"
+      },
+      "es": {
+        "description": "low-level access to Elasticsearch"
+      },
+      "index": {
+        "description": "dump or restore an entire data index"
+      },
+      "instance": {
+        "description": "manage Kuzzle instances"
+      },
+      "profile": {
+        "description": "manage user profiles"
+      },
+      "role": {
+        "description": "manage user roles"
+      },
+      "vault": {
+        "description": "manage then encrypted vault"
+      }
+    }
   },
   "repository": "kuzzleio/kourou",
   "scripts": {

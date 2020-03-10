@@ -2,7 +2,6 @@ import { flags } from '@oclif/command'
 import chalk from 'chalk'
 import { ChildProcess, spawn } from 'child_process'
 import cli from 'cli-ux'
-import compareVersion from 'compare-version'
 import execa from 'execa'
 import { writeFileSync } from 'fs'
 import Listr from 'listr'
@@ -203,7 +202,7 @@ export default class InstanceSpawn extends Kommand {
               )
             }
             try {
-              if (compareVersion(docoVersion, MIN_DOCO_VERSION) === -1) {
+              if (docoVersion < MIN_DOCO_VERSION) {
                 throw new Error(
                   `The detected version of docker-compose (${docoVersion}) is not recent enough (${MIN_DOCO_VERSION})`,
                 )
