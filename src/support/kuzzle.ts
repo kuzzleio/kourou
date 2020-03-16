@@ -65,7 +65,7 @@ export class KuzzleSDK {
         password: this.password,
       }
 
-      await this.sdk.auth.login('local', credentials, '60s')
+      await this.sdk.auth.login('local', credentials, '2h')
     }
   }
 
