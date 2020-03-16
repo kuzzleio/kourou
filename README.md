@@ -80,6 +80,7 @@ By environment variables:
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
 * [`kourou vault:show SECRETS-FILE KEY`](#kourou-vaultshow-secrets-file-key)
+* [`kourou vault:test SECRETS-FILE`](#kourou-vaulttest-secrets-file)
 
 ## `kourou api-key:create USER`
 
@@ -585,6 +586,23 @@ OPTIONS
 ```
 
 _See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.8.0/src/commands/vault/show.ts)_
+
+## `kourou vault:test SECRETS-FILE`
+
+Tests if an encrypted secrets file can be decrypted.
+
+```
+USAGE
+  $ kourou vault:test SECRETS-FILE
+
+ARGUMENTS
+  SECRETS-FILE  Encrypted secrets file
+
+OPTIONS
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+```
+
+_See code: [src/commands/vault/test.ts](https://github.com/kuzzleio/kourou/blob/v0.8.0/src/commands/vault/test.ts)_
 <!-- commandsstop -->
 
 # Where does this weird name comes from?
