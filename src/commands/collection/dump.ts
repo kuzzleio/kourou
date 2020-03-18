@@ -61,6 +61,6 @@ export default class CollectionDump extends Kommand {
       Number(userFlags['batch-size']),
       path)
 
-    this.log(chalk.green(`[✔] Collection ${args.index}:${args.collection.name} dumped`))
+    this.log(chalk.green(`[✔] Collection ${args.index}:${args.collection} dumped`))
   }
 }
