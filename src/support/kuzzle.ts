@@ -4,6 +4,8 @@ import chalk from 'chalk'
 // tslint:disable-next-line
 const { Http, Kuzzle } = require('kuzzle-sdk')
 
+const EIGHT_MINUTES = 8 * 60 * 1000
+
 export const kuzzleFlags = {
   host: flags.string({
     char: 'h',
@@ -65,7 +67,11 @@ export class KuzzleSDK {
         password: this.password,
       }
 
-      await this.sdk.auth.login('local', credentials, '60s')
+      await this.sdk.auth.login('local', credentials, '10m')
+
+      setInterval(() => {
+        this.sdk.auth.refreshToken()
+      }, EIGHT_MINUTES)
     }
   }
 
