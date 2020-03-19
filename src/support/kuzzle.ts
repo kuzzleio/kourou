@@ -4,8 +4,6 @@ import chalk from 'chalk'
 // tslint:disable-next-line
 const { Http, Kuzzle } = require('kuzzle-sdk')
 
-const ONE_MINUTE = 1 * 60 * 1000
-
 export const kuzzleFlags = {
   host: flags.string({
     char: 'h',
