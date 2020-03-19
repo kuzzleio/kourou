@@ -43,7 +43,7 @@ export default class IndexRestore extends Kommand {
 
     const index = userFlags.index
 
-    const sdk = new KuzzleSDK({ refreshLogin: true, ...userFlags })
+    const sdk = new KuzzleSDK({ loginTTL: true, ...userFlags })
 
     await sdk.init(this.log)
 

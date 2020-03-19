@@ -43,7 +43,7 @@ export class KuzzleSDK {
 
   private password: string;
 
-  private refreshLogin: boolean;
+  private loginTTL: string;
 
   constructor(options: any) {
     this.host = options.host
@@ -51,7 +51,7 @@ export class KuzzleSDK {
     this.ssl = options.ssl || this.port === 443
     this.username = options.username
     this.password = options.password
-    this.refreshLogin = options.refreshLogin || false
+    this.loginTTL = options.loginTTL || '10s'
   }
 
   public async init(log: any) {
@@ -70,14 +70,8 @@ export class KuzzleSDK {
         password: this.password,
       }
 
-      await this.sdk.auth.login('local', credentials, '2m')
-      log(chalk.green(`[ℹ] Loggued as ${this.username} for 2 minutes. (refresh: ${this.refreshLogin ? 'on' : 'off'})`))
-
-      if (this.refreshLogin) {
-        setInterval(() => {
-          this.sdk.auth.refreshToken({ expiresIn: '2m' })
-        }, ONE_MINUTE)
-      }
+      await this.sdk.auth.login('local', credentials, this.loginTTL)
+      log(chalk.green(`[ℹ] Loggued as ${this.username} for ${this.loginTTL}.`))
     }
   }
 
