@@ -4,7 +4,7 @@ import chalk from 'chalk'
 // tslint:disable-next-line
 const { Http, Kuzzle } = require('kuzzle-sdk')
 
-const EIGHT_MINUTES = 8 * 60 * 1000
+const ONE_MINUTE = 1 * 60 * 1000
 
 export const kuzzleFlags = {
   host: flags.string({
@@ -43,12 +43,15 @@ export class KuzzleSDK {
 
   private password: string;
 
+  private refreshLogin: boolean;
+
   constructor(options: any) {
     this.host = options.host
     this.port = parseInt(options.port, 10)
     this.ssl = options.ssl || this.port === 443
     this.username = options.username
     this.password = options.password
+    this.refreshLogin = options.refreshLogin || false
   }
 
   public async init(log: any) {
@@ -57,7 +60,7 @@ export class KuzzleSDK {
       sslConnection: this.ssl,
     }))
 
-    log(chalk.green(`[ℹ] Connecting to http${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`))
+    log(`[ℹ] Connecting to http${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
 
     await this.sdk.connect()
 
@@ -67,11 +70,14 @@ export class KuzzleSDK {
         password: this.password,
       }
 
-      await this.sdk.auth.login('local', credentials, '10m')
+      await this.sdk.auth.login('local', credentials, '2m')
+      log(chalk.green(`[ℹ] Loggued as ${this.username} for 2 minutes. (refresh: ${this.refreshLogin ? 'on' : 'off'})`))
 
-      setInterval(() => {
-        this.sdk.auth.refreshToken()
-      }, EIGHT_MINUTES)
+      if (this.refreshLogin) {
+        setInterval(() => {
+          this.sdk.auth.refreshToken({ expiresIn: '2m' })
+        }, ONE_MINUTE)
+      }
     }
   }
 

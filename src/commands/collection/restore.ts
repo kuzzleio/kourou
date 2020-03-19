@@ -46,7 +46,7 @@ export default class CollectionRestore extends Kommand {
     const index = userFlags.index
     const collection = userFlags.collection
 
-    const sdk = new KuzzleSDK(userFlags)
+    const sdk = new KuzzleSDK({ refreshLogin: true, ...userFlags })
 
     await sdk.init(this.log)
 
