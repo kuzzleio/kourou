@@ -28,7 +28,7 @@ export abstract class Kommand extends Command {
    *
    * @returns {Promise<String>} Parsed input
    */
-  fromStdin(defaultValue: string) {
+  fromStdin(defaultValue: string): Promise<string> {
     return new Promise(resolve => {
       // cucumber mess with stdin so I have to do this trick
       if (process.env.NODE_ENV === 'test' || process.stdin.isTTY) {
@@ -44,6 +44,6 @@ export abstract class Kommand extends Command {
 
   public _parseInput(input: string) {
     // eslint-disable-next-line no-eval
-    return eval(`var o = ${input}; o`)
+    return JSON.stringify(eval(`var o = ${input}; o`))
   }
 }

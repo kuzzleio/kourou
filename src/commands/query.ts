@@ -2,6 +2,10 @@ import { flags } from '@oclif/command'
 import { Kommand } from '../common'
 import { kuzzleFlags, KuzzleSDK } from '../support/kuzzle'
 import chalk from 'chalk'
+import Editor from '../support/editor';
+
+// tslint:disable-next-line
+const { edit } = require("external-editor");
 
 class Query extends Kommand {
   public static description = 'Executes an API query';
@@ -23,6 +27,9 @@ class Query extends Kommand {
     body: flags.string({
       description: 'Request body in JS or JSON format. Will be read from STDIN if available.',
       default: '{}'
+    }),
+    edit: flags.boolean({
+      description: 'Open an editor (EDITOR env variable) to edit the body before sending the request. Editor will be pre-fill with the body read from STDIN if available.'
     }),
     ...kuzzleFlags,
   };
@@ -58,7 +65,14 @@ class Query extends Kommand {
     }
 
     // try to read stdin, otherwise use the "body" flag
-    const body = await this.fromStdin(userFlags.body)
+    let body = await this.fromStdin(userFlags.body)
+
+    if (userFlags.edit) {
+      const editor = new Editor(body, { json: true })
+      editor.run()
+      body = editor.content
+      console.log({ body })
+    }
 
     const request = {
       controller,
