@@ -51,6 +51,7 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
           documents.push(obj)
 
           if (documents.length === batchSize) {
+            console.log({ t: 'batchsize == length' })
             mWriteRequest.body.documents = documents
             documents = []
 
@@ -89,20 +90,21 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
 
           sdk
             .query(mWriteRequest)
-            .catch((error: any) => {
-              try {
-                handleError(log, dumpFile, error)
-              }
-              catch (error) {
-                reject(error)
-              }
-            })
             .then(() => {
               total += mWriteRequest.body.documents.length
               process.stdout.write(`  ${total} documents imported`)
               process.stdout.write('\r')
 
               resolve()
+            })
+            .catch((error: any) => {
+              try {
+                handleError(log, dumpFile, error)
+                reject(error)
+              }
+              catch (error) {
+                reject(error)
+              }
             })
         }
         else {
