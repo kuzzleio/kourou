@@ -41,12 +41,15 @@ export class KuzzleSDK {
 
   private password: string;
 
+  private loginTTL: string;
+
   constructor(options: any) {
     this.host = options.host
     this.port = parseInt(options.port, 10)
     this.ssl = options.ssl || this.port === 443
     this.username = options.username
     this.password = options.password
+    this.loginTTL = options.loginTTL || '10s'
   }
 
   public async init(log: any) {
@@ -55,7 +58,7 @@ export class KuzzleSDK {
       sslConnection: this.ssl,
     }))
 
-    log(chalk.green(`[ℹ] Connecting to http${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`))
+    log(`[ℹ] Connecting to http${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
 
     await this.sdk.connect()
 
@@ -65,7 +68,8 @@ export class KuzzleSDK {
         password: this.password,
       }
 
-      await this.sdk.auth.login('local', credentials, '60s')
+      await this.sdk.auth.login('local', credentials, this.loginTTL)
+      log(chalk.green(`[ℹ] Loggued as ${this.username} for ${this.loginTTL}.`))
     }
   }
 

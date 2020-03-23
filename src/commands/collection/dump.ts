@@ -41,7 +41,7 @@ export default class CollectionDump extends Kommand {
 
     const path = userFlags.path || args.index
 
-    const sdk = new KuzzleSDK(userFlags)
+    const sdk = new KuzzleSDK({ loginTTL: true, ...userFlags })
     await sdk.init(this.log)
 
     this.log(chalk.green(`Dumping collection "${args.index}:${args.collection}" in ${path}/ ...`))
@@ -61,6 +61,6 @@ export default class CollectionDump extends Kommand {
       Number(userFlags['batch-size']),
       path)
 
-    this.log(chalk.green(`[✔] Collection ${args.index}:${args.collection.name} dumped`))
+    this.log(chalk.green(`[✔] Collection ${args.index}:${args.collection} dumped`))
   }
 }
