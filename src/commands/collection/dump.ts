@@ -41,7 +41,7 @@ export default class CollectionDump extends Kommand {
 
     const path = userFlags.path || args.index
 
-    const sdk = new KuzzleSDK(userFlags)
+    const sdk = new KuzzleSDK({ loginTTL: true, ...userFlags })
     await sdk.init(this.log)
 
     this.log(chalk.green(`Dumping collection "${args.index}:${args.collection}" in ${path}/ ...`))

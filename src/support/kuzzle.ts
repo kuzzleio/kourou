@@ -4,8 +4,6 @@ import chalk from 'chalk'
 // tslint:disable-next-line
 const { Http, Kuzzle } = require('kuzzle-sdk')
 
-const EIGHT_MINUTES = 8 * 60 * 1000
-
 export const kuzzleFlags = {
   host: flags.string({
     char: 'h',
@@ -43,12 +41,15 @@ export class KuzzleSDK {
 
   private password: string;
 
+  private loginTTL: string;
+
   constructor(options: any) {
     this.host = options.host
     this.port = parseInt(options.port, 10)
     this.ssl = options.ssl || this.port === 443
     this.username = options.username
     this.password = options.password
+    this.loginTTL = options.loginTTL || '10s'
   }
 
   public async init(log: any) {
@@ -57,7 +58,7 @@ export class KuzzleSDK {
       sslConnection: this.ssl,
     }))
 
-    log(chalk.green(`[ℹ] Connecting to http${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`))
+    log(`[ℹ] Connecting to http${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
 
     await this.sdk.connect()
 
@@ -67,11 +68,8 @@ export class KuzzleSDK {
         password: this.password,
       }
 
-      await this.sdk.auth.login('local', credentials, '10m')
-
-      setInterval(() => {
-        this.sdk.auth.refreshToken()
-      }, EIGHT_MINUTES)
+      await this.sdk.auth.login('local', credentials, this.loginTTL)
+      log(chalk.green(`[ℹ] Loggued as ${this.username} for ${this.loginTTL}.`))
     }
   }
 
