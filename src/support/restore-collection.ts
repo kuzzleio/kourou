@@ -52,7 +52,6 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
           documents.push(obj)
 
           if (documents.length === batchSize) {
-            console.log({ t: 'batchsize == length' })
             mWriteRequest.body.documents = documents
             documents = []
 
