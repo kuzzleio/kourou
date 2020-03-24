@@ -64,6 +64,7 @@ By environment variables:
 * [`kourou collection:restore PATH`](#kourou-collectionrestore-path)
 * [`kourou document:create INDEX COLLECTION`](#kourou-documentcreate-index-collection)
 * [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
+* [`kourou document:search INDEX COLLECTION`](#kourou-documentsearch-index-collection)
 * [`kourou es:get INDEX ID`](#kourou-esget-index-id)
 * [`kourou es:insert INDEX`](#kourou-esinsert-index)
 * [`kourou es:list-index`](#kourou-eslist-index)
@@ -256,6 +257,39 @@ OPTIONS
 ```
 
 _See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.8.0/src/commands/document/get.ts)_
+
+## `kourou document:search INDEX COLLECTION`
+
+Searches for documents
+
+```
+USAGE
+  $ kourou document:search INDEX COLLECTION
+
+ARGUMENTS
+  INDEX       Index name
+  COLLECTION  Collection name
+
+OPTIONS
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  --editor             Open an editor (EDITOR env variable) to edit the request before sending
+  --from=from          Optional offset
+  --help               show CLI help
+  --password=password  Kuzzle user password
+  --query=query        [default: {}] Query in JS or JSON format.
+  --scroll=scroll      Optional scroll TTL
+  --size=size          Optional page size
+  --sort=sort          [default: {}] Sort in JS or JSON format.
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLES
+  kourou document:search iot sensors --query '{ term: { name: "corona" } }'
+  kourou document:search iot sensors --editor
+```
+
+_See code: [src/commands/document/search.ts](https://github.com/kuzzleio/kourou/blob/v0.8.0/src/commands/document/search.ts)_
 
 ## `kourou es:get INDEX ID`
 
@@ -472,6 +506,7 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --body=body          [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
+  --editor             Open an editor (EDITOR env variable) to edit the request before sending
   --help               show CLI help
   --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
