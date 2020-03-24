@@ -28,8 +28,8 @@ class Query extends Kommand {
       description: 'Request body in JS or JSON format. Will be read from STDIN if available.',
       default: '{}'
     }),
-    edit: flags.boolean({
-      description: 'Open an editor (EDITOR env variable) to edit the body before sending the request. Editor will be pre-fill with the body read from STDIN if available.'
+    editor: flags.boolean({
+      description: 'Open an editor (EDITOR env variable) to edit the request before sending'
     }),
     ...kuzzleFlags,
   };
@@ -64,21 +64,23 @@ class Query extends Kommand {
       requestArgs[key] = value.join()
     }
 
-    // try to read stdin, otherwise use the "body" flag
-    let body = await this.fromStdin(userFlags.body)
+    // try to read stdin
+    let body = await this.fromStdin()
 
-    if (userFlags.edit) {
-      const editor = new Editor(body, { json: true })
-      editor.run()
-      body = editor.content
-      console.log({ body })
+    if (body && userFlags.editor) {
+      throw new Error('Unable to use flag --editor when reading from STDIN');
     }
 
-    const request = {
+    let request = {
       controller,
       action,
       ...requestArgs,
-      body,
+      body: this.parseJs(body),
+    }
+
+    // content from user editor
+    if (userFlags.editor) {
+      request = this.fromEditor(request, { json: true })
     }
 
     try {

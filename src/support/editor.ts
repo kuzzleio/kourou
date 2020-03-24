@@ -7,7 +7,7 @@ export interface IEditorParams {
   json?: boolean;
 }
 
-export default class Editor {
+export class Editor {
   private _content: string;
   private tmpFile: string;
   private defaultEditor: string;
@@ -45,7 +45,8 @@ export default class Editor {
 
     const response = spawnSync(
       editor,
-      [this.tmpFile]);
+      [this.tmpFile],
+      { stdio: "inherit" });
 
     if (response.status !== 0) {
       console.error(response.stdout)
@@ -59,11 +60,6 @@ export default class Editor {
   }
 
   get content() {
-    if (this.options.json) {
-      // remove newlines and spaces
-      return JSON.stringify(JSON.parse(this._content))
-    }
-
     return this._content
   }
 
