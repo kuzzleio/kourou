@@ -1,24 +1,27 @@
 import fs from 'fs'
 import { spawnSync } from 'child_process'
 
-const CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 
-export interface IEditorParams {
+export interface EditorParams {
   json?: boolean;
 }
 
 export class Editor {
   private _content: string;
-  private tmpFile: string;
-  private defaultEditor: string;
-  private options: IEditorParams;
 
-  constructor(content: string = '', options: IEditorParams = {}) {
+  private tmpFile: string;
+
+  private defaultEditor: string;
+
+  private options: EditorParams;
+
+  constructor(content = '', options: EditorParams = {}) {
     this._content = content
 
     this.options = options
 
-    this.defaultEditor = /^win/.test(process.platform)
+    this.defaultEditor = process.platform.startsWith('win')
       ? 'notepad'
       : 'nano'
 
@@ -46,10 +49,12 @@ export class Editor {
     const response = spawnSync(
       editor,
       [this.tmpFile],
-      { stdio: "inherit" });
+      { stdio: 'inherit' })
 
     if (response.status !== 0) {
+      // eslint-disable-next-line
       console.error(response.stdout)
+      // eslint-disable-next-line
       console.error(response.stderr)
       throw new Error(`Unable to open editor "${editor}": ${response.error}.\nPlease set EDITOR environment variable.`)
     }
@@ -64,16 +69,16 @@ export class Editor {
   }
 
   _createTmpFile() {
-    fs.writeFileSync(this.tmpFile, this._content, 'utf8');
+    fs.writeFileSync(this.tmpFile, this._content, 'utf8')
   }
 
   _randomString() {
-    let string = '';
+    let string = ''
 
     for (let i = 12; i--;) {
-      string += CHARSET.charAt(Math.floor(Math.random() * CHARSET.length));
+      string += CHARSET.charAt(Math.floor(Math.random() * CHARSET.length))
     }
 
-    return string;
+    return string
   }
 }

@@ -2,10 +2,6 @@ import { flags } from '@oclif/command'
 import { Kommand } from '../common'
 import { kuzzleFlags, KuzzleSDK } from '../support/kuzzle'
 import chalk from 'chalk'
-import Editor from '../support/editor';
-
-// tslint:disable-next-line
-const { edit } = require("external-editor");
 
 class Query extends Kommand {
   public static description = 'Executes an API query';
@@ -65,10 +61,10 @@ class Query extends Kommand {
     }
 
     // try to read stdin
-    let body = await this.fromStdin()
+    const body = await this.fromStdin()
 
     if (body && userFlags.editor) {
-      throw new Error('Unable to use flag --editor when reading from STDIN');
+      throw new Error('Unable to use flag --editor when reading from STDIN')
     }
 
     let request = {

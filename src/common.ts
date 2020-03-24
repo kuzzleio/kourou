@@ -2,7 +2,7 @@ import { Command } from '@oclif/command'
 import chalk from 'chalk'
 import emoji from 'node-emoji'
 import fs from 'fs'
-import { Editor, IEditorParams } from './support/editor'
+import { Editor, EditorParams } from './support/editor'
 
 export abstract class Kommand extends Command {
   public printCommand() {
@@ -40,7 +40,7 @@ export abstract class Kommand extends Command {
     })
   }
 
-  fromEditor(defaultContent: object | string, options?: IEditorParams) {
+  fromEditor(defaultContent: object | string, options?: EditorParams) {
     let content = defaultContent
 
     if (typeof content !== 'string') {

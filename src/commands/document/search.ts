@@ -72,14 +72,12 @@ export default class DocumentSearch extends Kommand {
       }
     }
 
-    console.log(request)
-    // content from user editor
+    // allow to edit request before send
     if (userFlags.editor) {
       request = this.fromEditor(request, { json: true })
     }
-    console.log(request)
+
     const { result } = await sdk.query(request)
-    console.log(result)
 
     for (const document of result.hits) {
       this.log(chalk.yellow(`Document ID: ${document._id}`))
