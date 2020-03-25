@@ -11,7 +11,7 @@ export default class RoleDump extends Kommand {
 
   private sdk?: any;
 
-  static description = 'Dumps Kuzzle roles'
+  static description = 'Exports roles'
 
   static flags = {
     help: flags.help({}),

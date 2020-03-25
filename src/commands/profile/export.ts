@@ -4,14 +4,14 @@ import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import * as fs from 'fs'
 import chalk from 'chalk'
 
-export default class ProfileDump extends Kommand {
+export default class ProfileExport extends Kommand {
   private batchSize?: string;
 
   private path?: string;
 
   private sdk?: any;
 
-  static description = 'Dumps Kuzzle profiles'
+  static description = 'Exports profiles'
 
   static flags = {
     help: flags.help({}),
@@ -29,7 +29,7 @@ export default class ProfileDump extends Kommand {
   async runSafe() {
     this.printCommand()
 
-    const { flags: userFlags } = this.parse(ProfileDump)
+    const { flags: userFlags } = this.parse(ProfileExport)
 
     this.path = userFlags.path
     this.batchSize = userFlags['batch-size']

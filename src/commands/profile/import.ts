@@ -4,21 +4,15 @@ import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import * as fs from 'fs'
 import chalk from 'chalk'
 
-export default class ProfileRestore extends Kommand {
-  private batchSize?: string;
-
+export default class ProfileImport extends Kommand {
   private path?: string;
 
   private sdk?: any;
 
-  static description = 'Restores previously dumped Kuzzle profiles'
+  static description = 'Imports profiles'
 
   static flags = {
     help: flags.help({}),
-    'batch-size': flags.string({
-      description: 'Maximum batch size (see limits.documentsWriteCount config)',
-      default: '200'
-    }),
     ...kuzzleFlags,
   }
 
@@ -29,10 +23,9 @@ export default class ProfileRestore extends Kommand {
   async runSafe() {
     this.printCommand()
 
-    const { args, flags: userFlags } = this.parse(ProfileRestore)
+    const { args, flags: userFlags } = this.parse(ProfileImport)
 
     this.path = args.path
-    this.batchSize = userFlags['batch-size']
 
     this.sdk = new KuzzleSDK(userFlags)
     await this.sdk.init(this.log)

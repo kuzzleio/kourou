@@ -4,8 +4,8 @@ import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import chalk from 'chalk'
 import { restoreCollectionData, restoreCollectionMappings } from '../../support/restore-collection'
 
-export default class CollectionRestore extends Kommand {
-  static description = 'Restore the content of a previously dumped collection'
+export default class CollectionImport extends Kommand {
+  static description = 'Imports a collection'
 
   static flags = {
     help: flags.help({}),
@@ -32,7 +32,7 @@ export default class CollectionRestore extends Kommand {
   async runSafe() {
     this.printCommand()
 
-    const { args, flags: userFlags } = this.parse(CollectionRestore)
+    const { args, flags: userFlags } = this.parse(CollectionImport)
 
     const index = userFlags.index
     const collection = userFlags.collection

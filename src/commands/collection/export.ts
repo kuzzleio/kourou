@@ -5,8 +5,8 @@ import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-c
 import * as fs from 'fs'
 import chalk from 'chalk'
 
-export default class CollectionDump extends Kommand {
-  static description = 'Dump an entire collection content (JSONL format)'
+export default class CollectionExport extends Kommand {
+  static description = 'Exports a collection (JSONL format)'
 
   static flags = {
     help: flags.help({}),
@@ -28,7 +28,7 @@ export default class CollectionDump extends Kommand {
   async runSafe() {
     this.printCommand()
 
-    const { args, flags: userFlags } = this.parse(CollectionDump)
+    const { args, flags: userFlags } = this.parse(CollectionExport)
 
     const path = userFlags.path || args.index
 

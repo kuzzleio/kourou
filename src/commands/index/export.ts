@@ -6,8 +6,8 @@ import * as fs from 'fs'
 import cli from 'cli-ux'
 import chalk from 'chalk'
 
-export default class IndexDump extends Kommand {
-  static description = 'Dump an entire index content (JSONL format)'
+export default class IndexExport extends Kommand {
+  static description = 'Exports an index (JSONL format)'
 
   static flags = {
     help: flags.help({}),
@@ -28,7 +28,7 @@ export default class IndexDump extends Kommand {
   async runSafe() {
     this.printCommand()
 
-    const { args, flags: userFlags } = this.parse(IndexDump)
+    const { args, flags: userFlags } = this.parse(IndexExport)
 
     const path = userFlags.path || args.index
 
