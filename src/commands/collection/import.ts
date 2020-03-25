@@ -46,7 +46,7 @@ export default class CollectionImport extends Kommand {
     const index = userFlags.index
     const collection = userFlags.collection
 
-    const sdk = new KuzzleSDK(userFlags)
+    const sdk = new KuzzleSDK({ loginTTL: true, ...userFlags })
 
     await sdk.init(this.log)
 

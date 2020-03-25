@@ -42,3 +42,14 @@ Feature: Vault
       | flag | --vault-key           | "secret-password" |
     And I should match stdout with "foobar"
 
+  @vault
+  Scenario: Encrypt a secrets file
+    Given a JSON file "test-secrets.json" containing:
+      | aws.s3   | "foobar" |
+      | my.huong | "hcmc"   |
+    And I run the command "vault:encrypt" with:
+      | arg  | test-secrets.json |                   |
+      | flag | --vault-key       | "secret-password" |
+    When I run the command "vault:test" with:
+      | arg  | test-secrets.enc.json |                   |
+      | flag | --vault-key           | "secret-password" |
