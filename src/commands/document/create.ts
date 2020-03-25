@@ -35,15 +35,15 @@ export default class DocumentCreate extends Kommand {
 
     const { args, flags: userFlags } = this.parse(DocumentCreate)
 
-    const sdk = new KuzzleSDK(userFlags)
-    await sdk.init(this.log)
+    this.sdk = new KuzzleSDK(userFlags)
+    await this.sdk.init(this.log)
 
     const body = await this.fromStdin(userFlags.body)
 
     let document: any
 
     if (userFlags.replace) {
-      document = await sdk.document.replace(
+      document = await this.sdk.document.replace(
         args.index,
         args.collection,
         userFlags.id,
@@ -51,7 +51,7 @@ export default class DocumentCreate extends Kommand {
         { refresh: 'wait_for' })
     }
     else {
-      document = await sdk.document.create(
+      document = await this.sdk.document.create(
         args.index,
         args.collection,
         body,

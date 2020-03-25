@@ -37,22 +37,22 @@ export default class CollectionRestore extends Kommand {
     const index = userFlags.index
     const collection = userFlags.collection
 
-    const sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
+    this.sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
 
-    await sdk.init(this.log)
+    await this.sdk.init(this.log)
 
     this.log(chalk.green(`[✔] Start importing dump from ${args.path}`))
 
     if (!userFlags['no-mappings']) {
       await restoreCollectionMappings(
-        sdk,
+        this.sdk,
         args.path,
         index,
         collection)
     }
 
     await restoreCollectionData(
-      sdk,
+      this.sdk,
       this.log.bind(this),
       Number(userFlags['batch-size']),
       args.path,

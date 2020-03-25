@@ -32,25 +32,25 @@ export default class IndexDump extends Kommand {
 
     const path = userFlags.path || args.index
 
-    const sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
-    await sdk.init(this.log)
+    this.sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
+    await this.sdk.init(this.log)
 
     this.log(chalk.green(`Dumping index "${args.index}" in ${path}/ ...`))
 
     fs.mkdirSync(path, { recursive: true })
 
-    const { collections } = await sdk.collection.list(args.index)
+    const { collections } = await this.sdk.collection.list(args.index)
 
     for (const collection of collections) {
       if (collection.type !== 'realtime') {
         await dumpCollectionMappings(
-          sdk,
+          this.sdk,
           args.index,
           collection.name,
           path)
 
         await dumpCollectionData(
-          sdk,
+          this.sdk,
           args.index,
           collection.name,
           Number(userFlags['batch-size']),

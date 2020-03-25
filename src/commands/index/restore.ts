@@ -34,9 +34,9 @@ export default class IndexRestore extends Kommand {
 
     const index = userFlags.index
 
-    const sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
+    this.sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
 
-    await sdk.init(this.log)
+    await this.sdk.init(this.log)
 
     if (index) {
       this.log(chalk.green(`[✔] Start importing dump from ${args.path} in index ${index}`))
@@ -50,13 +50,13 @@ export default class IndexRestore extends Kommand {
     for (const dumpDir of dumpDirs) {
       if (!userFlags['no-mappings']) {
         await restoreCollectionMappings(
-          sdk,
+          this.sdk,
           dumpDir,
           index)
       }
 
       await restoreCollectionData(
-        sdk,
+        this.sdk,
         this.log.bind(this),
         Number(userFlags['batch-size']),
         dumpDir,

@@ -32,21 +32,21 @@ export default class CollectionDump extends Kommand {
 
     const path = userFlags.path || args.index
 
-    const sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
-    await sdk.init(this.log)
+    this.sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
+    await this.sdk.init(this.log)
 
     this.log(chalk.green(`Dumping collection "${args.index}:${args.collection}" in ${path}/ ...`))
 
     fs.mkdirSync(path, { recursive: true })
 
     await dumpCollectionMappings(
-      sdk,
+      this.sdk,
       args.index,
       args.collection,
       path)
 
     await dumpCollectionData(
-      sdk,
+      this.sdk,
       args.index,
       args.collection,
       Number(userFlags['batch-size']),

@@ -31,10 +31,10 @@ class ApiKeyCreate extends Kommand {
 
     const { args, flags: userFlags } = this.parse(ApiKeyCreate)
 
-    const sdk = new KuzzleSDK(userFlags)
-    await sdk.init(this.log)
+    this.sdk = new KuzzleSDK(userFlags)
+    await this.sdk.init(this.log)
 
-    const apiKey = await sdk.security.createApiKey(
+    const apiKey = await this.sdk.security.createApiKey(
       args.user,
       userFlags.description,
       {

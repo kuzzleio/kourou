@@ -2,8 +2,11 @@ import { Command } from '@oclif/command'
 import chalk from 'chalk'
 import emoji from 'node-emoji'
 import fs from 'fs'
+import { KuzzleSDK } from './support/kuzzle'
 
 export abstract class Kommand extends Command {
+  protected sdk?: KuzzleSDK;
+
   public printCommand() {
     const klass: any = this.constructor
 
@@ -28,6 +31,11 @@ export abstract class Kommand extends Command {
     }
     catch (error) {
       this.logError(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
+    }
+    finally {
+      if (this.sdk) {
+        this.sdk.disconnect()
+      }
     }
   }
 

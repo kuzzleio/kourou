@@ -36,8 +36,8 @@ class Query extends Kommand {
 
     const { args, flags: userFlags } = this.parse(Query)
 
-    const sdk = new KuzzleSDK(userFlags)
-    await sdk.init(this.log)
+    this.sdk = new KuzzleSDK(userFlags)
+    await this.sdk.init(this.log)
 
     const [controller, action] = args['controller:action'].split(':')
 
@@ -58,7 +58,7 @@ class Query extends Kommand {
       body,
     }
 
-    const response = await sdk.query(request)
+    const response = await this.sdk.query(request)
 
     this.log(chalk.green(`Successfully executed "${controller}:${action}"`))
     this.log(JSON.stringify(response, null, 2))

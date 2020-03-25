@@ -22,10 +22,10 @@ class ApiKeyDelete extends Kommand {
 
     const { flags: userFlags, args } = this.parse(ApiKeyDelete)
 
-    const sdk = new KuzzleSDK(userFlags)
-    await sdk.init(this.log)
+    this.sdk = new KuzzleSDK(userFlags)
+    await this.sdk.init(this.log)
 
-    await sdk.security.deleteApiKey(args.user, userFlags.id)
+    await this.sdk.security.deleteApiKey(args.user, userFlags.id)
 
     this.log(`Successfully deleted API Key "${userFlags.id}" of user "${args.user}"`)
   }

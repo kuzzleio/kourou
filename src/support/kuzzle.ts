@@ -4,7 +4,7 @@ import chalk from 'chalk'
 // tslint:disable-next-line
 const { Http, WebSocket, Kuzzle } = require('kuzzle-sdk')
 
-const ONE_SECOND = 60 * 1000;
+const ONE_SECOND = 60 * 1000
 
 export const kuzzleFlags = {
   host: flags.string({
@@ -60,11 +60,11 @@ export class KuzzleSDK {
   }
 
   public async init(log: any) {
-    const protocolClass = this.protocol === 'ws'
+    const ProtocolClass = this.protocol === 'ws'
       ? WebSocket
       : Http
 
-    this.sdk = new Kuzzle(new protocolClass(this.host, {
+    this.sdk = new Kuzzle(new ProtocolClass(this.host, {
       port: this.port,
       sslConnection: this.ssl,
     }))
@@ -89,7 +89,7 @@ export class KuzzleSDK {
           catch (error) {
             log(`Cannot refresh token: ${error}`)
           }
-        }, ONE_SECOND);
+        }, ONE_SECOND)
       }
 
       log(chalk.green(`[ℹ] Loggued as ${this.username} (refreshLogin: ${this.refreshLogin}).`))
@@ -99,7 +99,7 @@ export class KuzzleSDK {
   disconnect() {
     this.sdk.disconnect()
 
-    if (this.refreshLogin) {
+    if (this.refreshTimer) {
       clearInterval(this.refreshTimer)
     }
   }
