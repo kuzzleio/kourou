@@ -47,7 +47,11 @@ export default class DocumentCreate extends Kommand {
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init(this.log)
 
-    const body = await this.fromStdin(userFlags.body)
+    const stdin = await this.fromStdin()
+
+    const body = stdin
+      ? stdin
+      : this.parseJs(userFlags.body)
 
     try {
       let document: any
