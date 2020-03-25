@@ -21,7 +21,6 @@ Feature: Document Management
     Then The document "chuon-chuon-kim" content match:
       | my | "other name" |
 
-
   # document:get ===============================================================
 
   @mappings
@@ -35,3 +34,20 @@ Feature: Document Management
       | "yellow-taxi"     |
       | "chuon-chuon-kim" |
     Then I should match stdout with "chuon-chuon-kim"
+
+  # document:search ============================================================
+
+  @mappings
+  Scenario: Searches for documents
+    Given an existing collection "nyc-open-data":"yellow-taxi"
+    And I create the following document:
+      | body | { "name": "Adrien", "city": "Saigon" } |
+    And I create the following document:
+      | body | { "name": "Sebastien", "city": "Cassis" } |
+    And I refresh the collection
+    When I run the command "document:search" with:
+      | arg  | nyc-open-data |                              |
+      | arg  | yellow-taxi   |                              |
+      | flag | --query       | { term: { city: "Saigon" } } |
+    Then I should match stdout with "Adrien"
+    And I should not match stdout with "Sebastien"

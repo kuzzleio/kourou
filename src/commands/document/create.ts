@@ -47,7 +47,11 @@ export default class DocumentCreate extends Kommand {
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init(this.log)
 
-    const body = await this.fromStdin(userFlags.body)
+    const stdin = await this.fromStdin()
+
+    const body = stdin
+      ? stdin
+      : userFlags.body
 
     try {
       let document: any
@@ -57,14 +61,14 @@ export default class DocumentCreate extends Kommand {
           args.index,
           args.collection,
           userFlags.id,
-          body,
+          this.parseJs(body),
           { refresh: 'wait_for' })
       }
       else {
         document = await sdk.document.create(
           args.index,
           args.collection,
-          body,
+          this.parseJs(body),
           userFlags.id,
           { refresh: 'wait_for' })
       }
