@@ -19,7 +19,7 @@ export class VaultTest extends Kommand {
     { name: 'secrets-file', description: 'Encrypted secrets file', required: true }
   ]
 
-  async run() {
+  async runSafe() {
     this.printCommand()
 
     const { args, flags: userFlags } = this.parse(VaultTest)

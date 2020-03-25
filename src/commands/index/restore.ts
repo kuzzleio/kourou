@@ -27,15 +27,6 @@ export default class IndexRestore extends Kommand {
     { name: 'path', description: 'Dump directory or file', required: true },
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -43,7 +34,7 @@ export default class IndexRestore extends Kommand {
 
     const index = userFlags.index
 
-    const sdk = new KuzzleSDK({ loginTTL: true, ...userFlags })
+    const sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
 
     await sdk.init(this.log)
 
@@ -56,31 +47,27 @@ export default class IndexRestore extends Kommand {
 
     const dumpDirs = fs.readdirSync(args.path).map(f => `${args.path}/${f}`)
 
-    try {
-      for (const dumpDir of dumpDirs) {
-        if (!userFlags['no-mappings']) {
-          await restoreCollectionMappings(
-            sdk,
-            dumpDir,
-            index)
-        }
-
-        await restoreCollectionData(
+    for (const dumpDir of dumpDirs) {
+      if (!userFlags['no-mappings']) {
+        await restoreCollectionMappings(
           sdk,
-          this.log.bind(this),
-          Number(userFlags['batch-size']),
           dumpDir,
           index)
-
-        if (index) {
-          this.log(chalk.green(`[✔] Dump directory ${dumpDir} imported in index ${index}`))
-        }
-        else {
-          this.log(chalk.green(`[✔] Dump directory ${dumpDir} imported`))
-        }
       }
-    } catch (error) {
-      this.log(chalk.red(`[ℹ] Error while importing: ${error.message}`))
+
+      await restoreCollectionData(
+        sdk,
+        this.log.bind(this),
+        Number(userFlags['batch-size']),
+        dumpDir,
+        index)
+
+      if (index) {
+        this.log(chalk.green(`[✔] Dump directory ${dumpDir} imported in index ${index}`))
+      }
+      else {
+        this.log(chalk.green(`[✔] Dump directory ${dumpDir} imported`))
+      }
     }
   }
 }

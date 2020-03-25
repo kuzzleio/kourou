@@ -21,7 +21,7 @@ export class VaultAdd extends Kommand {
     { name: 'value', description: 'Value to encrypt', required: true }
   ]
 
-  async run() {
+  async runSafe() {
     this.printCommand()
 
     const { args, flags: userFlags } = this.parse(VaultAdd)

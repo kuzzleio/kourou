@@ -16,15 +16,6 @@ export default class DocumentGet extends Kommand {
     { name: 'id', description: 'Document ID', required: true }
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -33,15 +24,11 @@ export default class DocumentGet extends Kommand {
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init(this.log)
 
-    try {
-      const document = await sdk.document.get(
-        args.index,
-        args.collection,
-        args.id)
+    const document = await sdk.document.get(
+      args.index,
+      args.collection,
+      args.id)
 
-      this.log(JSON.stringify(document, null, 2))
-    } catch (error) {
-      this.log(error.message)
-    }
+    this.log(JSON.stringify(document, null, 2))
   }
 }

@@ -23,15 +23,6 @@ export default class EsListIndex extends Kommand {
     })
   }
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 

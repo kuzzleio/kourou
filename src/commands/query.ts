@@ -31,15 +31,6 @@ class Query extends Kommand {
     { name: 'controller:action', description: 'Controller and action (eg: "server:now")', required: true },
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -67,15 +58,10 @@ class Query extends Kommand {
       body,
     }
 
-    try {
-      const response = await sdk.query(request)
+    const response = await sdk.query(request)
 
-      this.log(chalk.green(`Successfully executed "${controller}:${action}"`))
-      this.log(JSON.stringify(response, null, 2))
-    }
-    catch (error) {
-      this.logError(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
-    }
+    this.log(chalk.green(`Successfully executed "${controller}:${action}"`))
+    this.log(JSON.stringify(response, null, 2))
   }
 }
 

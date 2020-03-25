@@ -30,15 +30,6 @@ export default class DocumentCreate extends Kommand {
     { name: 'collection', description: 'Collection name', required: true }
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -49,29 +40,25 @@ export default class DocumentCreate extends Kommand {
 
     const body = await this.fromStdin(userFlags.body)
 
-    try {
-      let document: any
+    let document: any
 
-      if (userFlags.replace) {
-        document = await sdk.document.replace(
-          args.index,
-          args.collection,
-          userFlags.id,
-          body,
-          { refresh: 'wait_for' })
-      }
-      else {
-        document = await sdk.document.create(
-          args.index,
-          args.collection,
-          body,
-          userFlags.id,
-          { refresh: 'wait_for' })
-      }
-
-      this.log(JSON.stringify(document, null, 2))
-    } catch (error) {
-      this.logError(error.message)
+    if (userFlags.replace) {
+      document = await sdk.document.replace(
+        args.index,
+        args.collection,
+        userFlags.id,
+        body,
+        { refresh: 'wait_for' })
     }
+    else {
+      document = await sdk.document.create(
+        args.index,
+        args.collection,
+        body,
+        userFlags.id,
+        { refresh: 'wait_for' })
+    }
+
+    this.log(JSON.stringify(document, null, 2))
   }
 }

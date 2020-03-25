@@ -17,15 +17,6 @@ class ApiKeyDelete extends Kommand {
     { name: 'user', description: 'User kuid', required: true },
   ]
 
-  public async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -34,13 +25,9 @@ class ApiKeyDelete extends Kommand {
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init(this.log)
 
-    try {
-      await sdk.security.deleteApiKey(args.user, userFlags.id)
+    await sdk.security.deleteApiKey(args.user, userFlags.id)
 
-      this.log(`Successfully deleted API Key "${userFlags.id}" of user "${args.user}"`)
-    } catch (error) {
-      this.logError(error.message)
-    }
+    this.log(`Successfully deleted API Key "${userFlags.id}" of user "${args.user}"`)
   }
 }
 

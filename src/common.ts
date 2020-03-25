@@ -17,7 +17,22 @@ export abstract class Kommand extends Command {
   }
 
   public logError(message?: string | undefined, ...args: any[]): void {
+    process.exitCode = 1
+
     return this.error(chalk.red(message), ...args)
+  }
+
+  async run() {
+    try {
+      await this.runSafe()
+    }
+    catch (error) {
+      this.logError(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
+    }
+  }
+
+  async runSafe() {
+    throw new Error('You must implement runSafe() method')
   }
 
   /**

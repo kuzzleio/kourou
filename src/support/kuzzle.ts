@@ -2,7 +2,9 @@ import { flags } from '@oclif/command'
 import chalk from 'chalk'
 
 // tslint:disable-next-line
-const { Http, Kuzzle } = require('kuzzle-sdk')
+const { Http, WebSocket, Kuzzle } = require('kuzzle-sdk')
+
+const ONE_SECOND = 60 * 1000;
 
 export const kuzzleFlags = {
   host: flags.string({
@@ -41,7 +43,11 @@ export class KuzzleSDK {
 
   private password: string;
 
-  private loginTTL: string;
+  private refreshLogin: boolean;
+
+  private protocol: string;
+
+  private refreshTimer?: NodeJS.Timeout;
 
   constructor(options: any) {
     this.host = options.host
@@ -49,16 +55,21 @@ export class KuzzleSDK {
     this.ssl = options.ssl || this.port === 443
     this.username = options.username
     this.password = options.password
-    this.loginTTL = options.loginTTL || '10s'
+    this.refreshLogin = options.refreshLogin || false
+    this.protocol = options.protocol || 'http'
   }
 
   public async init(log: any) {
-    this.sdk = new Kuzzle(new Http(this.host, {
+    const protocolClass = this.protocol === 'ws'
+      ? WebSocket
+      : Http
+
+    this.sdk = new Kuzzle(new protocolClass(this.host, {
       port: this.port,
       sslConnection: this.ssl,
     }))
 
-    log(`[ℹ] Connecting to http${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
+    log(`[ℹ] Connecting to ${this.protocol}${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
 
     await this.sdk.connect()
 
@@ -68,8 +79,28 @@ export class KuzzleSDK {
         password: this.password,
       }
 
-      await this.sdk.auth.login('local', credentials, this.loginTTL)
-      log(chalk.green(`[ℹ] Loggued as ${this.username} for ${this.loginTTL}.`))
+      await this.sdk.auth.login('local', credentials, '90s')
+
+      if (this.refreshLogin) {
+        this.refreshTimer = setInterval(async () => {
+          try {
+            await this.sdk.auth.refreshToken()
+          }
+          catch (error) {
+            log(`Cannot refresh token: ${error}`)
+          }
+        }, ONE_SECOND);
+      }
+
+      log(chalk.green(`[ℹ] Loggued as ${this.username} (refreshLogin: ${this.refreshLogin}).`))
+    }
+  }
+
+  disconnect() {
+    this.sdk.disconnect()
+
+    if (this.refreshLogin) {
+      clearInterval(this.refreshTimer)
     }
   }
 

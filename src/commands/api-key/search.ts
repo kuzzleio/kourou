@@ -17,15 +17,6 @@ class ApiKeySearch extends Kommand {
     { name: 'user', description: 'User kuid', required: true },
   ]
 
-  public async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -43,27 +34,23 @@ class ApiKeySearch extends Kommand {
       }
     }
 
-    try {
-      const result = await sdk.security.searchApiKeys(
-        args.user,
-        query,
-        {
-          from: 0,
-          size: 100
-        })
+    const result = await sdk.security.searchApiKeys(
+      args.user,
+      query,
+      {
+        from: 0,
+        size: 100
+      })
 
-      this.log(`${result.total} API Keys found for user ${args.user}`)
+    this.log(`${result.total} API Keys found for user ${args.user}`)
 
-      if (result.total !== 0) {
-        this.log('')
-        for (const { _id, _source } of result.hits) {
-          this.log(` - Key "${_id}"`)
-          this.log(`    Description: ${_source.description}`)
-          this.log(`    Expires at: ${_source.expiresAt}`)
-        }
+    if (result.total !== 0) {
+      this.log('')
+      for (const { _id, _source } of result.hits) {
+        this.log(` - Key "${_id}"`)
+        this.log(`    Description: ${_source.description}`)
+        this.log(`    Expires at: ${_source.expiresAt}`)
       }
-    } catch (error) {
-      this.logError(error.message)
     }
   }
 }

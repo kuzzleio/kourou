@@ -25,15 +25,6 @@ export default class IndexDump extends Kommand {
     { name: 'index', description: 'Index name', required: true },
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -41,7 +32,7 @@ export default class IndexDump extends Kommand {
 
     const path = userFlags.path || args.index
 
-    const sdk = new KuzzleSDK({ loginTTL: true, ...userFlags })
+    const sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
     await sdk.init(this.log)
 
     this.log(chalk.green(`Dumping index "${args.index}" in ${path}/ ...`))
