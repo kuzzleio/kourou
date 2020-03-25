@@ -51,7 +51,7 @@ export default class DocumentCreate extends Kommand {
 
     const body = stdin
       ? stdin
-      : this.parseJs(userFlags.body)
+      : userFlags.body
 
     try {
       let document: any
@@ -61,14 +61,14 @@ export default class DocumentCreate extends Kommand {
           args.index,
           args.collection,
           userFlags.id,
-          body,
+          this.parseJs(body),
           { refresh: 'wait_for' })
       }
       else {
         document = await sdk.document.create(
           args.index,
           args.collection,
-          body,
+          this.parseJs(body),
           userFlags.id,
           { refresh: 'wait_for' })
       }

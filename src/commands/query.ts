@@ -61,11 +61,14 @@ class Query extends Kommand {
     }
 
     // try to read stdin
-    const body = await this.fromStdin()
+    const stdin = await this.fromStdin()
 
-    if (body && userFlags.editor) {
+    if (stdin && userFlags.editor) {
       throw new Error('Unable to use flag --editor when reading from STDIN')
     }
+    const body = stdin
+      ? stdin
+      : userFlags.body
 
     let request = {
       controller,
