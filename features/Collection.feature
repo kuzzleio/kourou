@@ -1,21 +1,21 @@
 Feature: Collection Commands
 
   @mappings
-  Scenario: Dump and restore a collection
+  Scenario: Export and import a collection
     Given an existing collection "nyc-open-data":"yellow-taxi"
     And I "create" the following documents:
       | _id               | body                              |
       | "chuon-chuon-kim" | { "city": "hcmc", "district": 1 } |
       | "the-hive"        | { "city": "hcmc", "district": 2 } |
-    # collection:dump
-    When I run the command "collection:dump" with args:
+    # collection:export
+    When I run the command "collection:export" with args:
       | "nyc-open-data" |
       | "yellow-taxi"   |
     Then I successfully call the route "collection":"delete" with args:
       | index      | "nyc-open-data" |
       | collection | "yellow-taxi"   |
-    # collection:restore
-    And I run the command "collection:restore" with args:
+    # collection:import
+    And I run the command "collection:import" with args:
       | "nyc-open-data/yellow-taxi" |
     Then The document "chuon-chuon-kim" content match:
       | city     | "hcmc" |

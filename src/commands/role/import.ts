@@ -4,21 +4,15 @@ import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import * as fs from 'fs'
 import chalk from 'chalk'
 
-export default class RoleRestore extends Kommand {
-  private batchSize?: string;
-
+export default class RoleImport extends Kommand {
   private path?: string;
 
   private sdk?: any;
 
-  static description = 'Restores previously dumped Kuzzle roles'
+  static description = 'Import roles'
 
   static flags = {
     help: flags.help({}),
-    'batch-size': flags.string({
-      description: 'Maximum batch size (see limits.documentsWriteCount config)',
-      default: '200'
-    }),
     ...kuzzleFlags,
   }
 
@@ -38,10 +32,9 @@ export default class RoleRestore extends Kommand {
   async runSafe() {
     this.printCommand()
 
-    const { args, flags: userFlags } = this.parse(RoleRestore)
+    const { args, flags: userFlags } = this.parse(RoleImport)
 
     this.path = args.path
-    this.batchSize = userFlags['batch-size']
 
     this.sdk = new KuzzleSDK(userFlags)
     await this.sdk.init(this.log)

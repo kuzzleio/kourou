@@ -5,8 +5,8 @@ import * as fs from 'fs'
 import chalk from 'chalk'
 import { restoreCollectionData, restoreCollectionMappings } from '../../support/restore-collection'
 
-export default class IndexRestore extends Kommand {
-  static description = 'Restore the content of a previously dumped index'
+export default class IndexImport extends Kommand {
+  static description = 'Imports an index'
 
   static flags = {
     help: flags.help({}),
@@ -39,7 +39,7 @@ export default class IndexRestore extends Kommand {
   async runSafe() {
     this.printCommand()
 
-    const { args, flags: userFlags } = this.parse(IndexRestore)
+    const { args, flags: userFlags } = this.parse(IndexImport)
 
     const index = userFlags.index
 

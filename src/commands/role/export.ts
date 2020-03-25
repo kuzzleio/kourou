@@ -4,20 +4,20 @@ import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import * as fs from 'fs'
 import chalk from 'chalk'
 
-export default class ProfileDump extends Kommand {
+export default class RoleDump extends Kommand {
   private batchSize?: string;
 
   private path?: string;
 
   private sdk?: any;
 
-  static description = 'Dumps Kuzzle profiles'
+  static description = 'Exports roles'
 
   static flags = {
     help: flags.help({}),
     path: flags.string({
       description: 'Dump directory',
-      default: 'profiles'
+      default: 'roles'
     }),
     'batch-size': flags.string({
       description: 'Maximum batch size (see limits.documentsFetchCount config)',
@@ -38,45 +38,45 @@ export default class ProfileDump extends Kommand {
   async runSafe() {
     this.printCommand()
 
-    const { flags: userFlags } = this.parse(ProfileDump)
+    const { flags: userFlags } = this.parse(RoleDump)
 
     this.path = userFlags.path
     this.batchSize = userFlags['batch-size']
 
-    const filename = `${this.path}/profiles.json`
+    const filename = `${this.path}/roles.json`
 
     this.sdk = new KuzzleSDK(userFlags)
     await this.sdk.init(this.log)
 
-    this.log(`Dumping securities in ${filename} ...`)
+    this.log(`Dumping roles in ${filename} ...`)
 
     fs.mkdirSync(this.path, { recursive: true })
 
-    const profiles = await this._dumpProfiles()
+    const roles = await this._dumpRoles()
 
-    fs.writeFileSync(filename, JSON.stringify(profiles, null, 2))
+    fs.writeFileSync(filename, JSON.stringify(roles, null, 2))
 
-    this.log(chalk.green(`[✔] ${Object.keys(profiles).length} profiles dumped`))
+    this.log(chalk.green(`[✔] ${Object.keys(roles).length} roles dumped`))
   }
 
-  async _dumpProfiles() {
+  async _dumpRoles() {
     const options = {
       scroll: '10m',
       size: this.batchSize
     }
 
-    let result = await this.sdk.security.searchProfiles({}, options)
+    let result = await this.sdk.security.searchRoles({}, options)
 
-    const profiles: any = {}
+    const roles: any = {}
 
     while (result) {
       result.hits.forEach((hit: any) => {
-        profiles[hit._id] = { policies: hit.policies }
+        roles[hit._id] = { controllers: hit.controllers }
       })
 
       result = await result.next()
     }
 
-    return profiles
+    return roles
   }
 }
