@@ -6,7 +6,7 @@ import * as fs from 'fs'
 import chalk from 'chalk'
 
 export default class CollectionExport extends Kommand {
-  static description = 'Exports an collection (JSONL format)'
+  static description = 'Exports a collection (JSONL format)'
 
   static flags = {
     help: flags.help({}),
