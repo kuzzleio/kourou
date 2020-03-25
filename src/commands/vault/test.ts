@@ -42,6 +42,7 @@ export class VaultTest extends Kommand {
     }
     catch (error) {
       this.log(chalk.red('[X] Secrets file cannot be decrypted'))
+      throw error
     }
   }
 }
