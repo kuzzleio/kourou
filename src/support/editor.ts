@@ -40,7 +40,7 @@ export class Editor {
       this.tmpFile = tmp.fileSync({ postfix: '.json' })
     }
 
-    fs.writeFileSync(this.tmpFile.name, this._content);
+    fs.writeFileSync(this.tmpFile.name, this._content)
   }
 
   run() {
