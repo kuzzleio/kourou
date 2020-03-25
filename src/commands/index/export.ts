@@ -3,15 +3,16 @@ import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-collection'
 import * as fs from 'fs'
+import cli from 'cli-ux'
 import chalk from 'chalk'
 
-export default class CollectionDump extends Kommand {
-  static description = 'Dump an entire collection content (JSONL format)'
+export default class IndexExport extends Kommand {
+  static description = 'Exports an index (JSONL format)'
 
   static flags = {
     help: flags.help({}),
     path: flags.string({
-      description: 'Dump root directory (default: index name)',
+      description: 'Dump directory (default: index name)',
     }),
     'batch-size': flags.string({
       description: 'Maximum batch size (see limits.documentsFetchCount config)',
@@ -22,7 +23,6 @@ export default class CollectionDump extends Kommand {
 
   static args = [
     { name: 'index', description: 'Index name', required: true },
-    { name: 'collection', description: 'Collection name', required: true },
   ]
 
   async run() {
@@ -37,30 +37,38 @@ export default class CollectionDump extends Kommand {
   async runSafe() {
     this.printCommand()
 
-    const { args, flags: userFlags } = this.parse(CollectionDump)
+    const { args, flags: userFlags } = this.parse(IndexExport)
 
     const path = userFlags.path || args.index
 
     const sdk = new KuzzleSDK({ loginTTL: true, ...userFlags })
     await sdk.init(this.log)
 
-    this.log(chalk.green(`Dumping collection "${args.index}:${args.collection}" in ${path}/ ...`))
+    this.log(chalk.green(`Dumping index "${args.index}" in ${path}/ ...`))
 
     fs.mkdirSync(path, { recursive: true })
 
-    await dumpCollectionMappings(
-      sdk,
-      args.index,
-      args.collection,
-      path)
+    const { collections } = await sdk.collection.list(args.index)
 
-    await dumpCollectionData(
-      sdk,
-      args.index,
-      args.collection,
-      Number(userFlags['batch-size']),
-      path)
+    for (const collection of collections) {
+      if (collection.type !== 'realtime') {
+        await dumpCollectionMappings(
+          sdk,
+          args.index,
+          collection.name,
+          path)
 
-    this.log(chalk.green(`[✔] Collection ${args.index}:${args.collection} dumped`))
+        await dumpCollectionData(
+          sdk,
+          args.index,
+          collection.name,
+          Number(userFlags['batch-size']),
+          path)
+
+        cli.action.stop()
+      }
+    }
+
+    this.log(chalk.green(`[✔] Index ${args.index} dumped`))
   }
 }
