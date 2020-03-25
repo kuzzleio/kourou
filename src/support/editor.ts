@@ -1,7 +1,8 @@
 import fs from 'fs'
 import { spawnSync } from 'child_process'
 
-const CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+// tslint:disable-next-line
+const tmp = require('tmp')
 
 export interface EditorParams {
   json?: boolean;
@@ -10,7 +11,7 @@ export interface EditorParams {
 export class Editor {
   private _content: string;
 
-  private tmpFile: string;
+  private tmpFile: any;
 
   private defaultEditor: string;
 
@@ -33,13 +34,13 @@ export class Editor {
         this._content = JSON.stringify(JSON.parse(this._content), null, 2)
       }
 
-      this.tmpFile = `/tmp/${this._randomString()}.json`
+      this.tmpFile = tmp.fileSync({ postfix: '.json' })
     }
     else {
-      this.tmpFile = `/tmp/${this._randomString()}.tmp`
+      this.tmpFile = tmp.fileSync({ postfix: '.json' })
     }
 
-    this._createTmpFile()
+    fs.writeFileSync(this.tmpFile.name, this._content);
   }
 
   run() {
@@ -48,7 +49,7 @@ export class Editor {
 
     const response = spawnSync(
       editor,
-      [this.tmpFile],
+      [this.tmpFile.name],
       { stdio: 'inherit' })
 
     if (response.status !== 0) {
@@ -59,26 +60,12 @@ export class Editor {
       throw new Error(`Unable to open editor "${editor}": ${response.error}.\nPlease set EDITOR environment variable.`)
     }
 
-    this._content = fs.readFileSync(this.tmpFile, 'utf8')
+    this._content = fs.readFileSync(this.tmpFile.name, 'utf8')
 
-    fs.unlinkSync(this.tmpFile)
+    fs.unlinkSync(this.tmpFile.name)
   }
 
   get content() {
     return this._content
-  }
-
-  _createTmpFile() {
-    fs.writeFileSync(this.tmpFile, this._content, 'utf8')
-  }
-
-  _randomString() {
-    let string = ''
-
-    for (let i = 12; i--;) {
-      string += CHARSET.charAt(Math.floor(Math.random() * CHARSET.length))
-    }
-
-    return string
   }
 }
