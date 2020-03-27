@@ -23,7 +23,7 @@ export abstract class Kommand extends Command {
 
   public logError(message?: string | undefined, ...args: any[]): void {
     process.exitCode = 1
-    return this.error(chalk.red(message), ...args)
+    return this.error(chalk.red(`[X] ${message}`), ...args)
   }
 
   async run() {

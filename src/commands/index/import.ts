@@ -48,20 +48,24 @@ export default class IndexImport extends Kommand {
     const dumpDirs = fs.readdirSync(args.path).map(f => `${args.path}/${f}`)
 
     for (const dumpDir of dumpDirs) {
-      if (!userFlags['no-mappings']) {
-        await restoreCollectionMappings(
+      try {
+        if (!userFlags['no-mappings']) {
+          await restoreCollectionMappings(
+            this.sdk,
+            dumpDir,
+            index)
+        }
+
+        await restoreCollectionData(
           this.sdk,
+          this.log.bind(this),
+          Number(userFlags['batch-size']),
           dumpDir,
           index)
       }
-
-      await restoreCollectionData(
-        this.sdk,
-        this.log.bind(this),
-        Number(userFlags['batch-size']),
-        dumpDir,
-        index)
-
+      catch (error) {
+        this.logError(`Error when importing collection from "${dumpDir}": ${error}`)
+      }
       if (index) {
         this.log(chalk.green(`[✔] Dump directory ${dumpDir} imported in index ${index}`))
       }

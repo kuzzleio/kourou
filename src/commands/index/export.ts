@@ -42,21 +42,26 @@ export default class IndexExport extends Kommand {
     const { collections } = await this.sdk.collection.list(args.index)
 
     for (const collection of collections) {
-      if (collection.type !== 'realtime') {
-        await dumpCollectionMappings(
-          this.sdk,
-          args.index,
-          collection.name,
-          path)
+      try {
+        if (collection.type !== 'realtime') {
+          await dumpCollectionMappings(
+            this.sdk,
+            args.index,
+            collection.name,
+            path)
 
-        await dumpCollectionData(
-          this.sdk,
-          args.index,
-          collection.name,
-          Number(userFlags['batch-size']),
-          path)
+          await dumpCollectionData(
+            this.sdk,
+            args.index,
+            collection.name,
+            Number(userFlags['batch-size']),
+            path)
 
-        cli.action.stop()
+          cli.action.stop()
+        }
+      }
+      catch (error) {
+        this.logError(`Error when exporting collection "${collection.name}": ${error}`)
       }
     }
 

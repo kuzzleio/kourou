@@ -41,7 +41,7 @@ export class VaultTest extends Kommand {
       this.log(chalk.green('[✔] Secrets file can be decrypted'))
     }
     catch (error) {
-      this.log(chalk.red('[X] Secrets file cannot be decrypted'))
+      this.logError('Secrets file cannot be decrypted')
       throw error
     }
   }
