@@ -52,7 +52,7 @@ export default class ProfileExport extends Kommand {
 
   async _dumpProfiles() {
     const options = {
-      scroll: '10m',
+      scroll: '1m',
       size: this.batchSize
     }
 

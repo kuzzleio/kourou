@@ -52,7 +52,7 @@ export default class RoleDump extends Kommand {
 
   async _dumpRoles() {
     const options = {
-      scroll: '10m',
+      scroll: '1m',
       size: this.batchSize
     }
 
