@@ -7,15 +7,17 @@ class ApiKeyDelete extends Kommand {
 
   public static flags = {
     help: flags.help(),
-    id: flags.string({
-      description: 'API Key unique ID',
-    }),
     ...kuzzleFlags,
   };
 
   static args = [
     { name: 'user', description: 'User kuid', required: true },
+    { name: 'id', description: 'API Key unique ID', required: true },
   ]
+
+  static examples = [
+    'kourou vault:delete sigfox-gateway 1k-BF3EBjsXdvA2PR8x'
+  ];
 
   public async run() {
     try {
@@ -35,9 +37,9 @@ class ApiKeyDelete extends Kommand {
     await sdk.init(this.log)
 
     try {
-      await sdk.security.deleteApiKey(args.user, userFlags.id)
+      await sdk.security.deleteApiKey(args.user, args.id)
 
-      this.log(`Successfully deleted API Key "${userFlags.id}" of user "${args.user}"`)
+      this.log(`Successfully deleted API Key "${args.id}" of user "${args.user}"`)
     } catch (error) {
       this.logError(error.message)
     }
