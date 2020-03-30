@@ -4,7 +4,7 @@ import chalk from 'chalk'
 // tslint:disable-next-line
 const { Http, WebSocket, Kuzzle } = require('kuzzle-sdk')
 
-const ONE_SECOND = 60 * 1000
+const SECOND = 60 * 1000
 
 export const kuzzleFlags = {
   host: flags.string({
@@ -43,8 +43,6 @@ export class KuzzleSDK {
 
   private password: string;
 
-  private refreshLogin: boolean;
-
   private protocol: string;
 
   private refreshTimer?: NodeJS.Timeout;
@@ -55,7 +53,6 @@ export class KuzzleSDK {
     this.ssl = options.ssl || this.port === 443
     this.username = options.username
     this.password = options.password
-    this.refreshLogin = options.refreshLogin || false
     this.protocol = options.protocol || 'http'
   }
 
@@ -81,18 +78,16 @@ export class KuzzleSDK {
 
       await this.sdk.auth.login('local', credentials, '90s')
 
-      if (this.refreshLogin) {
-        this.refreshTimer = setInterval(async () => {
-          try {
-            await this.sdk.auth.refreshToken()
-          }
-          catch (error) {
-            log(`Cannot refresh token: ${error}`)
-          }
-        }, ONE_SECOND)
-      }
+      this.refreshTimer = setInterval(async () => {
+        try {
+          await this.sdk.auth.refreshToken()
+        }
+        catch (error) {
+          log(`Cannot refresh token: ${error}`)
+        }
+      }, 80 * SECOND)
 
-      log(chalk.green(`[ℹ] Loggued as ${this.username} (refreshLogin: ${this.refreshLogin}).`))
+      log(chalk.green(`[ℹ] Loggued as ${this.username}.`))
     }
   }
 
