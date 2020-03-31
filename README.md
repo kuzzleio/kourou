@@ -173,11 +173,17 @@ OPTIONS
   -h, --host=host          [default: localhost] Kuzzle server host
   -p, --port=port          [default: 7512] Kuzzle server port
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+  --editor                 Open an editor (EDITOR env variable) to edit the query before sending
   --help                   show CLI help
   --password=password      Kuzzle user password
   --path=path              Dump root directory (default: index name)
+  --query=query            [default: {}] Only dump documents matching the query (JS or JSON format)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLES
+  kourou collection:export nyc-open-data yellow-taxi
+  kourou collection:export nyc-open-data yellow-taxi --query '{ term: { city: "Saigon" } }'
 ```
 
 _See code: [src/commands/collection/export.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/collection/export.ts)_

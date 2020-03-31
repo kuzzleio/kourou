@@ -17,12 +17,24 @@ export default class CollectionExport extends Kommand {
       description: 'Maximum batch size (see limits.documentsFetchCount config)',
       default: '2000'
     }),
+    query: flags.string({
+      description: 'Only dump documents matching the query (JS or JSON format)',
+      default: '{}'
+    }),
+    editor: flags.boolean({
+      description: 'Open an editor (EDITOR env variable) to edit the query before sending'
+    }),
     ...kuzzleFlags,
   }
 
   static args = [
     { name: 'index', description: 'Index name', required: true },
     { name: 'collection', description: 'Collection name', required: true },
+  ]
+
+  static examples = [
+    'kourou collection:export nyc-open-data yellow-taxi',
+    'kourou collection:export nyc-open-data yellow-taxi --query \'{ term: { city: "Saigon" } }\'',
   ]
 
   async runSafe() {
@@ -35,7 +47,16 @@ export default class CollectionExport extends Kommand {
     this.sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
     await this.sdk.init(this.log)
 
-    this.log(chalk.green(`Dumping collection "${args.index}:${args.collection}" in ${path}/ ...`))
+    let query = this.parseJs(userFlags.query)
+
+    if (userFlags.editor) {
+      query = this.fromEditor(query, { json: true })
+    }
+
+    const countAll = await this.sdk.document.count(args.index, args.collection)
+    const count = await this.sdk.document.count(args.index, args.collection, { query })
+
+    this.log(`Dumping ${count} of ${countAll} documents from collection "${args.index}:${args.collection}" in ${path}/ ...`)
 
     fs.mkdirSync(path, { recursive: true })
 
@@ -50,7 +71,8 @@ export default class CollectionExport extends Kommand {
       args.index,
       args.collection,
       Number(userFlags['batch-size']),
-      path)
+      path,
+      query)
 
     this.log(chalk.green(`[✔] Collection ${args.index}:${args.collection} dumped`))
   }
