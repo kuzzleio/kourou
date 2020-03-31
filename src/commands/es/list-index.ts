@@ -23,15 +23,6 @@ export default class EsListIndex extends Kommand {
     })
   }
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -53,8 +44,8 @@ export default class EsListIndex extends Kommand {
       this.log(JSON.stringify(indexes, null, 2))
     }
     catch (error) {
-      this.log(JSON.stringify(error, null, 2))
-      this.log(error.message)
+      this.logError(JSON.stringify(error, null, 2))
+      throw error
     }
   }
 }

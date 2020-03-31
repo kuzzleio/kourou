@@ -19,7 +19,7 @@ export class VaultTest extends Kommand {
     { name: 'secrets-file', description: 'Encrypted secrets file', required: true }
   ]
 
-  async run() {
+  async runSafe() {
     this.printCommand()
 
     const { args, flags: userFlags } = this.parse(VaultTest)
@@ -41,7 +41,8 @@ export class VaultTest extends Kommand {
       this.log(chalk.green('[✔] Secrets file can be decrypted'))
     }
     catch (error) {
-      this.log(chalk.red('[X] Secrets file cannot be decrypted'))
+      this.logError('Secrets file cannot be decrypted')
+      throw error
     }
   }
 }

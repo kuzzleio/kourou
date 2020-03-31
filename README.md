@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.9.0 linux-x64 node-v8.10.0
+kourou/0.10.0 linux-x64 node-v12.16.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -58,25 +58,26 @@ By environment variables:
 
 <!-- commands -->
 * [`kourou api-key:create USER`](#kourou-api-keycreate-user)
-* [`kourou api-key:delete USER`](#kourou-api-keydelete-user)
+* [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
-* [`kourou collection:dump INDEX COLLECTION`](#kourou-collectiondump-index-collection)
-* [`kourou collection:restore PATH`](#kourou-collectionrestore-path)
+* [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
+* [`kourou collection:import PATH`](#kourou-collectionimport-path)
 * [`kourou document:create INDEX COLLECTION`](#kourou-documentcreate-index-collection)
 * [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
+* [`kourou document:search INDEX COLLECTION`](#kourou-documentsearch-index-collection)
 * [`kourou es:get INDEX ID`](#kourou-esget-index-id)
 * [`kourou es:insert INDEX`](#kourou-esinsert-index)
 * [`kourou es:list-index`](#kourou-eslist-index)
 * [`kourou help [COMMAND]`](#kourou-help-command)
-* [`kourou index:dump INDEX`](#kourou-indexdump-index)
-* [`kourou index:restore PATH`](#kourou-indexrestore-path)
+* [`kourou index:export INDEX`](#kourou-indexexport-index)
+* [`kourou index:import PATH`](#kourou-indeximport-path)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
-* [`kourou profile:dump`](#kourou-profiledump)
-* [`kourou profile:restore PATH`](#kourou-profilerestore-path)
+* [`kourou profile:export`](#kourou-profileexport)
+* [`kourou profile:import PATH`](#kourou-profileimport-path)
 * [`kourou query CONTROLLER:ACTION`](#kourou-query-controlleraction)
-* [`kourou role:dump`](#kourou-roledump)
-* [`kourou role:restore PATH`](#kourou-rolerestore-path)
+* [`kourou role:export`](#kourou-roleexport)
+* [`kourou role:import PATH`](#kourou-roleimport-path)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
 * [`kourou vault:show SECRETS-FILE KEY`](#kourou-vaultshow-secrets-file-key)
@@ -105,30 +106,33 @@ OPTIONS
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/api-key/create.ts)_
+_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/api-key/create.ts)_
 
-## `kourou api-key:delete USER`
+## `kourou api-key:delete USER ID`
 
 Deletes an API key.
 
 ```
 USAGE
-  $ kourou api-key:delete USER
+  $ kourou api-key:delete USER ID
 
 ARGUMENTS
   USER  User kuid
+  ID    API Key unique ID
 
 OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --id=id              API Key unique ID
   --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLE
+  kourou vault:delete sigfox-gateway 1k-BF3EBjsXdvA2PR8x
 ```
 
-_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/api-key/delete.ts)_
+_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/api-key/delete.ts)_
 
 ## `kourou api-key:search USER`
 
@@ -151,15 +155,15 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/api-key/search.ts)_
+_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/api-key/search.ts)_
 
-## `kourou collection:dump INDEX COLLECTION`
+## `kourou collection:export INDEX COLLECTION`
 
-Dump an entire collection content (JSONL format)
+Exports a collection (JSONL format)
 
 ```
 USAGE
-  $ kourou collection:dump INDEX COLLECTION
+  $ kourou collection:export INDEX COLLECTION
 
 ARGUMENTS
   INDEX       Index name
@@ -169,22 +173,28 @@ OPTIONS
   -h, --host=host          [default: localhost] Kuzzle server host
   -p, --port=port          [default: 7512] Kuzzle server port
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+  --editor                 Open an editor (EDITOR env variable) to edit the query before sending
   --help                   show CLI help
   --password=password      Kuzzle user password
   --path=path              Dump root directory (default: index name)
+  --query=query            [default: {}] Only dump documents matching the query (JS or JSON format)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLES
+  kourou collection:export nyc-open-data yellow-taxi
+  kourou collection:export nyc-open-data yellow-taxi --query '{ term: { city: "Saigon" } }'
 ```
 
-_See code: [src/commands/collection/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/collection/dump.ts)_
+_See code: [src/commands/collection/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/collection/export.ts)_
 
-## `kourou collection:restore PATH`
+## `kourou collection:import PATH`
 
-Restore the content of a previously dumped collection
+Imports a collection
 
 ```
 USAGE
-  $ kourou collection:restore PATH
+  $ kourou collection:import PATH
 
 ARGUMENTS
   PATH  Dump directory path
@@ -202,7 +212,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/collection/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/collection/restore.ts)_
+_See code: [src/commands/collection/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/collection/import.ts)_
 
 ## `kourou document:create INDEX COLLECTION`
 
@@ -232,7 +242,7 @@ EXAMPLES
   kourou document:create iot sensors < document.json
 ```
 
-_See code: [src/commands/document/create.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/document/create.ts)_
+_See code: [src/commands/document/create.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/document/create.ts)_
 
 ## `kourou document:get INDEX COLLECTION ID`
 
@@ -256,7 +266,40 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/document/get.ts)_
+_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/document/get.ts)_
+
+## `kourou document:search INDEX COLLECTION`
+
+Searches for documents
+
+```
+USAGE
+  $ kourou document:search INDEX COLLECTION
+
+ARGUMENTS
+  INDEX       Index name
+  COLLECTION  Collection name
+
+OPTIONS
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  --editor             Open an editor (EDITOR env variable) to edit the request before sending
+  --from=from          Optional offset
+  --help               show CLI help
+  --password=password  Kuzzle user password
+  --query=query        [default: {}] Query in JS or JSON format.
+  --scroll=scroll      Optional scroll TTL
+  --size=size          Optional page size
+  --sort=sort          [default: {}] Sort in JS or JSON format.
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLES
+  kourou document:search iot sensors --query '{ term: { name: "corona" } }'
+  kourou document:search iot sensors --editor
+```
+
+_See code: [src/commands/document/search.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/document/search.ts)_
 
 ## `kourou es:get INDEX ID`
 
@@ -276,7 +319,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/get.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/es/get.ts)_
+_See code: [src/commands/es/get.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/es/get.ts)_
 
 ## `kourou es:insert INDEX`
 
@@ -297,7 +340,7 @@ OPTIONS
   --id=id          Document ID
 ```
 
-_See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/es/insert.ts)_
+_See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/es/insert.ts)_
 
 ## `kourou es:list-index`
 
@@ -314,7 +357,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/list-index.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/es/list-index.ts)_
+_See code: [src/commands/es/list-index.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/es/list-index.ts)_
 
 ## `kourou help [COMMAND]`
 
@@ -333,13 +376,13 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
 
-## `kourou index:dump INDEX`
+## `kourou index:export INDEX`
 
-Dump an entire index content (JSONL format)
+Exports an index (JSONL format)
 
 ```
 USAGE
-  $ kourou index:dump INDEX
+  $ kourou index:export INDEX
 
 ARGUMENTS
   INDEX  Index name
@@ -355,15 +398,15 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/index/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/index/dump.ts)_
+_See code: [src/commands/index/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/index/export.ts)_
 
-## `kourou index:restore PATH`
+## `kourou index:import PATH`
 
-Restore the content of a previously dumped index
+Imports an index
 
 ```
 USAGE
-  $ kourou index:restore PATH
+  $ kourou index:import PATH
 
 ARGUMENTS
   PATH  Dump directory or file
@@ -380,7 +423,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/index/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/index/restore.ts)_
+_See code: [src/commands/index/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/index/import.ts)_
 
 ## `kourou instance:logs`
 
@@ -395,7 +438,7 @@ OPTIONS
   -i, --instance=instance  Kuzzle instance name
 ```
 
-_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/instance/logs.ts)_
+_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/instance/logs.ts)_
 
 ## `kourou instance:spawn`
 
@@ -411,15 +454,15 @@ OPTIONS
   --help                 show CLI help
 ```
 
-_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/instance/spawn.ts)_
+_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/instance/spawn.ts)_
 
-## `kourou profile:dump`
+## `kourou profile:export`
 
-Dumps Kuzzle profiles
+Exports profiles
 
 ```
 USAGE
-  $ kourou profile:dump
+  $ kourou profile:export
 
 OPTIONS
   -h, --host=host          [default: localhost] Kuzzle server host
@@ -432,30 +475,29 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/profile/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/profile/dump.ts)_
+_See code: [src/commands/profile/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/profile/export.ts)_
 
-## `kourou profile:restore PATH`
+## `kourou profile:import PATH`
 
-Restores previously dumped Kuzzle profiles
+Imports profiles
 
 ```
 USAGE
-  $ kourou profile:restore PATH
+  $ kourou profile:import PATH
 
 ARGUMENTS
   PATH  Dump file
 
 OPTIONS
-  -h, --host=host          [default: localhost] Kuzzle server host
-  -p, --port=port          [default: 7512] Kuzzle server port
-  --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
-  --help                   show CLI help
-  --password=password      Kuzzle user password
-  --ssl                    Use SSL to connect to Kuzzle
-  --username=username      [default: anonymous] Kuzzle username (local strategy)
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  --help               show CLI help
+  --password=password  Kuzzle user password
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/profile/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/profile/restore.ts)_
+_See code: [src/commands/profile/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/profile/import.ts)_
 
 ## `kourou query CONTROLLER:ACTION`
 
@@ -473,6 +515,7 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --body=body          [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
+  --editor             Open an editor (EDITOR env variable) to edit the request before sending
   --help               show CLI help
   --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
@@ -485,15 +528,15 @@ EXAMPLES
   echo '{name: "Aschen"}' | kourou query document:create --arg index=iot --arg collection=sensors
 ```
 
-_See code: [src/commands/query.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/query.ts)_
+_See code: [src/commands/query.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/query.ts)_
 
-## `kourou role:dump`
+## `kourou role:export`
 
-Dumps Kuzzle roles
+Exports roles
 
 ```
 USAGE
-  $ kourou role:dump
+  $ kourou role:export
 
 OPTIONS
   -h, --host=host          [default: localhost] Kuzzle server host
@@ -506,30 +549,29 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/role/dump.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/role/dump.ts)_
+_See code: [src/commands/role/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/role/export.ts)_
 
-## `kourou role:restore PATH`
+## `kourou role:import PATH`
 
-Restores previously dumped Kuzzle roles
+Import roles
 
 ```
 USAGE
-  $ kourou role:restore PATH
+  $ kourou role:import PATH
 
 ARGUMENTS
   PATH  Dump file
 
 OPTIONS
-  -h, --host=host          [default: localhost] Kuzzle server host
-  -p, --port=port          [default: 7512] Kuzzle server port
-  --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
-  --help                   show CLI help
-  --password=password      Kuzzle user password
-  --ssl                    Use SSL to connect to Kuzzle
-  --username=username      [default: anonymous] Kuzzle username (local strategy)
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  --help               show CLI help
+  --password=password  Kuzzle user password
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/role/restore.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/role/restore.ts)_
+_See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/role/import.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
@@ -548,7 +590,7 @@ OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
-_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/vault/add.ts)_
+_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/add.ts)_
 
 ## `kourou vault:encrypt FILE`
 
@@ -567,7 +609,7 @@ OPTIONS
   --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
-_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/vault/encrypt.ts)_
+_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/encrypt.ts)_
 
 ## `kourou vault:show SECRETS-FILE KEY`
 
@@ -585,7 +627,7 @@ OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
-_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/vault/show.ts)_
+_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/show.ts)_
 
 ## `kourou vault:test SECRETS-FILE`
 
@@ -602,7 +644,7 @@ OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 ```
 
-_See code: [src/commands/vault/test.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/vault/test.ts)_
+_See code: [src/commands/vault/test.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/test.ts)_
 <!-- commandsstop -->
 
 # Where does this weird name comes from?

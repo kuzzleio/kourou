@@ -24,15 +24,6 @@ export default class EsGet extends Kommand {
     { name: 'id', description: 'Document ID', required: true }
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -51,8 +42,8 @@ export default class EsGet extends Kommand {
       this.log(JSON.stringify(body, null, 2))
     }
     catch (error) {
-      this.log(JSON.stringify(error, null, 2))
-      this.log(error.message)
+      this.logError(JSON.stringify(error, null, 2))
+      throw error
     }
   }
 }

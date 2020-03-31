@@ -1,7 +1,7 @@
 Feature: Index Commands
 
   @mappings
-  Scenario: Dump and restore an index
+  Scenario: Export and import an index
     Given an existing collection "nyc-open-data":"yellow-taxi"
     And I "create" the following documents:
       | _id               | body                              |
@@ -12,13 +12,13 @@ Feature: Index Commands
       | _id                | body                              |
       | "chuon-chuon-kim2" | { "city": "hcmc", "district": 1 } |
       | "the-hive2"        | { "city": "hcmc", "district": 2 } |
-    # index:dump
-    When I run the command "index:dump" with args:
+    # index:export
+    When I run the command "index:export" with args:
       | "nyc-open-data" |
     And I successfully call the route "index":"delete" with args:
       | index | "nyc-open-data" |
-    # index:restore
-    And I run the command "index:restore" with args:
+    # index:import
+    And I run the command "index:import" with args:
       | "nyc-open-data" |
     Then The document "chuon-chuon-kim2" content match:
       | city     | "hcmc" |
