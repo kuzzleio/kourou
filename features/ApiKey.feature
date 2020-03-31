@@ -17,8 +17,8 @@ Feature: Api Key Management
       | _id              | "gordon-key"   |
       | userId           | "gordon"       |
       | body.description | "Test api key" |
-    When I run the command "api-key:delete gordon" with flags:
-      | --id | "gordon-key" |
+    When I run the command "api-key:delete gordon" with:
+      | arg | gordon-key |
     Then I successfully call the route "security":"searchApiKeys" with args:
       | userId | "gordon" |
     And I should receive a empty "hits" array
