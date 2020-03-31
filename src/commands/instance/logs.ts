@@ -17,15 +17,6 @@ export class InstanceLogs extends Kommand {
     }),
   }
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.warn(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -45,11 +36,7 @@ export class InstanceLogs extends Kommand {
       instance = responses.instance!
     }
 
-    try {
-      await this.showInstanceLogs(instance, followOption)
-    } catch {
-      this.warn('Something went wrong while showing your kuzzle instance logs')
-    }
+    await this.showInstanceLogs(instance, followOption)
   }
 
   private async showInstanceLogs(instanceName: string, followOption: boolean) {

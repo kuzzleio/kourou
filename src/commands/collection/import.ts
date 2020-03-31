@@ -29,15 +29,6 @@ export default class CollectionImport extends Kommand {
     { name: 'path', description: 'Dump directory path', required: true },
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -46,33 +37,28 @@ export default class CollectionImport extends Kommand {
     const index = userFlags.index
     const collection = userFlags.collection
 
-    const sdk = new KuzzleSDK({ loginTTL: true, ...userFlags })
+    this.sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
 
-    await sdk.init(this.log)
+    await this.sdk.init(this.log)
 
     this.log(chalk.green(`[✔] Start importing dump from ${args.path}`))
 
-    try {
-      if (!userFlags['no-mappings']) {
-        await restoreCollectionMappings(
-          sdk,
-          args.path,
-          index,
-          collection)
-      }
-
-      await restoreCollectionData(
-        sdk,
-        this.log.bind(this),
-        Number(userFlags['batch-size']),
+    if (!userFlags['no-mappings']) {
+      await restoreCollectionMappings(
+        this.sdk,
         args.path,
         index,
         collection)
+    }
 
-      this.log(chalk.green(`[✔] Dump file ${args.path} imported`))
-    }
-    catch (error) {
-      this.log(chalk.red(`[ℹ] Error while importing: ${error.message}`))
-    }
+    await restoreCollectionData(
+      this.sdk,
+      this.log.bind(this),
+      Number(userFlags['batch-size']),
+      args.path,
+      index,
+      collection)
+
+    this.log(chalk.green(`[✔] Dump file ${args.path} imported`))
   }
 }

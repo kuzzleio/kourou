@@ -27,7 +27,7 @@ export class VaultEncrypt extends Kommand {
     { name: 'file', description: 'File containing unencrypted secrets', required: true }
   ]
 
-  async run() {
+  async runSafe() {
     this.printCommand()
 
     const { args, flags: userFlags } = this.parse(VaultEncrypt)

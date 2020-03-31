@@ -26,15 +26,6 @@ export default class RoleDump extends Kommand {
     ...kuzzleFlags,
   }
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -61,7 +52,7 @@ export default class RoleDump extends Kommand {
 
   async _dumpRoles() {
     const options = {
-      scroll: '10m',
+      scroll: '1m',
       size: this.batchSize
     }
 

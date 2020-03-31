@@ -20,7 +20,7 @@ export class VaultShow extends Kommand {
     { name: 'key', description: 'Path to the key (lodash style)', required: true },
   ]
 
-  async run() {
+  async runSafe() {
     this.printCommand()
 
     const { args, flags: userFlags } = this.parse(VaultShow)
