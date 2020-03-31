@@ -37,15 +37,6 @@ export default class CollectionExport extends Kommand {
     'kourou collection:export nyc-open-data yellow-taxi --query \'{ term: { city: "Saigon" } }\'',
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -53,8 +44,8 @@ export default class CollectionExport extends Kommand {
 
     const path = userFlags.path || args.index
 
-    const sdk = new KuzzleSDK({ loginTTL: true, ...userFlags })
-    await sdk.init(this.log)
+    this.sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
+    await this.sdk.init(this.log)
 
     let query = this.parseJs(userFlags.query)
 
@@ -62,21 +53,21 @@ export default class CollectionExport extends Kommand {
       query = this.fromEditor(query, { json: true })
     }
 
-    const countAll = await sdk.document.count(args.index, args.collection)
-    const count = await sdk.document.count(args.index, args.collection, { query })
+    const countAll = await this.sdk.document.count(args.index, args.collection)
+    const count = await this.sdk.document.count(args.index, args.collection, { query })
 
     this.log(`Dumping ${count} of ${countAll} documents from collection "${args.index}:${args.collection}" in ${path}/ ...`)
 
     fs.mkdirSync(path, { recursive: true })
 
     await dumpCollectionMappings(
-      sdk,
+      this.sdk,
       args.index,
       args.collection,
       path)
 
     await dumpCollectionData(
-      sdk,
+      this.sdk,
       args.index,
       args.collection,
       Number(userFlags['batch-size']),

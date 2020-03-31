@@ -25,15 +25,6 @@ export default class IndexExport extends Kommand {
     { name: 'index', description: 'Index name', required: true },
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -41,31 +32,36 @@ export default class IndexExport extends Kommand {
 
     const path = userFlags.path || args.index
 
-    const sdk = new KuzzleSDK({ loginTTL: true, ...userFlags })
-    await sdk.init(this.log)
+    this.sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
+    await this.sdk.init(this.log)
 
     this.log(chalk.green(`Dumping index "${args.index}" in ${path}/ ...`))
 
     fs.mkdirSync(path, { recursive: true })
 
-    const { collections } = await sdk.collection.list(args.index)
+    const { collections } = await this.sdk.collection.list(args.index)
 
     for (const collection of collections) {
-      if (collection.type !== 'realtime') {
-        await dumpCollectionMappings(
-          sdk,
-          args.index,
-          collection.name,
-          path)
+      try {
+        if (collection.type !== 'realtime') {
+          await dumpCollectionMappings(
+            this.sdk,
+            args.index,
+            collection.name,
+            path)
 
-        await dumpCollectionData(
-          sdk,
-          args.index,
-          collection.name,
-          Number(userFlags['batch-size']),
-          path)
+          await dumpCollectionData(
+            this.sdk,
+            args.index,
+            collection.name,
+            Number(userFlags['batch-size']),
+            path)
 
-        cli.action.stop()
+          cli.action.stop()
+        }
+      }
+      catch (error) {
+        this.logError(`Error when exporting collection "${collection.name}": ${error}`)
       }
     }
 

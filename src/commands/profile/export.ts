@@ -26,15 +26,6 @@ export default class ProfileExport extends Kommand {
     ...kuzzleFlags,
   }
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -61,7 +52,7 @@ export default class ProfileExport extends Kommand {
 
   async _dumpProfiles() {
     const options = {
-      scroll: '10m',
+      scroll: '10s',
       size: this.batchSize
     }
 

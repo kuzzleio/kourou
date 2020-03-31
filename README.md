@@ -58,7 +58,7 @@ By environment variables:
 
 <!-- commands -->
 * [`kourou api-key:create USER`](#kourou-api-keycreate-user)
-* [`kourou api-key:delete USER`](#kourou-api-keydelete-user)
+* [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
@@ -108,25 +108,28 @@ OPTIONS
 
 _See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/api-key/create.ts)_
 
-## `kourou api-key:delete USER`
+## `kourou api-key:delete USER ID`
 
 Deletes an API key.
 
 ```
 USAGE
-  $ kourou api-key:delete USER
+  $ kourou api-key:delete USER ID
 
 ARGUMENTS
   USER  User kuid
+  ID    API Key unique ID
 
 OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --id=id              API Key unique ID
   --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLE
+  kourou vault:delete sigfox-gateway 1k-BF3EBjsXdvA2PR8x
 ```
 
 _See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/api-key/delete.ts)_
@@ -156,7 +159,7 @@ _See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/b
 
 ## `kourou collection:export INDEX COLLECTION`
 
-Exports an collection (JSONL format)
+Exports a collection (JSONL format)
 
 ```
 USAGE
@@ -296,7 +299,7 @@ EXAMPLES
   kourou document:search iot sensors --editor
 ```
 
-_See code: [src/commands/document/search.ts](https://github.com/kuzzleio/kourou/blob/v0.8.0/src/commands/document/search.ts)_
+_See code: [src/commands/document/search.ts](https://github.com/kuzzleio/kourou/blob/v0.9.0/src/commands/document/search.ts)_
 
 ## `kourou es:get INDEX ID`
 
