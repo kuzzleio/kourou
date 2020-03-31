@@ -51,14 +51,14 @@ export default class DocumentCreate extends Kommand {
         args.index,
         args.collection,
         userFlags.id,
-        body,
+        this.parseJs(body),
         { refresh: 'wait_for' })
     }
     else {
       document = await this.sdk.document.create(
         args.index,
         args.collection,
-        body,
+        this.parseJs(body),
         userFlags.id,
         { refresh: 'wait_for' })
     }

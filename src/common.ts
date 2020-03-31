@@ -63,7 +63,7 @@ export abstract class Kommand extends Command {
     })
   }
 
-  fromEditor(defaultContent: object | string, options?: EditorParams) {
+  fromEditor(defaultContent: object | string, options?: EditorParams): object {
     let content = defaultContent
 
     if (typeof content !== 'string') {
