@@ -26,37 +26,24 @@ class ApiKeyCreate extends Kommand {
     { name: 'user', description: 'User kuid', required: true },
   ]
 
-  public async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
     const { args, flags: userFlags } = this.parse(ApiKeyCreate)
 
-    const sdk = new KuzzleSDK(userFlags)
-    await sdk.init(this.log)
+    this.sdk = new KuzzleSDK(userFlags)
+    await this.sdk.init(this.log)
 
-    try {
-      const apiKey = await sdk.security.createApiKey(
-        args.user,
-        userFlags.description,
-        {
-          _id: userFlags.id,
-          expiresIn: userFlags.expire
-        })
+    const apiKey = await this.sdk.security.createApiKey(
+      args.user,
+      userFlags.description,
+      {
+        _id: userFlags.id,
+        expiresIn: userFlags.expire
+      })
 
-      this.log(`Successfully created API Key "${apiKey._id}" for user "${args.user}"`)
-      this.log(apiKey._source.token)
-    } catch (error) {
-      this.logError(error.message)
-    }
+    this.log(`Successfully created API Key "${apiKey._id}" for user "${args.user}"`)
+    this.log(apiKey._source.token)
   }
 }
 

@@ -20,15 +20,6 @@ export default class RoleImport extends Kommand {
     { name: 'path', description: 'Dump file', required: true },
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 

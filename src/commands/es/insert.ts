@@ -30,15 +30,6 @@ export default class EsInsert extends Kommand {
     { name: 'index', description: 'ES Index name', required: true },
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
@@ -58,8 +49,8 @@ export default class EsInsert extends Kommand {
       this.log(JSON.stringify(body, null, 2))
     }
     catch (error) {
-      this.log(JSON.stringify(error, null, 2))
-      this.log(error.message)
+      this.logError(JSON.stringify(error, null, 2))
+      throw error
     }
   }
 }

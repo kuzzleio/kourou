@@ -2,9 +2,13 @@ import { Command } from '@oclif/command'
 import chalk from 'chalk'
 import emoji from 'node-emoji'
 import fs from 'fs'
+
+import { KuzzleSDK } from './support/kuzzle'
 import { Editor, EditorParams } from './support/editor'
 
 export abstract class Kommand extends Command {
+  protected sdk?: KuzzleSDK;
+
   public printCommand() {
     const klass: any = this.constructor
 
@@ -19,7 +23,25 @@ export abstract class Kommand extends Command {
 
   public logError(message?: string | undefined, ...args: any[]): void {
     process.exitCode = 1
-    return this.error(chalk.red(message), ...args)
+    return this.error(chalk.red(`[X] ${message}`), ...args)
+  }
+
+  async run() {
+    try {
+      await this.runSafe()
+    }
+    catch (error) {
+      this.logError(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
+    }
+    finally {
+      if (this.sdk) {
+        this.sdk.disconnect()
+      }
+    }
+  }
+
+  async runSafe() {
+    throw new Error('You must implement runSafe() method')
   }
 
   /**
@@ -41,7 +63,7 @@ export abstract class Kommand extends Command {
     })
   }
 
-  fromEditor(defaultContent: object | string, options?: EditorParams) {
+  fromEditor(defaultContent: object | string, options?: EditorParams): object {
     let content = defaultContent
 
     if (typeof content !== 'string') {

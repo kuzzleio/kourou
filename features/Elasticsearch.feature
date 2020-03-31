@@ -8,7 +8,7 @@ Feature: Elasticsearch commands
       | body | {}                |
     When I run the command "es:get" with args:
       | "&nyc-open-data.yellow-taxi" |
-      | "chuon-chuon-kim "           |
+      | "chuon-chuon-kim"            |
     Then I should match stdout with "chuon-chuon-kim"
 
   @mappings

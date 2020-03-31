@@ -26,15 +26,6 @@ export default class RoleDump extends Kommand {
     ...kuzzleFlags,
   }
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 

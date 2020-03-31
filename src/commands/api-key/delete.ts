@@ -19,30 +19,17 @@ class ApiKeyDelete extends Kommand {
     'kourou vault:delete sigfox-gateway 1k-BF3EBjsXdvA2PR8x'
   ];
 
-  public async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
     const { flags: userFlags, args } = this.parse(ApiKeyDelete)
 
-    const sdk = new KuzzleSDK(userFlags)
-    await sdk.init(this.log)
+    this.sdk = new KuzzleSDK(userFlags)
+    await this.sdk.init(this.log)
 
-    try {
-      await sdk.security.deleteApiKey(args.user, args.id)
+    await this.sdk.security.deleteApiKey(args.user, args.id)
 
-      this.log(`Successfully deleted API Key "${args.id}" of user "${args.user}"`)
-    } catch (error) {
-      this.logError(error.message)
-    }
+    this.log(`Successfully deleted API Key "${args.id}" of user "${args.user}"`)
   }
 }
 
