@@ -11,7 +11,7 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
   const waitWrite = new Promise(resolve => writeStream.on('finish', resolve))
   const ndjsonStream = ndjson.serialize()
   const options = {
-    scroll: '10m',
+    scroll: '2m',
     size: batchSize
   }
 
