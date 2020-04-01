@@ -9,8 +9,6 @@ export default class RoleDump extends Kommand {
 
   private path?: string;
 
-  private sdk?: any;
-
   static description = 'Exports roles'
 
   static flags = {
@@ -56,7 +54,11 @@ export default class RoleDump extends Kommand {
       size: this.batchSize
     }
 
-    let result = await this.sdk.security.searchRoles({}, options)
+    let result;
+    // f*** you TS
+    if (this.sdk) {
+      result = await this.sdk.security.searchRoles({}, options)
+    }
 
     const roles: any = {}
 

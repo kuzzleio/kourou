@@ -9,8 +9,6 @@ export default class ProfileExport extends Kommand {
 
   private path?: string;
 
-  private sdk?: any;
-
   static description = 'Exports profiles'
 
   static flags = {
@@ -56,7 +54,11 @@ export default class ProfileExport extends Kommand {
       size: this.batchSize
     }
 
-    let result = await this.sdk.security.searchProfiles({}, options)
+    let result;
+    // f*** you TS
+    if (this.sdk) {
+      result = await this.sdk.security.searchProfiles({}, options)
+    }
 
     const profiles: any = {}
 

@@ -7,8 +7,6 @@ import chalk from 'chalk'
 export default class RoleImport extends Kommand {
   private path?: string;
 
-  private sdk?: any;
-
   static description = 'Import roles'
 
   static flags = {
@@ -36,16 +34,15 @@ export default class RoleImport extends Kommand {
 
     const roles = JSON.parse(fs.readFileSync(filename, 'utf-8'))
 
-    await this._restoreRoles(roles)
-
-    this.log(chalk.green(`[✔] ${Object.keys(roles).length} roles restored`))
-  }
-
-  async _restoreRoles(roles: any) {
     const promises = Object.entries(roles).map(([roleId, role]) => {
-      return this.sdk.security.createOrReplaceRole(roleId, role, { force: true })
+      // f*** you TS
+      if (this.sdk) {
+        return this.sdk.security.createOrReplaceRole(roleId, role, { force: true })
+      }
     })
 
     await Promise.all(promises)
+
+    this.log(chalk.green(`[✔] ${Object.keys(roles).length} roles restored`))
   }
 }

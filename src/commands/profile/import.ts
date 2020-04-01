@@ -7,8 +7,6 @@ import chalk from 'chalk'
 export default class ProfileImport extends Kommand {
   private path?: string;
 
-  private sdk?: any;
-
   static description = 'Imports profiles'
 
   static flags = {
@@ -43,7 +41,10 @@ export default class ProfileImport extends Kommand {
 
   async _restoreRoles(profiles: any) {
     const promises = Object.entries(profiles).map(([profileId, profile]) => {
-      return this.sdk.security.createOrReplaceProfile(profileId, profile, { force: true })
+      // f*** you TS
+      if (this.sdk) {
+        return this.sdk.security.createOrReplaceProfile(profileId, profile, { force: true })
+      }
     })
 
     await Promise.all(promises)

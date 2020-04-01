@@ -1,6 +1,23 @@
 jobs:
   include:
     - stage: Tests
+      name: "Kourou TS build"
+      language: node_js
+      node_js: 12
+      cache:
+        directories:
+          - ~/.npm
+          - ~/.cache
+          - node_modules # NPM packages
+
+      install:
+        - npm install --silent --unsafe-perm
+        - npm install --silent --unsafe-perm --only=dev
+
+      script:
+        - npm run prepack
+
+    - stage: Tests
       name: "Kourou Lint"
       language: node_js
       node_js: 12
