@@ -26,7 +26,6 @@ export default class ProfileExport extends Kommand {
     const { flags: userFlags } = this.parse(ProfileExport)
 
     this.path = userFlags.path
-    this.batchSize = userFlags['batch-size']
 
     const filename = `${this.path}/profiles.json`
 
@@ -47,7 +46,7 @@ export default class ProfileExport extends Kommand {
   async _dumpProfiles() {
     const options = {
       scroll: '10s',
-      size: this.batchSize
+      size: 100
     }
 
     let result

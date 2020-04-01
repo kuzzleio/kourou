@@ -26,7 +26,6 @@ export default class RoleDump extends Kommand {
     const { flags: userFlags } = this.parse(RoleDump)
 
     this.path = userFlags.path
-    this.batchSize = userFlags['batch-size']
 
     const filename = `${this.path}/roles.json`
 
@@ -47,7 +46,7 @@ export default class RoleDump extends Kommand {
   async _dumpRoles() {
     const options = {
       scroll: '10s',
-      size: this.batchSize
+      size: 100
     }
 
     let result

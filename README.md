@@ -465,14 +465,13 @@ USAGE
   $ kourou profile:export
 
 OPTIONS
-  -h, --host=host          [default: localhost] Kuzzle server host
-  -p, --port=port          [default: 7512] Kuzzle server port
-  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-  --help                   show CLI help
-  --password=password      Kuzzle user password
-  --path=path              [default: profiles] Dump directory
-  --ssl                    Use SSL to connect to Kuzzle
-  --username=username      [default: anonymous] Kuzzle username (local strategy)
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  --help               show CLI help
+  --password=password  Kuzzle user password
+  --path=path          [default: profiles] Dump directory
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
 _See code: [src/commands/profile/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/profile/export.ts)_
@@ -539,14 +538,13 @@ USAGE
   $ kourou role:export
 
 OPTIONS
-  -h, --host=host          [default: localhost] Kuzzle server host
-  -p, --port=port          [default: 7512] Kuzzle server port
-  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-  --help                   show CLI help
-  --password=password      Kuzzle user password
-  --path=path              [default: roles] Dump directory
-  --ssl                    Use SSL to connect to Kuzzle
-  --username=username      [default: anonymous] Kuzzle username (local strategy)
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  --help               show CLI help
+  --password=password  Kuzzle user password
+  --path=path          [default: roles] Dump directory
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
 _See code: [src/commands/role/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/role/export.ts)_
