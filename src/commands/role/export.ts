@@ -17,10 +17,6 @@ export default class RoleDump extends Kommand {
       description: 'Dump directory',
       default: 'roles'
     }),
-    'batch-size': flags.string({
-      description: 'Maximum batch size (see limits.documentsFetchCount config)',
-      default: '2000'
-    }),
     ...kuzzleFlags,
   }
 
@@ -54,7 +50,7 @@ export default class RoleDump extends Kommand {
       size: this.batchSize
     }
 
-    let result;
+    let result
     // f*** you TS
     if (this.sdk) {
       result = await this.sdk.security.searchRoles({}, options)

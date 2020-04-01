@@ -9,7 +9,6 @@ import { Editor, EditorParams } from './support/editor'
 export abstract class Kommand extends Command {
   protected sdk?: KuzzleSDK;
 
-
   public printCommand() {
     const klass: any = this.constructor
 

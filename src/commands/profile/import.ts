@@ -45,6 +45,9 @@ export default class ProfileImport extends Kommand {
       if (this.sdk) {
         return this.sdk.security.createOrReplaceProfile(profileId, profile, { force: true })
       }
+
+      // never happen
+      return Promise.resolve()
     })
 
     await Promise.all(promises)

@@ -39,6 +39,9 @@ export default class RoleImport extends Kommand {
       if (this.sdk) {
         return this.sdk.security.createOrReplaceRole(roleId, role, { force: true })
       }
+
+      // never happen
+      return Promise.resolve()
     })
 
     await Promise.all(promises)
