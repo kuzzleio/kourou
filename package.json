@@ -22,12 +22,8 @@
     "listr": "^0.14.3",
     "ndjson": "^1.5.0",
     "node-emoji": "^1.10.0",
-<<<<<<< HEAD
-    "tslib": "^1.11.1"
-=======
-    "tmp": "^0.1.0",
-    "tslib": "^1.10.0"
->>>>>>> develop
+    "tslib": "^1.11.1",
+    "tmp": "^0.1.0"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",
