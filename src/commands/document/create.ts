@@ -30,48 +30,39 @@ export default class DocumentCreate extends Kommand {
     { name: 'collection', description: 'Collection name', required: true }
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
     const { args, flags: userFlags } = this.parse(DocumentCreate)
 
-    const sdk = new KuzzleSDK(userFlags)
-    await sdk.init(this.log)
+    this.sdk = new KuzzleSDK(userFlags)
+    await this.sdk.init(this.log)
 
-    const body = await this.fromStdin(userFlags.body)
+    const stdin = await this.fromStdin()
 
-    try {
-      let document: any
+    const body = stdin
+      ? stdin
+      : userFlags.body
 
-      if (userFlags.replace) {
-        document = await sdk.document.replace(
-          args.index,
-          args.collection,
-          userFlags.id,
-          body,
-          { refresh: 'wait_for' })
-      }
-      else {
-        document = await sdk.document.create(
-          args.index,
-          args.collection,
-          body,
-          userFlags.id,
-          { refresh: 'wait_for' })
-      }
+    let document: any
 
-      this.log(JSON.stringify(document, null, 2))
-    } catch (error) {
-      this.logError(error.message)
+    if (userFlags.replace) {
+      document = await this.sdk.document.replace(
+        args.index,
+        args.collection,
+        userFlags.id,
+        this.parseJs(body),
+        { refresh: 'wait_for' })
     }
+    else {
+      document = await this.sdk.document.create(
+        args.index,
+        args.collection,
+        this.parseJs(body),
+        userFlags.id,
+        { refresh: 'wait_for' })
+    }
+
+    this.log(JSON.stringify(document, null, 2))
   }
 }

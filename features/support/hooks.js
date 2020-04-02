@@ -32,6 +32,8 @@ async function resetSecurityDefault(sdk) {
 // Common hooks ================================================================
 
 BeforeAll(({ timeout: 10 * 1000 }), async function () {
+  process.env.NODE_ENV = 'test';
+
   const world = new World({});
 
   console.log(`Start tests with ${world.protocol.toLocaleUpperCase()} protocol.`);

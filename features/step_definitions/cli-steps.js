@@ -1,10 +1,32 @@
-const
-  _ = require('lodash'),
-  fs = require('fs'),
-  execa = require('execa'),
-  {
-    Then
-  } = require('cucumber');
+const _ = require('lodash');
+const fs = require('fs');
+const { Then } = require('cucumber');
+const { spawn } = require('child_process');
+
+function execute(command, args) {
+  const childProcess = spawn(command, args);
+  let stdout = '';
+  let stderr = '';
+
+  childProcess.stdout.on('data', data => {
+    stdout += data.toString();
+  });
+
+  childProcess.stderr.on('data', data => {
+    stderr += data.toString()
+  });
+
+  return new Promise((resolve, reject) => {
+    childProcess.on('close', code => {
+      if (code === 0) {
+        resolve({ code, stdout, stderr });
+      }
+      else {
+        reject({ code, stdout, stderr, command: [command, ...args].join(' ') });
+      }
+    });
+  });
+}
 
 Then('I run the command {string} with:', async function (command, dataTable) {
   const args = [];
@@ -27,7 +49,7 @@ Then('I run the command {string} with:', async function (command, dataTable) {
   }
 
   try {
-    const { stdout } = await execa('./bin/run', [...command.split(' '), ...args, ...flags])
+    const { stdout } = await execute('./bin/run', [...command.split(' '), ...args, ...flags])
 
     this.props.result = stdout;
   }
@@ -49,7 +71,7 @@ Then('I run the command {string} with flags:', async function (command, dataTabl
   }
 
   try {
-    const { stdout } = await execa('./bin/run', [...command.split(' '), ...flags])
+    const { stdout } = await execute('./bin/run', [...command.split(' '), ...flags])
 
     this.props.result = stdout;
   }
@@ -68,7 +90,7 @@ Then('I run the command {string} with args:', async function (command, dataTable
   }
 
   try {
-    const { stdout } = await execa('./bin/run', [command, ...args])
+    const { stdout } = await execute('./bin/run', [command, ...args])
 
     this.props.result = stdout;
   }

@@ -4,14 +4,12 @@ import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import * as fs from 'fs'
 import chalk from 'chalk'
 
-export default class ProfileDump extends Kommand {
+export default class ProfileExport extends Kommand {
   private batchSize?: string;
 
   private path?: string;
 
-  private sdk?: any;
-
-  static description = 'Dumps Kuzzle profiles'
+  static description = 'Exports profiles'
 
   static flags = {
     help: flags.help({}),
@@ -19,29 +17,15 @@ export default class ProfileDump extends Kommand {
       description: 'Dump directory',
       default: 'profiles'
     }),
-    'batch-size': flags.string({
-      description: 'Maximum batch size (see limits.documentsFetchCount config)',
-      default: '2000'
-    }),
     ...kuzzleFlags,
-  }
-
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
   }
 
   async runSafe() {
     this.printCommand()
 
-    const { flags: userFlags } = this.parse(ProfileDump)
+    const { flags: userFlags } = this.parse(ProfileExport)
 
     this.path = userFlags.path
-    this.batchSize = userFlags['batch-size']
 
     const filename = `${this.path}/profiles.json`
 
@@ -61,11 +45,15 @@ export default class ProfileDump extends Kommand {
 
   async _dumpProfiles() {
     const options = {
-      scroll: '10m',
-      size: this.batchSize
+      scroll: '10s',
+      size: 100
     }
 
-    let result = await this.sdk.security.searchProfiles({}, options)
+    let result
+    // f*** you TS
+    if (this.sdk) {
+      result = await this.sdk.security.searchProfiles({}, options)
+    }
 
     const profiles: any = {}
 

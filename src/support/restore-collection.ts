@@ -39,8 +39,9 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
     }
   }
 
+  let total = 0
+
   await new Promise((resolve, reject) => {
-    let total = 0
     let headerSkipped = false
     let documents: any[] = []
 
@@ -89,20 +90,22 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
 
           sdk
             .query(mWriteRequest)
-            .catch((error: any) => {
-              try {
-                handleError(log, dumpFile, error)
-              }
-              catch (error) {
-                reject(error)
-              }
-            })
             .then(() => {
               total += mWriteRequest.body.documents.length
+
               process.stdout.write(`  ${total} documents imported`)
               process.stdout.write('\r')
 
               resolve()
+            })
+            .catch((error: any) => {
+              try {
+                handleError(log, dumpFile, error)
+                reject(error)
+              }
+              catch (error) {
+                reject(error)
+              }
             })
         }
         else {
@@ -111,9 +114,7 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
       })
   })
 
-  const count = await sdk.document.count(mWriteRequest.index, mWriteRequest.collection)
-
-  log(chalk.green(`[ℹ] Successfully imported ${count} documents in "${mWriteRequest.index}:${mWriteRequest.collection}"`))
+  log(chalk.green(`[ℹ] Successfully imported ${total} documents in "${mWriteRequest.index}:${mWriteRequest.collection}"`))
 }
 
 /**

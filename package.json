@@ -1,7 +1,7 @@
 {
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
-  "version": "0.8.0",
+  "version": "0.10.0",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kourou": "./bin/run"
@@ -22,7 +22,12 @@
     "listr": "^0.14.3",
     "ndjson": "^1.5.0",
     "node-emoji": "^1.10.0",
+<<<<<<< HEAD
     "tslib": "^1.11.1"
+=======
+    "tmp": "^0.1.0",
+    "tslib": "^1.10.0"
+>>>>>>> develop
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.22.2",

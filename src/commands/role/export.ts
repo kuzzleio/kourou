@@ -9,9 +9,7 @@ export default class RoleDump extends Kommand {
 
   private path?: string;
 
-  private sdk?: any;
-
-  static description = 'Dumps Kuzzle roles'
+  static description = 'Exports roles'
 
   static flags = {
     help: flags.help({}),
@@ -19,20 +17,7 @@ export default class RoleDump extends Kommand {
       description: 'Dump directory',
       default: 'roles'
     }),
-    'batch-size': flags.string({
-      description: 'Maximum batch size (see limits.documentsFetchCount config)',
-      default: '2000'
-    }),
     ...kuzzleFlags,
-  }
-
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
   }
 
   async runSafe() {
@@ -41,7 +26,6 @@ export default class RoleDump extends Kommand {
     const { flags: userFlags } = this.parse(RoleDump)
 
     this.path = userFlags.path
-    this.batchSize = userFlags['batch-size']
 
     const filename = `${this.path}/roles.json`
 
@@ -61,11 +45,15 @@ export default class RoleDump extends Kommand {
 
   async _dumpRoles() {
     const options = {
-      scroll: '10m',
-      size: this.batchSize
+      scroll: '10s',
+      size: 100
     }
 
-    let result = await this.sdk.security.searchRoles({}, options)
+    let result
+    // f*** you TS
+    if (this.sdk) {
+      result = await this.sdk.security.searchRoles({}, options)
+    }
 
     const roles: any = {}
 

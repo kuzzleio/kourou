@@ -6,8 +6,8 @@ import * as fs from 'fs'
 import cli from 'cli-ux'
 import chalk from 'chalk'
 
-export default class IndexDump extends Kommand {
-  static description = 'Dump an entire index content (JSONL format)'
+export default class IndexExport extends Kommand {
+  static description = 'Exports an index (JSONL format)'
 
   static flags = {
     help: flags.help({}),
@@ -25,52 +25,43 @@ export default class IndexDump extends Kommand {
     { name: 'index', description: 'Index name', required: true },
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
-    const { args, flags: userFlags } = this.parse(IndexDump)
+    const { args, flags: userFlags } = this.parse(IndexExport)
 
     const path = userFlags.path || args.index
 
-<<<<<<< Updated upstream:src/commands/index/dump.ts
-    const sdk = new KuzzleSDK(userFlags)
-    await sdk.init(this.log)
-=======
     this.sdk = new KuzzleSDK({ protocol: 'ws', ...userFlags })
     await this.sdk.init(this.log)
->>>>>>> Stashed changes:src/commands/index/export.ts
 
     this.log(chalk.green(`Dumping index "${args.index}" in ${path}/ ...`))
 
     fs.mkdirSync(path, { recursive: true })
 
-    const { collections } = await sdk.collection.list(args.index)
+    const { collections } = await this.sdk.collection.list(args.index)
 
     for (const collection of collections) {
-      if (collection.type !== 'realtime') {
-        await dumpCollectionMappings(
-          sdk,
-          args.index,
-          collection.name,
-          path)
+      try {
+        if (collection.type !== 'realtime') {
+          await dumpCollectionMappings(
+            this.sdk,
+            args.index,
+            collection.name,
+            path)
 
-        await dumpCollectionData(
-          sdk,
-          args.index,
-          collection.name,
-          Number(userFlags['batch-size']),
-          path)
+          await dumpCollectionData(
+            this.sdk,
+            args.index,
+            collection.name,
+            Number(userFlags['batch-size']),
+            path)
 
-        cli.action.stop()
+          cli.action.stop()
+        }
+      }
+      catch (error) {
+        this.logError(`Error when exporting collection "${collection.name}": ${error}`)
       }
     }
 

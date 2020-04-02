@@ -5,8 +5,8 @@ import chalk from 'chalk'
 
 const Vault = require('kuzzle-vault')
 
-export class VaultAdd extends Kommand {
-  static description = 'Adds an encrypted key to a secrets file'
+export class VaultTest extends Kommand {
+  static description = 'Tests if an encrypted secrets file can be decrypted.'
 
   static flags = {
     'vault-key': flags.string({
@@ -16,15 +16,13 @@ export class VaultAdd extends Kommand {
   }
 
   static args = [
-    { name: 'secrets-file', description: 'Encrypted secrets file', required: true },
-    { name: 'key', description: 'Path to the key (lodash style)', required: true },
-    { name: 'value', description: 'Value to encrypt', required: true }
+    { name: 'secrets-file', description: 'Encrypted secrets file', required: true }
   ]
 
   async runSafe() {
     this.printCommand()
 
-    const { args, flags: userFlags } = this.parse(VaultAdd)
+    const { args, flags: userFlags } = this.parse(VaultTest)
 
     if (_.isEmpty(userFlags['vault-key'])) {
       this.log(chalk.red('A vault key must be provided'))
@@ -36,10 +34,15 @@ export class VaultAdd extends Kommand {
       return
     }
 
-    const vault = new Vault(userFlags['vault-key'])
+    const vault = new Vault(userFlags['vault-key'], null, args['secrets-file'])
 
-    vault.encryptKey(args.key, args.value, args['secrets-file'])
-
-    this.log(chalk.green(`[✔] Key "${args.key}" has been securely added "${args['secrets-file']}"`))
+    try {
+      vault.decrypt(args['secrets-file'])
+      this.log(chalk.green('[✔] Secrets file can be decrypted'))
+    }
+    catch (error) {
+      this.logError('Secrets file cannot be decrypted')
+      throw error
+    }
   }
 }

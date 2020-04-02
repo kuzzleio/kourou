@@ -4,14 +4,14 @@ import cli from 'cli-ux'
 // tslint:disable-next-line
 const ndjson = require('ndjson')
 
-export async function dumpCollectionData(sdk: any, index: string, collection: string, batchSize: number, path: string) {
+export async function dumpCollectionData(sdk: any, index: string, collection: string, batchSize: number, path: string, query: any = {}) {
   const collectionDir = `${path}/${collection}`
   const filename = `${collectionDir}/documents.jsonl`
   const writeStream = fs.createWriteStream(filename)
   const waitWrite = new Promise(resolve => writeStream.on('finish', resolve))
   const ndjsonStream = ndjson.serialize()
   const options = {
-    scroll: '10m',
+    scroll: '1m',
     size: batchSize
   }
 
@@ -31,7 +31,7 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
     }
   })
 
-  let results = await sdk.document.search(index, collection, {}, options)
+  let results = await sdk.document.search(index, collection, { query }, options)
 
   const progressBar = cli.progress({
     format: `Dumping ${collection} |{bar}| {percentage}% || {value}/{total} documents`

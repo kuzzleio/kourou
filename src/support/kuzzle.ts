@@ -2,7 +2,9 @@ import { flags } from '@oclif/command'
 import chalk from 'chalk'
 
 // tslint:disable-next-line
-const { Http, Kuzzle } = require('kuzzle-sdk')
+const { Http, WebSocket, Kuzzle } = require('kuzzle-sdk')
+
+const SECOND = 60 * 1000
 
 export const kuzzleFlags = {
   host: flags.string({
@@ -41,21 +43,30 @@ export class KuzzleSDK {
 
   private password: string;
 
+  private protocol: string;
+
+  private refreshTimer?: NodeJS.Timeout;
+
   constructor(options: any) {
     this.host = options.host
     this.port = parseInt(options.port, 10)
     this.ssl = options.ssl || this.port === 443
     this.username = options.username
     this.password = options.password
+    this.protocol = options.protocol || 'http'
   }
 
   public async init(log: any) {
-    this.sdk = new Kuzzle(new Http(this.host, {
+    const ProtocolClass = this.protocol === 'ws'
+      ? WebSocket
+      : Http
+
+    this.sdk = new Kuzzle(new ProtocolClass(this.host, {
       port: this.port,
       sslConnection: this.ssl,
     }))
 
-    log(chalk.green(`[ℹ] Connecting to http${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`))
+    log(`[ℹ] Connecting to ${this.protocol}${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
 
     await this.sdk.connect()
 
@@ -65,7 +76,26 @@ export class KuzzleSDK {
         password: this.password,
       }
 
-      await this.sdk.auth.login('local', credentials, '60s')
+      await this.sdk.auth.login('local', credentials, '90s')
+
+      this.refreshTimer = setInterval(async () => {
+        try {
+          await this.sdk.auth.refreshToken()
+        }
+        catch (error) {
+          log(`Cannot refresh token: ${error}`)
+        }
+      }, 80 * SECOND)
+
+      log(chalk.green(`[ℹ] Loggued as ${this.username}.`))
+    }
+  }
+
+  disconnect() {
+    this.sdk.disconnect()
+
+    if (this.refreshTimer) {
+      clearInterval(this.refreshTimer)
     }
   }
 

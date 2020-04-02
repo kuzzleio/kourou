@@ -4,21 +4,13 @@ import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import * as fs from 'fs'
 import chalk from 'chalk'
 
-export default class RoleRestore extends Kommand {
-  private batchSize?: string;
-
+export default class RoleImport extends Kommand {
   private path?: string;
 
-  private sdk?: any;
-
-  static description = 'Restores previously dumped Kuzzle roles'
+  static description = 'Import roles'
 
   static flags = {
     help: flags.help({}),
-    'batch-size': flags.string({
-      description: 'Maximum batch size (see limits.documentsWriteCount config)',
-      default: '200'
-    }),
     ...kuzzleFlags,
   }
 
@@ -26,22 +18,12 @@ export default class RoleRestore extends Kommand {
     { name: 'path', description: 'Dump file', required: true },
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(error)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 
-    const { args, flags: userFlags } = this.parse(RoleRestore)
+    const { args, flags: userFlags } = this.parse(RoleImport)
 
     this.path = args.path
-    this.batchSize = userFlags['batch-size']
 
     this.sdk = new KuzzleSDK(userFlags)
     await this.sdk.init(this.log)
@@ -52,16 +34,18 @@ export default class RoleRestore extends Kommand {
 
     const roles = JSON.parse(fs.readFileSync(filename, 'utf-8'))
 
-    await this._restoreRoles(roles)
-
-    this.log(chalk.green(`[✔] ${Object.keys(roles).length} roles restored`))
-  }
-
-  async _restoreRoles(roles: any) {
     const promises = Object.entries(roles).map(([roleId, role]) => {
-      return this.sdk.security.createOrReplaceRole(roleId, role, { force: true })
+      // f*** you TS
+      if (this.sdk) {
+        return this.sdk.security.createOrReplaceRole(roleId, role, { force: true })
+      }
+
+      // never happen
+      return Promise.resolve()
     })
 
     await Promise.all(promises)
+
+    this.log(chalk.green(`[✔] ${Object.keys(roles).length} roles restored`))
   }
 }
