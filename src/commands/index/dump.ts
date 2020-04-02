@@ -41,8 +41,13 @@ export default class IndexDump extends Kommand {
 
     const path = userFlags.path || args.index
 
+<<<<<<< Updated upstream:src/commands/index/dump.ts
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init(this.log)
+=======
+    this.sdk = new KuzzleSDK({ protocol: 'ws', ...userFlags })
+    await this.sdk.init(this.log)
+>>>>>>> Stashed changes:src/commands/index/export.ts
 
     this.log(chalk.green(`Dumping index "${args.index}" in ${path}/ ...`))
 

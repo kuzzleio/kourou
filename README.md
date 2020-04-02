@@ -57,6 +57,7 @@ By environment variables:
 # Commands
 
 <!-- commands -->
+* [`kourou api-key:check TOKEN`](#kourou-api-keycheck-token)
 * [`kourou api-key:create USER`](#kourou-api-keycreate-user)
 * [`kourou api-key:delete USER`](#kourou-api-keydelete-user)
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
@@ -80,6 +81,31 @@ By environment variables:
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
 * [`kourou vault:show SECRETS-FILE KEY`](#kourou-vaultshow-secrets-file-key)
+
+## `kourou api-key:check TOKEN`
+
+Checks an API key validity
+
+```
+USAGE
+  $ kourou api-key:check TOKEN
+
+ARGUMENTS
+  TOKEN  API key token
+
+OPTIONS
+  -h, --host=host      [default: localhost] Kuzzle server host
+  -p, --port=port      [default: 7512] Kuzzle server port
+  --help               show CLI help
+  --password=password  Kuzzle user password
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLE
+  kourou api-key:check eyJhbG...QxfQrc
+```
+
+_See code: [src/commands/api-key/check.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/api-key/check.ts)_
 
 ## `kourou api-key:create USER`
 

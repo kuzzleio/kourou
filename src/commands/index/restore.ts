@@ -43,7 +43,11 @@ export default class IndexRestore extends Kommand {
 
     const index = userFlags.index
 
+<<<<<<< Updated upstream:src/commands/index/restore.ts
     const sdk = new KuzzleSDK(userFlags)
+=======
+    this.sdk = new KuzzleSDK({ protocol: 'ws', ...userFlags })
+>>>>>>> Stashed changes:src/commands/index/import.ts
 
     await sdk.init(this.log)
 

@@ -88,4 +88,8 @@ export class KuzzleSDK {
   get security() {
     return this.sdk.security
   }
+
+  get auth() {
+    return this.sdk.auth
+  }
 }

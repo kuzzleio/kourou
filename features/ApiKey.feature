@@ -38,3 +38,9 @@ Feature: Api Key Management
       | flag | --filter | "Test" |
     Then I should match stdout with "gordon-key"
     And I should not match stdout with "gordon-key-2"
+
+  @security
+  Scenario: Checks an API Key validity
+    Given I create an API key
+    When I check the API key validity
+    Then I should match stdout with "API key is still valid"
