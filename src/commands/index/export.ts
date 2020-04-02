@@ -32,7 +32,7 @@ export default class IndexExport extends Kommand {
 
     const path = userFlags.path || args.index
 
-    this.sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
+    this.sdk = new KuzzleSDK({ protocol: 'ws', ...userFlags })
     await this.sdk.init(this.log)
 
     this.log(chalk.green(`Dumping index "${args.index}" in ${path}/ ...`))

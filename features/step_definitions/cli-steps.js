@@ -123,3 +123,22 @@ Then('a JSON file {string} containing:', function (filename, dataTable) {
 
   fs.writeFileSync(filename, JSON.stringify(content, null, 2));
 });
+
+Then('I create an API key', async function () {
+  this.props.result = await this.sdk.security.createApiKey('gordon', 'Test API key');
+});
+
+Then('I check the API key validity', async function () {
+  try {
+    const { stdout } = await execute(
+      './bin/run',
+      ['api-key:check', this.props.result._source.token]);
+
+    this.props.result = stdout;
+  }
+  catch (error) {
+    console.error(error)
+
+    throw error;
+  }
+});

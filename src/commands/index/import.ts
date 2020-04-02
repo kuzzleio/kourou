@@ -34,8 +34,7 @@ export default class IndexImport extends Kommand {
 
     const index = userFlags.index
 
-    this.sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
-
+    this.sdk = new KuzzleSDK({ protocol: 'ws', ...userFlags })
     await this.sdk.init(this.log)
 
     if (index) {
