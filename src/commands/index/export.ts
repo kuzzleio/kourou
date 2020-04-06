@@ -39,7 +39,7 @@ export default class IndexExport extends Kommand {
 
     fs.mkdirSync(path, { recursive: true })
 
-    const { collections } = await this.sdk.collection.list(args.index)
+    const { collections } = await this.sdk.collection.list(args.index, { size: 42000 })
 
     for (const collection of collections) {
       try {
