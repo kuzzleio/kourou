@@ -42,7 +42,7 @@ export default class CollectionExport extends Kommand {
 
     const { args, flags: userFlags } = this.parse(CollectionExport)
 
-    const path = `${userFlags.path}/${args.index}` || args.index
+    const path = userFlags.path ? `${userFlags.path}/${args.index}` : args.index
 
     this.sdk = new KuzzleSDK({ protocol: 'ws', ...userFlags })
     await this.sdk.init(this.log)
