@@ -4,7 +4,7 @@ import chalk from 'chalk'
 // tslint:disable-next-line
 const { Http, WebSocket, Kuzzle } = require('kuzzle-sdk')
 
-const SECOND = 60 * 1000
+const SECOND = 1000
 
 export const kuzzleFlags = {
   host: flags.string({
