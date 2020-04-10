@@ -23,7 +23,7 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
       else {
         ndjsonStream.once('drain', resolve)
       }
-    });
+    })
   }
 
   writeStream.on('error', error => {

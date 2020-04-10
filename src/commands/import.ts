@@ -51,15 +51,15 @@ export default class Import extends Kommand {
   }
 
   async walkDirectories(directory: string) {
-    let entries = fs.readdirSync(directory)
+    const entries = fs.readdirSync(directory)
 
-    let directories = entries
+    const directories = entries
       .map(entry => path.join(directory, entry))
       .filter(dirName => fs.lstatSync(dirName).isDirectory())
       .sort(alphaSort)
 
     // Sort files by name some mappings.json come before documents.jsonl
-    let files = entries
+    const files = entries
       .map(entry => path.join(directory, entry))
       .filter(fileName => fs.lstatSync(fileName).isFile())
       .sort(alphaSort)

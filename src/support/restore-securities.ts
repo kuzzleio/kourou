@@ -6,11 +6,11 @@ export async function restoreRoles(sdk: any, dump: any) {
   const promises = Object.entries(dump.content)
     .map(([roleId, role]) => (
       sdk.security.createOrReplaceRole(roleId, role, { force: true })
-    ));
+    ))
 
   await Promise.all(promises)
 
-  return promises.length;
+  return promises.length
 }
 
 export async function restoreProfiles(sdk: any, dump: any) {
@@ -21,7 +21,7 @@ export async function restoreProfiles(sdk: any, dump: any) {
   const promises = Object.entries(dump.content)
     .map(([profileId, profile]) => (
       sdk.security.createOrReplaceProfile(profileId, profile, { force: true })
-    ));
+    ))
 
-  return promises.length;
+  return promises.length
 }
