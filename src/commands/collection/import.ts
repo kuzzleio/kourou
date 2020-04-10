@@ -1,7 +1,10 @@
+import * as path from 'path'
+import * as fs from 'fs'
+import chalk from 'chalk'
+
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
-import chalk from 'chalk'
 import { restoreCollectionData, restoreCollectionMappings } from '../../support/restore-collection'
 
 export default class CollectionImport extends Kommand {
@@ -41,24 +44,29 @@ export default class CollectionImport extends Kommand {
 
     await this.sdk.init(this.log)
 
-    this.log(chalk.green(`[✔] Start importing dump from ${args.path}`))
+    this.logInfo(`Start importing dump from ${args.path}`)
 
     if (!userFlags['no-mappings']) {
+      const mappingsPath = path.join(args.path, 'mappings.json')
+      const dump = JSON.parse(fs.readFileSync(mappingsPath, 'utf8'))
+
       await restoreCollectionMappings(
         this.sdk,
-        args.path,
+        dump,
         index,
         collection)
     }
 
-    await restoreCollectionData(
+    const { total } = await restoreCollectionData(
       this.sdk,
       this.log.bind(this),
       Number(userFlags['batch-size']),
-      args.path,
+      path.join(args.path, 'documents.jsonl'),
       index,
       collection)
 
-    this.log(chalk.green(`[✔] Dump file ${args.path} imported`))
+    this.logOk(`Successfully imported ${total} documents in "${index}:${collection}"`)
+
+    this.logOk(`Dump directory ${args.path} imported`)
   }
 }

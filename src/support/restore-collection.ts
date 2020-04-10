@@ -19,7 +19,7 @@ function handleError(log: any, dumpFile: string, error: any) {
 
     serialize.end()
 
-    log(chalk.red(`[ℹ] Error importing ${dumpFile}. See errors in ${errorFile}`))
+    log(chalk.red(`[X] Error importing ${dumpFile}. See errors in ${errorFile}`))
   }
   else {
     log(chalk.red(error.message))
@@ -27,8 +27,7 @@ function handleError(log: any, dumpFile: string, error: any) {
   }
 }
 
-export async function restoreCollectionData(sdk: any, log: any, batchSize: number, dumpDir: string, index?: string, collection?: string) {
-  const dumpFile = `${dumpDir}/documents.jsonl`
+export async function restoreCollectionData(sdk: any, log: any, batchSize: number, dumpFile: string, index?: string, collection?: string) {
   const mWriteRequest = {
     controller: 'bulk',
     action: 'mWrite',
@@ -79,6 +78,10 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
           }
         }
         else {
+          if (obj.type !== 'collection') {
+            throw new Error('Dump file does not contains collection data')
+          }
+
           headerSkipped = true
           mWriteRequest.index = index || obj.index
           mWriteRequest.collection = collection || obj.collection
@@ -114,31 +117,39 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
       })
   })
 
-  log(chalk.green(`[ℹ] Successfully imported ${total} documents in "${mWriteRequest.index}:${mWriteRequest.collection}"`))
+  return {
+    total,
+    collection: mWriteRequest.collection,
+    index: mWriteRequest.index
+  }
 }
 
 /**
  * Imports mappings from a collection mappings dump
  * Expected format:
  * {
- *   index: {
- *     collection: {
- *       // mappings
+ *   type: 'mappings',
+ *   content: {
+ *     index: {
+ *       collection: {
+ *         // mappings
+ *       }
  *     }
  *   }
  * }
  *
  * @param {Kuzzle} sdk - Kuzzle SDK instance
- * @param {String} dumpDir - Path to the collection dump dir
+ * @param {String} dump - Dump object (type, content)
  * @param {String} index - Override index name
  * @param {String} collection - Override collection name
  */
-export async function restoreCollectionMappings(sdk: any, dumpDir: string, index?: string, collection?: string) {
-  const dumpFile = `${dumpDir}/mappings.json`
-  const content: any = JSON.parse(fs.readFileSync(dumpFile, 'utf8'))
+export async function restoreCollectionMappings(sdk: any, dump: any, index?: string, collection?: string) {
+  if (dump.type !== 'mappings') {
+    throw new Error('Dump file does not contain mappings definition')
+  }
 
-  const srcIndex: any = Object.keys(content)[0]
-  const srcCollection: any = Object.keys(content[srcIndex])[0]
+  const srcIndex: any = Object.keys(dump.content)[0]
+  const srcCollection: any = Object.keys(dump.content[srcIndex])[0]
 
   const dstIndex: any = index || srcIndex
   const dstCollection: any = collection || srcCollection
@@ -147,5 +158,5 @@ export async function restoreCollectionMappings(sdk: any, dumpDir: string, index
     await sdk.index.create(dstIndex)
   }
 
-  return sdk.collection.create(dstIndex, dstCollection, content[srcIndex][srcCollection])
+  return sdk.collection.create(dstIndex, dstCollection, dump.content[srcIndex][srcCollection])
 }

@@ -3,6 +3,7 @@ import { Kommand } from '../../common'
 import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import * as fs from 'fs'
 import chalk from 'chalk'
+import { restoreRoles } from '../../support/restore-securities'
 
 export default class RoleImport extends Kommand {
   private path?: string;
@@ -32,20 +33,10 @@ export default class RoleImport extends Kommand {
 
     this.log(`Restoring roles from ${filename} ...`)
 
-    const roles = JSON.parse(fs.readFileSync(filename, 'utf-8'))
+    const dump = JSON.parse(fs.readFileSync(filename, 'utf-8'))
 
-    const promises = Object.entries(roles).map(([roleId, role]) => {
-      // f*** you TS
-      if (this.sdk) {
-        return this.sdk.security.createOrReplaceRole(roleId, role, { force: true })
-      }
+    const count = await restoreRoles(this.sdk, dump)
 
-      // never happen
-      return Promise.resolve()
-    })
-
-    await Promise.all(promises)
-
-    this.log(chalk.green(`[✔] ${Object.keys(roles).length} roles restored`))
+    this.log(chalk.green(`[✔] ${count} roles restored`))
   }
 }

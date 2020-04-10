@@ -15,6 +15,17 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
     size: batchSize
   }
 
+  const writeLine = (content: any) => {
+    return new Promise(resolve => {
+      if (ndjsonStream.write(content)) {
+        resolve()
+      }
+      else {
+        ndjsonStream.once('drain', resolve)
+      }
+    });
+  }
+
   writeStream.on('error', error => {
     throw error
   })
@@ -23,13 +34,7 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
 
   fs.mkdirSync(collectionDir, { recursive: true })
 
-  await new Promise(resolve => {
-    if (ndjsonStream.write({ index: index, collection })) {
-      resolve()
-    } else {
-      ndjsonStream.once('drain', resolve)
-    }
-  })
+  await writeLine({ type: 'collection', index, collection })
 
   let results = await sdk.document.search(index, collection, { query }, options)
 
@@ -47,9 +52,7 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
         body: hit._source
       }
 
-      if (!ndjsonStream.write(document)) {
-        await new Promise(resolve => ndjsonStream.once('drain', resolve))
-      }
+      await writeLine(document)
     }
   } while ((results = await results.next()))
 
@@ -68,11 +71,14 @@ export async function dumpCollectionMappings(sdk: any, index: string, collection
 
   const mappings = await sdk.collection.getMapping(index, collection)
 
-  const content = {
-    [index]: {
-      [collection]: mappings
+  const dump = {
+    type: 'mappings',
+    content: {
+      [index]: {
+        [collection]: mappings
+      }
     }
   }
 
-  fs.writeFileSync(filename, JSON.stringify(content, null, 2))
+  fs.writeFileSync(filename, JSON.stringify(dump, null, 2))
 }

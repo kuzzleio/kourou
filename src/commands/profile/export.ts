@@ -38,7 +38,12 @@ export default class ProfileExport extends Kommand {
 
     const profiles = await this._dumpProfiles()
 
-    fs.writeFileSync(filename, JSON.stringify(profiles, null, 2))
+    const dump = {
+      type: 'profiles',
+      content: profiles
+    }
+
+    fs.writeFileSync(filename, JSON.stringify(dump, null, 2))
 
     this.log(chalk.green(`[✔] ${Object.keys(profiles).length} profiles dumped`))
   }
