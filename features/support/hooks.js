@@ -105,6 +105,7 @@ Before({ tags: '@vault' }, async function () {
   const files = [
     'test-secrets.json',
     'test-secrets.enc.json',
+    'decrypted.json'
   ];
 
   for (const file of files) {

@@ -1,12 +1,16 @@
-import { Kommand } from '../../common'
 import { flags } from '@oclif/command'
 import * as _ from 'lodash'
 import chalk from 'chalk'
+import { Vault } from 'kuzzle-vault'
 
-const Vault = require('kuzzle-vault')
+import { Kommand } from '../../common'
 
 export class VaultTest extends Kommand {
   static description = 'Tests if an encrypted secrets file can be decrypted.'
+
+  static examples = [
+    'kourou vault:test config/secrets.enc.json --vault-key <vault-key>'
+  ]
 
   static flags = {
     'vault-key': flags.string({
@@ -34,15 +38,14 @@ export class VaultTest extends Kommand {
       return
     }
 
-    const vault = new Vault(userFlags['vault-key'], null, args['secrets-file'])
+    const vault = new Vault(userFlags['vault-key'])
 
     try {
       vault.decrypt(args['secrets-file'])
-      this.log(chalk.green('[✔] Secrets file can be decrypted'))
+      this.logOk('Secrets file can be decrypted')
     }
     catch (error) {
-      this.logError('Secrets file cannot be decrypted')
-      throw error
+      this.logKo(`Secrets file cannot be decrypted: ${error.message}`)
     }
   }
 }

@@ -1,12 +1,17 @@
-import { Kommand } from '../../common'
 import { flags } from '@oclif/command'
 import * as _ from 'lodash'
+import * as fs from 'fs'
 import chalk from 'chalk'
+import { Cryptonomicon } from 'kuzzle-vault'
 
-const Vault = require('kuzzle-vault')
+import { Kommand } from '../../common'
 
 export class VaultShow extends Kommand {
   static description = 'Prints an encrypted key.'
+
+  static examples = [
+    'kourou vault:show config/secrets.enc.json aws.s3.secretKey --vault-key <vault-key>'
+  ]
 
   static flags = {
     'vault-key': flags.string({
@@ -35,11 +40,29 @@ export class VaultShow extends Kommand {
       return
     }
 
-    const vault = new Vault(userFlags['vault-key'])
+    const cryptonomicon = new Cryptonomicon(userFlags['vault-key'])
 
-    const decryptedValue = vault.decryptKey(args.key, args['secrets-file'])
+    if (!fs.existsSync(args['secrets-file'])) {
+      throw new Error(`File "${args['secrets-file']}" does not exists`)
+    }
 
-    this.log(chalk.green(`[✔] Key "${args.key}" content:`))
+    let encryptedSecrets = {}
+    try {
+      encryptedSecrets = JSON.parse(fs.readFileSync(args['secrets-file'], 'utf8'))
+    }
+    catch (error) {
+      throw new Error(`Cannot read secrets from file "${args['secrets-file']}": ${error.message}`)
+    }
+
+    const encryptedValue = _.get(encryptedSecrets, args.key)
+
+    if (!encryptedValue) {
+      throw new Error(`Key "${args.key}" does not exists`)
+    }
+
+    const decryptedValue = cryptonomicon.decryptString(encryptedValue)
+
+    this.logOk(`Key "${args.key}" content:`)
     this.log(chalk.green(decryptedValue))
   }
 }

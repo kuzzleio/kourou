@@ -1,12 +1,17 @@
-import { Kommand } from '../../common'
 import { flags } from '@oclif/command'
 import * as _ from 'lodash'
+import * as fs from 'fs'
 import chalk from 'chalk'
+import { Cryptonomicon } from 'kuzzle-vault'
 
-const Vault = require('kuzzle-vault')
+import { Kommand } from '../../common'
 
 export class VaultAdd extends Kommand {
   static description = 'Adds an encrypted key to a secrets file'
+
+  static examples = [
+    'kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>'
+  ]
 
   static flags = {
     'vault-key': flags.string({
@@ -36,10 +41,24 @@ export class VaultAdd extends Kommand {
       return
     }
 
-    const vault = new Vault(userFlags['vault-key'])
+    const cryptonomicon = new Cryptonomicon(userFlags['vault-key'])
 
-    vault.encryptKey(args.key, args.value, args['secrets-file'])
+    let encryptedSecrets = {}
+    if (fs.existsSync(args['secrets-file'])) {
+      encryptedSecrets = JSON.parse(fs.readFileSync(args['secrets-file'], 'utf8'))
 
-    this.log(chalk.green(`[✔] Key "${args.key}" has been securely added "${args['secrets-file']}"`))
+      try {
+        cryptonomicon.decryptObject(encryptedSecrets)
+      }
+      catch (error) {
+        throw new Error('Trying to add a secret encrypted with a different key')
+      }
+    }
+
+    _.set(encryptedSecrets, args.key, cryptonomicon.encryptString(args.value))
+
+    fs.writeFileSync(args['secrets-file'], JSON.stringify(encryptedSecrets, null, 2))
+
+    this.logOk(`Key "${args.key}" has been securely added "${args['secrets-file']}"`)
   }
 }

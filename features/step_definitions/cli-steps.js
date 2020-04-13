@@ -124,6 +124,19 @@ Then('a JSON file {string} containing:', function (filename, dataTable) {
   fs.writeFileSync(filename, JSON.stringify(content, null, 2));
 });
 
+Then('The file {string} content should match:', function (filename, dataTable) {
+  const expectedContent = {};
+  const contentRaw = this.parseObject(dataTable);
+
+  for (const [path, value] of Object.entries(contentRaw)) {
+    _.set(expectedContent, path, value);
+  }
+
+  const content = JSON.parse(fs.readFileSync(filename, 'utf8'));
+
+  should(content).matchObject(expectedContent);
+});
+
 Then('I create an API key', async function () {
   this.props.result = await this.sdk.security.createApiKey('gordon', 'Test API key');
 });
