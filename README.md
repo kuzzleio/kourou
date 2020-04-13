@@ -80,6 +80,7 @@ By environment variables:
 * [`kourou role:export`](#kourou-roleexport)
 * [`kourou role:import PATH`](#kourou-roleimport-path)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
+* [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
 * [`kourou vault:show SECRETS-FILE KEY`](#kourou-vaultshow-secrets-file-key)
 * [`kourou vault:test SECRETS-FILE`](#kourou-vaulttest-secrets-file)
@@ -612,9 +613,35 @@ ARGUMENTS
 
 OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+
+EXAMPLE
+  kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>
 ```
 
 _See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/add.ts)_
+
+## `kourou vault:decrypt FILE`
+
+Decrypts an entire file.
+
+```
+USAGE
+  $ kourou vault:decrypt FILE
+
+ARGUMENTS
+  FILE  File containing encrypted secrets
+
+OPTIONS
+  -f, --force                    Overwrite the output file if it already exists
+  -o, --output-file=output-file  Output file (default: remove ".enc")
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+
+EXAMPLES
+  kourou vault:decrypt config/secrets.enc.json --vault-key <vault-key>
+  kourou vault:decrypt config/secrets.enc.json -o config/secrets.json --vault-key <vault-key>
+```
+
+_See code: [src/commands/vault/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/decrypt.ts)_
 
 ## `kourou vault:encrypt FILE`
 
@@ -631,6 +658,10 @@ OPTIONS
   -f, --force                    Overwrite the output file if it already exists
   -o, --output-file=output-file  Output file (default: <file>.enc.json)
   --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+
+EXAMPLES
+  kourou vault:encrypt config/secrets.json --vault-key <vault-key>
+  kourou vault:encrypt config/secrets.json -o config/secrets_prod.enc.json --vault-key <vault-key>
 ```
 
 _See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/encrypt.ts)_
@@ -649,6 +680,9 @@ ARGUMENTS
 
 OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+
+EXAMPLE
+  kourou vault:show config/secrets.enc.json aws.s3.secretKey --vault-key <vault-key>
 ```
 
 _See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/show.ts)_
@@ -666,6 +700,9 @@ ARGUMENTS
 
 OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+
+EXAMPLE
+  kourou vault:test config/secrets.enc.json --vault-key <vault-key>
 ```
 
 _See code: [src/commands/vault/test.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/test.ts)_
