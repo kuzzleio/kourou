@@ -46,7 +46,7 @@ Feature: Vault
       | flag | --vault-key           | secret-password |
     And I should match stdout with "foobar"
 
-  # vault:decrypt ==============================================================
+  # vault:test =================================================================
 
   @vault
   Scenario: Test a secrets file
@@ -59,6 +59,7 @@ Feature: Vault
     When I run the command "vault:test" with:
       | arg  | test-secrets.enc.json |                 |
       | flag | --vault-key           | secret-password |
+    Then I should match stdout with "Secrets file can be decrypted"
 
   # vault:decrypt ==============================================================
 

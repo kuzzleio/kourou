@@ -39,18 +39,22 @@ export class VaultDecrypt extends Kommand {
     const { args, flags: userFlags } = this.parse(VaultDecrypt)
 
     if (_.isEmpty(userFlags['vault-key'])) {
-      this.log(chalk.red('A vault key must be provided'))
-      return
+      throw new Error('A vault key must be provided')
     }
 
     if (_.isEmpty(args.file)) {
-      this.log(chalk.red('A secrets file must be provided'))
-      return
+      throw new Error('A secrets file must be provided')
     }
 
     let outputFile = `${args.file.replace('.enc', '')}`
     if (userFlags['output-file']) {
       outputFile = userFlags['output-file']
+    }
+
+    if (fs.existsSync(outputFile)) {
+      if (!userFlags.force) {
+        throw new Error(`Output file "${outputFile}" already exists. Use -f flag to overwrite it.`)
+      }
     }
 
     const cryptonomicon = new Cryptonomicon(userFlags['vault-key'])

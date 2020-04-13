@@ -69,6 +69,9 @@ By environment variables:
 * [`kourou es:get INDEX ID`](#kourou-esget-index-id)
 * [`kourou es:insert INDEX`](#kourou-esinsert-index)
 * [`kourou es:list-index`](#kourou-eslist-index)
+* [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
+* [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
+* [`kourou file:test FILE`](#kourou-filetest-file)
 * [`kourou help [COMMAND]`](#kourou-help-command)
 * [`kourou index:export INDEX`](#kourou-indexexport-index)
 * [`kourou index:import PATH`](#kourou-indeximport-path)
@@ -385,6 +388,72 @@ OPTIONS
 ```
 
 _See code: [src/commands/es/list-index.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/es/list-index.ts)_
+
+## `kourou file:decrypt FILE`
+
+Decrypts an encrypted file.
+
+```
+USAGE
+  $ kourou file:decrypt FILE
+
+ARGUMENTS
+  FILE  Encrypted file
+
+OPTIONS
+  -f, --force                    Overwrite the output file if it already exists
+  -o, --output-file=output-file  Output file (default: remove ".enc")
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+
+EXAMPLES
+  kourou file:decrypt books/cryptonomicon.txt.enc --vault-key <vault-key>
+  kourou file:decrypt books/cryptonomicon.txt.enc -o books/cryptonomicon.txt --vault-key <vault-key>
+```
+
+_See code: [src/commands/file/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/file/decrypt.ts)_
+
+## `kourou file:encrypt FILE`
+
+Encrypts an entire file.
+
+```
+USAGE
+  $ kourou file:encrypt FILE
+
+ARGUMENTS
+  FILE  Filename
+
+OPTIONS
+  -f, --force                    Overwrite the output file if it already exists
+  -o, --output-file=output-file  Output file (default: <filename>.enc)
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+
+EXAMPLES
+  kourou file:encrypt books/cryptonomicon.txt --vault-key <vault-key>
+  kourou file:encrypt books/cryptonomicon.txt -o books/cryptonomicon.txt.enc --vault-key <vault-key>
+```
+
+_See code: [src/commands/file/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/file/encrypt.ts)_
+
+## `kourou file:test FILE`
+
+Decrypts an encrypted file.
+
+```
+USAGE
+  $ kourou file:test FILE
+
+ARGUMENTS
+  FILE  Encrypted file
+
+OPTIONS
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+
+EXAMPLE
+  kourou file:test books/cryptonomicon.txt.enc --vault-key <vault-key>
+```
+
+_See code: [src/commands/file/test.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/file/test.ts)_
 
 ## `kourou help [COMMAND]`
 

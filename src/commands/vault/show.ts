@@ -31,13 +31,11 @@ export class VaultShow extends Kommand {
     const { args, flags: userFlags } = this.parse(VaultShow)
 
     if (_.isEmpty(userFlags['vault-key'])) {
-      this.log(chalk.red('A vault key must be provided'))
-      return
+      throw new Error('A vault key must be provided')
     }
 
     if (_.isEmpty(args['secrets-file'])) {
-      this.log(chalk.red('A secrets file must be provided'))
-      return
+      throw new Error('A secrets file must be provided')
     }
 
     const cryptonomicon = new Cryptonomicon(userFlags['vault-key'])
