@@ -1,13 +1,12 @@
 import * as fs from 'fs'
 import * as _ from 'lodash'
-import chalk from 'chalk'
 import { flags } from '@oclif/command'
 import { Cryptonomicon } from 'kuzzle-vault'
 
 import { Kommand } from '../../common'
 
 export class FileTest extends Kommand {
-  static description = 'Decrypts an encrypted file.'
+  static description = 'Tests if an encrypted file can be decrypted.'
 
   static examples = [
     'kourou file:test books/cryptonomicon.txt.enc --vault-key <vault-key>'
@@ -43,7 +42,7 @@ export class FileTest extends Kommand {
 
     const cryptonomicon = new Cryptonomicon(userFlags['vault-key'])
 
-    let encryptedContent;
+    let encryptedContent
     try {
       encryptedContent = fs.readFileSync(args.file, 'utf8')
     }

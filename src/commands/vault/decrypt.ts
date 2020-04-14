@@ -1,6 +1,5 @@
 import * as fs from 'fs'
 import * as _ from 'lodash'
-import chalk from 'chalk'
 import { flags } from '@oclif/command'
 import { Cryptonomicon } from 'kuzzle-vault'
 

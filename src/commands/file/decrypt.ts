@@ -1,6 +1,5 @@
 import * as fs from 'fs'
 import * as _ from 'lodash'
-import chalk from 'chalk'
 import { flags } from '@oclif/command'
 import { Cryptonomicon } from 'kuzzle-vault'
 
@@ -63,7 +62,7 @@ export class FileDecrypt extends Kommand {
       throw new Error(`File "${args.file}" does not exists`)
     }
 
-    let encryptedContent;
+    let encryptedContent
     try {
       encryptedContent = fs.readFileSync(args.file, 'utf8')
     }
