@@ -600,7 +600,7 @@ _See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
-Adds an encrypted key to a secrets file
+Adds an encrypted key to a secrets file (See: https://github.com/kuzzleio/kuzzle-vault/)
 
 ```
 USAGE
@@ -622,7 +622,7 @@ _See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v
 
 ## `kourou vault:decrypt FILE`
 
-Decrypts an entire file.
+Decrypts an entire secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)
 
 ```
 USAGE
@@ -645,7 +645,7 @@ _See code: [src/commands/vault/decrypt.ts](https://github.com/kuzzleio/kourou/bl
 
 ## `kourou vault:encrypt FILE`
 
-Encrypts an entire file.
+Encrypts an entire secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)
 
 ```
 USAGE
@@ -668,7 +668,7 @@ _See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/bl
 
 ## `kourou vault:show SECRETS-FILE KEY`
 
-Prints an encrypted key.
+Prints an encrypted key from a secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)
 
 ```
 USAGE
@@ -689,7 +689,7 @@ _See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/
 
 ## `kourou vault:test SECRETS-FILE`
 
-Tests if an encrypted secrets file can be decrypted.
+Tests if an encrypted secrets file can be decrypted. (see https://github.com/kuzzleio/kuzzle-vault/)
 
 ```
 USAGE

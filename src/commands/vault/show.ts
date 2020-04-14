@@ -7,7 +7,7 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultShow extends Kommand {
-  static description = 'Prints an encrypted key.'
+  static description = 'Prints an encrypted key from a secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)'
 
   static examples = [
     'kourou vault:show config/secrets.enc.json aws.s3.secretKey --vault-key <vault-key>'
