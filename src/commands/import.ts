@@ -22,7 +22,7 @@ const alphaSort = (a: string, b: string) => {
 export default class Import extends Kommand {
   private userFlags: any
 
-  static description = 'Automaticaly imports dump files from a root directory'
+  static description = 'Recursively imports dump files from a root directory'
 
   static flags = {
     help: flags.help({}),
