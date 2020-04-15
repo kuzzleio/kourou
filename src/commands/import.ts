@@ -34,7 +34,7 @@ export default class Import extends Kommand {
   }
 
   static args = [
-    { name: 'path', description: 'Root directory containings dumps', required: true },
+    { name: 'path', description: 'Root directory containing dumps', required: true },
   ]
 
   async runSafe() {
