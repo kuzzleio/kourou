@@ -25,6 +25,10 @@ export abstract class Kommand extends Command {
     this.log(chalk.green(`[✔] ${message}`), ...args)
   }
 
+  public logInfo(message: string, ...args: any[]): void {
+    this.log(chalk.yellow(`[ℹ] ${message}`), ...args)
+  }
+
   public logKo(message: string, ...args: any[]): void {
     process.exitCode = 1
     this.log(chalk.red(`[X] ${message}`), ...args)

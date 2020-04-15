@@ -6,7 +6,7 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultDecrypt extends Kommand {
-  static description = 'Decrypts an entire file.'
+  static description = 'Decrypts an entire secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)'
 
   static examples = [
     'kourou vault:decrypt config/secrets.enc.json --vault-key <vault-key>',

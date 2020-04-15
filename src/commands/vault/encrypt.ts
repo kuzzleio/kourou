@@ -6,7 +6,7 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultEncrypt extends Kommand {
-  static description = 'Encrypts an entire file.'
+  static description = 'Encrypts an entire secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)'
 
   static examples = [
     'kourou vault:encrypt config/secrets.json --vault-key <vault-key>',
