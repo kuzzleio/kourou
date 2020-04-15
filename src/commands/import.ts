@@ -22,7 +22,7 @@ const revAlphaSort = (a: string, b: string) => {
 export default class Import extends Kommand {
   private userFlags: any
 
-  static description = 'Automaticaly imports dump files from a root directory'
+  static description = 'Recursively imports dump files from a root directory'
 
   static flags = {
     help: flags.help({}),
@@ -34,7 +34,7 @@ export default class Import extends Kommand {
   }
 
   static args = [
-    { name: 'path', description: 'Root directory containings dumps', required: true },
+    { name: 'path', description: 'Root directory containing dumps', required: true },
   ]
 
   async runSafe() {
