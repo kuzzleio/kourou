@@ -7,7 +7,7 @@ import { kuzzleFlags, KuzzleSDK } from '../support/kuzzle'
 import { restoreCollectionData, restoreCollectionMappings } from '../support/restore-collection'
 import { restoreProfiles, restoreRoles } from '../support/restore-securities'
 
-const alphaSort = (a: string, b: string) => {
+const revAlphaSort = (a: string, b: string) => {
   if (a < b) {
     return 1
   }
@@ -56,13 +56,13 @@ export default class Import extends Kommand {
     const directories = entries
       .map(entry => path.join(directory, entry))
       .filter(dirName => fs.lstatSync(dirName).isDirectory())
-      .sort(alphaSort)
+      .sort(revAlphaSort)
 
     // Sort files by name some mappings.json come before documents.jsonl
     const files = entries
       .map(entry => path.join(directory, entry))
       .filter(fileName => fs.lstatSync(fileName).isFile())
-      .sort(alphaSort)
+      .sort(revAlphaSort)
 
     for (const file of files) {
       await this.importFile(file)
