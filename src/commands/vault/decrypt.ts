@@ -50,10 +50,8 @@ export class VaultDecrypt extends Kommand {
       outputFile = userFlags['output-file']
     }
 
-    if (fs.existsSync(outputFile)) {
-      if (!userFlags.force) {
-        throw new Error(`Output file "${outputFile}" already exists. Use -f flag to overwrite it.`)
-      }
+    if (fs.existsSync(outputFile) && !userFlags.force) {
+      throw new Error(`Output file "${outputFile}" already exists. Use -f flag to overwrite it.`)
     }
 
     const cryptonomicon = new Cryptonomicon(userFlags['vault-key'])
