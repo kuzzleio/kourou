@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.10.0 linux-x64 node-v12.16.0
+kourou/0.10.1 linux-x64 node-v12.16.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -105,7 +105,7 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -113,7 +113,7 @@ EXAMPLE
   kourou api-key:check eyJhbG...QxfQrc
 ```
 
-_See code: [src/commands/api-key/check.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/api-key/check.ts)_
+_See code: [src/commands/api-key/check.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/api-key/check.ts)_
 
 ## `kourou api-key:create USER`
 
@@ -133,12 +133,12 @@ OPTIONS
   --expire=expire                [default: -1] API Key validity
   --help                         show CLI help
   --id=id                        API Key unique ID
-  --password=password            [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password            Kuzzle user password
   --ssl                          Use SSL to connect to Kuzzle
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/api-key/create.ts)_
+_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/api-key/create.ts)_
 
 ## `kourou api-key:delete USER ID`
 
@@ -156,7 +156,7 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -164,7 +164,7 @@ EXAMPLE
   kourou vault:delete sigfox-gateway 1k-BF3EBjsXdvA2PR8x
 ```
 
-_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/api-key/delete.ts)_
+_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/api-key/delete.ts)_
 
 ## `kourou api-key:search USER`
 
@@ -182,12 +182,12 @@ OPTIONS
   -p, --port=port      [default: 7512] Kuzzle server port
   --filter=filter      Filter to match the API Key descriptions
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/api-key/search.ts)_
+_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/api-key/search.ts)_
 
 ## `kourou collection:create INDEX COLLECTION`
 
@@ -210,14 +210,14 @@ OPTIONS
 
   --help               show CLI help
 
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
 
   --ssl                Use SSL to connect to Kuzzle
 
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/collection/create.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/collection/create.ts)_
+_See code: [src/commands/collection/create.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/collection/create.ts)_
 
 ## `kourou collection:export INDEX COLLECTION`
 
@@ -237,7 +237,7 @@ OPTIONS
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --editor                 Open an editor (EDITOR env variable) to edit the query before sending
   --help                   show CLI help
-  --password=password      [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password      Kuzzle user password
   --path=path              Dump root directory
   --query=query            [default: {}] Only dump documents matching the query (JS or JSON format)
   --ssl                    Use SSL to connect to Kuzzle
@@ -248,7 +248,7 @@ EXAMPLES
   kourou collection:export nyc-open-data yellow-taxi --query '{ term: { city: "Saigon" } }'
 ```
 
-_See code: [src/commands/collection/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/collection/export.ts)_
+_See code: [src/commands/collection/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/collection/export.ts)_
 
 ## `kourou collection:import PATH`
 
@@ -269,12 +269,12 @@ OPTIONS
   --help                   show CLI help
   --index=index            If set, override the index destination name
   --no-mappings            Skip collection mappings
-  --password=password      [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password      Kuzzle user password
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/collection/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/collection/import.ts)_
+_See code: [src/commands/collection/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/collection/import.ts)_
 
 ## `kourou document:create INDEX COLLECTION`
 
@@ -294,7 +294,7 @@ OPTIONS
   --body=body          [default: {}] Document body in JS or JSON format. Will be read from STDIN if available
   --help               show CLI help
   --id=id              Optional document ID
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --replace            Replaces the document if it already exists
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
@@ -304,7 +304,7 @@ EXAMPLES
   kourou document:create iot sensors < document.json
 ```
 
-_See code: [src/commands/document/create.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/document/create.ts)_
+_See code: [src/commands/document/create.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/document/create.ts)_
 
 ## `kourou document:get INDEX COLLECTION ID`
 
@@ -323,12 +323,12 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/document/get.ts)_
+_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/document/get.ts)_
 
 ## `kourou document:search INDEX COLLECTION`
 
@@ -348,7 +348,7 @@ OPTIONS
   --editor             Open an editor (EDITOR env variable) to edit the request before sending
   --from=from          Optional offset
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --query=query        [default: {}] Query in JS or JSON format.
   --scroll=scroll      Optional scroll TTL
   --size=size          Optional page size
@@ -361,7 +361,7 @@ EXAMPLES
   kourou document:search iot sensors --editor
 ```
 
-_See code: [src/commands/document/search.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/document/search.ts)_
+_See code: [src/commands/document/search.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/document/search.ts)_
 
 ## `kourou es:get INDEX ID`
 
@@ -377,11 +377,11 @@ ARGUMENTS
 
 OPTIONS
   -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 7512] Elasticsearch server port
+  -p, --port=port  [default: 9200] Elasticsearch server port
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/get.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/es/get.ts)_
+_See code: [src/commands/es/get.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/es/get.ts)_
 
 ## `kourou es:insert INDEX`
 
@@ -396,13 +396,13 @@ ARGUMENTS
 
 OPTIONS
   -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 7512] Elasticsearch server port
+  -p, --port=port  [default: 9200] Elasticsearch server port
   --body=body      [default: {}] Document body in JSON
   --help           show CLI help
   --id=id          Document ID
 ```
 
-_See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/es/insert.ts)_
+_See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/es/insert.ts)_
 
 ## `kourou es:list-index`
 
@@ -415,11 +415,11 @@ USAGE
 OPTIONS
   -g, --grep=grep  Match output with pattern
   -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 7512] Elasticsearch server port
+  -p, --port=port  [default: 9200] Elasticsearch server port
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/list-index.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/es/list-index.ts)_
+_See code: [src/commands/es/list-index.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/es/list-index.ts)_
 
 ## `kourou file:decrypt FILE`
 
@@ -435,16 +435,14 @@ ARGUMENTS
 OPTIONS
   -f, --force                    Overwrite the output file if it already exists
   -o, --output-file=output-file  Output file (default: remove ".enc")
-
-  --vault-key=vault-key          [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                                 KUZZLE_VAULT_KEY)
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLES
   kourou file:decrypt books/cryptonomicon.txt.enc --vault-key <vault-key>
   kourou file:decrypt books/cryptonomicon.txt.enc -o books/cryptonomicon.txt --vault-key <vault-key>
 ```
 
-_See code: [src/commands/file/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/file/decrypt.ts)_
+_See code: [src/commands/file/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/file/decrypt.ts)_
 
 ## `kourou file:encrypt FILE`
 
@@ -460,16 +458,14 @@ ARGUMENTS
 OPTIONS
   -f, --force                    Overwrite the output file if it already exists
   -o, --output-file=output-file  Output file (default: <filename>.enc)
-
-  --vault-key=vault-key          [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                                 KUZZLE_VAULT_KEY)
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLES
   kourou file:encrypt books/cryptonomicon.txt --vault-key <vault-key>
   kourou file:encrypt books/cryptonomicon.txt -o books/cryptonomicon.txt.enc --vault-key <vault-key>
 ```
 
-_See code: [src/commands/file/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/file/encrypt.ts)_
+_See code: [src/commands/file/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/file/encrypt.ts)_
 
 ## `kourou file:test FILE`
 
@@ -483,14 +479,13 @@ ARGUMENTS
   FILE  Encrypted file
 
 OPTIONS
-  --vault-key=vault-key  [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                         KUZZLE_VAULT_KEY)
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLE
   kourou file:test books/cryptonomicon.txt.enc --vault-key <vault-key>
 ```
 
-_See code: [src/commands/file/test.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/file/test.ts)_
+_See code: [src/commands/file/test.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/file/test.ts)_
 
 ## `kourou help [COMMAND]`
 
@@ -525,12 +520,12 @@ OPTIONS
   -p, --port=port          [default: 7512] Kuzzle server port
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
-  --password=password      [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password      Kuzzle user password
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/import.ts)_
+_See code: [src/commands/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/import.ts)_
 
 ## `kourou index:export INDEX`
 
@@ -548,13 +543,13 @@ OPTIONS
   -p, --port=port          [default: 7512] Kuzzle server port
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --help                   show CLI help
-  --password=password      [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password      Kuzzle user password
   --path=path              Dump root directory
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/index/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/index/export.ts)_
+_See code: [src/commands/index/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/index/export.ts)_
 
 ## `kourou index:import PATH`
 
@@ -574,12 +569,12 @@ OPTIONS
   --help                   show CLI help
   --index=index            If set, override the index destination name
   --no-mappings            Skip collections mappings
-  --password=password      [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password      Kuzzle user password
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/index/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/index/import.ts)_
+_See code: [src/commands/index/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/index/import.ts)_
 
 ## `kourou instance:logs`
 
@@ -594,7 +589,7 @@ OPTIONS
   -i, --instance=instance  Kuzzle instance name
 ```
 
-_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/instance/logs.ts)_
+_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/instance/logs.ts)_
 
 ## `kourou instance:spawn`
 
@@ -610,7 +605,7 @@ OPTIONS
   --help                 show CLI help
 ```
 
-_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/instance/spawn.ts)_
+_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/instance/spawn.ts)_
 
 ## `kourou profile:export`
 
@@ -624,13 +619,13 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --path=path          [default: profiles] Dump directory
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/profile/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/profile/export.ts)_
+_See code: [src/commands/profile/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/profile/export.ts)_
 
 ## `kourou profile:import PATH`
 
@@ -647,12 +642,12 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/profile/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/profile/import.ts)_
+_See code: [src/commands/profile/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/profile/import.ts)_
 
 ## `kourou query CONTROLLER:ACTION`
 
@@ -672,7 +667,7 @@ OPTIONS
   --body=body          [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
   --editor             Open an editor (EDITOR env variable) to edit the request before sending
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -683,7 +678,7 @@ EXAMPLES
   echo '{name: "Aschen"}' | kourou query document:create --arg index=iot --arg collection=sensors
 ```
 
-_See code: [src/commands/query.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/query.ts)_
+_See code: [src/commands/query.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/query.ts)_
 
 ## `kourou role:export`
 
@@ -697,13 +692,13 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --path=path          [default: roles] Dump directory
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/role/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/role/export.ts)_
+_See code: [src/commands/role/export.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/role/export.ts)_
 
 ## `kourou role:import PATH`
 
@@ -720,12 +715,12 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/role/import.ts)_
+_See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/role/import.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
@@ -741,14 +736,13 @@ ARGUMENTS
   VALUE         Value to encrypt
 
 OPTIONS
-  --vault-key=vault-key  [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                         KUZZLE_VAULT_KEY)
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLE
   kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/add.ts)_
+_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/vault/add.ts)_
 
 ## `kourou vault:decrypt FILE`
 
@@ -764,16 +758,14 @@ ARGUMENTS
 OPTIONS
   -f, --force                    Overwrite the output file if it already exists
   -o, --output-file=output-file  Output file (default: remove ".enc")
-
-  --vault-key=vault-key          [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                                 KUZZLE_VAULT_KEY)
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLES
   kourou vault:decrypt config/secrets.enc.json --vault-key <vault-key>
   kourou vault:decrypt config/secrets.enc.json -o config/secrets.json --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/decrypt.ts)_
+_See code: [src/commands/vault/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/vault/decrypt.ts)_
 
 ## `kourou vault:encrypt FILE`
 
@@ -789,16 +781,14 @@ ARGUMENTS
 OPTIONS
   -f, --force                    Overwrite the output file if it already exists
   -o, --output-file=output-file  Output file (default: <file>.enc.json)
-
-  --vault-key=vault-key          [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                                 KUZZLE_VAULT_KEY)
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLES
   kourou vault:encrypt config/secrets.json --vault-key <vault-key>
   kourou vault:encrypt config/secrets.json -o config/secrets_prod.enc.json --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/encrypt.ts)_
+_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/vault/encrypt.ts)_
 
 ## `kourou vault:show SECRETS-FILE KEY`
 
@@ -813,14 +803,13 @@ ARGUMENTS
   KEY           Path to the key (lodash style)
 
 OPTIONS
-  --vault-key=vault-key  [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                         KUZZLE_VAULT_KEY)
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLE
   kourou vault:show config/secrets.enc.json aws.s3.secretKey --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/show.ts)_
+_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/vault/show.ts)_
 
 ## `kourou vault:test SECRETS-FILE`
 
@@ -834,14 +823,13 @@ ARGUMENTS
   SECRETS-FILE  Encrypted secrets file
 
 OPTIONS
-  --vault-key=vault-key  [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                         KUZZLE_VAULT_KEY)
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLE
   kourou vault:test config/secrets.enc.json --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/test.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/test.ts)_
+_See code: [src/commands/vault/test.ts](https://github.com/kuzzleio/kourou/blob/v0.10.1/src/commands/vault/test.ts)_
 <!-- commandsstop -->
 
 # Where does this weird name comes from?
