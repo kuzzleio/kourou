@@ -1,6 +1,5 @@
 import * as fs from 'fs'
 import * as _ from 'lodash'
-import chalk from 'chalk'
 import { flags } from '@oclif/command'
 import { Cryptonomicon } from 'kuzzle-vault'
 
@@ -39,13 +38,11 @@ export class VaultEncrypt extends Kommand {
     const { args, flags: userFlags } = this.parse(VaultEncrypt)
 
     if (_.isEmpty(userFlags['vault-key'])) {
-      this.log(chalk.red('A vault key must be provided'))
-      return
+      throw new Error('A vault key must be provided')
     }
 
     if (_.isEmpty(args.file)) {
-      this.log(chalk.red('A secrets file must be provided'))
-      return
+      throw new Error('A secrets file must be provided')
     }
 
     const [filename, ext] = args.file.split('.')
@@ -54,10 +51,8 @@ export class VaultEncrypt extends Kommand {
       outputFile = userFlags['output-file']
     }
 
-    if (fs.existsSync(outputFile)) {
-      if (!userFlags.force) {
-        throw new Error(`Output file "${outputFile}" already exists. Use -f flag to overwrite it.`)
-      }
+    if (fs.existsSync(outputFile) && !userFlags.force) {
+      throw new Error(`Output file "${outputFile}" already exists. Use -f flag to overwrite it.`)
     }
 
     const cryptonomicon = new Cryptonomicon(userFlags['vault-key'])
