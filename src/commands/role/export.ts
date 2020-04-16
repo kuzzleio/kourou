@@ -38,7 +38,12 @@ export default class RoleDump extends Kommand {
 
     const roles = await this._dumpRoles()
 
-    fs.writeFileSync(filename, JSON.stringify(roles, null, 2))
+    const dump = {
+      type: 'roles',
+      content: roles
+    }
+
+    fs.writeFileSync(filename, JSON.stringify(dump, null, 2))
 
     this.log(chalk.green(`[✔] ${Object.keys(roles).length} roles dumped`))
   }

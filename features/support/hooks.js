@@ -104,7 +104,9 @@ Before({ tags: '@mappings' }, async function () {
 Before({ tags: '@vault' }, async function () {
   const files = [
     'test-secrets.json',
+    'test-secrets.json.enc',
     'test-secrets.enc.json',
+    'decrypted.json'
   ];
 
   for (const file of files) {

@@ -6,11 +6,11 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultEncrypt extends Kommand {
-  static description = 'Encrypts an entire secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)'
+  static description = 'Encrypts an entire file.'
 
   static examples = [
-    'kourou vault:encrypt config/secrets.json --vault-key <vault-key>',
-    'kourou vault:encrypt config/secrets.json -o config/secrets_prod.enc.json --vault-key <vault-key>'
+    'kourou file:encrypt books/cryptonomicon.txt --vault-key <vault-key>',
+    'kourou file:encrypt books/cryptonomicon.txt -o books/cryptonomicon.txt.enc --vault-key <vault-key>'
   ]
 
   static flags = {
@@ -20,7 +20,7 @@ export class VaultEncrypt extends Kommand {
     }),
     'output-file': flags.string({
       char: 'o',
-      description: 'Output file (default: <file>.enc.json)'
+      description: 'Output file (default: <filename>.enc)'
     }),
     'vault-key': flags.string({
       description: 'Kuzzle Vault Key (or KUZZLE_VAULT_KEY)',
@@ -29,7 +29,7 @@ export class VaultEncrypt extends Kommand {
   }
 
   static args = [
-    { name: 'file', description: 'File containing unencrypted secrets', required: true }
+    { name: 'file', description: 'Filename', required: true }
   ]
 
   async runSafe() {
@@ -42,11 +42,10 @@ export class VaultEncrypt extends Kommand {
     }
 
     if (_.isEmpty(args.file)) {
-      throw new Error('A secrets file must be provided')
+      throw new Error('A file must be provided')
     }
 
-    const [filename, ext] = args.file.split('.')
-    let outputFile = `${filename}.enc.${ext}`
+    let outputFile = `${args.file}.enc`
     if (userFlags['output-file']) {
       outputFile = userFlags['output-file']
     }
@@ -61,18 +60,18 @@ export class VaultEncrypt extends Kommand {
       throw new Error(`File "${args.file}" does not exists`)
     }
 
-    let secrets = {}
+    let content
     try {
-      secrets = JSON.parse(fs.readFileSync(args.file, 'utf8'))
+      content = fs.readFileSync(args.file, 'utf8')
     }
     catch (error) {
-      throw new Error(`Cannot read secrets from file "${args.file}": ${error.message}`)
+      throw new Error(`Cannot read file "${args.file}": ${error.message}`)
     }
 
-    const encryptedSecrets = cryptonomicon.encryptObject(secrets)
+    const encryptedContent = cryptonomicon.encryptString(content)
 
-    fs.writeFileSync(outputFile, JSON.stringify(encryptedSecrets, null, 2))
+    fs.writeFileSync(outputFile, encryptedContent)
 
-    this.logOk(`Secrets were successfully encrypted into the file ${outputFile}`)
+    this.logOk(`File content successfully encrypted into ${outputFile}`)
   }
 }

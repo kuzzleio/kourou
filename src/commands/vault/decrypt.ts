@@ -5,12 +5,12 @@ import { Cryptonomicon } from 'kuzzle-vault'
 
 import { Kommand } from '../../common'
 
-export class VaultEncrypt extends Kommand {
-  static description = 'Encrypts an entire secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)'
+export class VaultDecrypt extends Kommand {
+  static description = 'Decrypts an entire secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)'
 
   static examples = [
-    'kourou vault:encrypt config/secrets.json --vault-key <vault-key>',
-    'kourou vault:encrypt config/secrets.json -o config/secrets_prod.enc.json --vault-key <vault-key>'
+    'kourou vault:decrypt config/secrets.enc.json --vault-key <vault-key>',
+    'kourou vault:decrypt config/secrets.enc.json -o config/secrets.json --vault-key <vault-key>'
   ]
 
   static flags = {
@@ -20,7 +20,7 @@ export class VaultEncrypt extends Kommand {
     }),
     'output-file': flags.string({
       char: 'o',
-      description: 'Output file (default: <file>.enc.json)'
+      description: 'Output file (default: remove ".enc")'
     }),
     'vault-key': flags.string({
       description: 'Kuzzle Vault Key (or KUZZLE_VAULT_KEY)',
@@ -29,13 +29,13 @@ export class VaultEncrypt extends Kommand {
   }
 
   static args = [
-    { name: 'file', description: 'File containing unencrypted secrets', required: true }
+    { name: 'file', description: 'File containing encrypted secrets', required: true }
   ]
 
   async runSafe() {
     this.printCommand()
 
-    const { args, flags: userFlags } = this.parse(VaultEncrypt)
+    const { args, flags: userFlags } = this.parse(VaultDecrypt)
 
     if (_.isEmpty(userFlags['vault-key'])) {
       throw new Error('A vault key must be provided')
@@ -45,8 +45,7 @@ export class VaultEncrypt extends Kommand {
       throw new Error('A secrets file must be provided')
     }
 
-    const [filename, ext] = args.file.split('.')
-    let outputFile = `${filename}.enc.${ext}`
+    let outputFile = `${args.file.replace('.enc', '')}`
     if (userFlags['output-file']) {
       outputFile = userFlags['output-file']
     }
@@ -61,18 +60,18 @@ export class VaultEncrypt extends Kommand {
       throw new Error(`File "${args.file}" does not exists`)
     }
 
-    let secrets = {}
+    let encryptedSecrets = {}
     try {
-      secrets = JSON.parse(fs.readFileSync(args.file, 'utf8'))
+      encryptedSecrets = JSON.parse(fs.readFileSync(args.file, 'utf8'))
     }
     catch (error) {
       throw new Error(`Cannot read secrets from file "${args.file}": ${error.message}`)
     }
 
-    const encryptedSecrets = cryptonomicon.encryptObject(secrets)
+    const secrets = cryptonomicon.decryptObject(encryptedSecrets)
 
-    fs.writeFileSync(outputFile, JSON.stringify(encryptedSecrets, null, 2))
+    fs.writeFileSync(outputFile, JSON.stringify(secrets, null, 2))
 
-    this.logOk(`Secrets were successfully encrypted into the file ${outputFile}`)
+    this.logOk(`Secrets were successfully decrypted into the file ${outputFile}`)
   }
 }

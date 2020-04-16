@@ -1,12 +1,16 @@
-import { Kommand } from '../../common'
 import { flags } from '@oclif/command'
 import * as _ from 'lodash'
-import chalk from 'chalk'
+import * as fs from 'fs'
+import { Cryptonomicon } from 'kuzzle-vault'
 
-const Vault = require('kuzzle-vault')
+import { Kommand } from '../../common'
 
 export class VaultAdd extends Kommand {
-  static description = 'Adds an encrypted key to a secrets file'
+  static description = 'Adds an encrypted key to a secrets file (See: https://github.com/kuzzleio/kuzzle-vault/)'
+
+  static examples = [
+    'kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>'
+  ]
 
   static flags = {
     'vault-key': flags.string({
@@ -27,19 +31,31 @@ export class VaultAdd extends Kommand {
     const { args, flags: userFlags } = this.parse(VaultAdd)
 
     if (_.isEmpty(userFlags['vault-key'])) {
-      this.log(chalk.red('A vault key must be provided'))
-      return
+      throw new Error('A vault key must be provided')
     }
 
     if (_.isEmpty(args['secrets-file'])) {
-      this.log(chalk.red('A secrets file must be provided'))
-      return
+      throw new Error('A secrets file must be provided')
     }
 
-    const vault = new Vault(userFlags['vault-key'])
+    const cryptonomicon = new Cryptonomicon(userFlags['vault-key'])
 
-    vault.encryptKey(args.key, args.value, args['secrets-file'])
+    let encryptedSecrets = {}
+    if (fs.existsSync(args['secrets-file'])) {
+      encryptedSecrets = JSON.parse(fs.readFileSync(args['secrets-file'], 'utf8'))
 
-    this.log(chalk.green(`[✔] Key "${args.key}" has been securely added "${args['secrets-file']}"`))
+      try {
+        cryptonomicon.decryptObject(encryptedSecrets)
+      }
+      catch (error) {
+        throw new Error('Trying to add a secret encrypted with a different key')
+      }
+    }
+
+    _.set(encryptedSecrets, args.key, cryptonomicon.encryptString(args.value))
+
+    fs.writeFileSync(args['secrets-file'], JSON.stringify(encryptedSecrets, null, 2))
+
+    this.logOk(`Key "${args.key}" has been securely added "${args['secrets-file']}"`)
   }
 }

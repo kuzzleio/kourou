@@ -1,5 +1,7 @@
 Feature: Collection Commands
 
+  # collection:export & collection:import ======================================
+
   @mappings
   Scenario: Export and import a collection
     Given an existing collection "nyc-open-data":"yellow-taxi"
@@ -32,3 +34,16 @@ Feature: Collection Commands
     And The property "properties" of the result should match:
       | city | { "type": "keyword" } |
       | name | { "type": "keyword" } |
+
+  # collection:create ==========================================================
+
+  Scenario: Creates a collection
+    When I run the command "collection:create" with:
+      | arg  | mtp-open-data |                                  |
+      | arg  | yellow-taxi   |                                  |
+      | flag | --body        | { mappings: { dynamic: false } } |
+    And I successfully call the route "collection":"getMapping" with args:
+      | index      | "mtp-open-data" |
+      | collection | "yellow-taxi"   |
+    Then I should receive a result matching:
+      | dynamic | "false" |
