@@ -12,8 +12,10 @@ export abstract class Kommand extends Command {
   public printCommand() {
     const klass: any = this.constructor
 
+    const shortDescription = klass.shortDescription || klass.description
+
     this.log('')
-    this.log(`${chalk.blue.bold(`${emoji.get('rocket')} Kourou`)} - ${klass.description}`)
+    this.log(`${chalk.blue.bold(`${emoji.get('rocket')} Kourou`)} - ${shortDescription}`)
     this.log('')
   }
 

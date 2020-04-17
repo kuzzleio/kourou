@@ -724,7 +724,7 @@ _See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
-Adds an encrypted key to a secrets file (See: https://github.com/kuzzleio/kuzzle-vault/)
+Adds an encrypted key to an encrypted secrets file.
 
 ```
 USAGE
@@ -738,6 +738,15 @@ ARGUMENTS
 OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
+DESCRIPTION
+  Adds an encrypted key to an encrypted secrets file.
+
+  If the secrets file does not exists, it will be created.
+
+  Encrypted secrets are meant to be loaded inside an application with Kuzzle Vault.
+
+  See https://github.com/kuzzleio/kuzzle-vault/ for more informations.
+
 EXAMPLE
   kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>
 ```
@@ -746,7 +755,7 @@ _See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v
 
 ## `kourou vault:decrypt FILE`
 
-Decrypts an entire secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)
+Decrypts an entire secrets file.
 
 ```
 USAGE
@@ -760,6 +769,13 @@ OPTIONS
   -o, --output-file=output-file  Output file (default: remove ".enc")
   --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
+DESCRIPTION
+  Decrypts an entire secrets file.
+
+  Decrypted secrets file must NEVER be committed into the repository.
+
+  See https://github.com/kuzzleio/kuzzle-vault/ for more informations
+
 EXAMPLES
   kourou vault:decrypt config/secrets.enc.json --vault-key <vault-key>
   kourou vault:decrypt config/secrets.enc.json -o config/secrets.json --vault-key <vault-key>
@@ -769,7 +785,7 @@ _See code: [src/commands/vault/decrypt.ts](https://github.com/kuzzleio/kourou/bl
 
 ## `kourou vault:encrypt FILE`
 
-Encrypts an entire secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)
+Encrypts an entire secrets file.
 
 ```
 USAGE
@@ -783,6 +799,24 @@ OPTIONS
   -o, --output-file=output-file  Output file (default: <file>.enc.json)
   --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
+DESCRIPTION
+  Encrypts an entire secrets file.
+
+  The secrets file must be in JSON format and contains only string or objects.
+
+  Example:
+  {
+     aws: {
+       s3: {
+         keyId: 'b61e267676660c314b006b06'
+       }
+     }
+  }
+
+  Encrypted secrets are meant to be loaded inside an application with Kuzzle Vault.
+
+  See https://github.com/kuzzleio/kuzzle-vault/ for more informations.
+
 EXAMPLES
   kourou vault:encrypt config/secrets.json --vault-key <vault-key>
   kourou vault:encrypt config/secrets.json -o config/secrets_prod.enc.json --vault-key <vault-key>
@@ -792,7 +826,7 @@ _See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/bl
 
 ## `kourou vault:show SECRETS-FILE [KEY]`
 
-Prints an encrypted file content. (see https://github.com/kuzzleio/kuzzle-vault/)
+Prints an encrypted secrets file content.
 
 ```
 USAGE
@@ -806,11 +840,13 @@ OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 DESCRIPTION
-  Prints an encrypted file content. (see https://github.com/kuzzleio/kuzzle-vault/)
+  Prints an encrypted secrets file content.
 
   This method can display either:
     - the entire content of the secrets file
     - a single key value
+
+  See https://github.com/kuzzleio/kuzzle-vault/ for more informations
 
 EXAMPLES
   kourou vault:show config/secrets.enc.json --vault-key <vault-key>
@@ -821,7 +857,7 @@ _See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/
 
 ## `kourou vault:test SECRETS-FILE`
 
-Tests if an encrypted secrets file can be decrypted. (see https://github.com/kuzzleio/kuzzle-vault/)
+Tests if an encrypted secrets file can be decrypted.
 
 ```
 USAGE
@@ -832,6 +868,11 @@ ARGUMENTS
 
 OPTIONS
   --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
+
+DESCRIPTION
+  Tests if an encrypted secrets file can be decrypted.
+
+  See https://github.com/kuzzleio/kuzzle-vault/ for more informations
 
 EXAMPLE
   kourou vault:test config/secrets.enc.json --vault-key <vault-key>
