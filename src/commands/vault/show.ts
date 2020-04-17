@@ -74,9 +74,9 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more informations
       this.log(chalk.green(decryptedValue))
     }
     else {
-      const decryptedSecrets = cryptonomicon.decryptObject(encryptedSecrets);
+      const decryptedSecrets = cryptonomicon.decryptObject(encryptedSecrets)
 
-      this.logOk(`Secrets file content:`)
+      this.logOk('Secrets file content:')
       this.log(chalk.green(JSON.stringify(decryptedSecrets, null, 2)))
     }
   }
