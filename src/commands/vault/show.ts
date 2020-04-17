@@ -7,8 +7,6 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultShow extends Kommand {
-  static shortDescription = 'Prints an encrypted secrets file content.'
-
   static description = `
 Prints an encrypted secrets file content.
 

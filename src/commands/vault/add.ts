@@ -6,8 +6,6 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultAdd extends Kommand {
-  static shortDescription = 'Adds an encrypted key to an encrypted secrets file.'
-
   static description = `
 Adds an encrypted key to an encrypted secrets file.
 

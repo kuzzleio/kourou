@@ -5,8 +5,6 @@ import { Vault } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultTest extends Kommand {
-  static shortDescription = 'Tests if an encrypted secrets file can be decrypted.'
-
   static description = `
 Tests if an encrypted secrets file can be decrypted.
 

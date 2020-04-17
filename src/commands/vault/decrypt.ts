@@ -6,8 +6,6 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultDecrypt extends Kommand {
-  static shortDescription = 'Decrypts an entire secrets file.'
-
   static description = `
 Decrypts an entire secrets file.
 
