@@ -87,7 +87,7 @@ By environment variables:
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
-* [`kourou vault:show SECRETS-FILE KEY`](#kourou-vaultshow-secrets-file-key)
+* [`kourou vault:show SECRETS-FILE [KEY]`](#kourou-vaultshow-secrets-file-key)
 * [`kourou vault:test SECRETS-FILE`](#kourou-vaulttest-secrets-file)
 
 ## `kourou api-key:check TOKEN`
@@ -105,7 +105,7 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -133,7 +133,7 @@ OPTIONS
   --expire=expire                [default: -1] API Key validity
   --help                         show CLI help
   --id=id                        API Key unique ID
-  --password=password            [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password            Kuzzle user password
   --ssl                          Use SSL to connect to Kuzzle
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -156,7 +156,7 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -182,7 +182,7 @@ OPTIONS
   -p, --port=port      [default: 7512] Kuzzle server port
   --filter=filter      Filter to match the API Key descriptions
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -210,7 +210,7 @@ OPTIONS
 
   --help               show CLI help
 
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
 
   --ssl                Use SSL to connect to Kuzzle
 
@@ -237,7 +237,7 @@ OPTIONS
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --editor                 Open an editor (EDITOR env variable) to edit the query before sending
   --help                   show CLI help
-  --password=password      [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password      Kuzzle user password
   --path=path              Dump root directory
   --query=query            [default: {}] Only dump documents matching the query (JS or JSON format)
   --ssl                    Use SSL to connect to Kuzzle
@@ -269,7 +269,7 @@ OPTIONS
   --help                   show CLI help
   --index=index            If set, override the index destination name
   --no-mappings            Skip collection mappings
-  --password=password      [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password      Kuzzle user password
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -294,7 +294,7 @@ OPTIONS
   --body=body          [default: {}] Document body in JS or JSON format. Will be read from STDIN if available
   --help               show CLI help
   --id=id              Optional document ID
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --replace            Replaces the document if it already exists
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
@@ -323,7 +323,7 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -348,7 +348,7 @@ OPTIONS
   --editor             Open an editor (EDITOR env variable) to edit the request before sending
   --from=from          Optional offset
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --query=query        [default: {}] Query in JS or JSON format.
   --scroll=scroll      Optional scroll TTL
   --size=size          Optional page size
@@ -377,7 +377,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 7512] Elasticsearch server port
+  -p, --port=port  [default: 9200] Elasticsearch server port
   --help           show CLI help
 ```
 
@@ -396,7 +396,7 @@ ARGUMENTS
 
 OPTIONS
   -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 7512] Elasticsearch server port
+  -p, --port=port  [default: 9200] Elasticsearch server port
   --body=body      [default: {}] Document body in JSON
   --help           show CLI help
   --id=id          Document ID
@@ -415,7 +415,7 @@ USAGE
 OPTIONS
   -g, --grep=grep  Match output with pattern
   -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 7512] Elasticsearch server port
+  -p, --port=port  [default: 9200] Elasticsearch server port
   --help           show CLI help
 ```
 
@@ -435,9 +435,7 @@ ARGUMENTS
 OPTIONS
   -f, --force                    Overwrite the output file if it already exists
   -o, --output-file=output-file  Output file (default: remove ".enc")
-
-  --vault-key=vault-key          [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                                 KUZZLE_VAULT_KEY)
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLES
   kourou file:decrypt books/cryptonomicon.txt.enc --vault-key <vault-key>
@@ -460,9 +458,7 @@ ARGUMENTS
 OPTIONS
   -f, --force                    Overwrite the output file if it already exists
   -o, --output-file=output-file  Output file (default: <filename>.enc)
-
-  --vault-key=vault-key          [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                                 KUZZLE_VAULT_KEY)
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLES
   kourou file:encrypt books/cryptonomicon.txt --vault-key <vault-key>
@@ -483,8 +479,7 @@ ARGUMENTS
   FILE  Encrypted file
 
 OPTIONS
-  --vault-key=vault-key  [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                         KUZZLE_VAULT_KEY)
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLE
   kourou file:test books/cryptonomicon.txt.enc --vault-key <vault-key>
@@ -525,7 +520,7 @@ OPTIONS
   -p, --port=port          [default: 7512] Kuzzle server port
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
-  --password=password      [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password      Kuzzle user password
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -548,7 +543,7 @@ OPTIONS
   -p, --port=port          [default: 7512] Kuzzle server port
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --help                   show CLI help
-  --password=password      [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password      Kuzzle user password
   --path=path              Dump root directory
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
@@ -574,7 +569,7 @@ OPTIONS
   --help                   show CLI help
   --index=index            If set, override the index destination name
   --no-mappings            Skip collections mappings
-  --password=password      [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password      Kuzzle user password
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -624,7 +619,7 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --path=path          [default: profiles] Dump directory
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
@@ -647,7 +642,7 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -672,7 +667,7 @@ OPTIONS
   --body=body          [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
   --editor             Open an editor (EDITOR env variable) to edit the request before sending
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -697,7 +692,7 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --path=path          [default: roles] Dump directory
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
@@ -720,7 +715,7 @@ OPTIONS
   -h, --host=host      [default: localhost] Kuzzle server host
   -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
-  --password=password  [default: 0szBh8W7dHMI/u2nQRr6RoZbj+KSlty3H6ySPUe8wmY=] Kuzzle user password
+  --password=password  Kuzzle user password
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -741,8 +736,7 @@ ARGUMENTS
   VALUE         Value to encrypt
 
 OPTIONS
-  --vault-key=vault-key  [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                         KUZZLE_VAULT_KEY)
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLE
   kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>
@@ -764,9 +758,7 @@ ARGUMENTS
 OPTIONS
   -f, --force                    Overwrite the output file if it already exists
   -o, --output-file=output-file  Output file (default: remove ".enc")
-
-  --vault-key=vault-key          [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                                 KUZZLE_VAULT_KEY)
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLES
   kourou vault:decrypt config/secrets.enc.json --vault-key <vault-key>
@@ -789,9 +781,7 @@ ARGUMENTS
 OPTIONS
   -f, --force                    Overwrite the output file if it already exists
   -o, --output-file=output-file  Output file (default: <file>.enc.json)
-
-  --vault-key=vault-key          [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                                 KUZZLE_VAULT_KEY)
+  --vault-key=vault-key          Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLES
   kourou vault:encrypt config/secrets.json --vault-key <vault-key>
@@ -800,23 +790,30 @@ EXAMPLES
 
 _See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.10.0/src/commands/vault/encrypt.ts)_
 
-## `kourou vault:show SECRETS-FILE KEY`
+## `kourou vault:show SECRETS-FILE [KEY]`
 
-Prints an encrypted key from a secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)
+Prints an encrypted file content. (see https://github.com/kuzzleio/kuzzle-vault/)
 
 ```
 USAGE
-  $ kourou vault:show SECRETS-FILE KEY
+  $ kourou vault:show SECRETS-FILE [KEY]
 
 ARGUMENTS
   SECRETS-FILE  Encrypted secrets file
-  KEY           Path to the key (lodash style)
+  KEY           Path to a key (lodash style)
 
 OPTIONS
-  --vault-key=vault-key  [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                         KUZZLE_VAULT_KEY)
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
-EXAMPLE
+DESCRIPTION
+  Prints an encrypted file content. (see https://github.com/kuzzleio/kuzzle-vault/)
+
+  This method can display either:
+    - the entire content of the secrets file
+    - a single key value
+
+EXAMPLES
+  kourou vault:show config/secrets.enc.json --vault-key <vault-key>
   kourou vault:show config/secrets.enc.json aws.s3.secretKey --vault-key <vault-key>
 ```
 
@@ -834,8 +831,7 @@ ARGUMENTS
   SECRETS-FILE  Encrypted secrets file
 
 OPTIONS
-  --vault-key=vault-key  [default: ku_local_XuwT9dXvcx9kaLPaW9qb4cGWK7a653XdZ95fJgyJvB] Kuzzle Vault Key (or
-                         KUZZLE_VAULT_KEY)
+  --vault-key=vault-key  Kuzzle Vault Key (or KUZZLE_VAULT_KEY)
 
 EXAMPLE
   kourou vault:test config/secrets.enc.json --vault-key <vault-key>
