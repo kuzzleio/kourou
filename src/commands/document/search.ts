@@ -41,15 +41,6 @@ export default class DocumentSearch extends Kommand {
     { name: 'collection', description: 'Collection name', required: true }
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
-    }
-  }
-
   async runSafe() {
     this.printCommand()
 

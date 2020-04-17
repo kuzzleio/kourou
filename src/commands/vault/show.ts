@@ -7,9 +7,16 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultShow extends Kommand {
-  static description = 'Prints an encrypted key from a secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)'
+  static description = `
+Prints an encrypted file content. (see https://github.com/kuzzleio/kuzzle-vault/)
+
+This method can display either:
+ - the entire content of the secrets file
+ - a single key value
+`
 
   static examples = [
+    'kourou vault:show config/secrets.enc.json --vault-key <vault-key>',
     'kourou vault:show config/secrets.enc.json aws.s3.secretKey --vault-key <vault-key>'
   ]
 
@@ -22,7 +29,7 @@ export class VaultShow extends Kommand {
 
   static args = [
     { name: 'secrets-file', description: 'Encrypted secrets file', required: true },
-    { name: 'key', description: 'Path to the key (lodash style)', required: true },
+    { name: 'key', description: 'Path to a key (lodash style)' },
   ]
 
   async runSafe() {
@@ -52,15 +59,23 @@ export class VaultShow extends Kommand {
       throw new Error(`Cannot read secrets from file "${args['secrets-file']}": ${error.message}`)
     }
 
-    const encryptedValue = _.get(encryptedSecrets, args.key)
+    if (args.key) {
+      const encryptedValue = _.get(encryptedSecrets, args.key)
 
-    if (!encryptedValue) {
-      throw new Error(`Key "${args.key}" does not exists`)
+      if (!encryptedValue) {
+        throw new Error(`Key "${args.key}" does not exists`)
+      }
+
+      const decryptedValue = cryptonomicon.decryptString(encryptedValue)
+
+      this.logOk(`Key "${args.key}" content:`)
+      this.log(chalk.green(decryptedValue))
     }
+    else {
+      const decryptedSecrets = cryptonomicon.decryptObject(encryptedSecrets);
 
-    const decryptedValue = cryptonomicon.decryptString(encryptedValue)
-
-    this.logOk(`Key "${args.key}" content:`)
-    this.log(chalk.green(decryptedValue))
+      this.logOk(`Secrets file content:`)
+      this.log(chalk.green(JSON.stringify(decryptedSecrets, null, 2)))
+    }
   }
 }
