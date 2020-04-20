@@ -9,11 +9,11 @@ export class VaultAdd extends Kommand {
   static description = `
 Adds an encrypted key to an encrypted secrets file.
 
-If the secrets file does not exists, it will be created.
+A new secrets file is created if it does not yet exist.
 
 Encrypted secrets are meant to be loaded inside an application with Kuzzle Vault.
 
-See https://github.com/kuzzleio/kuzzle-vault/ for more informations.
+See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 `
 
   static examples = [

@@ -9,7 +9,7 @@ export class VaultEncrypt extends Kommand {
   static description = `
 Encrypts an entire secrets file.
 
-The secrets file must be in JSON format and contains only string or objects.
+The secrets file must be in JSON format and it must contain only strings or objects.
 
 Example:
 {
@@ -22,7 +22,7 @@ Example:
 
 Encrypted secrets are meant to be loaded inside an application with Kuzzle Vault.
 
-See https://github.com/kuzzleio/kuzzle-vault/ for more informations.
+See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 `
 
   static examples = [

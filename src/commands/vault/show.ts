@@ -14,7 +14,7 @@ This method can display either:
  - the entire content of the secrets file
  - a single key value
 
-See https://github.com/kuzzleio/kuzzle-vault/ for more informations
+See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 `
 
   static examples = [
@@ -65,7 +65,7 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more informations
       const encryptedValue = _.get(encryptedSecrets, args.key)
 
       if (!encryptedValue) {
-        throw new Error(`Key "${args.key}" does not exists`)
+        throw new Error(`Key "${args.key}" does not exist`)
       }
 
       const decryptedValue = cryptonomicon.decryptString(encryptedValue)

@@ -11,7 +11,7 @@ Decrypts an entire secrets file.
 
 Decrypted secrets file must NEVER be committed into the repository.
 
-See https://github.com/kuzzleio/kuzzle-vault/ for more informations
+See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 `
 
   static examples = [

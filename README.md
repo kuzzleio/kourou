@@ -741,11 +741,11 @@ OPTIONS
 DESCRIPTION
   Adds an encrypted key to an encrypted secrets file.
 
-  If the secrets file does not exists, it will be created.
+  A new secrets file is created if it does not yet exist.
 
   Encrypted secrets are meant to be loaded inside an application with Kuzzle Vault.
 
-  See https://github.com/kuzzleio/kuzzle-vault/ for more informations.
+  See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 
 EXAMPLE
   kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>
@@ -774,7 +774,7 @@ DESCRIPTION
 
   Decrypted secrets file must NEVER be committed into the repository.
 
-  See https://github.com/kuzzleio/kuzzle-vault/ for more informations
+  See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 
 EXAMPLES
   kourou vault:decrypt config/secrets.enc.json --vault-key <vault-key>
@@ -802,7 +802,7 @@ OPTIONS
 DESCRIPTION
   Encrypts an entire secrets file.
 
-  The secrets file must be in JSON format and contains only string or objects.
+  The secrets file must be in JSON format and it must contain only strings or objects.
 
   Example:
   {
@@ -815,7 +815,7 @@ DESCRIPTION
 
   Encrypted secrets are meant to be loaded inside an application with Kuzzle Vault.
 
-  See https://github.com/kuzzleio/kuzzle-vault/ for more informations.
+  See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 
 EXAMPLES
   kourou vault:encrypt config/secrets.json --vault-key <vault-key>
@@ -846,7 +846,7 @@ DESCRIPTION
     - the entire content of the secrets file
     - a single key value
 
-  See https://github.com/kuzzleio/kuzzle-vault/ for more informations
+  See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 
 EXAMPLES
   kourou vault:show config/secrets.enc.json --vault-key <vault-key>
@@ -872,7 +872,7 @@ OPTIONS
 DESCRIPTION
   Tests if an encrypted secrets file can be decrypted.
 
-  See https://github.com/kuzzleio/kuzzle-vault/ for more informations
+  See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 
 EXAMPLE
   kourou vault:test config/secrets.enc.json --vault-key <vault-key>

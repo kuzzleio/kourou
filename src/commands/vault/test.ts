@@ -8,7 +8,7 @@ export class VaultTest extends Kommand {
   static description = `
 Tests if an encrypted secrets file can be decrypted.
 
-See https://github.com/kuzzleio/kuzzle-vault/ for more informations
+See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 `
 
   static examples = [
