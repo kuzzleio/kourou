@@ -6,7 +6,24 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultEncrypt extends Kommand {
-  static description = 'Encrypts an entire secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)'
+  static description = `
+Encrypts an entire secrets file.
+
+The secrets file must be in JSON format and it must contain only strings or objects.
+
+Example:
+{
+  aws: {
+    s3: {
+      keyId: 'b61e267676660c314b006b06'
+    }
+  }
+}
+
+Encrypted secrets are meant to be loaded inside an application with Kuzzle Vault.
+
+See https://github.com/kuzzleio/kuzzle-vault/ for more information.
+`
 
   static examples = [
     'kourou vault:encrypt config/secrets.json --vault-key <vault-key>',

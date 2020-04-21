@@ -6,7 +6,15 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultAdd extends Kommand {
-  static description = 'Adds an encrypted key to a secrets file (See: https://github.com/kuzzleio/kuzzle-vault/)'
+  static description = `
+Adds an encrypted key to an encrypted secrets file.
+
+A new secrets file is created if it does not yet exist.
+
+Encrypted secrets are meant to be loaded inside an application with Kuzzle Vault.
+
+See https://github.com/kuzzleio/kuzzle-vault/ for more information.
+`
 
   static examples = [
     'kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>'

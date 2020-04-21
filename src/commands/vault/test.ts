@@ -5,7 +5,11 @@ import { Vault } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultTest extends Kommand {
-  static description = 'Tests if an encrypted secrets file can be decrypted. (see https://github.com/kuzzleio/kuzzle-vault/)'
+  static description = `
+Tests if an encrypted secrets file can be decrypted.
+
+See https://github.com/kuzzleio/kuzzle-vault/ for more information.
+`
 
   static examples = [
     'kourou vault:test config/secrets.enc.json --vault-key <vault-key>'
