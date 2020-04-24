@@ -6,7 +6,7 @@ import stripComments from 'strip-json-comments'
 import { Kommand } from '../../common'
 
 export class ConfigDiff extends Kommand {
-  static description = 'Returns differences between two Kuzzle configuration files (kuzzlerc)'
+  static description = 'Returns differences between the keys of two Kuzzle configuration files (kuzzlerc)'
 
   static examples = [
     'kourou config:diff config/local/kuzzlerc config/production/kuzzlerc'
