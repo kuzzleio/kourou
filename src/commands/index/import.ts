@@ -1,6 +1,5 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import chalk from 'chalk'
 
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
@@ -8,7 +7,12 @@ import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
 import { restoreCollectionData, restoreCollectionMappings } from '../../support/restore-collection'
 
 export default class IndexImport extends Kommand {
-  static description = 'Imports an index'
+  static description = ''
+
+  static examples = [
+    'kourou index:import ./dump/iot-data',
+    'kourou index:import ./dump/iot-data --index iot-data-production --no-mappings'
+  ]
 
   static flags = {
     help: flags.help({}),
@@ -40,10 +44,10 @@ export default class IndexImport extends Kommand {
     await this.sdk.init(this.log)
 
     if (index) {
-      this.log(chalk.green(`[✔] Start importing dump from ${args.path} in index ${index}`))
+      this.logOk(`Start importing dump from ${args.path} in index ${index}`)
     }
     else {
-      this.log(chalk.green(`[✔] Start importing dump from ${args.path} in same index`))
+      this.logOk(`Start importing dump from ${args.path} in same index`)
     }
 
     const dumpDirs = fs.readdirSync(args.path).map(f => `${args.path}/${f}`)
@@ -60,24 +64,24 @@ export default class IndexImport extends Kommand {
             index)
         }
 
-        const { total, collection } = await restoreCollectionData(
+        const { total, collection, index: dstIndex } = await restoreCollectionData(
           this.sdk,
           this.log.bind(this),
           Number(userFlags['batch-size']),
           path.join(dumpDir, 'documents.jsonl'),
           index)
 
-        this.logOk(`Successfully imported ${total} documents in "${index}:${collection}"`)
+        this.logOk(`Successfully imported ${total} documents in "${dstIndex}:${collection}"`)
       }
       catch (error) {
         this.logError(`Error when importing collection from "${dumpDir}": ${error}`)
       }
 
       if (index) {
-        this.log(chalk.green(`[✔] Dump directory ${dumpDir} imported in index ${index}`))
+        this.logOk(`Dump directory ${dumpDir} imported in index ${index}`)
       }
       else {
-        this.log(chalk.green(`[✔] Dump directory ${dumpDir} imported`))
+        this.logOk(`Dump directory ${dumpDir} imported`)
       }
     }
   }
