@@ -43,11 +43,11 @@ export class ConfigDiff extends Kommand {
     const changes = this._keyChanges(first, second)
 
     if (_.isEmpty(changes)) {
-      this.logOk('No configuration keys differences between the provided configurations')
+      this.logOk('No differences between keys in the provided configurations')
       return
     }
 
-    this.logInfo('Found key differences between the provided configurations. In the second file:')
+    this.logInfo('Found differences between keys in the provided configurations. In the second file:')
 
     for (const [path, change] of Object.entries(changes)) {
       this.log(` - key "${path}" was ${change}`)
