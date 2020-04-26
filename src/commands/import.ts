@@ -38,8 +38,6 @@ export default class Import extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(Import)
 
     this.userFlags = userFlags

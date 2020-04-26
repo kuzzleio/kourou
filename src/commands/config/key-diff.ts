@@ -5,11 +5,11 @@ import stripComments from 'strip-json-comments'
 
 import { Kommand } from '../../common'
 
-export class ConfigDiff extends Kommand {
+export class ConfigKeyDiff extends Kommand {
   static description = 'Returns differences between the keys of two Kuzzle configuration files (kuzzlerc)'
 
   static examples = [
-    'kourou config:diff config/local/kuzzlerc config/production/kuzzlerc'
+    'kourou config:key-diff config/local/kuzzlerc config/production/kuzzlerc'
   ]
 
   static flags = {
@@ -25,9 +25,7 @@ export class ConfigDiff extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
-    const { args, flags: userFlags } = this.parse(ConfigDiff)
+    const { args, flags: userFlags } = this.parse(ConfigKeyDiff)
 
     if (!fs.existsSync(args.first)) {
       throw new Error(`File "${args.first}" does not exists`)

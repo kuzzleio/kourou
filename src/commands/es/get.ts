@@ -25,8 +25,6 @@ export default class EsGet extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(EsGet)
 
     const node = `http://${userFlags.host}:${userFlags.port}`

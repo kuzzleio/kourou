@@ -21,8 +21,6 @@ export default class ProfileExport extends Kommand {
   }
 
   async runSafe() {
-    this.printCommand()
-
     const { flags: userFlags } = this.parse(ProfileExport)
 
     this.path = userFlags.path

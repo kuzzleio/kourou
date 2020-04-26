@@ -20,8 +20,6 @@ class ApiKeyDelete extends Kommand {
   ];
 
   async runSafe() {
-    this.printCommand()
-
     const { flags: userFlags, args } = this.parse(ApiKeyDelete)
 
     this.sdk = new KuzzleSDK(userFlags)

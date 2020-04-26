@@ -100,8 +100,6 @@ export default class InstanceSpawn extends Kommand {
   };
 
   async runSafe() {
-    this.printCommand()
-
     const { flags: userFlags } = this.parse(InstanceSpawn)
     const portIndex = await this.findAvailablePort()
     const docoFilename = `/tmp/kuzzle-stack-${portIndex}.yml`

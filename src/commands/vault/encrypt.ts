@@ -50,8 +50,6 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(VaultEncrypt)
 
     if (_.isEmpty(userFlags['vault-key'])) {

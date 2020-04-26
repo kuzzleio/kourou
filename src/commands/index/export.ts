@@ -26,8 +26,6 @@ export default class IndexExport extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(IndexExport)
 
     const path = userFlags.path ? `${userFlags.path}/${args.index}` : args.index

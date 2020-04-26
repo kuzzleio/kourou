@@ -24,8 +24,6 @@ export default class EsListIndex extends Kommand {
   }
 
   async runSafe() {
-    this.printCommand()
-
     const { flags: userFlags } = this.parse(EsListIndex)
 
     const node = `http://${userFlags.host}:${userFlags.port}`

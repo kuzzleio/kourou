@@ -31,8 +31,6 @@ export default class EsInsert extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(EsInsert)
 
     const node = `http://${userFlags.host}:${userFlags.port}`

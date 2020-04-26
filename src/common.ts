@@ -45,6 +45,7 @@ export abstract class Kommand extends Command {
 
   async run() {
     try {
+      this.printCommand()
       await this.runSafe()
     }
     catch (error) {

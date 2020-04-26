@@ -64,6 +64,7 @@ By environment variables:
 * [`kourou collection:create INDEX COLLECTION`](#kourou-collectioncreate-index-collection)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
+* [`kourou config:key-diff FIRST SECOND`](#kourou-configkey-diff-first-second)
 * [`kourou document:create INDEX COLLECTION`](#kourou-documentcreate-index-collection)
 * [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
 * [`kourou document:search INDEX COLLECTION`](#kourou-documentsearch-index-collection)
@@ -275,6 +276,27 @@ OPTIONS
 ```
 
 _See code: [src/commands/collection/import.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/collection/import.ts)_
+
+## `kourou config:key-diff FIRST SECOND`
+
+Returns differences between the keys of two Kuzzle configuration files (kuzzlerc)
+
+```
+USAGE
+  $ kourou config:key-diff FIRST SECOND
+
+ARGUMENTS
+  FIRST   First configuration file
+  SECOND  Second configuration file
+
+OPTIONS
+  --strict  Exit with an error if diff are found
+
+EXAMPLE
+  kourou config:key-diff config/local/kuzzlerc config/production/kuzzlerc
+```
+
+_See code: [src/commands/config/key-diff.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/config/key-diff.ts)_
 
 ## `kourou document:create INDEX COLLECTION`
 
@@ -553,8 +575,6 @@ _See code: [src/commands/index/export.ts](https://github.com/kuzzleio/kourou/blo
 
 ## `kourou index:import PATH`
 
-Imports an index
-
 ```
 USAGE
   $ kourou index:import PATH
@@ -572,6 +592,10 @@ OPTIONS
   --password=password      Kuzzle user password
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLES
+  kourou index:import ./dump/iot-data
+  kourou index:import ./dump/iot-data --index iot-data-production --no-mappings
 ```
 
 _See code: [src/commands/index/import.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/index/import.ts)_

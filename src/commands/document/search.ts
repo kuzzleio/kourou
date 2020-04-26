@@ -42,9 +42,7 @@ export default class DocumentSearch extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
-    const { args, flags: userFlags } = this.parse(DocumentSearch)
+        const { args, flags: userFlags } = this.parse(DocumentSearch)
 
     const sdk = new KuzzleSDK(userFlags)
     await sdk.init(this.log)

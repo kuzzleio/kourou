@@ -17,8 +17,6 @@ export default class DocumentGet extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(DocumentGet)
 
     this.sdk = new KuzzleSDK(userFlags)

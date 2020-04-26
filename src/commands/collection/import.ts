@@ -32,8 +32,6 @@ export default class CollectionImport extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(CollectionImport)
 
     const index = userFlags.index

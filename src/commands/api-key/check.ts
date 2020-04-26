@@ -19,8 +19,6 @@ class ApiKeyCheck extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(ApiKeyCheck)
 
     this.sdk = new KuzzleSDK(userFlags)

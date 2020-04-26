@@ -34,8 +34,6 @@ export default class IndexImport extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(IndexImport)
 
     const index = userFlags.index

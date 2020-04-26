@@ -20,8 +20,6 @@ export default class ProfileImport extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(ProfileImport)
 
     this.path = args.path

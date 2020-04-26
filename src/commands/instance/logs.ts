@@ -18,8 +18,6 @@ export class InstanceLogs extends Kommand {
   }
 
   async runSafe() {
-    this.printCommand()
-
     const { flags } = this.parse(InstanceLogs)
     let instance: string = flags.instance!
     const followOption: boolean = flags.follow

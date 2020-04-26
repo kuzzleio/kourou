@@ -35,9 +35,7 @@ class Query extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
-    const { args, flags: userFlags } = this.parse(Query)
+        const { args, flags: userFlags } = this.parse(Query)
 
     this.sdk = new KuzzleSDK(userFlags)
     await this.sdk.init(this.log)

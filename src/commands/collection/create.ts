@@ -20,8 +20,6 @@ export default class CollectionCreate extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(CollectionCreate)
 
     this.sdk = new KuzzleSDK(userFlags)

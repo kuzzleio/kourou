@@ -20,8 +20,6 @@ export default class RoleImport extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(RoleImport)
 
     this.path = args.path
