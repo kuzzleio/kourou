@@ -14,7 +14,7 @@ export class ConfigKeyDiff extends Kommand {
 
   static flags = {
     strict: flags.boolean({
-      description: 'Exit with an error if diff are found',
+      description: 'Exit with an error if differences are found',
       default: false
     }),
   }
