@@ -48,7 +48,7 @@ export class ConfigKeyDiff extends Kommand {
     this.logInfo('Found differences between keys in the provided configurations. In the second file:')
 
     for (const [path, change] of Object.entries(changes)) {
-      this.log(` - key "${path}" was ${change}`)
+      this.log(` - key "${path}" ${change}`)
     }
 
     if (userFlags.strict) {
@@ -66,16 +66,19 @@ export class ConfigKeyDiff extends Kommand {
           const ar: [] = []
           const ar2: [] = []
           ar.concat(ar2)
-          changes[[...path, key].join('.')] = 'removed'
+          changes[[...path, key].join('.')] = 'was removed'
         }
       }
 
       for (const [key, value] of Object.entries(object)) {
         if (base[key] === undefined) {
-          changes[[...path, key].join('.')] = 'added'
+          changes[[...path, key].join('.')] = 'was added'
         }
         else if (!_.isEqual(value, base[key]) && _.isObject(value) && _.isObject(base[key])) {
           walkObject(base[key], value, [...path, key])
+        }
+        else if (base[key] !== object[key]) {
+          changes[[...path, key].join('.')] = `value is "${object[key]}" and was "${base[key]}"`;
         }
       }
     }

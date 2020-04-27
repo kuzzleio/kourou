@@ -1,5 +1,6 @@
 {
   "s3": {
-    "bucketRegion": "Vietnam"
+    "bucketRegion": "Vietnam",
+    "name": "hcmc"
   }
 }
