@@ -78,7 +78,7 @@ export class ConfigKeyDiff extends Kommand {
           walkObject(base[key], value, [...path, key])
         }
         else if (base[key] !== object[key]) {
-          changes[[...path, key].join('.')] = `value is "${object[key]}" and was "${base[key]}"`;
+          changes[[...path, key].join('.')] = `value is "${object[key]}" and was "${base[key]}"`
         }
       }
     }
