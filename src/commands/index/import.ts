@@ -48,7 +48,7 @@ export default class IndexImport extends Kommand {
       this.logOk(`Start importing dump from ${args.path} in same index`)
     }
 
-    const dumpDirs = fs.readdirSync(args.path).map(f => `${args.path}/${f}`)
+    const dumpDirs = fs.readdirSync(args.path).map(f => path.join(args.path, f))
 
     for (const dumpDir of dumpDirs) {
       try {
@@ -73,13 +73,6 @@ export default class IndexImport extends Kommand {
       }
       catch (error) {
         this.logError(`Error when importing collection from "${dumpDir}": ${error}`)
-      }
-
-      if (index) {
-        this.logOk(`Dump directory ${dumpDir} imported in index ${index}`)
-      }
-      else {
-        this.logOk(`Dump directory ${dumpDir} imported`)
       }
     }
   }
