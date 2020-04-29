@@ -31,9 +31,7 @@ export default class DocumentCreate extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
-    const { args, flags: userFlags } = this.parse(DocumentCreate)
+        const { args, flags: userFlags } = this.parse(DocumentCreate)
 
     this.sdk = new KuzzleSDK(userFlags)
     await this.sdk.init(this.log)

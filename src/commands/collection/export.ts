@@ -38,8 +38,6 @@ export default class CollectionExport extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(CollectionExport)
 
     const path = userFlags.path ? `${userFlags.path}/${args.index}` : args.index

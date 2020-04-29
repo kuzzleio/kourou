@@ -22,6 +22,7 @@
     "listr": "^0.14.3",
     "ndjson": "^1.5.0",
     "node-emoji": "^1.10.0",
+    "strip-json-comments": "^3.1.0",
     "tmp": "^0.1.0",
     "tslib": "^1.11.1"
   },

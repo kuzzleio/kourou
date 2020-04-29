@@ -27,8 +27,6 @@ class ApiKeyCreate extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(ApiKeyCreate)
 
     this.sdk = new KuzzleSDK(userFlags)

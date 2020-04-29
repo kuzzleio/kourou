@@ -21,8 +21,6 @@ export default class RoleDump extends Kommand {
   }
 
   async runSafe() {
-    this.printCommand()
-
     const { flags: userFlags } = this.parse(RoleDump)
 
     this.path = userFlags.path

@@ -33,8 +33,6 @@ export class FileDecrypt extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(FileDecrypt)
 
     if (_.isEmpty(userFlags['vault-key'])) {

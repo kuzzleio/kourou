@@ -20,8 +20,6 @@ export default class CollectionCreate extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
     const { args, flags: userFlags } = this.parse(CollectionCreate)
 
     this.sdk = new KuzzleSDK(userFlags)
@@ -41,6 +39,6 @@ export default class CollectionCreate extends Kommand {
 
     await this.sdk.collection.create(args.index, args.collection, body)
 
-    this.logOk(`Collection "${args.index}":"${args.collection}" has been created`)
+    this.logOk(`Collection "${args.index}":"${args.collection}" created`)
   }
 }
