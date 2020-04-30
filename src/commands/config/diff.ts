@@ -6,6 +6,8 @@ import stripComments from 'strip-json-comments'
 import { Kommand } from '../../common'
 
 export class ConfigKeyDiff extends Kommand {
+  static initSdk = false
+
   static description = 'Returns differences between two Kuzzle configuration files (kuzzlerc)'
 
   static examples = [

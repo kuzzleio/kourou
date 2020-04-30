@@ -85,6 +85,8 @@ services:
       nofile: 65536
 `
 export default class InstanceSpawn extends Kommand {
+  static initSdk = false
+
   public static description = 'Spawn a new Kuzzle instance';
 
   public static flags = {
