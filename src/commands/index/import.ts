@@ -3,7 +3,7 @@ import * as fs from 'fs'
 
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
+import { kuzzleFlags } from '../../support/kuzzle'
 import { restoreCollectionData, restoreCollectionMappings } from '../../support/restore-collection'
 
 export default class IndexImport extends Kommand {
@@ -38,8 +38,6 @@ export default class IndexImport extends Kommand {
   ]
 
   async runSafe() {
-    this.sdk = new KuzzleSDK({ protocol: 'ws', ...this.flags })
-
     if (this.flags.index) {
       this.logInfo(`Start importing dump from ${this.args.path} in index ${this.flags.index}`)
     }

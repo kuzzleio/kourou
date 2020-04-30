@@ -31,9 +31,6 @@ export const kuzzleFlags = {
     description: 'Kuzzle protocol (http or websocket)',
     default: process.env.KUZZLE_PROTOCOL || 'http',
   }),
-  as: flags.string({
-    description: 'kuid of a user to impersonate'
-  }),
 }
 
 export class KuzzleSDK {

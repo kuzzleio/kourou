@@ -5,6 +5,8 @@ import execa from 'execa'
 import { Kommand } from '../../common'
 
 export class InstanceLogs extends Kommand {
+  static initSdk = false
+
   static description = 'Displays the logs of a running Kuzzle'
 
   static flags = {

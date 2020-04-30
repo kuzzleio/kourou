@@ -2,9 +2,8 @@ import * as fs from 'fs'
 
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
-import { kuzzleFlags } from '../support/kuzzle'
+import { kuzzleFlags } from '../../support/kuzzle'
 import { restoreRoles } from '../../support/restore-securities'
-
 export default class RoleImport extends Kommand {
   static description = 'Import roles'
 

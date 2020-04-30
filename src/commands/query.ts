@@ -31,7 +31,6 @@ Other
 
   Examples:
     - kourou query document:create -i iot -c sensors --editor
-    - kourou query auth:getCurrentUser --as sigfox-gateway
 `;
 
   public static flags = {
