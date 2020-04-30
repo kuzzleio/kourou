@@ -1,14 +1,11 @@
+import * as fs from 'fs'
+import path from 'path'
+
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
-import * as fs from 'fs'
-import chalk from 'chalk'
+import { kuzzleFlags, } from '../../support/kuzzle'
 
 export default class ProfileExport extends Kommand {
-  private batchSize?: string;
-
-  private path?: string;
-
   static description = 'Exports profiles'
 
   static flags = {
@@ -18,21 +15,18 @@ export default class ProfileExport extends Kommand {
       default: 'profiles'
     }),
     ...kuzzleFlags,
+    protocol: flags.string({
+      description: 'Kuzzle protocol (http or websocket)',
+      default: 'websocket',
+    }),
   }
 
   async runSafe() {
-    const { flags: userFlags } = this.parse(ProfileExport)
+    const filename = path.join(this.flags.path, 'profiles.json')
 
-    this.path = userFlags.path
+    this.logInfo(`Exporting profiles in ${filename} ...`)
 
-    const filename = `${this.path}/profiles.json`
-
-    this.sdk = new KuzzleSDK(userFlags)
-    await this.sdk.init(this.log)
-
-    this.log(`Dumping securities in ${filename} ...`)
-
-    fs.mkdirSync(this.path, { recursive: true })
+    fs.mkdirSync(this.flags.path, { recursive: true })
 
     const profiles = await this._dumpProfiles()
 
@@ -43,20 +37,16 @@ export default class ProfileExport extends Kommand {
 
     fs.writeFileSync(filename, JSON.stringify(dump, null, 2))
 
-    this.log(chalk.green(`[✔] ${Object.keys(profiles).length} profiles dumped`))
+    this.logOk(`${Object.keys(profiles).length} profiles dumped`)
   }
 
   async _dumpProfiles() {
     const options = {
-      scroll: '10s',
+      scroll: '3s',
       size: 100
     }
 
-    let result
-    // f*** you TS
-    if (this.sdk) {
-      result = await this.sdk.security.searchProfiles({}, options)
-    }
+    let result = await this.sdk?.security.searchProfiles({}, options)
 
     const profiles: any = {}
 

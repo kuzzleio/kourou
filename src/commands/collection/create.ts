@@ -1,6 +1,7 @@
 import { flags } from '@oclif/command'
+
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
+import { kuzzleFlags } from '../../support/kuzzle'
 
 export default class CollectionCreate extends Kommand {
   static description = 'Creates a collection'
@@ -20,25 +21,18 @@ export default class CollectionCreate extends Kommand {
   ]
 
   async runSafe() {
-    const { args, flags: userFlags } = this.parse(CollectionCreate)
-
-    this.sdk = new KuzzleSDK(userFlags)
-    await this.sdk.init(this.log)
-
     const stdin = await this.fromStdin()
 
-    const body = stdin
-      ? this.parseJs(stdin)
-      : this.parseJs(userFlags.body)
+    const body = stdin ? this.parseJs(stdin) : this.parseJs(this.flags.body)
 
-    if (!await this.sdk.index.exists(args.index)) {
-      await this.sdk.index.create(args.index)
+    if (!await this.sdk?.index.exists(this.args.index)) {
+      await this.sdk?.index.create(this.args.index)
 
-      this.logOk(`Index "${args.index}" created`)
+      this.logInfo(`Index "${this.args.index}" created`)
     }
 
-    await this.sdk.collection.create(args.index, args.collection, body)
+    await this.sdk?.collection.create(this.args.index, this.args.collection, body)
 
-    this.logOk(`Collection "${args.index}":"${args.collection}" created`)
+    this.logOk(`Collection "${this.args.index}":"${this.args.collection}" created`)
   }
 }

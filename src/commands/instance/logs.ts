@@ -1,7 +1,8 @@
-import { Kommand } from '../../common'
 import { flags } from '@oclif/command'
 import * as inquirer from 'inquirer'
 import execa from 'execa'
+
+import { Kommand } from '../../common'
 
 export class InstanceLogs extends Kommand {
   static description = 'Displays the logs of a running Kuzzle'
@@ -18,9 +19,8 @@ export class InstanceLogs extends Kommand {
   }
 
   async runSafe() {
-    const { flags } = this.parse(InstanceLogs)
-    let instance: string = flags.instance!
-    const followOption: boolean = flags.follow
+    let instance: string = this.flags.instance!
+    const followOption: boolean = this.flags.follow
 
     if (!instance) {
       const instancesList = await this.getInstancesList()

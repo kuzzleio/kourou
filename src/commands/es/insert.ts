@@ -1,8 +1,11 @@
 import { flags } from '@oclif/command'
-import { Kommand } from '../../common'
 import { Client } from '@elastic/elasticsearch'
 
+import { Kommand } from '../../common'
+
 export default class EsInsert extends Kommand {
+  static initSdk = false
+
   static description = 'Inserts a document directly into ES (will replace if exists)'
 
   static flags = {
@@ -31,24 +34,18 @@ export default class EsInsert extends Kommand {
   ]
 
   async runSafe() {
-    const { args, flags: userFlags } = this.parse(EsInsert)
+    const node = `http://${this.flags.host}:${this.flags.port}`
 
-    const node = `http://${userFlags.host}:${userFlags.port}`
     const esClient = new Client({ node })
+
     const esRequest = {
-      index: args.index,
-      id: userFlags.id,
-      body: userFlags.body,
+      index: this.args.index,
+      id: this.flags.id,
+      body: this.flags.body,
     }
 
-    try {
-      const { body } = await esClient.index(esRequest)
+    await esClient.index(esRequest)
 
-      this.log(JSON.stringify(body, null, 2))
-    }
-    catch (error) {
-      this.logError(JSON.stringify(error, null, 2))
-      throw error
-    }
+    this.logOk('Document successfully inserted.')
   }
 }

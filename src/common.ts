@@ -7,7 +7,13 @@ import { KuzzleSDK } from './support/kuzzle'
 import { Editor, EditorParams } from './support/editor'
 
 export abstract class Kommand extends Command {
-  protected sdk?: KuzzleSDK;
+  protected sdk?: KuzzleSDK
+
+  public args: any
+
+  public flags: any
+
+  public static initSdk = true
 
   public printCommand() {
     const klass: any = this.constructor
@@ -44,17 +50,26 @@ export abstract class Kommand extends Command {
   }
 
   async run() {
+    this.printCommand()
+    const kommand = (this.constructor as unknown) as any
+
+    const { args, flags: userFlags } = this.parse(kommand)
+    this.args = args
+    this.flags = userFlags
+
     try {
-      this.printCommand()
+      this.sdk = new KuzzleSDK(userFlags)
+      if (kommand.initSdk) {
+        await this.sdk.init(this.log)
+      }
+
       await this.runSafe()
     }
     catch (error) {
       this.logError(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
     }
     finally {
-      if (this.sdk) {
-        this.sdk.disconnect()
-      }
+      this.sdk?.disconnect()
     }
   }
 

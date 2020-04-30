@@ -1,6 +1,7 @@
 import { flags } from '@oclif/command'
+
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
+import { kuzzleFlags } from '../../support/kuzzle'
 
 class ApiKeyDelete extends Kommand {
   public static description = 'Deletes an API key.';
@@ -20,14 +21,9 @@ class ApiKeyDelete extends Kommand {
   ];
 
   async runSafe() {
-    const { flags: userFlags, args } = this.parse(ApiKeyDelete)
+    await this.sdk?.security.deleteApiKey(this.args.user, this.args.id)
 
-    this.sdk = new KuzzleSDK(userFlags)
-    await this.sdk.init(this.log)
-
-    await this.sdk.security.deleteApiKey(args.user, args.id)
-
-    this.log(`Successfully deleted API Key "${args.id}" of user "${args.user}"`)
+    this.logOk(`Successfully deleted API Key "${this.args.id}" of user "${this.args.user}"`)
   }
 }
 

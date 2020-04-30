@@ -7,6 +7,7 @@ import { writeFileSync } from 'fs'
 import Listr from 'listr'
 import net from 'net'
 import emoji from 'node-emoji'
+
 import { Kommand } from '../../common'
 
 const MIN_MAX_MAP_COUNT = 262144
@@ -100,18 +101,17 @@ export default class InstanceSpawn extends Kommand {
   };
 
   async runSafe() {
-    const { flags: userFlags } = this.parse(InstanceSpawn)
     const portIndex = await this.findAvailablePort()
     const docoFilename = `/tmp/kuzzle-stack-${portIndex}.yml`
 
-    const successfullCheck = userFlags.check ?
+    const successfullCheck = this.flags.check ?
       await this.checkPrerequisites() :
       true
 
-    if (userFlags.check && successfullCheck) {
+    if (this.flags.check && successfullCheck) {
       this.log(
         `\n${emoji.get('ok_hand')} Prerequisites are ${chalk.green.bold('OK')}!`)
-    } else if (userFlags.check && !successfullCheck) {
+    } else if (this.flags.check && !successfullCheck) {
       throw new Error(
         `${emoji.get('shrug')} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle.`)
     }
@@ -119,7 +119,7 @@ export default class InstanceSpawn extends Kommand {
     this.log(
       chalk.grey(`\nWriting docker-compose file to ${docoFilename}...`),
     )
-    writeFileSync(docoFilename, this.generateDocoFile(userFlags.version, portIndex))
+    writeFileSync(docoFilename, this.generateDocoFile(this.flags.version, portIndex))
 
     // clean up
     await execa('docker-compose', ['-f', docoFilename, '-p', `stack-${portIndex}`, 'down'])
@@ -129,7 +129,7 @@ export default class InstanceSpawn extends Kommand {
       ['-f', docoFilename, '-p', `stack-${portIndex}`, 'up', '-d'])
 
     cli.action.start(
-      ` ${emoji.get('rocket')} Kuzzle version ${userFlags.version} is launching`,
+      ` ${emoji.get('rocket')} Kuzzle version ${this.flags.version} is launching`,
       undefined,
       {
         stdout: true,

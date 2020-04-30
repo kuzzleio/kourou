@@ -1,6 +1,7 @@
 import { flags } from '@oclif/command'
+
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
+import { kuzzleFlags } from '../../support/kuzzle'
 
 class ApiKeyCreate extends Kommand {
   public static description = 'Creates a new API Key for a user';
@@ -27,20 +28,15 @@ class ApiKeyCreate extends Kommand {
   ]
 
   async runSafe() {
-    const { args, flags: userFlags } = this.parse(ApiKeyCreate)
-
-    this.sdk = new KuzzleSDK(userFlags)
-    await this.sdk.init(this.log)
-
-    const apiKey = await this.sdk.security.createApiKey(
-      args.user,
-      userFlags.description,
+    const apiKey = await this.sdk?.security.createApiKey(
+      this.args.user,
+      this.flags.description,
       {
-        _id: userFlags.id,
-        expiresIn: userFlags.expire
+        _id: this.flags.id,
+        expiresIn: this.flags.expire
       })
 
-    this.log(`Successfully created API Key "${apiKey._id}" for user "${args.user}"`)
+    this.logOk(`Successfully created API Key "${apiKey._id}" for user "${this.args.user}"`)
     this.log(apiKey._source.token)
   }
 }

@@ -8,12 +8,10 @@ const SECOND = 1000
 
 export const kuzzleFlags = {
   host: flags.string({
-    char: 'h',
     description: 'Kuzzle server host',
     default: process.env.KUZZLE_HOST || 'localhost',
   }),
   port: flags.string({
-    char: 'p',
     description: 'Kuzzle server port',
     default: process.env.KUZZLE_PORT || '7512',
   }),
@@ -29,7 +27,15 @@ export const kuzzleFlags = {
     description: 'Kuzzle user password',
     default: process.env.KUZZLE_PASSWORD || undefined,
   }),
+  protocol: flags.string({
+    description: 'Kuzzle protocol (http or websocket)',
+    default: process.env.KUZZLE_PROTOCOL || 'http',
+  }),
+  as: flags.string({
+    description: 'kuid of a user to impersonate'
+  }),
 }
+
 export class KuzzleSDK {
   public sdk: any;
 
@@ -53,11 +59,11 @@ export class KuzzleSDK {
     this.ssl = options.ssl || this.port === 443
     this.username = options.username
     this.password = options.password
-    this.protocol = options.protocol || 'http'
+    this.protocol = options.protocol
   }
 
   public async init(log: any) {
-    const ProtocolClass = this.protocol === 'ws'
+    const ProtocolClass = this.protocol === 'websocket'
       ? WebSocket
       : Http
 
@@ -65,6 +71,8 @@ export class KuzzleSDK {
       port: this.port,
       sslConnection: this.ssl,
     }))
+
+    this.sdk.on('networkError', (error: any) => log(chalk.red(error)))
 
     log(`[ℹ] Connecting to ${this.protocol}${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
 
@@ -92,7 +100,7 @@ export class KuzzleSDK {
   }
 
   disconnect() {
-    this.sdk.disconnect()
+    this.sdk?.disconnect()
 
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer)

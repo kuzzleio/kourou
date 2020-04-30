@@ -1,8 +1,11 @@
 import { flags } from '@oclif/command'
-import { Kommand } from '../../common'
 import { Client } from '@elastic/elasticsearch'
 
+import { Kommand } from '../../common'
+
 export default class EsListIndex extends Kommand {
+  static initSdk = false
+
   static description = 'Lists available ES indexes'
 
   static flags = {
@@ -24,26 +27,20 @@ export default class EsListIndex extends Kommand {
   }
 
   async runSafe() {
-    const { flags: userFlags } = this.parse(EsListIndex)
+    const node = `http://${this.flags.host}:${this.flags.port}`
 
-    const node = `http://${userFlags.host}:${userFlags.port}`
     const esClient = new Client({ node })
 
-    try {
-      const { body } = await esClient.cat.indices({ format: 'json' })
-      // nice typescript destructuring syntax (:
-      const indexes: string[] = body
-        .map(({ index }: { index: string }) => index)
-        .filter((index: string) => (
-          userFlags.grep ? index.match(new RegExp(userFlags.grep)) : true
-        ))
-        .sort()
+    const { body } = await esClient.cat.indices({ format: 'json' })
 
-      this.log(JSON.stringify(indexes, null, 2))
-    }
-    catch (error) {
-      this.logError(JSON.stringify(error, null, 2))
-      throw error
-    }
+    // nice typescript destructuring syntax (:
+    const indexes: string[] = body
+      .map(({ index }: { index: string }) => index)
+      .filter((index: string) => (
+        this.flags.grep ? index.match(new RegExp(this.flags.grep)) : true
+      ))
+      .sort()
+
+    this.log(JSON.stringify(indexes, null, 2))
   }
 }
