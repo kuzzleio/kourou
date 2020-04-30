@@ -99,6 +99,49 @@ export class KuzzleSDK {
     }
   }
 
+  /**
+   * Impersonates a user.
+   * Every action called in the given callback will be impersonated.
+   *
+   * @param {string} userKuid
+   * @param {Function} callback
+   */
+  public impersonate(userKuid: string, callback: Function) {
+    return new Promise(async (resolve, reject) => {
+      const authToken = this.sdk.jwt
+
+      let apiKey: any = {};
+
+      try {
+        const apiKey = await this.security.createApiKey(
+          userKuid,
+          'Kourou impersonation token',
+          { expiresIn: '1d', refresh: 'wait_for' })
+
+        this.sdk.jwt = apiKey._source.token
+
+        await callback()
+      }
+      catch (error) {
+        reject(error)
+      }
+      finally {
+        this.sdk.jwt = authToken
+
+        try {
+          if (apiKey._id) {
+            await this.security.deleteApiKey(userKuid, apiKey._id)
+          }
+        }
+        catch (error) {
+          reject(error)
+        }
+
+        resolve()
+      }
+    });
+  }
+
   disconnect() {
     this.sdk?.disconnect()
 

@@ -16,5 +16,6 @@ Feature: Query
     When I run the command "query" with:
       | arg  | auth:getCurrentUser |        |
       | flag | --as                | gordon |
-    Then I should match stdout with "\"_id\": \"jean\""
+    Then I should match stdout with:
+      | "_id": "gordon" |
 

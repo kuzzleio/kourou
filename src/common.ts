@@ -63,7 +63,16 @@ export abstract class Kommand extends Command {
         await this.sdk.init(this.log)
       }
 
-      await this.runSafe()
+      if (userFlags.as) {
+        this.logInfo(`Impersonate user "${userFlags.as}"`)
+
+        await this.sdk?.impersonate(userFlags.as, async () => {
+          await this.runSafe()
+        })
+      }
+      else {
+        await this.runSafe()
+      }
     }
     catch (error) {
       this.logError(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
