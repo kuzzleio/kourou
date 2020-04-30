@@ -53,20 +53,20 @@ export abstract class Kommand extends Command {
     this.printCommand()
     const kommand = (this.constructor as unknown) as any
 
-    const { args, flags: userFlags } = this.parse(kommand)
-    this.args = args
-    this.flags = userFlags
+    const result = this.parse(kommand)
+    this.args = result.args
+    this.flags = result.flags
 
     try {
-      this.sdk = new KuzzleSDK(userFlags)
+      this.sdk = new KuzzleSDK(this.flags)
       if (kommand.initSdk) {
         await this.sdk.init(this.log)
       }
 
-      if (userFlags.as) {
-        this.logInfo(`Impersonate user "${userFlags.as}"`)
+      if (this.flags.as) {
+        this.logInfo(`Impersonate user "${this.flags.as}"`)
 
-        await this.sdk?.impersonate(userFlags.as, async () => {
+        await this.sdk?.impersonate(this.flags.as, async () => {
           await this.runSafe()
         })
       }
