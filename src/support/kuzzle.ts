@@ -1,5 +1,6 @@
 import { flags } from '@oclif/command'
 import chalk from 'chalk'
+import { type } from 'os'
 
 // tslint:disable-next-line
 const { Http, WebSocket, Kuzzle } = require('kuzzle-sdk')
@@ -110,17 +111,23 @@ export class KuzzleSDK {
     return new Promise(async (resolve, reject) => {
       const authToken = this.sdk.jwt
 
-      let apiKey: any = {};
+      let apiKey: any;
 
       try {
         const apiKey = await this.security.createApiKey(
           userKuid,
           'Kourou impersonation token',
-          { expiresIn: '1d', refresh: 'wait_for' })
+          { expiresIn: '1d', refresh: false })
 
         this.sdk.jwt = apiKey._source.token
 
-        await callback()
+        const promise = callback()
+
+        if (typeof promise !== 'object' && typeof promise.then !== 'function') {
+          throw new Error('The impersonate callback function must return a promise')
+        }
+
+        await promise
       }
       catch (error) {
         reject(error)
@@ -129,7 +136,7 @@ export class KuzzleSDK {
         this.sdk.jwt = authToken
 
         try {
-          if (apiKey._id) {
+          if (apiKey?._id) {
             await this.security.deleteApiKey(userKuid, apiKey._id)
           }
         }
