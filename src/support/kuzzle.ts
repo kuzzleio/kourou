@@ -1,6 +1,5 @@
 import { flags } from '@oclif/command'
 import chalk from 'chalk'
-import { type } from 'os'
 
 // tslint:disable-next-line
 const { Http, WebSocket, Kuzzle } = require('kuzzle-sdk')
@@ -104,49 +103,40 @@ export class KuzzleSDK {
    * Impersonates a user.
    * Every action called in the given callback will be impersonated.
    *
-   * @param {string} userKuid
-   * @param {Function} callback
+   * @param {string} userKuid - User kuid to impersonate
+   * @param {Function} callback - Callback that will be impersonated
    */
-  public impersonate(userKuid: string, callback: Function) {
-    return new Promise(async (resolve, reject) => {
-      const authToken = this.sdk.jwt
+  public async impersonate(userKuid: string, callback: Function) {
+    const authToken = this.sdk.jwt
 
-      let apiKey: any;
+    let apiKey: any
 
-      try {
-        const apiKey = await this.security.createApiKey(
-          userKuid,
-          'Kourou impersonation token',
-          { expiresIn: '1d', refresh: false })
+    try {
+      const apiKey = await this.security.createApiKey(
+        userKuid,
+        'Kourou impersonation token',
+        { expiresIn: '1d', refresh: false })
 
-        this.sdk.jwt = apiKey._source.token
+      this.sdk.jwt = apiKey._source.token
 
-        const promise = callback()
+      const promise = callback()
 
-        if (typeof promise !== 'object' && typeof promise.then !== 'function') {
-          throw new Error('The impersonate callback function must return a promise')
-        }
-
-        await promise
+      if (typeof promise !== 'object' && typeof promise.then !== 'function') {
+        throw new TypeError('The impersonate callback function must return a promise')
       }
-      catch (error) {
-        reject(error)
-      }
-      finally {
-        this.sdk.jwt = authToken
 
-        try {
-          if (apiKey?._id) {
-            await this.security.deleteApiKey(userKuid, apiKey._id)
-          }
-        }
-        catch (error) {
-          reject(error)
-        }
+      await promise
+    }
+    catch (error) {
+      throw error
+    }
+    finally {
+      this.sdk.jwt = authToken
 
-        resolve()
+      if (apiKey?._id) {
+        await this.security.deleteApiKey(userKuid, apiKey._id)
       }
-    });
+    }
   }
 
   disconnect() {
