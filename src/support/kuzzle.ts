@@ -1,5 +1,4 @@
 import { flags } from '@oclif/command'
-import chalk from 'chalk'
 
 // tslint:disable-next-line
 const { Http, WebSocket, Kuzzle } = require('kuzzle-sdk')
@@ -62,19 +61,27 @@ export class KuzzleSDK {
     this.protocol = options.protocol
   }
 
-  public async init(log: any) {
-    const ProtocolClass = this.protocol === 'websocket'
-      ? WebSocket
-      : Http
+  public async init(logger: any) {
+    let ProtocolClass
+
+    if (this.protocol === 'ws') {
+      ProtocolClass = WebSocket
+    }
+    else if (this.protocol === 'http') {
+      ProtocolClass = Http
+    }
+    else {
+      throw new TypeError(`Unknown protocol "${this.protocol}"`)
+    }
 
     this.sdk = new Kuzzle(new ProtocolClass(this.host, {
       port: this.port,
       sslConnection: this.ssl,
     }))
 
-    this.sdk.on('networkError', (error: any) => log(chalk.red(error)))
+    this.sdk.on('networkError', (error: any) => logger.logKo(error.message))
 
-    log(`[ℹ] Connecting to ${this.protocol}${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
+    logger.logInfo(`Connecting to ${this.protocol}${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
 
     await this.sdk.connect()
 
@@ -91,11 +98,11 @@ export class KuzzleSDK {
           await this.sdk.auth.refreshToken()
         }
         catch (error) {
-          log(`Cannot refresh token: ${error}`)
+          logger.logKo(`Cannot refresh token: ${error.message}`)
         }
       }, 80 * SECOND)
 
-      log(chalk.green(`[ℹ] Loggued as ${this.username}.`))
+      logger.logInfo(`Loggued as ${this.username}.`)
     }
   }
 
@@ -107,7 +114,7 @@ export class KuzzleSDK {
    * @param {Function} callback - Callback that will be impersonated
    */
   public async impersonate(userKuid: string, callback: Function) {
-    const authToken = this.sdk.jwt
+    const currentToken = this.sdk.jwt
 
     let apiKey: any
 
@@ -131,7 +138,7 @@ export class KuzzleSDK {
       throw error
     }
     finally {
-      this.sdk.jwt = authToken
+      this.sdk.jwt = currentToken
 
       if (apiKey?._id) {
         await this.security.deleteApiKey(userKuid, apiKey._id)

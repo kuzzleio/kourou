@@ -43,7 +43,7 @@ By command line:
   --username=username            [default: anonymous] Kuzzle user
   --password=password            Kuzzle user password
   --ssl                          [default: true for port 443] Use SSL to connect to Kuzzle
-  --protocol                     [default: http] Protocol used to connect to Kuzzle (`http` or `websocket`)
+  --protocol                     [default: http] Protocol used to connect to Kuzzle (`http` or `ws`)
 ```
 
 By environment variables:
@@ -53,7 +53,7 @@ By environment variables:
   KUZZLE_USERNAME            [default: anonymous] Kuzzle user
   KUZZLE_PASSWORD            Kuzzle user password
   KUZZLE_SSL                 Use SSL to connect to Kuzzle
-  KUZZLE_PROTOCOL            Protocol used to connect to Kuzzle (`http` or `websocket`)
+  KUZZLE_PROTOCOL            Protocol used to connect to Kuzzle (`http` or `ws`)
 ```
 
 ## User impersonation

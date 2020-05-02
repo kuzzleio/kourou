@@ -53,9 +53,9 @@ export abstract class Kommand extends Command {
     this.flags = result.flags
 
     try {
-      this.sdk = new KuzzleSDK(this.flags)
       if (kommand.initSdk) {
-        await this.sdk.init(this.log)
+        this.sdk = new KuzzleSDK(this.flags)
+        await this.sdk.init(this)
       }
 
       if (this.flags.as) {
