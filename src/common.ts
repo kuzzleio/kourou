@@ -27,26 +27,21 @@ export abstract class Kommand extends Command {
     this.log('')
   }
 
-  public log(message?: string | undefined, ...args: any[]): void {
-    return super.log(` ${message}`, ...args)
+  public log(message?: string): void {
+    return super.log(` ${message}`)
   }
 
-  public logOk(message: string, ...args: any[]): void {
-    this.log(chalk.green(`[✔] ${message}`), ...args)
+  public logOk(message: string): void {
+    this.log(chalk.green(`[✔] ${message}`))
   }
 
-  public logInfo(message: string, ...args: any[]): void {
-    this.log(chalk.yellow(`[ℹ] ${message}`), ...args)
+  public logInfo(message: string): void {
+    this.log(chalk.yellow(`[ℹ] ${message}`))
   }
 
-  public logKo(message: string, ...args: any[]): void {
+  public logKo(message?: string): void {
     process.exitCode = 1
-    this.log(chalk.red(`[X] ${message}`), ...args)
-  }
-
-  public logError(message?: string | undefined, ...args: any[]): void {
-    process.exitCode = 1
-    return this.error(chalk.red(`[X] ${message}`), ...args)
+    return this.error(chalk.red(`[X] ${message}`))
   }
 
   async run() {
@@ -66,7 +61,7 @@ export abstract class Kommand extends Command {
       await this.runSafe()
     }
     catch (error) {
-      this.logError(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
+      this.logKo(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
     }
     finally {
       this.sdk?.disconnect()

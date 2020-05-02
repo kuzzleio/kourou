@@ -234,7 +234,7 @@ export default class InstanceSpawn extends Kommand {
       await checks.run()
       return true
     } catch (error) {
-      this.logError(error.message)
+      this.logKo(error.message)
       return false
     }
   }

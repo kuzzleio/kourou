@@ -69,7 +69,7 @@ export default class IndexImport extends Kommand {
         this.logOk(`Successfully imported ${total} documents in "${dstIndex}:${collection}"`)
       }
       catch (error) {
-        this.logError(`Error when importing collection from "${dumpDir}": ${error}`)
+        this.logKo(`Error when importing collection from "${dumpDir}": ${error}`)
       }
     }
   }
