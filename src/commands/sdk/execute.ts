@@ -6,32 +6,31 @@ import { kuzzleFlags } from '../../support/kuzzle'
 
 class SdkQuery extends Kommand {
   public static description = `
-Executes an API query.
+Executes arbitrary code.
 
-Query arguments
+Code Execution
 
-  arguments can be passed and repeated using the --arg or -a flag.
-  index and collection names can be passed with --index (-i) and --collection (-c) flags
+  provided code will be executed in an async method
+  you can access an connected and authenticated SDK with the "sdk" variable
+  return value will be printed on the standard output (eg: 'return await sdk.server.now();')
+  error will be catched and printed on the error output (eg: 'throw new Error("failure");')
+
+Provide code
+
+  code can be passed with the --code flag
+  code will be read from STDIN if available
 
   Examples:
-    - kourou sdk:query document:get -i iot -c sensors -a _id=sigfox-42
-
-Query body
-
-  body can be passed with the --body flag with either a JSON or JS string.
-  body will be read from STDIN if available
-
-  Examples:
-    - kourou sdk:query document:create -i iot -c sensors --body '{creation: Date.now())}'
-    - kourou sdk:query admin:loadMappings < mappings.json
-    - echo '{dynamic: "strict"}' | kourou sdk:query collection:create -i iot -c sensors
+    - kourou sdk:execute --code 'return await sdk.server.now()'
+    - kourou sdk:execute < snippet.js
+    - echo 'return await sdk.server.now()' | kourou sdk:execute
 
 Other
 
-  use the --editor flag to modify the query before sending it to Kuzzle
+  use the --editor flag to modify the code before executing it
 
   Examples:
-    - kourou query document:create -i iot -c sensors --editor
+    - kourou sdk:execute --code 'return await sdk.server.now()' --editor
 `;
 
   public static flags = {
