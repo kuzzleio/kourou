@@ -53,7 +53,7 @@ Other
     }
 
     let code: any = stdin || this.flags.code
-    let userError: any;
+    let userError: any
 
     code = `
 (async () => {
@@ -61,10 +61,10 @@ Other
     ${code}
   }
   catch (error) {
-    userError = error;
+    userError = error
   }
 })();
-`;
+`
     // content from user editor
     if (this.flags.editor) {
       const editor = new Editor(code)
@@ -72,7 +72,9 @@ Other
       code = editor.content
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const sdk: any = this.sdk?.sdk
+    // eslint-disable-next-line no-eval
     const result = await eval(code)
 
     if (userError) {
