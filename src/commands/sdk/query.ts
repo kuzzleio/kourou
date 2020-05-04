@@ -1,7 +1,7 @@
 import { flags } from '@oclif/command'
 
-import { Kommand } from '../common'
-import { kuzzleFlags } from '../support/kuzzle'
+import { Kommand } from '../../common'
+import { kuzzleFlags } from '../../support/kuzzle'
 
 class Query extends Kommand {
   public static description = `

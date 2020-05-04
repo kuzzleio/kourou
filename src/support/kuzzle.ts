@@ -127,4 +127,8 @@ export class KuzzleSDK {
   get auth() {
     return this.sdk.auth
   }
+
+  get server() {
+    return this.sdk.server
+  }
 }
