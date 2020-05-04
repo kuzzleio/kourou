@@ -11,7 +11,7 @@ Executes arbitrary code.
 Code Execution
 
   provided code will be executed in an async method
-  you can access an connected and authenticated SDK with the "sdk" variable
+  you can access a connected and authenticated SDK with the "sdk" variable
   return value will be printed on the standard output (eg: 'return await sdk.server.now();')
   error will be catched and printed on the error output (eg: 'throw new Error("failure");')
 
