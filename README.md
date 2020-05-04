@@ -82,9 +82,10 @@ By environment variables:
 * [`kourou instance:spawn`](#kourou-instancespawn)
 * [`kourou profile:export`](#kourou-profileexport)
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
-* [`kourou query CONTROLLER:ACTION`](#kourou-query-controlleraction)
 * [`kourou role:export`](#kourou-roleexport)
 * [`kourou role:import PATH`](#kourou-roleimport-path)
+* [`kourou sdk:execute`](#kourou-sdkexecute)
+* [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
@@ -692,13 +693,106 @@ OPTIONS
 
 _See code: [src/commands/profile/import.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/profile/import.ts)_
 
-## `kourou query CONTROLLER:ACTION`
+## `kourou role:export`
+
+Exports roles
+
+```
+USAGE
+  $ kourou role:export
+
+OPTIONS
+  --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
+  --password=password  Kuzzle user password
+  --path=path          [default: roles] Dump directory
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: websocket] Kuzzle protocol (http or websocket)
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/role/export.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/role/export.ts)_
+
+## `kourou role:import PATH`
+
+Import roles
+
+```
+USAGE
+  $ kourou role:import PATH
+
+ARGUMENTS
+  PATH  Dump file
+
+OPTIONS
+  --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
+  --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: websocket] Kuzzle protocol (http or websocket)
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/role/import.ts)_
+
+## `kourou sdk:execute`
+
+Executes arbitrary code.
+
+```
+USAGE
+  $ kourou sdk:execute
+
+OPTIONS
+  --code=code          Code to execute. Will be read from STDIN if available.
+  --editor             Open an editor (EDITOR env variable) to edit the code before executing it.
+  --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
+  --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+DESCRIPTION
+  Executes arbitrary code.
+
+  Code Execution
+
+     provided code will be executed in an async method
+     you can access an connected and authenticated SDK with the "sdk" variable
+     return value will be printed on the standard output (eg: 'return await sdk.server.now();')
+     error will be catched and printed on the error output (eg: 'throw new Error("failure");')
+
+  Provide code
+
+     code can be passed with the --code flag
+     code will be read from STDIN if available
+
+     Examples:
+       - kourou sdk:execute --code 'return await sdk.server.now()'
+       - kourou sdk:execute < snippet.js
+       - echo 'return await sdk.server.now()' | kourou sdk:execute
+
+  Other
+
+     use the --editor flag to modify the code before executing it
+
+     Examples:
+       - kourou sdk:execute --code 'return await sdk.server.now()' --editor
+```
+
+_See code: [src/commands/sdk/execute.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/sdk/execute.ts)_
+
+## `kourou sdk:query CONTROLLER:ACTION`
 
 Executes an API query.
 
 ```
 USAGE
-  $ kourou query CONTROLLER:ACTION
+  $ kourou sdk:query CONTROLLER:ACTION
 
 ARGUMENTS
   CONTROLLER:ACTION  Controller and action (eg: "server:now")
@@ -746,51 +840,7 @@ DESCRIPTION
        - kourou query document:create -i iot -c sensors --editor
 ```
 
-_See code: [src/commands/query.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/query.ts)_
-
-## `kourou role:export`
-
-Exports roles
-
-```
-USAGE
-  $ kourou role:export
-
-OPTIONS
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --password=password  Kuzzle user password
-  --path=path          [default: roles] Dump directory
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: websocket] Kuzzle protocol (http or websocket)
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
-```
-
-_See code: [src/commands/role/export.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/role/export.ts)_
-
-## `kourou role:import PATH`
-
-Import roles
-
-```
-USAGE
-  $ kourou role:import PATH
-
-ARGUMENTS
-  PATH  Dump file
-
-OPTIONS
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --password=password  Kuzzle user password
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: websocket] Kuzzle protocol (http or websocket)
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
-```
-
-_See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/role/import.ts)_
+_See code: [src/commands/sdk/query.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/sdk/query.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
