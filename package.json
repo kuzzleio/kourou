@@ -97,6 +97,9 @@
       },
       "vault": {
         "description": "manage then encrypted vault"
+      },
+      "sdk": {
+        "description": "directly manipulate the sdk"
       }
     }
   },
