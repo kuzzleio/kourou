@@ -55,7 +55,7 @@ export class FileDecrypt extends Kommand {
     const cryptonomicon = new Cryptonomicon(this.flags['vault-key'])
 
     if (!fs.existsSync(this.args.file)) {
-      throw new Error(`File "${this.args.file}" does not exists`)
+      throw new Error(`File "${this.args.file}" does not exist`)
     }
 
     let encryptedContent
