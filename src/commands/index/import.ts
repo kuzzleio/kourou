@@ -3,11 +3,11 @@ import * as fs from 'fs'
 
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
+import { kuzzleFlags } from '../../support/kuzzle'
 import { restoreCollectionData, restoreCollectionMappings } from '../../support/restore-collection'
 
 export default class IndexImport extends Kommand {
-  static description = ''
+  static description = 'Imports an index (JSONL format)'
 
   static examples = [
     'kourou index:import ./dump/iot-data',
@@ -27,6 +27,10 @@ export default class IndexImport extends Kommand {
       description: 'Skip collections mappings'
     }),
     ...kuzzleFlags,
+    protocol: flags.string({
+      description: 'Kuzzle protocol (http or websocket)',
+      default: 'websocket',
+    }),
   }
 
   static args = [
@@ -34,45 +38,38 @@ export default class IndexImport extends Kommand {
   ]
 
   async runSafe() {
-    const { args, flags: userFlags } = this.parse(IndexImport)
-
-    const index = userFlags.index
-
-    this.sdk = new KuzzleSDK({ protocol: 'ws', ...userFlags })
-    await this.sdk.init(this.log)
-
-    if (index) {
-      this.logOk(`Start importing dump from ${args.path} in index ${index}`)
+    if (this.flags.index) {
+      this.logInfo(`Start importing dump from ${this.args.path} in index ${this.flags.index}`)
     }
     else {
-      this.logOk(`Start importing dump from ${args.path} in same index`)
+      this.logInfo(`Start importing dump from ${this.args.path} in same index`)
     }
 
-    const dumpDirs = fs.readdirSync(args.path).map(f => path.join(args.path, f))
+    const dumpDirs = fs.readdirSync(this.args.path).map(f => path.join(this.args.path, f))
 
     for (const dumpDir of dumpDirs) {
       try {
-        if (!userFlags['no-mappings']) {
+        if (!this.flags['no-mappings']) {
           const mappingsPath = path.join(dumpDir, 'mappings.json')
           const dump = JSON.parse(fs.readFileSync(mappingsPath, 'utf8'))
 
           await restoreCollectionMappings(
             this.sdk,
             dump,
-            index)
+            this.flags.index)
         }
 
         const { total, collection, index: dstIndex } = await restoreCollectionData(
           this.sdk,
           this.log.bind(this),
-          Number(userFlags['batch-size']),
+          Number(this.flags['batch-size']),
           path.join(dumpDir, 'documents.jsonl'),
-          index)
+          this.flags.index)
 
         this.logOk(`Successfully imported ${total} documents in "${dstIndex}:${collection}"`)
       }
       catch (error) {
-        this.logError(`Error when importing collection from "${dumpDir}": ${error}`)
+        this.logKo(`Error when importing collection from "${dumpDir}": ${error}`)
       }
     }
   }

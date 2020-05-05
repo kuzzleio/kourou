@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 
 import { Kommand } from '../common'
-import { kuzzleFlags, KuzzleSDK } from '../support/kuzzle'
+import { kuzzleFlags } from '../support/kuzzle'
 import { restoreCollectionData, restoreCollectionMappings } from '../support/restore-collection'
 import { restoreProfiles, restoreRoles } from '../support/restore-securities'
 
@@ -20,8 +20,6 @@ const revAlphaSort = (a: string, b: string) => {
 }
 
 export default class Import extends Kommand {
-  private userFlags: any
-
   static description = 'Recursively imports dump files from a root directory'
 
   static flags = {
@@ -31,6 +29,10 @@ export default class Import extends Kommand {
       default: '200'
     }),
     ...kuzzleFlags,
+    protocol: flags.string({
+      description: 'Kuzzle protocol (http or websocket)',
+      default: 'websocket',
+    }),
   }
 
   static args = [
@@ -38,14 +40,7 @@ export default class Import extends Kommand {
   ]
 
   async runSafe() {
-    const { args, flags: userFlags } = this.parse(Import)
-
-    this.userFlags = userFlags
-
-    this.sdk = new KuzzleSDK({ protocol: 'ws', ...userFlags })
-    await this.sdk.init(this.log)
-
-    await this.walkDirectories(args.path)
+    await this.walkDirectories(this.args.path)
   }
 
   async walkDirectories(directory: string) {
@@ -77,7 +72,7 @@ export default class Import extends Kommand {
       const { total, index, collection } = await restoreCollectionData(
         this.sdk,
         this.log.bind(this),
-        Number(this.userFlags['batch-size']),
+        Number(this.flags['batch-size']),
         file)
 
       this.logOk(`[collection] Imported ${total} documents in "${index}":"${collection}"`)

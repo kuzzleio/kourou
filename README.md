@@ -64,7 +64,7 @@ By environment variables:
 * [`kourou collection:create INDEX COLLECTION`](#kourou-collectioncreate-index-collection)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
-* [`kourou config:key-diff FIRST SECOND`](#kourou-configkey-diff-first-second)
+* [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
 * [`kourou document:create INDEX COLLECTION`](#kourou-documentcreate-index-collection)
 * [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
 * [`kourou document:search INDEX COLLECTION`](#kourou-documentsearch-index-collection)
@@ -103,10 +103,11 @@ ARGUMENTS
   TOKEN  API key token
 
 OPTIONS
-  -h, --host=host      [default: localhost] Kuzzle server host
-  -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -129,12 +130,13 @@ ARGUMENTS
 
 OPTIONS
   -d, --description=description  (required) API Key description
-  -h, --host=host                [default: localhost] Kuzzle server host
-  -p, --port=port                [default: 7512] Kuzzle server port
   --expire=expire                [default: -1] API Key validity
   --help                         show CLI help
+  --host=host                    [default: localhost] Kuzzle server host
   --id=id                        API Key unique ID
   --password=password            Kuzzle user password
+  --port=port                    [default: 7512] Kuzzle server port
+  --protocol=protocol            [default: http] Kuzzle protocol (http or websocket)
   --ssl                          Use SSL to connect to Kuzzle
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -154,10 +156,11 @@ ARGUMENTS
   ID    API Key unique ID
 
 OPTIONS
-  -h, --host=host      [default: localhost] Kuzzle server host
-  -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -179,11 +182,12 @@ ARGUMENTS
   USER  User kuid
 
 OPTIONS
-  -h, --host=host      [default: localhost] Kuzzle server host
-  -p, --port=port      [default: 7512] Kuzzle server port
   --filter=filter      Filter to match the API Key descriptions
   --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -203,15 +207,18 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
-  -h, --host=host      [default: localhost] Kuzzle server host
-  -p, --port=port      [default: 7512] Kuzzle server port
-
   --body=body          [default: {}] Collection mappings and settings in JS or JSON format. Will be read from STDIN if
                        available
 
   --help               show CLI help
 
+  --host=host          [default: localhost] Kuzzle server host
+
   --password=password  Kuzzle user password
+
+  --port=port          [default: 7512] Kuzzle server port
+
+  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
 
   --ssl                Use SSL to connect to Kuzzle
 
@@ -233,13 +240,14 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
-  -h, --host=host          [default: localhost] Kuzzle server host
-  -p, --port=port          [default: 7512] Kuzzle server port
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --editor                 Open an editor (EDITOR env variable) to edit the query before sending
   --help                   show CLI help
+  --host=host              [default: localhost] Kuzzle server host
   --password=password      Kuzzle user password
   --path=path              Dump root directory
+  --port=port              [default: 7512] Kuzzle server port
+  --protocol=protocol      [default: websocket] Kuzzle protocol (http or websocket)
   --query=query            [default: {}] Only dump documents matching the query (JS or JSON format)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
@@ -263,40 +271,41 @@ ARGUMENTS
   PATH  Dump directory path
 
 OPTIONS
-  -h, --host=host          [default: localhost] Kuzzle server host
-  -p, --port=port          [default: 7512] Kuzzle server port
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --collection=collection  If set, override the collection destination name
   --help                   show CLI help
+  --host=host              [default: localhost] Kuzzle server host
   --index=index            If set, override the index destination name
   --no-mappings            Skip collection mappings
   --password=password      Kuzzle user password
+  --port=port              [default: 7512] Kuzzle server port
+  --protocol=protocol      [default: websocket] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
 _See code: [src/commands/collection/import.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/collection/import.ts)_
 
-## `kourou config:key-diff FIRST SECOND`
+## `kourou config:diff FIRST SECOND`
 
-Returns differences between the keys of two Kuzzle configuration files (kuzzlerc)
+Returns differences between two Kuzzle configuration files (kuzzlerc)
 
 ```
 USAGE
-  $ kourou config:key-diff FIRST SECOND
+  $ kourou config:diff FIRST SECOND
 
 ARGUMENTS
   FIRST   First configuration file
   SECOND  Second configuration file
 
 OPTIONS
-  --strict  Exit with an error if diff are found
+  --strict  Exit with an error if differences are found
 
 EXAMPLE
-  kourou config:key-diff config/local/kuzzlerc config/production/kuzzlerc
+  kourou config:diff config/local/kuzzlerc config/production/kuzzlerc
 ```
 
-_See code: [src/commands/config/key-diff.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/config/key-diff.ts)_
+_See code: [src/commands/config/diff.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/config/diff.ts)_
 
 ## `kourou document:create INDEX COLLECTION`
 
@@ -311,12 +320,13 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
-  -h, --host=host      [default: localhost] Kuzzle server host
-  -p, --port=port      [default: 7512] Kuzzle server port
   --body=body          [default: {}] Document body in JS or JSON format. Will be read from STDIN if available
   --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
   --id=id              Optional document ID
   --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
   --replace            Replaces the document if it already exists
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
@@ -342,10 +352,11 @@ ARGUMENTS
   ID          Document ID
 
 OPTIONS
-  -h, --host=host      [default: localhost] Kuzzle server host
-  -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -365,12 +376,13 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
-  -h, --host=host      [default: localhost] Kuzzle server host
-  -p, --port=port      [default: 7512] Kuzzle server port
   --editor             Open an editor (EDITOR env variable) to edit the request before sending
   --from=from          Optional offset
   --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
   --query=query        [default: {}] Query in JS or JSON format.
   --scroll=scroll      Optional scroll TTL
   --size=size          Optional page size
@@ -538,11 +550,12 @@ ARGUMENTS
   PATH  Root directory containing dumps
 
 OPTIONS
-  -h, --host=host          [default: localhost] Kuzzle server host
-  -p, --port=port          [default: 7512] Kuzzle server port
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
+  --host=host              [default: localhost] Kuzzle server host
   --password=password      Kuzzle user password
+  --port=port              [default: 7512] Kuzzle server port
+  --protocol=protocol      [default: websocket] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -561,12 +574,13 @@ ARGUMENTS
   INDEX  Index name
 
 OPTIONS
-  -h, --host=host          [default: localhost] Kuzzle server host
-  -p, --port=port          [default: 7512] Kuzzle server port
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --help                   show CLI help
+  --host=host              [default: localhost] Kuzzle server host
   --password=password      Kuzzle user password
   --path=path              Dump root directory
+  --port=port              [default: 7512] Kuzzle server port
+  --protocol=protocol      [default: websocket] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -574,6 +588,8 @@ OPTIONS
 _See code: [src/commands/index/export.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/index/export.ts)_
 
 ## `kourou index:import PATH`
+
+Imports an index (JSONL format)
 
 ```
 USAGE
@@ -583,13 +599,14 @@ ARGUMENTS
   PATH  Dump directory or file
 
 OPTIONS
-  -h, --host=host          [default: localhost] Kuzzle server host
-  -p, --port=port          [default: 7512] Kuzzle server port
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
+  --host=host              [default: localhost] Kuzzle server host
   --index=index            If set, override the index destination name
   --no-mappings            Skip collections mappings
   --password=password      Kuzzle user password
+  --port=port              [default: 7512] Kuzzle server port
+  --protocol=protocol      [default: websocket] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 
@@ -640,11 +657,12 @@ USAGE
   $ kourou profile:export
 
 OPTIONS
-  -h, --host=host      [default: localhost] Kuzzle server host
-  -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --path=path          [default: profiles] Dump directory
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: websocket] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -663,10 +681,11 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
-  -h, --host=host      [default: localhost] Kuzzle server host
-  -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: websocket] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -675,7 +694,7 @@ _See code: [src/commands/profile/import.ts](https://github.com/kuzzleio/kourou/b
 
 ## `kourou query CONTROLLER:ACTION`
 
-Executes an API query
+Executes an API query.
 
 ```
 USAGE
@@ -685,21 +704,46 @@ ARGUMENTS
   CONTROLLER:ACTION  Controller and action (eg: "server:now")
 
 OPTIONS
-  -a, --arg=arg        Additional argument. Repeatable. (e.g. "-a refresh=wait_for")
-  -h, --host=host      [default: localhost] Kuzzle server host
-  -p, --port=port      [default: 7512] Kuzzle server port
-  --body=body          [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
-  --editor             Open an editor (EDITOR env variable) to edit the request before sending
-  --help               show CLI help
-  --password=password  Kuzzle user password
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
+  -a, --arg=arg                Additional argument. Repeatable. (e.g. "-a refresh=wait_for")
+  -c, --collection=collection  Collection argument
+  -i, --index=index            Index argument
+  --body=body                  [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
+  --editor                     Open an editor (EDITOR env variable) to edit the request before sending.
+  --help                       show CLI help
+  --host=host                  [default: localhost] Kuzzle server host
+  --password=password          Kuzzle user password
+  --port=port                  [default: 7512] Kuzzle server port
+  --protocol=protocol          [default: http] Kuzzle protocol (http or websocket)
+  --ssl                        Use SSL to connect to Kuzzle
+  --username=username          [default: anonymous] Kuzzle username (local strategy)
 
-EXAMPLES
-  kourou query document:get --arg index=iot --arg collection=sensors --arg _id=sigfox-42
-  kourou query collection:create --arg index=iot --arg collection=sensors --body '{dynamic: "strict"}'
-  kourou query admin:loadMappings < mappings.json
-  echo '{name: "Aschen"}' | kourou query document:create --arg index=iot --arg collection=sensors
+DESCRIPTION
+  Executes an API query.
+
+  Query arguments
+
+     arguments can be passed and repeated using the --arg or -a flag.
+     index and collection names can be passed with --index (-i) and --collection (-c) flags
+
+     Examples:
+       - kourou query document:get -i iot -c sensors -a _id=sigfox-42
+
+  Query body
+
+     body can be passed with the --body flag with either a JSON or JS string.
+     body will be read from STDIN if available
+
+     Examples:
+       - kourou query document:create -i iot -c sensors --body '{creation: Date.now())}'
+       - kourou query admin:loadMappings < mappings.json
+       - echo '{dynamic: "strict"}' | kourou query collection:create -i iot -c sensors
+
+  Other
+
+     use the --editor flag to modify the query before sending it to Kuzzle
+
+     Examples:
+       - kourou query document:create -i iot -c sensors --editor
 ```
 
 _See code: [src/commands/query.ts](https://github.com/kuzzleio/kourou/blob/v0.11.0/src/commands/query.ts)_
@@ -713,11 +757,12 @@ USAGE
   $ kourou role:export
 
 OPTIONS
-  -h, --host=host      [default: localhost] Kuzzle server host
-  -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --path=path          [default: roles] Dump directory
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: websocket] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -736,10 +781,11 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
-  -h, --host=host      [default: localhost] Kuzzle server host
-  -p, --port=port      [default: 7512] Kuzzle server port
   --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: websocket] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```

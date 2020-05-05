@@ -6,10 +6,12 @@ import stripComments from 'strip-json-comments'
 import { Kommand } from '../../common'
 
 export class ConfigKeyDiff extends Kommand {
-  static description = 'Returns differences between the keys of two Kuzzle configuration files (kuzzlerc)'
+  static initSdk = false
+
+  static description = 'Returns differences between two Kuzzle configuration files (kuzzlerc)'
 
   static examples = [
-    'kourou config:key-diff config/local/kuzzlerc config/production/kuzzlerc'
+    'kourou config:diff config/local/kuzzlerc config/production/kuzzlerc'
   ]
 
   static flags = {
@@ -25,18 +27,16 @@ export class ConfigKeyDiff extends Kommand {
   ]
 
   async runSafe() {
-    const { args, flags: userFlags } = this.parse(ConfigKeyDiff)
-
-    if (!fs.existsSync(args.first)) {
-      throw new Error(`File "${args.first}" does not exists`)
+    if (!fs.existsSync(this.args.first)) {
+      throw new Error(`File "${this.args.first}" does not exists`)
     }
 
-    if (!fs.existsSync(args.second)) {
-      throw new Error(`File "${args.second}" does not exists`)
+    if (!fs.existsSync(this.args.second)) {
+      throw new Error(`File "${this.args.second}" does not exists`)
     }
 
-    const first = JSON.parse(stripComments(fs.readFileSync(args.first, 'utf8')))
-    const second = JSON.parse(stripComments(fs.readFileSync(args.second, 'utf8')))
+    const first = JSON.parse(stripComments(fs.readFileSync(this.args.first, 'utf8')))
+    const second = JSON.parse(stripComments(fs.readFileSync(this.args.second, 'utf8')))
 
     const changes = this._keyChanges(first, second)
 
@@ -51,7 +51,7 @@ export class ConfigKeyDiff extends Kommand {
       this.log(` - key "${path}" ${change}`)
     }
 
-    if (userFlags.strict) {
+    if (this.flags.strict) {
       throw new Error('Provided configuration contains different keys')
     }
   }

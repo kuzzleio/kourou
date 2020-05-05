@@ -1,10 +1,11 @@
 import { flags } from '@oclif/command'
-import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
-import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-collection'
 import * as fs from 'fs'
 import cli from 'cli-ux'
-import chalk from 'chalk'
+import path from 'path'
+
+import { Kommand } from '../../common'
+import { kuzzleFlags } from '../../support/kuzzle'
+import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-collection'
 
 export default class IndexExport extends Kommand {
   static description = 'Exports an index (JSONL format)'
@@ -19,6 +20,10 @@ export default class IndexExport extends Kommand {
       default: '2000'
     }),
     ...kuzzleFlags,
+    protocol: flags.string({
+      description: 'Kuzzle protocol (http or websocket)',
+      default: 'websocket',
+    }),
   }
 
   static args = [
@@ -26,43 +31,40 @@ export default class IndexExport extends Kommand {
   ]
 
   async runSafe() {
-    const { args, flags: userFlags } = this.parse(IndexExport)
+    const exportPath = this.flags.path
+      ? path.join(this.flags.path, this.args.index)
+      : this.args.index
 
-    const path = userFlags.path ? `${userFlags.path}/${args.index}` : args.index
+    this.logInfo(`Dumping index "${this.args.index}" in ${exportPath}/ ...`)
 
-    this.sdk = new KuzzleSDK({ protocol: 'ws', ...userFlags })
-    await this.sdk.init(this.log)
+    fs.mkdirSync(exportPath, { recursive: true })
 
-    this.log(chalk.green(`Dumping index "${args.index}" in ${path}/ ...`))
-
-    fs.mkdirSync(path, { recursive: true })
-
-    const { collections } = await this.sdk.collection.list(args.index)
+    const { collections } = await this.sdk?.collection.list(this.args.index)
 
     for (const collection of collections) {
       try {
         if (collection.type !== 'realtime') {
           await dumpCollectionMappings(
             this.sdk,
-            args.index,
+            this.args.index,
             collection.name,
-            path)
+            exportPath)
 
           await dumpCollectionData(
             this.sdk,
-            args.index,
+            this.args.index,
             collection.name,
-            Number(userFlags['batch-size']),
-            path)
+            Number(this.flags['batch-size']),
+            exportPath)
 
           cli.action.stop()
         }
       }
       catch (error) {
-        this.logError(`Error when exporting collection "${collection.name}": ${error}`)
+        this.logKo(`Error when exporting collection "${collection.name}": ${error}`)
       }
     }
 
-    this.log(chalk.green(`[✔] Index ${args.index} dumped`))
+    this.logOk(`Index ${this.args.index} dumped`)
   }
 }

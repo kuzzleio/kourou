@@ -1,17 +1,37 @@
 import { flags } from '@oclif/command'
+
 import { Kommand } from '../common'
-import { kuzzleFlags, KuzzleSDK } from '../support/kuzzle'
-import chalk from 'chalk'
+import { kuzzleFlags } from '../support/kuzzle'
 
 class Query extends Kommand {
-  public static description = 'Executes an API query';
+  public static description = `
+Executes an API query.
 
-  public static examples = [
-    'kourou query document:get --arg index=iot --arg collection=sensors --arg _id=sigfox-42',
-    'kourou query collection:create --arg index=iot --arg collection=sensors --body \'{dynamic: "strict"}\'',
-    'kourou query admin:loadMappings < mappings.json',
-    'echo \'{name: "Aschen"}\' | kourou query document:create --arg index=iot --arg collection=sensors'
-  ]
+Query arguments
+
+  arguments can be passed and repeated using the --arg or -a flag.
+  index and collection names can be passed with --index (-i) and --collection (-c) flags
+
+  Examples:
+    - kourou query document:get -i iot -c sensors -a _id=sigfox-42
+
+Query body
+
+  body can be passed with the --body flag with either a JSON or JS string.
+  body will be read from STDIN if available
+
+  Examples:
+    - kourou query document:create -i iot -c sensors --body '{creation: Date.now())}'
+    - kourou query admin:loadMappings < mappings.json
+    - echo '{dynamic: "strict"}' | kourou query collection:create -i iot -c sensors
+
+Other
+
+  use the --editor flag to modify the query before sending it to Kuzzle
+
+  Examples:
+    - kourou query document:create -i iot -c sensors --editor
+`;
 
   public static flags = {
     help: flags.help(),
@@ -25,7 +45,15 @@ class Query extends Kommand {
       default: '{}'
     }),
     editor: flags.boolean({
-      description: 'Open an editor (EDITOR env variable) to edit the request before sending'
+      description: 'Open an editor (EDITOR env variable) to edit the request before sending.'
+    }),
+    index: flags.string({
+      char: 'i',
+      description: 'Index argument'
+    }),
+    collection: flags.string({
+      char: 'c',
+      description: 'Collection argument'
     }),
     ...kuzzleFlags,
   };
@@ -35,16 +63,14 @@ class Query extends Kommand {
   ]
 
   async runSafe() {
-        const { args, flags: userFlags } = this.parse(Query)
-
-    this.sdk = new KuzzleSDK(userFlags)
-    await this.sdk.init(this.log)
-
-    const [controller, action] = args['controller:action'].split(':')
+    const [controller, action] = this.args['controller:action'].split(':')
 
     const requestArgs: any = {}
 
-    for (const keyValue of userFlags.arg || []) {
+    requestArgs.index = this.flags.index
+    requestArgs.collection = this.flags.collection
+
+    for (const keyValue of this.flags.arg || []) {
       const [key, ...value] = keyValue.split('=')
       requestArgs[key] = value.join()
     }
@@ -52,12 +78,12 @@ class Query extends Kommand {
     // try to read stdin
     const stdin = await this.fromStdin()
 
-    if (stdin && userFlags.editor) {
+    if (stdin && this.flags.editor) {
       throw new Error('Unable to use flag --editor when reading from STDIN')
     }
     const body = stdin
       ? stdin
-      : userFlags.body
+      : this.flags.body
 
     let request = {
       controller,
@@ -67,14 +93,15 @@ class Query extends Kommand {
     }
 
     // content from user editor
-    if (userFlags.editor) {
+    if (this.flags.editor) {
       request = this.fromEditor(request, { json: true })
     }
 
-    const response = await this.sdk.query(request)
+    const response = await this.sdk?.query(request)
 
-    this.log(chalk.green(`Successfully executed "${controller}:${action}"`))
     this.log(JSON.stringify(response, null, 2))
+
+    this.logOk(`Successfully executed "${controller}:${action}"`)
   }
 }
 

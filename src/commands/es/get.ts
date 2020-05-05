@@ -1,8 +1,11 @@
 import { flags } from '@oclif/command'
-import { Kommand } from '../../common'
 import { Client } from '@elastic/elasticsearch'
 
+import { Kommand } from '../../common'
+
 export default class EsGet extends Kommand {
+  static initSdk = false
+
   static description = 'Gets a document from ES'
 
   static flags = {
@@ -25,23 +28,18 @@ export default class EsGet extends Kommand {
   ]
 
   async runSafe() {
-    const { args, flags: userFlags } = this.parse(EsGet)
+    // @todo support ssl
+    const node = `http://${this.flags.host}:${this.flags.port}`
 
-    const node = `http://${userFlags.host}:${userFlags.port}`
     const esClient = new Client({ node })
+
     const esRequest = {
-      index: args.index,
-      id: args.id
+      index: this.args.index,
+      id: this.args.id
     }
 
-    try {
-      const { body } = await esClient.get(esRequest)
+    const { body } = await esClient.get(esRequest)
 
-      this.log(JSON.stringify(body, null, 2))
-    }
-    catch (error) {
-      this.logError(JSON.stringify(error, null, 2))
-      throw error
-    }
+    this.log(JSON.stringify(body, null, 2))
   }
 }

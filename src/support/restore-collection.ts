@@ -154,11 +154,11 @@ export async function restoreCollectionMappings(sdk: any, dump: any, index?: str
   const dstIndex: any = index || srcIndex
   const dstCollection: any = collection || srcCollection
 
-  if (!await sdk.index.exists(dstIndex)) {
-    await sdk.index.create(dstIndex)
+  if (!await sdk?.index.exists(dstIndex)) {
+    await sdk?.index.create(dstIndex)
   }
 
-  await sdk.collection.create(dstIndex, dstCollection, dump.content[srcIndex][srcCollection])
+  await sdk?.collection.create(dstIndex, dstCollection, dump.content[srcIndex][srcCollection])
 
   return {
     index: dstIndex,

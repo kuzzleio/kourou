@@ -1,6 +1,7 @@
 import { flags } from '@oclif/command'
+
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
+import { kuzzleFlags } from '../../support/kuzzle'
 
 export default class DocumentGet extends Kommand {
   static description = 'Gets a document'
@@ -17,15 +18,10 @@ export default class DocumentGet extends Kommand {
   ]
 
   async runSafe() {
-    const { args, flags: userFlags } = this.parse(DocumentGet)
-
-    this.sdk = new KuzzleSDK(userFlags)
-    await this.sdk.init(this.log)
-
-    const document = await this.sdk.document.get(
-      args.index,
-      args.collection,
-      args.id)
+    const document = await this.sdk?.document.get(
+      this.args.index,
+      this.args.collection,
+      this.args.id)
 
     this.log(JSON.stringify(document, null, 2))
   }
