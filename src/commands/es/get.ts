@@ -28,6 +28,7 @@ export default class EsGet extends Kommand {
   ]
 
   async runSafe() {
+    // @todo support ssl
     const node = `http://${this.flags.host}:${this.flags.port}`
 
     const esClient = new Client({ node })
