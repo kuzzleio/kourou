@@ -12,6 +12,7 @@ Code Execution
 
   provided code will be executed in an async method
   you can access a connected and authenticated SDK with the "sdk" variable
+  templated variable passed as the command arguments are also accessible within the same name
   return value will be printed on the standard output (eg: 'return await sdk.server.now();')
   error will be catched and printed on the error output (eg: 'throw new Error("failure");')
 
@@ -22,6 +23,7 @@ Provide code
 
   Examples:
     - kourou sdk:execute --code 'return await sdk.server.now()'
+    - kourou sdk:execute --code 'return await sdk.index.exists(index)' --var 'index="nyc-open-data"'
     - kourou sdk:execute < snippet.js
     - echo 'return await sdk.server.now()' | kourou sdk:execute
 
@@ -37,6 +39,11 @@ Other
     help: flags.help(),
     code: flags.string({
       description: 'Code to execute. Will be read from STDIN if available.'
+    }),
+    var: flags.string({
+      char: 'v',
+      description: 'Additional arguments injected into the code. (eg: --var \'index="nyc-open-data"\'',
+      multiple: true
     }),
     editor: flags.boolean({
       description: 'Open an editor (EDITOR env variable) to edit the code before executing it.'
@@ -54,10 +61,18 @@ Other
 
     let code: any = stdin || this.flags.code
     let userError: any
+    const variables = (this.flags.var || [])
+      .map((nameValue: string) => {
+        const [name, value] = nameValue.split('=');
+
+        return `    let ${name} = ${value};`;
+      })
+      .join('\n')
 
     code = `
 (async () => {
   try {
+${variables}
     ${code}
   }
   catch (error) {

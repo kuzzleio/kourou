@@ -746,6 +746,7 @@ USAGE
   $ kourou sdk:execute
 
 OPTIONS
+  -v, --var=var        Additional arguments injected into the code. (eg: --var 'index="nyc-open-data"'
   --code=code          Code to execute. Will be read from STDIN if available.
   --editor             Open an editor (EDITOR env variable) to edit the code before executing it.
   --help               show CLI help
@@ -762,7 +763,8 @@ DESCRIPTION
   Code Execution
 
      provided code will be executed in an async method
-     you can access an connected and authenticated SDK with the "sdk" variable
+     you can access a connected and authenticated SDK with the "sdk" variable
+     templated variable passed as the command arguments are also accessible within the same name
      return value will be printed on the standard output (eg: 'return await sdk.server.now();')
      error will be catched and printed on the error output (eg: 'throw new Error("failure");')
 
@@ -773,6 +775,7 @@ DESCRIPTION
 
      Examples:
        - kourou sdk:execute --code 'return await sdk.server.now()'
+       - kourou sdk:execute --code 'return await sdk.index.exists(index)' --var 'index="nyc-open-data"'
        - kourou sdk:execute < snippet.js
        - echo 'return await sdk.server.now()' | kourou sdk:execute
 

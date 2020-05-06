@@ -60,7 +60,11 @@ export class KuzzleSDK {
   }
 
   public async init(log: any) {
-    const ProtocolClass = this.protocol === 'websocket'
+    if (this.protocol === 'websocket') {
+      this.protocol = 'ws'
+    }
+
+    const ProtocolClass = this.protocol === 'ws'
       ? WebSocket
       : Http
 
