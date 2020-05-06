@@ -94,6 +94,7 @@ ${variables}
 
     if (userError) {
       this.logKo(`Error when executing SDK code: ${userError.message}`)
+      this.log(code)
     }
     else {
       this.logOk('Successfully executed SDK code')

@@ -41,7 +41,7 @@ export abstract class Kommand extends Command {
 
   public logKo(message?: string): void {
     process.exitCode = 1
-    this.error(chalk.red(`[X] ${message}`))
+    this.log(chalk.red(`[X] ${message}`))
   }
 
   async run() {
