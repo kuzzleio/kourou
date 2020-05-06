@@ -746,7 +746,7 @@ USAGE
   $ kourou sdk:execute
 
 OPTIONS
-  -v, --var=var        Additional arguments injected into the code. (eg: --var 'index="nyc-open-data"'
+  -v, --var=var        Additional arguments injected into the code. (eg: --var 'index="iot-data"'
   --code=code          Code to execute. Will be read from STDIN if available.
   --editor             Open an editor (EDITOR env variable) to edit the code before executing it.
   --help               show CLI help
@@ -775,7 +775,7 @@ DESCRIPTION
 
      Examples:
        - kourou sdk:execute --code 'return await sdk.server.now()'
-       - kourou sdk:execute --code 'return await sdk.index.exists(index)' --var 'index="nyc-open-data"'
+       - kourou sdk:execute --code 'return await sdk.index.exists(index)' --var 'index="iot-data"'
        - kourou sdk:execute < snippet.js
        - echo 'return await sdk.server.now()' | kourou sdk:execute
 

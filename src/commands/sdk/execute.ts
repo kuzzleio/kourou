@@ -23,7 +23,7 @@ Provide code
 
   Examples:
     - kourou sdk:execute --code 'return await sdk.server.now()'
-    - kourou sdk:execute --code 'return await sdk.index.exists(index)' --var 'index="nyc-open-data"'
+    - kourou sdk:execute --code 'return await sdk.index.exists(index)' --var 'index="iot-data"'
     - kourou sdk:execute < snippet.js
     - echo 'return await sdk.server.now()' | kourou sdk:execute
 
@@ -42,7 +42,7 @@ Other
     }),
     var: flags.string({
       char: 'v',
-      description: 'Additional arguments injected into the code. (eg: --var \'index="nyc-open-data"\'',
+      description: 'Additional arguments injected into the code. (eg: --var \'index="iot-data"\'',
       multiple: true
     }),
     editor: flags.boolean({
