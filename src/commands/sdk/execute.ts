@@ -63,9 +63,9 @@ Other
     let userError: any
     const variables = (this.flags.var || [])
       .map((nameValue: string) => {
-        const [name, value] = nameValue.split('=');
+        const [name, value] = nameValue.split('=')
 
-        return `    let ${name} = ${value};`;
+        return `    let ${name} = ${value};`
       })
       .join('\n')
 
