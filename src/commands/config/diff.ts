@@ -19,6 +19,10 @@ export class ConfigKeyDiff extends Kommand {
       description: 'Exit with an error if differences are found',
       default: false
     }),
+    values: flags.boolean({
+      description: 'Also displays value changes',
+      default: false
+    })
   }
 
   static args = [
@@ -60,7 +64,7 @@ export class ConfigKeyDiff extends Kommand {
   _keyChanges(base: any, object: any) {
     const changes: any = {}
 
-    function walkObject(base: any, object: any, path: any = []) {
+    const walkObject = (base: any, object: any, path: any = []) => {
       for (const key of Object.keys(base)) {
         if (object[key] === undefined) {
           const ar: [] = []
@@ -70,14 +74,14 @@ export class ConfigKeyDiff extends Kommand {
         }
       }
 
-      for (const [key, value] of Object.entries(object)) {
+      for (const key of Object.keys(object)) {
         if (base[key] === undefined) {
           changes[[...path, key].join('.')] = 'was added'
         }
-        else if (!_.isEqual(value, base[key]) && _.isObject(value) && _.isObject(base[key])) {
-          walkObject(base[key], value, [...path, key])
+        else if (!_.isEqual(object[key], base[key]) && _.isObject(object[key]) && _.isObject(base[key])) {
+          walkObject(base[key], object[key], [...path, key])
         }
-        else if (base[key] !== object[key]) {
+        else if (this.flags.values && base[key] !== object[key]) {
           changes[[...path, key].join('.')] = `value is "${object[key]}" and was "${base[key]}"`
         }
       }

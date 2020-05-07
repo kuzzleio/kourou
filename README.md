@@ -38,11 +38,12 @@ Commands that needs to send requests to Kuzzle API can specify the Kuzzle server
 
 By command line:
 ```
-  -h, --host=host                [default: localhost] Kuzzle server host
-  -p, --port=port                [default: 7512] Kuzzle server port
+  --host=host                    [default: localhost] Kuzzle server host
+  --port=port                    [default: 7512] Kuzzle server port
   --username=username            [default: anonymous] Kuzzle user
   --password=password            Kuzzle user password
   --ssl                          [default: true for port 443] Use SSL to connect to Kuzzle
+  --protocol                     [default: http] Protocol used to connect to Kuzzle (`http` or `ws`)
 ```
 
 By environment variables:
@@ -52,6 +53,24 @@ By environment variables:
   KUZZLE_USERNAME            [default: anonymous] Kuzzle user
   KUZZLE_PASSWORD            Kuzzle user password
   KUZZLE_SSL                 Use SSL to connect to Kuzzle
+  KUZZLE_PROTOCOL            Protocol used to connect to Kuzzle (`http` or `ws`)
+```
+
+## User impersonation
+
+You can impersonate a user before executing a command with the `--as` flag and a user `kuid`.
+
+User impersonation require the following rights for the authenticated user: `security:createApiKey`, `security:deleteApiKey`
+
+```bash
+$ kourou query auth:getCurrentUser --as gordon --username admin --password admin
+ 
+ 🚀 Kourou - Executes an API query.
+ 
+ [ℹ] Connecting to http://localhost:7512 ...
+ [ℹ] Impersonate user "gordon"
+
+[...]
 ```
 
 # Commands
@@ -104,11 +123,12 @@ ARGUMENTS
   TOKEN  API key token
 
 OPTIONS
+  --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -131,13 +151,14 @@ ARGUMENTS
 
 OPTIONS
   -d, --description=description  (required) API Key description
+  --as=as                        Impersonate a user
   --expire=expire                [default: -1] API Key validity
   --help                         show CLI help
   --host=host                    [default: localhost] Kuzzle server host
   --id=id                        API Key unique ID
   --password=password            Kuzzle user password
   --port=port                    [default: 7512] Kuzzle server port
-  --protocol=protocol            [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol            [default: http] Kuzzle protocol (http or ws)
   --ssl                          Use SSL to connect to Kuzzle
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -157,11 +178,12 @@ ARGUMENTS
   ID    API Key unique ID
 
 OPTIONS
+  --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -183,12 +205,13 @@ ARGUMENTS
   USER  User kuid
 
 OPTIONS
+  --as=as              Impersonate a user
   --filter=filter      Filter to match the API Key descriptions
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -208,6 +231,8 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
+  --as=as              Impersonate a user
+
   --body=body          [default: {}] Collection mappings and settings in JS or JSON format. Will be read from STDIN if
                        available
 
@@ -219,7 +244,7 @@ OPTIONS
 
   --port=port          [default: 7512] Kuzzle server port
 
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
 
   --ssl                Use SSL to connect to Kuzzle
 
@@ -241,6 +266,7 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
+  --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --editor                 Open an editor (EDITOR env variable) to edit the query before sending
   --help                   show CLI help
@@ -248,7 +274,7 @@ OPTIONS
   --password=password      Kuzzle user password
   --path=path              Dump root directory
   --port=port              [default: 7512] Kuzzle server port
-  --protocol=protocol      [default: websocket] Kuzzle protocol (http or websocket)
+  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --query=query            [default: {}] Only dump documents matching the query (JS or JSON format)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
@@ -272,6 +298,7 @@ ARGUMENTS
   PATH  Dump directory path
 
 OPTIONS
+  --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --collection=collection  If set, override the collection destination name
   --help                   show CLI help
@@ -280,7 +307,7 @@ OPTIONS
   --no-mappings            Skip collection mappings
   --password=password      Kuzzle user password
   --port=port              [default: 7512] Kuzzle server port
-  --protocol=protocol      [default: websocket] Kuzzle protocol (http or websocket)
+  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -301,6 +328,7 @@ ARGUMENTS
 
 OPTIONS
   --strict  Exit with an error if differences are found
+  --values  Also displays value changes
 
 EXAMPLE
   kourou config:diff config/local/kuzzlerc config/production/kuzzlerc
@@ -321,13 +349,14 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
+  --as=as              Impersonate a user
   --body=body          [default: {}] Document body in JS or JSON format. Will be read from STDIN if available
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --id=id              Optional document ID
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --replace            Replaces the document if it already exists
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
@@ -353,11 +382,12 @@ ARGUMENTS
   ID          Document ID
 
 OPTIONS
+  --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -377,13 +407,14 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
+  --as=as              Impersonate a user
   --editor             Open an editor (EDITOR env variable) to edit the request before sending
   --from=from          Optional offset
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --query=query        [default: {}] Query in JS or JSON format.
   --scroll=scroll      Optional scroll TTL
   --size=size          Optional page size
@@ -551,12 +582,13 @@ ARGUMENTS
   PATH  Root directory containing dumps
 
 OPTIONS
+  --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
   --host=host              [default: localhost] Kuzzle server host
   --password=password      Kuzzle user password
   --port=port              [default: 7512] Kuzzle server port
-  --protocol=protocol      [default: websocket] Kuzzle protocol (http or websocket)
+  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -575,13 +607,14 @@ ARGUMENTS
   INDEX  Index name
 
 OPTIONS
+  --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --help                   show CLI help
   --host=host              [default: localhost] Kuzzle server host
   --password=password      Kuzzle user password
   --path=path              Dump root directory
   --port=port              [default: 7512] Kuzzle server port
-  --protocol=protocol      [default: websocket] Kuzzle protocol (http or websocket)
+  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -600,6 +633,7 @@ ARGUMENTS
   PATH  Dump directory or file
 
 OPTIONS
+  --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
   --host=host              [default: localhost] Kuzzle server host
@@ -607,7 +641,7 @@ OPTIONS
   --no-mappings            Skip collections mappings
   --password=password      Kuzzle user password
   --port=port              [default: 7512] Kuzzle server port
-  --protocol=protocol      [default: websocket] Kuzzle protocol (http or websocket)
+  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 
@@ -658,12 +692,13 @@ USAGE
   $ kourou profile:export
 
 OPTIONS
+  --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --path=path          [default: profiles] Dump directory
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: websocket] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -682,11 +717,12 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
+  --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: websocket] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -702,12 +738,13 @@ USAGE
   $ kourou role:export
 
 OPTIONS
+  --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --path=path          [default: roles] Dump directory
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: websocket] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -726,11 +763,12 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
+  --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: websocket] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -747,13 +785,14 @@ USAGE
 
 OPTIONS
   -v, --var=var        Additional arguments injected into the code. (eg: --var 'index="iot-data"'
+  --as=as              Impersonate a user
   --code=code          Code to execute. Will be read from STDIN if available.
   --editor             Open an editor (EDITOR env variable) to edit the code before executing it.
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -804,13 +843,14 @@ OPTIONS
   -a, --arg=arg                Additional argument. Repeatable. (e.g. "-a refresh=wait_for")
   -c, --collection=collection  Collection argument
   -i, --index=index            Index argument
+  --as=as                      Impersonate a user
   --body=body                  [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
   --editor                     Open an editor (EDITOR env variable) to edit the request before sending.
   --help                       show CLI help
   --host=host                  [default: localhost] Kuzzle server host
   --password=password          Kuzzle user password
   --port=port                  [default: 7512] Kuzzle server port
-  --protocol=protocol          [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol          [default: http] Kuzzle protocol (http or ws)
   --ssl                        Use SSL to connect to Kuzzle
   --username=username          [default: anonymous] Kuzzle username (local strategy)
 

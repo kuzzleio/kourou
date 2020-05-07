@@ -1,5 +1,4 @@
 import { flags } from '@oclif/command'
-import chalk from 'chalk'
 
 // tslint:disable-next-line
 const { Http, WebSocket, Kuzzle } = require('kuzzle-sdk')
@@ -28,9 +27,12 @@ export const kuzzleFlags = {
     default: process.env.KUZZLE_PASSWORD || undefined,
   }),
   protocol: flags.string({
-    description: 'Kuzzle protocol (http or websocket)',
+    description: 'Kuzzle protocol (http or ws)',
     default: process.env.KUZZLE_PROTOCOL || 'http',
   }),
+  as: flags.string({
+    description: 'Impersonate a user',
+  })
 }
 
 export class KuzzleSDK {
@@ -59,23 +61,32 @@ export class KuzzleSDK {
     this.protocol = options.protocol
   }
 
-  public async init(log: any) {
+  public async init(logger: any) {
+    let ProtocolClass
+
+    // Avoid common mistake
     if (this.protocol === 'websocket') {
       this.protocol = 'ws'
     }
 
-    const ProtocolClass = this.protocol === 'ws'
-      ? WebSocket
-      : Http
+    if (this.protocol === 'ws') {
+      ProtocolClass = WebSocket
+    }
+    else if (this.protocol === 'http') {
+      ProtocolClass = Http
+    }
+    else {
+      throw new TypeError(`Unknown protocol "${this.protocol}"`)
+    }
 
     this.sdk = new Kuzzle(new ProtocolClass(this.host, {
       port: this.port,
       sslConnection: this.ssl,
     }))
 
-    this.sdk.on('networkError', (error: any) => log(chalk.red(error)))
+    this.sdk.on('networkError', (error: any) => logger.logKo(error.message))
 
-    log(`[ℹ] Connecting to ${this.protocol}${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
+    logger.logInfo(`Connecting to ${this.protocol}${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
 
     await this.sdk.connect()
 
@@ -92,11 +103,51 @@ export class KuzzleSDK {
           await this.sdk.auth.refreshToken()
         }
         catch (error) {
-          log(`Cannot refresh token: ${error}`)
+          logger.logKo(`Cannot refresh token: ${error.message}`)
         }
       }, 80 * SECOND)
 
-      log(chalk.green(`[ℹ] Loggued as ${this.username}.`))
+      logger.logInfo(`Loggued as ${this.username}.`)
+    }
+  }
+
+  /**
+   * Impersonates a user.
+   * Every action called in the given callback will be impersonated.
+   *
+   * @param {string} userKuid - User kuid to impersonate
+   * @param {Function} callback - Callback that will be impersonated
+   */
+  public async impersonate(userKuid: string, callback: Function) {
+    const currentToken = this.sdk.jwt
+
+    let apiKey: any
+
+    try {
+      const apiKey = await this.security.createApiKey(
+        userKuid,
+        'Kourou impersonation token',
+        { expiresIn: '2h', refresh: false })
+
+      this.sdk.jwt = apiKey._source.token
+
+      const promise = callback()
+
+      if (typeof promise !== 'object' && typeof promise.then !== 'function') {
+        throw new TypeError('The impersonate callback function must return a promise')
+      }
+
+      await promise
+    }
+    catch (error) {
+      throw error
+    }
+    finally {
+      this.sdk.jwt = currentToken
+
+      if (apiKey?._id) {
+        await this.security.deleteApiKey(userKuid, apiKey._id)
+      }
     }
   }
 
