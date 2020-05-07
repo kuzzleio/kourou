@@ -27,7 +27,7 @@ export const kuzzleFlags = {
     default: process.env.KUZZLE_PASSWORD || undefined,
   }),
   protocol: flags.string({
-    description: 'Kuzzle protocol (http or websocket)',
+    description: 'Kuzzle protocol (http or ws)',
     default: process.env.KUZZLE_PROTOCOL || 'http',
   }),
   as: flags.string({
@@ -122,7 +122,7 @@ export class KuzzleSDK {
       const apiKey = await this.security.createApiKey(
         userKuid,
         'Kourou impersonation token',
-        { expiresIn: '1d', refresh: false })
+        { expiresIn: '2h', refresh: false })
 
       this.sdk.jwt = apiKey._source.token
 

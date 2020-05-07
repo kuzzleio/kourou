@@ -127,7 +127,7 @@ OPTIONS
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -157,7 +157,7 @@ OPTIONS
   --id=id                        API Key unique ID
   --password=password            Kuzzle user password
   --port=port                    [default: 7512] Kuzzle server port
-  --protocol=protocol            [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol            [default: http] Kuzzle protocol (http or ws)
   --ssl                          Use SSL to connect to Kuzzle
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -182,7 +182,7 @@ OPTIONS
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -210,7 +210,7 @@ OPTIONS
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -243,7 +243,7 @@ OPTIONS
 
   --port=port          [default: 7512] Kuzzle server port
 
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
 
   --ssl                Use SSL to connect to Kuzzle
 
@@ -354,7 +354,7 @@ OPTIONS
   --id=id              Optional document ID
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --replace            Replaces the document if it already exists
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
@@ -385,7 +385,7 @@ OPTIONS
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -412,7 +412,7 @@ OPTIONS
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
   --query=query        [default: {}] Query in JS or JSON format.
   --scroll=scroll      Optional scroll TTL
   --size=size          Optional page size
@@ -749,7 +749,7 @@ OPTIONS
   --host=host                  [default: localhost] Kuzzle server host
   --password=password          Kuzzle user password
   --port=port                  [default: 7512] Kuzzle server port
-  --protocol=protocol          [default: http] Kuzzle protocol (http or websocket)
+  --protocol=protocol          [default: http] Kuzzle protocol (http or ws)
   --ssl                        Use SSL to connect to Kuzzle
   --username=username          [default: anonymous] Kuzzle username (local strategy)
 
