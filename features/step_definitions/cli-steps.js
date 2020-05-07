@@ -112,6 +112,19 @@ Then(/I should( not)? match stdout with "(.*?)"/, function (not, rawRegexp) {
   }
 });
 
+Then(/I should( not)? match stdout with:/, function (not, dataTable) {
+  for (const rawRegexp of _.flatten(dataTable.rawTable)) {
+    const regexp = new RegExp(rawRegexp);
+
+    if (not) {
+      should(this.props.result).not.match(regexp);
+    }
+    else {
+      should(this.props.result).match(regexp);
+    }
+  }
+});
+
 Then('a JSON file {string} containing:', function (filename, dataTable) {
   const
     content = {},

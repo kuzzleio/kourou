@@ -11,3 +11,11 @@ Feature: Query
       | flag | --body                   | { "other-name": "my" } |
     Then The document "chuon-chuon-kim" content match:
       | other-name | "my" |
+
+  Scenario: Impersonate an user
+    When I run the command "query" with:
+      | arg  | auth:getCurrentUser |        |
+      | flag | --as                | gordon |
+    Then I should match stdout with:
+      | "_id": "gordon" |
+

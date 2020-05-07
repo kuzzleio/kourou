@@ -13,7 +13,7 @@ export default class ProfileImport extends Kommand {
     ...kuzzleFlags,
     protocol: flags.string({
       description: 'Kuzzle protocol (http or websocket)',
-      default: 'websocket',
+      default: 'ws',
     }),
   }
 
