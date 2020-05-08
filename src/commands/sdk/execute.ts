@@ -60,7 +60,7 @@ Other
     }
 
     let code: any = stdin || this.flags.code
-    let userError: Error
+    let userError: Error | null = null
     const variables = (this.flags.var || [])
       .map((nameValue: string) => {
         const [name, value] = nameValue.split('=')
@@ -90,13 +90,13 @@ ${variables}
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const sdk: any = this.sdk?.sdk
 
-    let result;
+    let result
     try {
       // eslint-disable-next-line no-eval
       result = await eval(code)
     }
     catch (error) {
-      userError = error;
+      userError = error
     }
 
     if (userError) {
