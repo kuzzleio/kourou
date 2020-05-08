@@ -61,6 +61,7 @@ Other
 
     let code: any = stdin || this.flags.code
     let userError: Error | null = null
+
     const variables = (this.flags.var || [])
       .map((nameValue: string) => {
         const [name, value] = nameValue.split('=')
