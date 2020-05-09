@@ -10,11 +10,11 @@ Executes arbitrary code.
 
 Code Execution
 
-  provided code will be executed in an async method
-  you can access a connected and authenticated SDK with the "sdk" variable
-  templated variable passed as the command arguments are also accessible within the same name
-  return value will be printed on the standard output (eg: 'return await sdk.server.now();')
-  error will be catched and printed on the error output (eg: 'throw new Error("failure");')
+  Provided code will be executed in an async method.
+  You can access a connected and authenticated SDK with the "sdk" variable.
+  Templated variable passed as the command arguments are also accessible within the same name.
+  Returned value will be printed on the standard output (e.g. 'return await sdk.server.now();').
+  Errors will be caught and printed on the error output (e.g. 'throw new Error("failure");').
 
 Provide code
 
