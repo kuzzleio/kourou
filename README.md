@@ -753,7 +753,7 @@ _See code: [src/commands/role/export.ts](https://github.com/kuzzleio/kourou/blob
 
 ## `kourou role:import PATH`
 
-Import roles
+Imports roles.
 
 ```
 USAGE
