@@ -64,6 +64,11 @@ export class KuzzleSDK {
   public async init(logger: any) {
     let ProtocolClass
 
+    // Avoid common mistake
+    if (this.protocol === 'websocket') {
+      this.protocol = 'ws'
+    }
+
     if (this.protocol === 'ws') {
       ProtocolClass = WebSocket
     }
@@ -176,5 +181,9 @@ export class KuzzleSDK {
 
   get auth() {
     return this.sdk.auth
+  }
+
+  get server() {
+    return this.sdk.server
   }
 }
