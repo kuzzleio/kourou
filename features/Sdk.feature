@@ -15,7 +15,7 @@ Feature: SDK commands
       | other-name | "my" |
 
   Scenario: Impersonate an user
-    When I run the command "query" with:
+    When I run the command "sdk:query" with:
       | arg  | auth:getCurrentUser |        |
       | flag | --as                | gordon |
     Then I should match stdout with:
