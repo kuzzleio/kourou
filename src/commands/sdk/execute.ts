@@ -56,7 +56,7 @@ Other
     const stdin = await this.fromStdin()
 
     if (stdin && this.flags.editor) {
-      throw new Error('Unable to use flag --editor when reading from STDIN')
+      throw new Error('Cannot use --editor when reading from STDIN')
     }
 
     let code: any = stdin || this.flags.code
