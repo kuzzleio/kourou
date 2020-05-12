@@ -1,6 +1,7 @@
 import { flags } from '@oclif/command'
+
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
+import { kuzzleFlags } from '../../support/kuzzle'
 
 class ApiKeyCheck extends Kommand {
   public static description = 'Checks an API key validity';
@@ -19,14 +20,7 @@ class ApiKeyCheck extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
-    const { args, flags: userFlags } = this.parse(ApiKeyCheck)
-
-    this.sdk = new KuzzleSDK(userFlags)
-    await this.sdk.init(this.log)
-
-    const { valid } = await this.sdk.auth.checkToken(args.token)
+    const { valid } = await this.sdk?.auth.checkToken(this.args.token)
 
     if (valid) {
       this.logOk('API key is still valid')

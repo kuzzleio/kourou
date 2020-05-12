@@ -6,6 +6,8 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultEncrypt extends Kommand {
+  static initSdk = false
+
   static description = 'Encrypts an entire file.'
 
   static examples = [
@@ -33,39 +35,35 @@ export class VaultEncrypt extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
-    const { args, flags: userFlags } = this.parse(VaultEncrypt)
-
-    if (_.isEmpty(userFlags['vault-key'])) {
+    if (_.isEmpty(this.flags['vault-key'])) {
       throw new Error('A vault key must be provided')
     }
 
-    if (_.isEmpty(args.file)) {
+    if (_.isEmpty(this.args.file)) {
       throw new Error('A file must be provided')
     }
 
-    let outputFile = `${args.file}.enc`
-    if (userFlags['output-file']) {
-      outputFile = userFlags['output-file']
+    let outputFile = `${this.args.file}.enc`
+    if (this.flags['output-file']) {
+      outputFile = this.flags['output-file']
     }
 
-    if (fs.existsSync(outputFile) && !userFlags.force) {
+    if (fs.existsSync(outputFile) && !this.flags.force) {
       throw new Error(`Output file "${outputFile}" already exists. Use -f flag to overwrite it.`)
     }
 
-    const cryptonomicon = new Cryptonomicon(userFlags['vault-key'])
+    const cryptonomicon = new Cryptonomicon(this.flags['vault-key'])
 
-    if (!fs.existsSync(args.file)) {
-      throw new Error(`File "${args.file}" does not exists`)
+    if (!fs.existsSync(this.args.file)) {
+      throw new Error(`File "${this.args.file}" does not exists`)
     }
 
     let content
     try {
-      content = fs.readFileSync(args.file, 'utf8')
+      content = fs.readFileSync(this.args.file, 'utf8')
     }
     catch (error) {
-      throw new Error(`Cannot read file "${args.file}": ${error.message}`)
+      throw new Error(`Cannot read file "${this.args.file}": ${error.message}`)
     }
 
     const encryptedContent = cryptonomicon.encryptString(content)

@@ -7,49 +7,73 @@ import { KuzzleSDK } from './support/kuzzle'
 import { Editor, EditorParams } from './support/editor'
 
 export abstract class Kommand extends Command {
-  protected sdk?: KuzzleSDK;
+  protected sdk?: KuzzleSDK
+
+  public args: any
+
+  public flags: any
+
+  public static initSdk = true
 
   public printCommand() {
     const klass: any = this.constructor
 
+    const shortDescription = klass.description
+      .split('\n')
+      .filter((line: string) => line.length > 0)[0]
+
     this.log('')
-    this.log(`${chalk.blue.bold(`${emoji.get('rocket')} Kourou`)} - ${klass.description}`)
+    this.log(`${chalk.blue.bold(`${emoji.get('rocket')} Kourou`)} - ${shortDescription}`)
     this.log('')
   }
 
-  public log(message?: string | undefined, ...args: any[]): void {
-    return super.log(` ${message}`, ...args)
+  public log(message?: string): void {
+    super.log(` ${message}`)
   }
 
-  public logOk(message: string, ...args: any[]): void {
-    this.log(chalk.green(`[✔] ${message}`), ...args)
+  public logOk(message: string): void {
+    this.log(chalk.green(`[✔] ${message}`))
   }
 
-  public logInfo(message: string, ...args: any[]): void {
-    this.log(chalk.yellow(`[ℹ] ${message}`), ...args)
+  public logInfo(message: string): void {
+    this.log(chalk.yellow(`[ℹ] ${message}`))
   }
 
-  public logKo(message: string, ...args: any[]): void {
+  public logKo(message?: string): void {
     process.exitCode = 1
-    this.log(chalk.red(`[X] ${message}`), ...args)
-  }
-
-  public logError(message?: string | undefined, ...args: any[]): void {
-    process.exitCode = 1
-    return this.error(chalk.red(`[X] ${message}`), ...args)
+    this.log(chalk.red(`[X] ${message}`))
   }
 
   async run() {
+    this.printCommand()
+    const kommand = (this.constructor as unknown) as any
+
+    const result = this.parse(kommand)
+    this.args = result.args
+    this.flags = result.flags
+
     try {
-      await this.runSafe()
+      if (kommand.initSdk) {
+        this.sdk = new KuzzleSDK(this.flags)
+        await this.sdk.init(this)
+      }
+
+      if (this.flags.as) {
+        this.logInfo(`Impersonate user "${this.flags.as}"`)
+
+        await this.sdk?.impersonate(this.flags.as, async () => {
+          await this.runSafe()
+        })
+      }
+      else {
+        await this.runSafe()
+      }
     }
     catch (error) {
-      this.logError(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
+      this.logKo(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
     }
     finally {
-      if (this.sdk) {
-        this.sdk.disconnect()
-      }
+      this.sdk?.disconnect()
     }
   }
 

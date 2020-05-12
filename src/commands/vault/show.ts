@@ -7,9 +7,20 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultShow extends Kommand {
-  static description = 'Prints an encrypted key from a secrets file. (see https://github.com/kuzzleio/kuzzle-vault/)'
+  static initSdk = false
+
+  static description = `
+Prints an encrypted secrets file content.
+
+This method can display either:
+ - the entire content of the secrets file
+ - a single key value
+
+See https://github.com/kuzzleio/kuzzle-vault/ for more information.
+`
 
   static examples = [
+    'kourou vault:show config/secrets.enc.json --vault-key <vault-key>',
     'kourou vault:show config/secrets.enc.json aws.s3.secretKey --vault-key <vault-key>'
   ]
 
@@ -22,45 +33,49 @@ export class VaultShow extends Kommand {
 
   static args = [
     { name: 'secrets-file', description: 'Encrypted secrets file', required: true },
-    { name: 'key', description: 'Path to the key (lodash style)', required: true },
+    { name: 'key', description: 'Path to a key (lodash style)' },
   ]
 
   async runSafe() {
-    this.printCommand()
-
-    const { args, flags: userFlags } = this.parse(VaultShow)
-
-    if (_.isEmpty(userFlags['vault-key'])) {
+    if (_.isEmpty(this.flags['vault-key'])) {
       throw new Error('A vault key must be provided')
     }
 
-    if (_.isEmpty(args['secrets-file'])) {
+    if (_.isEmpty(this.args['secrets-file'])) {
       throw new Error('A secrets file must be provided')
     }
 
-    const cryptonomicon = new Cryptonomicon(userFlags['vault-key'])
+    const cryptonomicon = new Cryptonomicon(this.flags['vault-key'])
 
-    if (!fs.existsSync(args['secrets-file'])) {
-      throw new Error(`File "${args['secrets-file']}" does not exists`)
+    if (!fs.existsSync(this.args['secrets-file'])) {
+      throw new Error(`File "${this.args['secrets-file']}" does not exists`)
     }
 
     let encryptedSecrets = {}
     try {
-      encryptedSecrets = JSON.parse(fs.readFileSync(args['secrets-file'], 'utf8'))
+      encryptedSecrets = JSON.parse(fs.readFileSync(this.args['secrets-file'], 'utf8'))
     }
     catch (error) {
-      throw new Error(`Cannot read secrets from file "${args['secrets-file']}": ${error.message}`)
+      throw new Error(`Cannot read secrets from file "${this.args['secrets-file']}": ${error.message}`)
     }
 
-    const encryptedValue = _.get(encryptedSecrets, args.key)
+    if (this.args.key) {
+      const encryptedValue = _.get(encryptedSecrets, this.args.key)
 
-    if (!encryptedValue) {
-      throw new Error(`Key "${args.key}" does not exists`)
+      if (!encryptedValue) {
+        throw new Error(`Key "${this.args.key}" does not exist`)
+      }
+
+      const decryptedValue = cryptonomicon.decryptString(encryptedValue)
+
+      this.logOk(`Key "${this.args.key}" content:`)
+      this.log(chalk.green(decryptedValue))
     }
+    else {
+      const decryptedSecrets = cryptonomicon.decryptObject(encryptedSecrets)
 
-    const decryptedValue = cryptonomicon.decryptString(encryptedValue)
-
-    this.logOk(`Key "${args.key}" content:`)
-    this.log(chalk.green(decryptedValue))
+      this.logOk('Secrets file content:')
+      this.log(chalk.green(JSON.stringify(decryptedSecrets, null, 2)))
+    }
   }
 }

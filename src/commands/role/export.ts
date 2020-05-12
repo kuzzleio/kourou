@@ -1,14 +1,11 @@
+import * as fs from 'fs'
+import path from 'path'
+
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
-import * as fs from 'fs'
-import chalk from 'chalk'
+import { kuzzleFlags } from '../../support/kuzzle'
 
 export default class RoleDump extends Kommand {
-  private batchSize?: string;
-
-  private path?: string;
-
   static description = 'Exports roles'
 
   static flags = {
@@ -18,23 +15,18 @@ export default class RoleDump extends Kommand {
       default: 'roles'
     }),
     ...kuzzleFlags,
+    protocol: flags.string({
+      description: 'Kuzzle protocol (http or websocket)',
+      default: 'ws',
+    }),
   }
 
   async runSafe() {
-    this.printCommand()
+    const filename = path.join(this.flags.path, 'roles.json')
 
-    const { flags: userFlags } = this.parse(RoleDump)
+    this.logInfo(`Exporting roles in ${filename} ...`)
 
-    this.path = userFlags.path
-
-    const filename = `${this.path}/roles.json`
-
-    this.sdk = new KuzzleSDK(userFlags)
-    await this.sdk.init(this.log)
-
-    this.log(`Dumping roles in ${filename} ...`)
-
-    fs.mkdirSync(this.path, { recursive: true })
+    fs.mkdirSync(this.flags.path, { recursive: true })
 
     const roles = await this._dumpRoles()
 
@@ -45,20 +37,16 @@ export default class RoleDump extends Kommand {
 
     fs.writeFileSync(filename, JSON.stringify(dump, null, 2))
 
-    this.log(chalk.green(`[✔] ${Object.keys(roles).length} roles dumped`))
+    this.logOk(`${Object.keys(roles).length} roles dumped`)
   }
 
   async _dumpRoles() {
     const options = {
-      scroll: '10s',
+      scroll: '3s',
       size: 100
     }
 
-    let result
-    // f*** you TS
-    if (this.sdk) {
-      result = await this.sdk.security.searchRoles({}, options)
-    }
+    let result = await this.sdk?.security.searchRoles({}, options)
 
     const roles: any = {}
 

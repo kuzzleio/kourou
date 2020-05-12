@@ -5,7 +5,13 @@ import { Vault } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultTest extends Kommand {
-  static description = 'Tests if an encrypted secrets file can be decrypted. (see https://github.com/kuzzleio/kuzzle-vault/)'
+  static initSdk = false
+
+  static description = `
+Tests if an encrypted secrets file can be decrypted.
+
+See https://github.com/kuzzleio/kuzzle-vault/ for more information.
+`
 
   static examples = [
     'kourou vault:test config/secrets.enc.json --vault-key <vault-key>'
@@ -23,22 +29,18 @@ export class VaultTest extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
-    const { args, flags: userFlags } = this.parse(VaultTest)
-
-    if (_.isEmpty(userFlags['vault-key'])) {
+    if (_.isEmpty(this.flags['vault-key'])) {
       throw new Error('A vault key must be provided')
     }
 
-    if (_.isEmpty(args['secrets-file'])) {
+    if (_.isEmpty(this.args['secrets-file'])) {
       throw new Error('A secrets file must be provided')
     }
 
-    const vault = new Vault(userFlags['vault-key'])
+    const vault = new Vault(this.flags['vault-key'])
 
     try {
-      vault.decrypt(args['secrets-file'])
+      vault.decrypt(this.args['secrets-file'])
       this.logOk('Secrets file can be decrypted')
     }
     catch (error) {

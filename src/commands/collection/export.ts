@@ -1,9 +1,10 @@
 import { flags } from '@oclif/command'
-import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
-import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-collection'
 import * as fs from 'fs'
-import chalk from 'chalk'
+import path from 'path'
+
+import { Kommand } from '../../common'
+import { kuzzleFlags } from '../../support/kuzzle'
+import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-collection'
 
 export default class CollectionExport extends Kommand {
   static description = 'Exports a collection (JSONL format)'
@@ -25,6 +26,10 @@ export default class CollectionExport extends Kommand {
       description: 'Open an editor (EDITOR env variable) to edit the query before sending'
     }),
     ...kuzzleFlags,
+    protocol: flags.string({
+      description: 'Kuzzle protocol (http or websocket)',
+      default: 'ws',
+    }),
   }
 
   static args = [
@@ -38,42 +43,37 @@ export default class CollectionExport extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
+    const exportPath = this.flags.path
+      ? path.join(this.flags.path, this.args.index)
+      : this.args.index
 
-    const { args, flags: userFlags } = this.parse(CollectionExport)
+    let query = this.parseJs(this.flags.query)
 
-    const path = userFlags.path ? `${userFlags.path}/${args.index}` : args.index
-
-    this.sdk = new KuzzleSDK({ protocol: 'ws', ...userFlags })
-    await this.sdk.init(this.log)
-
-    let query = this.parseJs(userFlags.query)
-
-    if (userFlags.editor) {
+    if (this.flags.editor) {
       query = this.fromEditor(query, { json: true })
     }
 
-    const countAll = await this.sdk.document.count(args.index, args.collection)
-    const count = await this.sdk.document.count(args.index, args.collection, { query })
+    const countAll = await this.sdk?.document.count(this.args.index, this.args.collection)
+    const count = await this.sdk?.document.count(this.args.index, this.args.collection, { query })
 
-    this.log(`Dumping ${count} of ${countAll} documents from collection "${args.index}:${args.collection}" in ${path}/ ...`)
+    this.logInfo(`Dumping ${count} of ${countAll} documents from collection "${this.args.index}:${this.args.collection}" in ${path}/ ...`)
 
-    fs.mkdirSync(path, { recursive: true })
+    fs.mkdirSync(exportPath, { recursive: true })
 
     await dumpCollectionMappings(
       this.sdk,
-      args.index,
-      args.collection,
-      path)
+      this.args.index,
+      this.args.collection,
+      exportPath)
 
     await dumpCollectionData(
       this.sdk,
-      args.index,
-      args.collection,
-      Number(userFlags['batch-size']),
-      path,
+      this.args.index,
+      this.args.collection,
+      Number(this.flags['batch-size']),
+      exportPath,
       query)
 
-    this.log(chalk.green(`[✔] Collection ${args.index}:${args.collection} dumped`))
+    this.logOk(`Collection ${this.args.index}:${this.args.collection} dumped`)
   }
 }

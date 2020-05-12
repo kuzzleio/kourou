@@ -1,7 +1,7 @@
 import { flags } from '@oclif/command'
+
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
-import chalk from 'chalk'
+import { kuzzleFlags } from '../../support/kuzzle'
 
 export default class DocumentSearch extends Kommand {
   static description = 'Searches for documents'
@@ -41,49 +41,33 @@ export default class DocumentSearch extends Kommand {
     { name: 'collection', description: 'Collection name', required: true }
   ]
 
-  async run() {
-    try {
-      await this.runSafe()
-    }
-    catch (error) {
-      this.logError(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
-    }
-  }
-
   async runSafe() {
-    this.printCommand()
-
-    const { args, flags: userFlags } = this.parse(DocumentSearch)
-
-    const sdk = new KuzzleSDK(userFlags)
-    await sdk.init(this.log)
-
     let request: any = {
       controller: 'document',
       action: 'search',
-      index: args.index,
-      collection: args.collection,
-      from: userFlags.from,
-      size: userFlags.size,
-      scroll: userFlags.scroll,
+      index: this.args.index,
+      collection: this.args.collection,
+      from: this.flags.from,
+      size: this.flags.size,
+      scroll: this.flags.scroll,
       body: {
-        query: this.parseJs(userFlags.query),
-        sort: this.parseJs(userFlags.sort)
+        query: this.parseJs(this.flags.query),
+        sort: this.parseJs(this.flags.sort)
       }
     }
 
     // allow to edit request before send
-    if (userFlags.editor) {
+    if (this.flags.editor) {
       request = this.fromEditor(request, { json: true })
     }
 
-    const { result } = await sdk.query(request)
+    const { result } = await this.sdk?.query(request)
 
     for (const document of result.hits) {
-      this.log(chalk.yellow(`Document ID: ${document._id}`))
+      this.logInfo(`Document ID: ${document._id}`)
       this.log(`Content: ${JSON.stringify(document._source, null, 2)}`)
     }
 
-    this.log(chalk.green(`${result.hits.length} documents fetched on a total of ${result.total}`))
+    this.logOk(`${result.hits.length} documents fetched on a total of ${result.total}`)
   }
 }

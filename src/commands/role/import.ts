@@ -1,18 +1,19 @@
+import * as fs from 'fs'
+
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
-import * as fs from 'fs'
-import chalk from 'chalk'
+import { kuzzleFlags } from '../../support/kuzzle'
 import { restoreRoles } from '../../support/restore-securities'
-
 export default class RoleImport extends Kommand {
-  private path?: string;
-
   static description = 'Import roles'
 
   static flags = {
     help: flags.help({}),
     ...kuzzleFlags,
+    protocol: flags.string({
+      description: 'Kuzzle protocol (http or websocket)',
+      default: 'ws',
+    }),
   }
 
   static args = [
@@ -20,23 +21,12 @@ export default class RoleImport extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
+    this.logInfo(`Importing roles from ${this.args.path} ...`)
 
-    const { args, flags: userFlags } = this.parse(RoleImport)
-
-    this.path = args.path
-
-    this.sdk = new KuzzleSDK(userFlags)
-    await this.sdk.init(this.log)
-
-    const filename: any = this.path
-
-    this.log(`Restoring roles from ${filename} ...`)
-
-    const dump = JSON.parse(fs.readFileSync(filename, 'utf-8'))
+    const dump = JSON.parse(fs.readFileSync(this.args.path, 'utf-8'))
 
     const count = await restoreRoles(this.sdk, dump)
 
-    this.log(chalk.green(`[✔] ${count} roles restored`))
+    this.logOk(`${count} roles restored`)
   }
 }

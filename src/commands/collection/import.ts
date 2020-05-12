@@ -3,7 +3,7 @@ import * as fs from 'fs'
 
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
+import { kuzzleFlags } from '../../support/kuzzle'
 import { restoreCollectionData, restoreCollectionMappings } from '../../support/restore-collection'
 
 export default class CollectionImport extends Kommand {
@@ -25,6 +25,10 @@ export default class CollectionImport extends Kommand {
       description: 'Skip collection mappings'
     }),
     ...kuzzleFlags,
+    protocol: flags.string({
+      description: 'Kuzzle protocol (http or websocket)',
+      default: 'ws',
+    }),
   }
 
   static args = [
@@ -32,40 +36,27 @@ export default class CollectionImport extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
+    this.logInfo(`Start importing dump from ${this.args.path}`)
 
-    const { args, flags: userFlags } = this.parse(CollectionImport)
-
-    const index = userFlags.index
-    const collection = userFlags.collection
-
-    this.sdk = new KuzzleSDK({ protocol: 'ws', loginTTL: '1d', ...userFlags })
-
-    await this.sdk.init(this.log)
-
-    this.logInfo(`Start importing dump from ${args.path}`)
-
-    if (!userFlags['no-mappings']) {
-      const mappingsPath = path.join(args.path, 'mappings.json')
+    if (!this.flags['no-mappings']) {
+      const mappingsPath = path.join(this.args.path, 'mappings.json')
       const dump = JSON.parse(fs.readFileSync(mappingsPath, 'utf8'))
 
       await restoreCollectionMappings(
         this.sdk,
         dump,
-        index,
-        collection)
+        this.flags.index,
+        this.flags.collection)
     }
 
     const { total } = await restoreCollectionData(
       this.sdk,
       this.log.bind(this),
-      Number(userFlags['batch-size']),
-      path.join(args.path, 'documents.jsonl'),
-      index,
-      collection)
+      Number(this.flags['batch-size']),
+      path.join(this.args.path, 'documents.jsonl'),
+      this.flags.index,
+      this.flags.collection)
 
-    this.logOk(`Successfully imported ${total} documents in "${index}:${collection}"`)
-
-    this.logOk(`Dump directory ${args.path} imported`)
+    this.logOk(`Successfully imported ${total} documents from "${this.args.path}" in "${this.flags.index}:${this.flags.collection}"`)
   }
 }

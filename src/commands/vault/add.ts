@@ -6,7 +6,17 @@ import { Cryptonomicon } from 'kuzzle-vault'
 import { Kommand } from '../../common'
 
 export class VaultAdd extends Kommand {
-  static description = 'Adds an encrypted key to a secrets file (See: https://github.com/kuzzleio/kuzzle-vault/)'
+  static initSdk = false
+
+  static description = `
+Adds an encrypted key to an encrypted secrets file.
+
+A new secrets file is created if it does not yet exist.
+
+Encrypted secrets are meant to be loaded inside an application with Kuzzle Vault.
+
+See https://github.com/kuzzleio/kuzzle-vault/ for more information.
+`
 
   static examples = [
     'kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>'
@@ -26,23 +36,19 @@ export class VaultAdd extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
-    const { args, flags: userFlags } = this.parse(VaultAdd)
-
-    if (_.isEmpty(userFlags['vault-key'])) {
+    if (_.isEmpty(this.flags['vault-key'])) {
       throw new Error('A vault key must be provided')
     }
 
-    if (_.isEmpty(args['secrets-file'])) {
+    if (_.isEmpty(this.args['secrets-file'])) {
       throw new Error('A secrets file must be provided')
     }
 
-    const cryptonomicon = new Cryptonomicon(userFlags['vault-key'])
+    const cryptonomicon = new Cryptonomicon(this.flags['vault-key'])
 
     let encryptedSecrets = {}
-    if (fs.existsSync(args['secrets-file'])) {
-      encryptedSecrets = JSON.parse(fs.readFileSync(args['secrets-file'], 'utf8'))
+    if (fs.existsSync(this.args['secrets-file'])) {
+      encryptedSecrets = JSON.parse(fs.readFileSync(this.args['secrets-file'], 'utf8'))
 
       try {
         cryptonomicon.decryptObject(encryptedSecrets)
@@ -52,10 +58,10 @@ export class VaultAdd extends Kommand {
       }
     }
 
-    _.set(encryptedSecrets, args.key, cryptonomicon.encryptString(args.value))
+    _.set(encryptedSecrets, this.args.key, cryptonomicon.encryptString(this.args.value))
 
-    fs.writeFileSync(args['secrets-file'], JSON.stringify(encryptedSecrets, null, 2))
+    fs.writeFileSync(this.args['secrets-file'], JSON.stringify(encryptedSecrets, null, 2))
 
-    this.logOk(`Key "${args.key}" has been securely added "${args['secrets-file']}"`)
+    this.logOk(`Key "${this.args.key}" has been securely added "${this.args['secrets-file']}"`)
   }
 }

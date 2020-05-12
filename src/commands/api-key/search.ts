@@ -1,6 +1,7 @@
 import { flags } from '@oclif/command'
+
 import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
+import { kuzzleFlags } from '../../support/kuzzle'
 
 class ApiKeySearch extends Kommand {
   public static description = 'Lists a user\'s API Keys.';
@@ -18,31 +19,24 @@ class ApiKeySearch extends Kommand {
   ]
 
   async runSafe() {
-    this.printCommand()
-
-    const { flags: userFlags, args } = this.parse(ApiKeySearch)
-
-    this.sdk = new KuzzleSDK(userFlags)
-    await this.sdk.init(this.log)
-
     let query = {}
-    if (userFlags.filter) {
+    if (this.flags.filter) {
       query = {
         match: {
-          description: userFlags.filter,
+          description: this.flags.filter,
         },
       }
     }
 
-    const result = await this.sdk.security.searchApiKeys(
-      args.user,
+    const result = await this.sdk?.security.searchApiKeys(
+      this.args.user,
       query,
       {
         from: 0,
         size: 100
       })
 
-    this.log(`${result.total} API Keys found for user ${args.user}`)
+    this.logOk(`${result.total} API Keys found for user ${this.args.user}`)
 
     if (result.total !== 0) {
       this.log('')
