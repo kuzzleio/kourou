@@ -29,7 +29,7 @@ Query body
 Other
 
   use the --editor flag to modify the query before sending it to Kuzzle
-  use the --display flag to display a particular property of the response
+  use the --display flag to display a specific property of the response
 
   Examples:
     - kourou sdk:query document:create -i iot -c sensors --editor
