@@ -26,7 +26,7 @@ export default class UserImport extends Kommand {
 
     const dump = JSON.parse(fs.readFileSync(this.args.path, 'utf-8'))
 
-    const count = await restoreUsers(this.sdk, dump)
+    const count = await restoreUsers(this, dump)
 
     this.logOk(`${count} users restored`)
   }
