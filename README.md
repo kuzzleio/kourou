@@ -897,7 +897,7 @@ USAGE
 
 OPTIONS
   --as=as              Impersonate a user
-  --exclude=exclude    [default: []] Exclude user by matching their IDs
+  --exclude=exclude    [default: []] Exclude users by matching their IDs
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password

@@ -5,7 +5,7 @@ import * as path from 'path'
 import { Kommand } from '../common'
 import { kuzzleFlags } from '../support/kuzzle'
 import { restoreCollectionData, restoreCollectionMappings } from '../support/restore-collection'
-import { restoreProfiles, restoreRoles } from '../support/restore-securities'
+import { restoreProfiles, restoreRoles, restoreUsers } from '../support/restore-securities'
 
 const revAlphaSort = (a: string, b: string) => {
   if (a < b) {
@@ -90,6 +90,11 @@ export default class Import extends Kommand {
           this.logInfo(`[profiles] Start importing profiles in ${file}`)
           const total = await restoreProfiles(this.sdk, dump)
           this.logOk(`[profiles] Imported ${total} profiles`)
+        }
+        else if (dump.type === 'users') {
+          this.logInfo(`[users] Start importing users in ${file}`)
+          const total = await restoreUsers(this.sdk, dump)
+          this.logOk(`[users] Imported ${total} users`)
         }
         else if (dump.type === 'mappings') {
           this.logInfo(`[collection] Start importing mappings in ${file}`)

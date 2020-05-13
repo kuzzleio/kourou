@@ -16,7 +16,7 @@ export default class UserExport extends Kommand {
       default: 'users'
     }),
     exclude: flags.string({
-      description: 'Exclude user by matching their IDs',
+      description: 'Exclude users by matching their IDs',
       default: '[]'
     }),
     ...kuzzleFlags,
