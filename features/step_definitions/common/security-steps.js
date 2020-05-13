@@ -17,13 +17,13 @@ Given('I create a profile {string} with the following policies:', async function
 Given('I create a role {string} with the following API rights:', async function (roleId, dataTable) {
 
   const controllers = this.parseObject(dataTable);
-  this.props.result = await this.sdk.security.createRole(roleId, { controllers }, { refresh: 'wait_for' });
+  this.props.result = await this.sdk.security.createRole(roleId, { controllers });
 });
 
 Then(/I (can not )?delete the role "(.*?)"/, async function (not, roleId) {
 
   try {
-    await this.sdk.security.deleteRole(roleId, { refresh: 'wait_for' });
+    await this.sdk.security.deleteRole(roleId);
   }
   catch (e) {
     if (not) {
@@ -35,7 +35,7 @@ Then(/I (can not )?delete the role "(.*?)"/, async function (not, roleId) {
 
 Then(/I (can not )?delete the profile "(.*?)"/, async function (not, profileId) {
   try {
-    await this.sdk.security.deleteProfile(profileId, { refresh: 'wait_for' });
+    await this.sdk.security.deleteProfile(profileId);
   }
   catch (e) {
     if (not) {
@@ -46,7 +46,7 @@ Then(/I (can not )?delete the profile "(.*?)"/, async function (not, profileId) 
 });
 
 Given('I delete the user {string}', async function (userId) {
-  this.props.result = await this.sdk.security.deleteUser(userId, { refresh: 'wait_for' });
+  this.props.result = await this.sdk.security.deleteUser(userId);
 });
 
 Given('I create a user {string} with content:', async function (userId, dataTable) {
@@ -103,4 +103,11 @@ Given('The role {string} should match:', async function (roleId, dataTable) {
   const role = await this.sdk.security.getRole(roleId);
 
   should(role.controllers).match(expectedControllers);
+})
+
+Given('The user {string} should match:', async function (userId, dataTable) {
+  const expectedContent = this.parseObject(dataTable);
+  const user = await this.sdk.security.getUser(userId);
+
+  should(user.content).match(expectedContent);
 })
