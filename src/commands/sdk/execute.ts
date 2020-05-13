@@ -109,13 +109,16 @@ ${variables}
     }
     else {
       this.logOk('Successfully executed SDK code')
+
       if (result !== undefined) {
         this.log(JSON.stringify(result, null, 2))
       }
     }
 
     if (this.flags['keep-alive']) {
-      this.logInfo('Keep alive for realtime notifications')
+      this.logInfo('Keep alive for realtime notifications ...')
+
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       await new Promise(() => { })
     }
   }

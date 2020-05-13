@@ -83,10 +83,11 @@ export default class RealtimeSubscribe extends Kommand {
         scope: this.flags.scope,
         users: this.flags.users,
         volatile: this.parseJs(this.flags.volatile),
-      });
+      })
 
     this.logInfo(`Waiting for realtime notifications on "${this.args.index}":"${this.args.collection}" ...`)
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     await new Promise(() => { })
   }
 }
