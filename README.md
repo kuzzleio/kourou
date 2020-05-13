@@ -590,6 +590,7 @@ OPTIONS
   --host=host              [default: localhost] Kuzzle server host
   --password=password      Kuzzle user password
   --port=port              [default: 7512] Kuzzle server port
+  --preserve-anonymous     Preserve anonymous rights
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
@@ -765,14 +766,15 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
-  --as=as              Impersonate a user
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --password=password  Kuzzle user password
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
+  --as=as               Impersonate a user
+  --help                show CLI help
+  --host=host           [default: localhost] Kuzzle server host
+  --password=password   Kuzzle user password
+  --port=port           [default: 7512] Kuzzle server port
+  --preserve-anonymous  Preserve anonymous rights
+  --protocol=protocol   [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                 Use SSL to connect to Kuzzle
+  --username=username   [default: anonymous] Kuzzle username (local strategy)
 ```
 
 _See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/role/import.ts)_
