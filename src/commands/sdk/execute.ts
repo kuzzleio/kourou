@@ -49,12 +49,14 @@ Other
       description: 'Open an editor (EDITOR env variable) to edit the code before executing it.'
     }),
     'keep-alive': flags.boolean({
-      description: 'Keep the connection running for realtime notifications (websocket only)'
+      description: 'Keep the connection running (websocket only)'
     }),
     ...kuzzleFlags,
   };
 
-  async runSafe() {
+  private code = ''
+
+  async afterParsing() {
     // try to read stdin
     const stdin = await this.fromStdin()
 
@@ -62,7 +64,14 @@ Other
       throw new Error('Cannot use --editor when reading from STDIN')
     }
 
-    let code: any = stdin || this.flags.code || '// paste your code here'
+    this.code = stdin || this.flags.code || '// paste your code here'
+
+    if (this.haveSubscription) {
+      this.sdkOptions.protocol = 'ws'
+    }
+  }
+
+  async runSafe() {
     let userError: Error | null = null
 
     const variables = (this.flags.var || [])
@@ -73,11 +82,11 @@ Other
       })
       .join('\n')
 
-    code = `
+    this.code = `
 (async () => {
   try {
 ${variables}
-    ${code}
+    ${this.code}
   }
   catch (error) {
     userError = error
@@ -86,9 +95,9 @@ ${variables}
 `
     // content from user editor
     if (this.flags.editor) {
-      const editor = new Editor(code)
+      const editor = new Editor(this.code)
       editor.run()
-      code = editor.content
+      this.code = editor.content
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -97,7 +106,7 @@ ${variables}
     let result
     try {
       // eslint-disable-next-line no-eval
-      result = await eval(code)
+      result = await eval(this.code)
     }
     catch (error) {
       userError = error
@@ -105,7 +114,7 @@ ${variables}
 
     if (userError) {
       this.logKo(`Error when executing SDK code: ${userError.message}`)
-      this.log(code)
+      this.log(this.code)
     }
     else {
       this.logOk('Successfully executed SDK code')
@@ -115,12 +124,16 @@ ${variables}
       }
     }
 
-    if (this.flags['keep-alive']) {
+    if (this.haveSubscription || this.flags['keep-alive']) {
       this.logInfo('Keep alive for realtime notifications ...')
 
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       await new Promise(() => { })
     }
+  }
+
+  get haveSubscription() {
+    return this.code.includes('sdk.realtime.subscribe')
   }
 }
 

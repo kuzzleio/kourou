@@ -52,6 +52,12 @@ export default class RealtimeSubscribe extends Kommand {
     { name: 'collection', description: 'Collection name', required: true }
   ]
 
+  async afterParsing() {
+    if (this.flags.protocol === 'http') {
+      throw new Error('Realtime notification does not work with the Http protocol')
+    }
+  }
+
   async runSafe() {
     const stdin = await this.fromStdin()
 

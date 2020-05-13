@@ -791,7 +791,7 @@ OPTIONS
   --editor             Open an editor (EDITOR env variable) to edit the code before executing it.
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
-  --keep-alive         Keep the connection running for realtime notifications (websocket only)
+  --keep-alive         Keep the connection running (websocket only)
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
@@ -891,7 +891,7 @@ DESCRIPTION
   Other
 
      use the --editor flag to modify the query before sending it to Kuzzle
-     use the --display flag to display a particular property of the response
+     use the --display flag to display a specific property of the response
 
      Examples:
        - kourou sdk:query document:create -i iot -c sensors --editor

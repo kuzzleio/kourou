@@ -72,6 +72,11 @@ Other
   async runSafe() {
     const [controller, action] = this.args['controller:action'].split(':')
 
+    if (controller === 'realtime' && action === 'subscribe') {
+      this.logInfo('Use the "subscribe" command to listen to realtime notifications')
+      return
+    }
+
     const requestArgs: any = {}
 
     requestArgs.index = this.flags.index

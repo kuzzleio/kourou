@@ -15,6 +15,8 @@ export abstract class Kommand extends Command {
 
   public static initSdk = true
 
+  public sdkOptions: any = {}
+
   public printCommand() {
     const klass: any = this.constructor
 
@@ -52,9 +54,13 @@ export abstract class Kommand extends Command {
     this.args = result.args
     this.flags = result.flags
 
+    // Lifecycle hook
+    await this.afterParsing()
+
     try {
       if (kommand.initSdk) {
-        this.sdk = new KuzzleSDK(this.flags)
+        this.sdk = new KuzzleSDK({ ...this.flags, ...this.sdkOptions })
+
         await this.sdk.init(this)
       }
 
@@ -75,6 +81,10 @@ export abstract class Kommand extends Command {
     finally {
       this.sdk?.disconnect()
     }
+  }
+
+  afterParsing() {
+    // will be called after arguments parsing
   }
 
   async runSafe() {
