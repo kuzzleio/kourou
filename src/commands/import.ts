@@ -126,9 +126,9 @@ export default class Import extends Kommand {
         return memo
       }, { documents: [], mappings: [], roles: [], profiles: [], users: [] })
 
-
     for (const dir of directories) {
       const { documents, mappings, roles, profiles, users } = await this.walkDirectories(dir)
+
       files.documents = files.documents.concat(documents)
       files.mappings = files.mappings.concat(mappings)
       files.roles = files.roles.concat(roles)
@@ -143,57 +143,14 @@ export default class Import extends Kommand {
     if (file.endsWith('.jsonl')) {
       return 'documents'
     }
-    else if (file.endsWith('.json')) {
-      try {
-        const dump = JSON.parse(fs.readFileSync(file, 'utf8'))
 
-        return dump.type
-      }
-      catch (error) {
-        this.logKo(`Invalid JSON file "${file}". Import skipped. ${error.message}`)
-      }
+    try {
+      const dump = JSON.parse(fs.readFileSync(file, 'utf8'))
+
+      return dump.type
     }
-  }
-
-  async importFile(file: string) {
-    if (file.endsWith('.jsonl')) {
-      this.logInfo(`[collection] Start importing documents in ${file}`)
-      const { total, index, collection } = await restoreCollectionData(
-        this.sdk,
-        this.log.bind(this),
-        Number(this.flags['batch-size']),
-        file)
-
-      this.logOk(`[collection] Imported ${total} documents in "${index}":"${collection}"`)
-    }
-    else if (file.endsWith('.json')) {
-      try {
-        const dump = JSON.parse(fs.readFileSync(file, 'utf8'))
-
-        if (dump.type === 'roles') {
-          this.logInfo(`[roles] Start importing roles in ${file}`)
-          const total = await restoreRoles(this, dump, this.flags['preserve-anonymous'])
-          this.logOk(`[roles] Imported ${total} roles`)
-        }
-        else if (dump.type === 'profiles') {
-          this.logInfo(`[profiles] Start importing profiles in ${file}`)
-          const total = await restoreProfiles(this, dump)
-          this.logOk(`[profiles] Imported ${total} profiles`)
-        }
-        else if (dump.type === 'users') {
-          this.logInfo(`[users] Start importing users in ${file}`)
-          const total = await restoreUsers(this, dump)
-          this.logOk(`[users] Imported ${total} users`)
-        }
-        else if (dump.type === 'mappings') {
-          this.logInfo(`[collection] Start importing mappings in ${file}`)
-          const { index, collection } = await restoreCollectionMappings(this.sdk, dump)
-          this.logOk(`[collection] Imported mappings for "${index}":"${collection}"`)
-        }
-      }
-      catch (error) {
-        this.logKo(`Invalid JSON file "${file}". Import skipped. ${error.message}`)
-      }
+    catch (error) {
+      this.logKo(`Invalid JSON file "${file}". Import skipped. ${error.message}`)
     }
   }
 }

@@ -2,7 +2,7 @@ import * as _ from 'lodash'
 
 const sleep = (seconds: number) => new Promise((resolve: any) => setTimeout(resolve, seconds * 1000))
 
-export async function restoreRoles(command: any, dump: any, preserveAnonymous: boolean = false) {
+export async function restoreRoles(command: any, dump: any, preserveAnonymous = false) {
   if (dump.type !== 'roles') {
     throw new Error('Dump file does not contain roles definition')
   }
