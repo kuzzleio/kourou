@@ -4,7 +4,7 @@ import { Editor } from '../../support/editor'
 import { Kommand } from '../../common'
 import { kuzzleFlags } from '../../support/kuzzle'
 
-class SdkQuery extends Kommand {
+class SdkExecute extends Kommand {
   public static description = `
 Executes arbitrary code.
 
@@ -48,6 +48,9 @@ Other
     editor: flags.boolean({
       description: 'Open an editor (EDITOR env variable) to edit the code before executing it.'
     }),
+    'keep-alive': flags.boolean({
+      description: 'Keep the connection running for realtime notifications (websocket only)'
+    }),
     ...kuzzleFlags,
   };
 
@@ -59,7 +62,7 @@ Other
       throw new Error('Cannot use --editor when reading from STDIN')
     }
 
-    let code: any = stdin || this.flags.code
+    let code: any = stdin || this.flags.code || '// paste your code here'
     let userError: Error | null = null
 
     const variables = (this.flags.var || [])
@@ -106,9 +109,16 @@ ${variables}
     }
     else {
       this.logOk('Successfully executed SDK code')
-      this.log(JSON.stringify(result, null, 2))
+      if (result !== undefined) {
+        this.log(JSON.stringify(result, null, 2))
+      }
+    }
+
+    if (this.flags['keep-alive']) {
+      this.logInfo('Keep alive for realtime notifications')
+      await new Promise(() => { })
     }
   }
 }
 
-export default SdkQuery
+export default SdkExecute

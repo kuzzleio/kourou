@@ -1,9 +1,10 @@
 import { flags } from '@oclif/command'
+import * as _ from 'lodash'
 
 import { Kommand } from '../../common'
 import { kuzzleFlags } from '../../support/kuzzle'
 
-class Query extends Kommand {
+class SdkQuery extends Kommand {
   public static description = `
 Executes an API query.
 
@@ -13,7 +14,7 @@ Query arguments
   index and collection names can be passed with --index (-i) and --collection (-c) flags
 
   Examples:
-    - kourou query document:get -i iot -c sensors -a _id=sigfox-42
+    - kourou sdk:query document:get -i iot -c sensors -a _id=sigfox-42
 
 Query body
 
@@ -21,16 +22,18 @@ Query body
   body will be read from STDIN if available
 
   Examples:
-    - kourou query document:create -i iot -c sensors --body '{creation: Date.now())}'
-    - kourou query admin:loadMappings < mappings.json
-    - echo '{dynamic: "strict"}' | kourou query collection:create -i iot -c sensors
+    - kourou sdk:query document:create -i iot -c sensors --body '{creation: Date.now())}'
+    - kourou sdk:query admin:loadMappings < mappings.json
+    - echo '{dynamic: "strict"}' | kourou sdk:query collection:create -i iot -c sensors
 
 Other
 
   use the --editor flag to modify the query before sending it to Kuzzle
+  use the --display flag to display a particular property of the response
 
   Examples:
-    - kourou query document:create -i iot -c sensors --editor
+    - kourou sdk:query document:create -i iot -c sensors --editor
+    - kourou sdk:query server:now --display 'result.now'
 `;
 
   public static flags = {
@@ -54,6 +57,10 @@ Other
     collection: flags.string({
       char: 'c',
       description: 'Collection argument'
+    }),
+    display: flags.string({
+      description: 'Path of the property to display from the response (empty string to display everything)',
+      default: 'result'
     }),
     ...kuzzleFlags,
   };
@@ -99,10 +106,14 @@ Other
 
     const response = await this.sdk?.query(request)
 
-    this.log(JSON.stringify(response, null, 2))
+    const display = this.flags.display === ''
+      ? response
+      : _.get(response, this.flags.display)
+
+    this.log(JSON.stringify(display, null, 2))
 
     this.logOk(`Successfully executed "${controller}:${action}"`)
   }
 }
 
-export default Query
+export default SdkQuery

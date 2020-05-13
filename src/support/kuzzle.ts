@@ -186,4 +186,8 @@ export class KuzzleSDK {
   get server() {
     return this.sdk.server
   }
+
+  get realtime() {
+    return this.sdk.realtime
+  }
 }
