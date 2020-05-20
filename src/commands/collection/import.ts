@@ -49,7 +49,7 @@ export default class CollectionImport extends Kommand {
         this.flags.collection)
     }
 
-    const { total } = await restoreCollectionData(
+    const { index, collection, total } = await restoreCollectionData(
       this.sdk,
       this.log.bind(this),
       Number(this.flags['batch-size']),
@@ -57,6 +57,6 @@ export default class CollectionImport extends Kommand {
       this.flags.index,
       this.flags.collection)
 
-    this.logOk(`Successfully imported ${total} documents from "${this.args.path}" in "${this.flags.index}:${this.flags.collection}"`)
+    this.logOk(`Successfully imported ${total} documents from "${this.args.path}" in "${index}:${collection}"`)
   }
 }
