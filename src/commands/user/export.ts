@@ -19,6 +19,10 @@ export default class UserExport extends Kommand {
       description: 'Exclude users by matching their IDs',
       default: '[]'
     }),
+    'batch-size': flags.string({
+      description: 'Maximum batch size (see limits.documentsFetchCount config)',
+      default: '2000'
+    }),
     ...kuzzleFlags,
     protocol: flags.string({
       description: 'Kuzzle protocol (http or websocket)',
@@ -54,7 +58,7 @@ export default class UserExport extends Kommand {
 
     let results = await this.sdk?.security.searchUsers(
       {},
-      { scroll: '5s', size: 100 })
+      { scroll: '5s', size: this.flags['batch-size'] })
 
     while (results) {
       for (const user of results.hits) {
