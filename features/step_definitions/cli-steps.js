@@ -3,7 +3,7 @@ const fs = require('fs');
 const { Then } = require('cucumber');
 const { spawn } = require('child_process');
 
-function execute(command, args) {
+function execute(command, args = []) {
   const childProcess = spawn(command, args);
   let stdout = '';
   let stderr = '';
@@ -13,10 +13,10 @@ function execute(command, args) {
   });
 
   childProcess.stderr.on('data', data => {
-    stderr += data.toString()
+    stderr += data.toString();
   });
 
-  return new Promise((resolve, reject) => {
+  const executor = new Promise((resolve, reject) => {
     childProcess.on('close', code => {
       if (code === 0) {
         resolve({ code, stdout, stderr });
@@ -26,7 +26,30 @@ function execute(command, args) {
       }
     });
   });
+
+  executor.process = childProcess;
+
+  return executor;
 }
+
+Then('I subscribe to {string}:{string}', async function (index, collection) {
+  this.props.executor = execute('./bin/run', ['subscribe', index, collection]);
+
+  // wait to connect to Kuzzle
+  await new Promise(resolve => setTimeout(resolve, 2000));
+});
+
+Then('I kill the CLI process', async function () {
+  this.props.executor.process.kill();
+
+  // the promise will be rejected since we killed the process
+  try {
+    await this.props.executor
+  }
+  catch ({ stdout }) {
+    this.props.result = stdout;
+  }
+});
 
 Then('I run the command {string} with:', async function (command, dataTable) {
   const args = [];
