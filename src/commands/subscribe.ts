@@ -52,7 +52,7 @@ export default class RealtimeSubscribe extends Kommand {
     { name: 'collection', description: 'Collection name', required: true }
   ]
 
-  // static readStdin = true
+  static readStdin = true
 
   async afterParsing() {
     if (this.flags.protocol === 'http') {
