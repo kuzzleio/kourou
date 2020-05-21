@@ -15,6 +15,10 @@ export abstract class Kommand extends Command {
 
   public static initSdk = true
 
+  public static readStdin = false
+
+  public stdin: string | undefined = undefined
+
   public sdkOptions: any = {}
 
   public printCommand() {
@@ -53,6 +57,14 @@ export abstract class Kommand extends Command {
     const result = this.parse(kommand)
     this.args = result.args
     this.flags = result.flags
+
+    if (kommand.readStdin) {
+      this.stdin = await this.fromStdin()
+
+      if (this.stdin && this.flags.editor) {
+        throw new Error('Unable to use flag --editor when reading from STDIN')
+      }
+    }
 
     // Lifecycle hook
     await this.afterParsing()

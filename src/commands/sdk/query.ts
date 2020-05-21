@@ -69,6 +69,8 @@ Other
     { name: 'controller:action', description: 'Controller and action (eg: "server:now")', required: true },
   ]
 
+  static readStdin = true
+
   async runSafe() {
     const [controller, action] = this.args['controller:action'].split(':')
 
@@ -87,15 +89,7 @@ Other
       requestArgs[key] = value.join()
     }
 
-    // try to read stdin
-    const stdin = await this.fromStdin()
-
-    if (stdin && this.flags.editor) {
-      throw new Error('Unable to use flag --editor when reading from STDIN')
-    }
-    const body = stdin
-      ? stdin
-      : this.flags.body
+    const body = this.stdin ? this.stdin : this.flags.body
 
     let request = {
       controller,

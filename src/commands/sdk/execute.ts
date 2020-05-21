@@ -57,14 +57,7 @@ Other
   private code = ''
 
   async afterParsing() {
-    // try to read stdin
-    const stdin = await this.fromStdin()
-
-    if (stdin && this.flags.editor) {
-      throw new Error('Cannot use --editor when reading from STDIN')
-    }
-
-    this.code = stdin || this.flags.code || '// paste your code here'
+    this.code = this.stdin || this.flags.code || '// paste your code here'
 
     if (this.haveSubscription) {
       this.sdkOptions.protocol = 'ws'

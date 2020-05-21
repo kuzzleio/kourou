@@ -52,6 +52,8 @@ export default class RealtimeSubscribe extends Kommand {
     { name: 'collection', description: 'Collection name', required: true }
   ]
 
+  static readStdin = true
+
   async afterParsing() {
     if (this.flags.protocol === 'http') {
       throw new Error('Realtime notification does not work with the Http protocol')
@@ -59,13 +61,7 @@ export default class RealtimeSubscribe extends Kommand {
   }
 
   async runSafe() {
-    const stdin = await this.fromStdin()
-
-    if (stdin && this.flags.editor) {
-      throw new Error('Unable to use flag --editor when reading from STDIN')
-    }
-
-    let filters = stdin ? stdin : this.flags.filters
+    let filters = this.stdin ? this.stdin : this.flags.filters
 
     // content from user editor
     if (this.flags.editor) {
@@ -76,7 +72,7 @@ export default class RealtimeSubscribe extends Kommand {
       this.args.index,
       this.args.collection,
       this.parseJs(filters),
-      async (notification: any) => {
+      (notification: any) => {
         this.logInfo('New notification')
 
         const display = this.flags.display === ''
