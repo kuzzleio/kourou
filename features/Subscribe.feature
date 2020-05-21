@@ -2,7 +2,7 @@ Feature: Subscribe Command
 
   # subscribe ==================================================================
 
-  @realtime @mappings
+  @mappings
   Scenario: Subscribe to notifications
     Given an existing collection "nyc-open-data":"yellow-taxi"
     When I subscribe to "nyc-open-data":"yellow-taxi"
