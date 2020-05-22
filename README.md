@@ -913,7 +913,7 @@ OPTIONS
 DESCRIPTION
   Exports users
 
-  Users credentials are NOT exported but only users content and profiles.
+  Users credentials are NOT exported. Only users' content and profiles are.
 
   See https://docs.kuzzle.io/core/2/guides/essentials/export-import-data.
 ```
