@@ -75,8 +75,7 @@ Other
     const [controller, action] = this.args['controller:action'].split(':')
 
     if (controller === 'realtime' && action === 'subscribe') {
-      this.logInfo('Use the "subscribe" command to listen to realtime notifications')
-      return
+      throw new Error('Use the "subscribe" command to listen to realtime notifications')
     }
 
     const requestArgs: any = {}
