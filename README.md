@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.12.0 linux-x64 node-v12.16.0
+kourou/0.12.0 linux-x64 node-v12.16.2
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -909,6 +909,13 @@ OPTIONS
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
+
+DESCRIPTION
+  Exports users
+
+  Users credentials are NOT exported but only users content and profiles.
+
+  See https://docs.kuzzle.io/core/2/guides/essentials/export-import-data.
 ```
 
 _See code: [src/commands/user/export.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/user/export.ts)_
