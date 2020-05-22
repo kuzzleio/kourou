@@ -11,8 +11,8 @@ export async function restoreRoles(command: any, dump: any, preserveAnonymous = 
 
   if (!preserveAnonymous && anonymousRights === false) {
     if (command.sdk.username === 'anonymous') {
-      command.logKo('You are currently loggued as "anonymous" and anonymous role write will be overwritten.')
-      command.logInfo('Use the --preserve-anonymous flag to keep default anonymous rights.')
+      command.logKo('You are currently logged in as "anonymous" and anonymous role rights will be overwritten.')
+      command.logInfo('Use the --preserve-anonymous flag to keep the default anonymous rights.')
 
       throw new Error('Please authenticate before importing or use --preserve-anonymous.')
     }
