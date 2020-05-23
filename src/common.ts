@@ -114,9 +114,7 @@ export abstract class Kommand extends Command {
       return
     }
 
-    const input = fs.readFileSync(0, 'utf8')
-
-    return input
+    return fs.readFileSync(0, 'utf8')
   }
 
   fromEditor(defaultContent: object | string, options?: EditorParams): object {
