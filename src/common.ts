@@ -59,7 +59,7 @@ export abstract class Kommand extends Command {
     this.flags = result.flags
 
     if (kommand.readStdin) {
-      this.stdin = await this.fromStdin()
+      this.stdin = this.fromStdin()
 
       if (this.stdin && this.flags.editor) {
         throw new Error('Unable to use flag --editor when reading from STDIN')
@@ -106,20 +106,17 @@ export abstract class Kommand extends Command {
   /**
    * Reads a value from STDIN.
    *
-   * @returns {Promise<String>} Parsed input
+   * @returns {String} Parsed input
    */
-  fromStdin(): Promise<string | undefined> {
-    return new Promise(resolve => {
-      // cucumber mess with stdin so I have to do this trick
-      if (process.env.NODE_ENV === 'test' || process.stdin.isTTY) {
-        resolve()
-        return
-      }
+  fromStdin(): string | undefined {
+    // cucumber mess with stdin so I have to do this trick
+    if (process.env.NODE_ENV === 'test' || process.stdin.isTTY) {
+      return
+    }
 
-      const input = fs.readFileSync(0, 'utf8')
+    const input = fs.readFileSync(0, 'utf8')
 
-      resolve(input)
-    })
+    return input
   }
 
   fromEditor(defaultContent: object | string, options?: EditorParams): object {
