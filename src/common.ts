@@ -67,7 +67,7 @@ export abstract class Kommand extends Command {
     }
 
     // Lifecycle hook
-    await this.afterParsing()
+    await this.beforeConnect()
 
     try {
       if (kommand.initSdk) {
@@ -95,7 +95,7 @@ export abstract class Kommand extends Command {
     }
   }
 
-  afterParsing() {
+  beforeConnect() {
     // will be called after arguments parsing
   }
 

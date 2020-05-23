@@ -56,7 +56,7 @@ Other
 
   private code = ''
 
-  async afterParsing() {
+  async beforeConnect() {
     this.code = this.stdin || this.flags.code || '// paste your code here'
 
     if (this.haveSubscription) {

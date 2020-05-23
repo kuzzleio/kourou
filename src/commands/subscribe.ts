@@ -54,7 +54,7 @@ export default class RealtimeSubscribe extends Kommand {
 
   static readStdin = true
 
-  async afterParsing() {
+  async beforeConnect() {
     if (this.flags.protocol === 'http') {
       throw new Error('Realtime notification does not work with the Http protocol')
     }
