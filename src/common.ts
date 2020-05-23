@@ -96,7 +96,7 @@ export abstract class Kommand extends Command {
   }
 
   beforeConnect() {
-    // will be called after arguments parsing
+    // will be called before connecting to Kuzzle
   }
 
   async runSafe() {
