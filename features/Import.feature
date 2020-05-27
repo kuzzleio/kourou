@@ -40,12 +40,25 @@ Feature: Generic Import
     And I delete the role "teacher"
     And I delete the role "student"
 
+    # user export
+    And I create a user "kleiner" with content:
+      | profileIds | ["admin"]              |
+      | email      | "kleiner@blackmesa.us" |
+    And I create a user "alyx" with content:
+      | profileIds | ["admin"]           |
+      | email      | "alyx@blackmesa.us" |
+    When I run the command "user:export" with:
+      | flag | --path    | ./dump                   |
+      | flag | --exclude | ["gordon", "test-admin"] |
+    And I delete the user "kleiner"
+    And I delete the user "alyx"
+
 
     # import
     And I run the command "import" with:
       | arg | ./dump |  |
 
-    # check index & collections import
+    # Check index & collections import
     Then The document "chuon-chuon-kim2" content match:
       | city     | "hcmc" |
       | district | 1      |
@@ -66,14 +79,22 @@ Feature: Generic Import
       | city | { "type": "keyword" } |
       | name | { "type": "keyword" } |
 
-    # check role import
+    # Check role import
     Then The role "teacher" should match:
       | document | { "actions": { "create": true } } |
     And The role "student" should match:
       | document | { "actions": { "update": true } } |
 
-    # check profile import
+    # Check profile import
     Then The profile "teacher" should match:
       | default | [{ "index": "nyc-open-data" }] |
     And The profile "student" should match:
       | admin | [{ "index": "mtp-open-data" }] |
+
+    # Check user import
+    Then The user "kleiner" should match:
+      | profileIds | ["admin"]              |
+      | email      | "kleiner@blackmesa.us" |
+    And The user "alyx" should match:
+      | profileIds | ["admin"]           |
+      | email      | "alyx@blackmesa.us" |

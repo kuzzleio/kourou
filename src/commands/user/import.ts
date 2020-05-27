@@ -3,10 +3,10 @@ import * as fs from 'fs'
 
 import { Kommand } from '../../common'
 import { kuzzleFlags } from '../../support/kuzzle'
-import { restoreProfiles } from '../../support/restore-securities'
+import { restoreUsers } from '../../support/restore-securities'
 
-export default class ProfileImport extends Kommand {
-  static description = 'Imports profiles'
+export default class UserImport extends Kommand {
+  static description = 'Imports users'
 
   static flags = {
     help: flags.help({}),
@@ -22,12 +22,12 @@ export default class ProfileImport extends Kommand {
   ]
 
   async runSafe() {
-    this.logInfo(`Importing profiles from ${this.args.path} ...`)
+    this.logInfo(`Importing users from ${this.args.path} ...`)
 
     const dump = JSON.parse(fs.readFileSync(this.args.path, 'utf-8'))
 
-    const count = await restoreProfiles(this, dump)
+    const count = await restoreUsers(this, dump)
 
-    this.logOk(`${count} profiles restored`)
+    this.logOk(`${count} users restored`)
   }
 }
