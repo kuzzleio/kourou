@@ -8,6 +8,10 @@ export default class RoleImport extends Kommand {
   static description = 'Import roles'
 
   static flags = {
+    'preserve-anonymous': flags.boolean({
+      description: 'Preserve anonymous rights',
+      default: false
+    }),
     help: flags.help({}),
     ...kuzzleFlags,
     protocol: flags.string({
@@ -25,7 +29,7 @@ export default class RoleImport extends Kommand {
 
     const dump = JSON.parse(fs.readFileSync(this.args.path, 'utf-8'))
 
-    const count = await restoreRoles(this.sdk, dump)
+    const count = await restoreRoles(this, dump, this.flags['preserve-anonymous'])
 
     this.logOk(`${count} roles restored`)
   }

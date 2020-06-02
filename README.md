@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.12.0 linux-x64 node-v12.16.0
+kourou/0.12.0 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -106,6 +106,8 @@ $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password a
 * [`kourou sdk:execute`](#kourou-sdkexecute)
 * [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
 * [`kourou subscribe INDEX COLLECTION`](#kourou-subscribe-index-collection)
+* [`kourou user:export`](#kourou-userexport)
+* [`kourou user:import PATH`](#kourou-userimport-path)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
@@ -589,6 +591,7 @@ OPTIONS
   --host=host              [default: localhost] Kuzzle server host
   --password=password      Kuzzle user password
   --port=port              [default: 7512] Kuzzle server port
+  --preserve-anonymous     Preserve anonymous rights
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
@@ -764,14 +767,15 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
-  --as=as              Impersonate a user
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --password=password  Kuzzle user password
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
+  --as=as               Impersonate a user
+  --help                show CLI help
+  --host=host           [default: localhost] Kuzzle server host
+  --password=password   Kuzzle user password
+  --port=port           [default: 7512] Kuzzle server port
+  --preserve-anonymous  Preserve anonymous rights
+  --protocol=protocol   [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                 Use SSL to connect to Kuzzle
+  --username=username   [default: anonymous] Kuzzle username (local strategy)
 ```
 
 _See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/role/import.ts)_
@@ -951,6 +955,54 @@ EXAMPLES
 ```
 
 _See code: [src/commands/subscribe.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/subscribe.ts)_
+
+## `kourou user:export`
+
+Exports users
+
+```
+USAGE
+  $ kourou user:export
+
+OPTIONS
+  --as=as                  Impersonate a user
+  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+  --exclude=exclude        [default: []] Exclude users by matching their IDs
+  --help                   show CLI help
+  --host=host              [default: localhost] Kuzzle server host
+  --password=password      Kuzzle user password
+  --path=path              [default: users] Dump directory
+  --port=port              [default: 7512] Kuzzle server port
+  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/user/export.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/user/export.ts)_
+
+## `kourou user:import PATH`
+
+Imports users
+
+```
+USAGE
+  $ kourou user:import PATH
+
+ARGUMENTS
+  PATH  Dump file
+
+OPTIONS
+  --as=as              Impersonate a user
+  --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
+  --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/user/import.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/user/import.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
