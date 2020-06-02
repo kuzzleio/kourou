@@ -31,10 +31,10 @@ export default class DocumentCreate extends Kommand {
     { name: 'collection', description: 'Collection name', required: true }
   ]
 
-  async runSafe() {
-    const stdin = await this.fromStdin()
+  static readStdin = true
 
-    const body = stdin ? stdin : this.flags.body
+  async runSafe() {
+    const body = this.stdin ? this.stdin : this.flags.body
 
     if (this.flags.replace) {
       const document = await this.sdk?.document.replace(

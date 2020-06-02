@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.12.0 linux-x64 node-v12.16.2
+kourou/0.12.0 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -63,7 +63,7 @@ You can impersonate a user before executing a command with the `--as` flag and a
 User impersonation require the following rights for the authenticated user: `security:createApiKey`, `security:deleteApiKey`
 
 ```bash
-$ kourou query auth:getCurrentUser --as gordon --username admin --password admin
+$ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password admin
  
  🚀 Kourou - Executes an API query.
  
@@ -105,6 +105,7 @@ $ kourou query auth:getCurrentUser --as gordon --username admin --password admin
 * [`kourou role:import PATH`](#kourou-roleimport-path)
 * [`kourou sdk:execute`](#kourou-sdkexecute)
 * [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
+* [`kourou subscribe INDEX COLLECTION`](#kourou-subscribe-index-collection)
 * [`kourou user:export`](#kourou-userexport)
 * [`kourou user:import PATH`](#kourou-userimport-path)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
@@ -794,6 +795,7 @@ OPTIONS
   --editor             Open an editor (EDITOR env variable) to edit the code before executing it.
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
+  --keep-alive         Keep the connection running (websocket only)
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
@@ -849,13 +851,24 @@ OPTIONS
   -i, --index=index            Index argument
   --as=as                      Impersonate a user
   --body=body                  [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
+
+  --display=display            [default: result] Path of the property to display from the response (empty string to
+                               display everything)
+
   --editor                     Open an editor (EDITOR env variable) to edit the request before sending.
+
   --help                       show CLI help
+
   --host=host                  [default: localhost] Kuzzle server host
+
   --password=password          Kuzzle user password
+
   --port=port                  [default: 7512] Kuzzle server port
+
   --protocol=protocol          [default: http] Kuzzle protocol (http or ws)
+
   --ssl                        Use SSL to connect to Kuzzle
+
   --username=username          [default: anonymous] Kuzzle username (local strategy)
 
 DESCRIPTION
@@ -867,7 +880,7 @@ DESCRIPTION
      index and collection names can be passed with --index (-i) and --collection (-c) flags
 
      Examples:
-       - kourou query document:get -i iot -c sensors -a _id=sigfox-42
+       - kourou sdk:query document:get -i iot -c sensors -a _id=sigfox-42
 
   Query body
 
@@ -875,19 +888,73 @@ DESCRIPTION
      body will be read from STDIN if available
 
      Examples:
-       - kourou query document:create -i iot -c sensors --body '{creation: Date.now())}'
-       - kourou query admin:loadMappings < mappings.json
-       - echo '{dynamic: "strict"}' | kourou query collection:create -i iot -c sensors
+       - kourou sdk:query document:create -i iot -c sensors --body '{creation: Date.now())}'
+       - kourou sdk:query admin:loadMappings < mappings.json
+       - echo '{dynamic: "strict"}' | kourou sdk:query collection:create -i iot -c sensors
 
   Other
 
      use the --editor flag to modify the query before sending it to Kuzzle
+     use the --display flag to display a specific property of the response
 
      Examples:
-       - kourou query document:create -i iot -c sensors --editor
+       - kourou sdk:query document:create -i iot -c sensors --editor
+       - kourou sdk:query server:now --display 'result.now'
 ```
 
 _See code: [src/commands/sdk/query.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/sdk/query.ts)_
+
+## `kourou subscribe INDEX COLLECTION`
+
+Subscribes to realtime notifications
+
+```
+USAGE
+  $ kourou subscribe INDEX COLLECTION
+
+ARGUMENTS
+  INDEX       Index name
+  COLLECTION  Collection name
+
+OPTIONS
+  --as=as              Impersonate a user
+
+  --display=display    [default: result] Path of the property to display from the notification (empty string to display
+                       everything)
+
+  --editor             Open an editor (EDITOR env variable) to edit the filters before subscribing.
+
+  --filters=filters    [default: {}] Set of Koncorde filters
+
+  --help               show CLI help
+
+  --host=host          [default: localhost] Kuzzle server host
+
+  --password=password  Kuzzle user password
+
+  --port=port          [default: 7512] Kuzzle server port
+
+  --protocol=protocol  [default: websocket] Kuzzle protocol (only websocket for realtime)
+
+  --scope=scope        [default: all] Subscribe to document entering or leaving the scope (all, in, out, none)
+
+  --ssl                Use SSL to connect to Kuzzle
+
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+  --users=users        [default: all] Subscribe to users entering or leaving the room (all, in, out, none)
+
+  --volatile=volatile  [default: {}] Additional subscription information used in user join/leave notifications
+
+EXAMPLES
+  kourou subscribe iot-data sensors
+  kourou subscribe iot-data sensors --filters '{ range: { temperature: { gt: 0 } } }'
+  kourou subscribe iot-data sensors --filters '{ exists: "position" }' --scope out
+  kourou subscribe iot-data sensors --users all --volatile '{ clientId: "citizen-kane" }'
+  kourou subscribe iot-data sensors --display result._source.temperature
+```
+
+_See code: [src/commands/subscribe.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/subscribe.ts)_
 
 ## `kourou user:export`
 
@@ -909,13 +976,6 @@ OPTIONS
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
-
-DESCRIPTION
-  Exports users
-
-  Users credentials are NOT exported. Only users' content and profiles are.
-
-  See https://docs.kuzzle.io/core/2/guides/essentials/export-import-data.
 ```
 
 _See code: [src/commands/user/export.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/user/export.ts)_

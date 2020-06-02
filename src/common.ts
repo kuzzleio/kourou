@@ -15,6 +15,12 @@ export abstract class Kommand extends Command {
 
   public static initSdk = true
 
+  public static readStdin = false
+
+  public stdin: string | undefined = undefined
+
+  public sdkOptions: any = {}
+
   public printCommand() {
     const klass: any = this.constructor
 
@@ -52,9 +58,21 @@ export abstract class Kommand extends Command {
     this.args = result.args
     this.flags = result.flags
 
+    if (kommand.readStdin) {
+      this.stdin = this.fromStdin()
+
+      if (this.stdin && this.flags.editor) {
+        throw new Error('Unable to use flag --editor when reading from STDIN')
+      }
+    }
+
+    // Lifecycle hook
+    await this.beforeConnect()
+
     try {
       if (kommand.initSdk) {
-        this.sdk = new KuzzleSDK(this.flags)
+        this.sdk = new KuzzleSDK({ ...this.flags, ...this.sdkOptions })
+
         await this.sdk.init(this)
       }
 
@@ -77,6 +95,10 @@ export abstract class Kommand extends Command {
     }
   }
 
+  beforeConnect() {
+    // will be called before connecting to Kuzzle
+  }
+
   async runSafe() {
     throw new Error('You must implement runSafe() method')
   }
@@ -84,20 +106,15 @@ export abstract class Kommand extends Command {
   /**
    * Reads a value from STDIN.
    *
-   * @returns {Promise<String>} Parsed input
+   * @returns {String} Parsed input
    */
-  fromStdin(): Promise<string | undefined> {
-    return new Promise(resolve => {
-      // cucumber mess with stdin so I have to do this trick
-      if (process.env.NODE_ENV === 'test' || process.stdin.isTTY) {
-        resolve()
-        return
-      }
+  fromStdin(): string | undefined {
+    // cucumber mess with stdin so I have to do this trick
+    if (process.env.NODE_ENV === 'test' || process.stdin.isTTY) {
+      return
+    }
 
-      const input = fs.readFileSync(0, 'utf8')
-
-      resolve(input)
-    })
+    return fs.readFileSync(0, 'utf8')
   }
 
   fromEditor(defaultContent: object | string, options?: EditorParams): object {
@@ -119,6 +136,6 @@ export abstract class Kommand extends Command {
     }
 
     // eslint-disable-next-line no-eval
-    return (eval(`var o = ${input}; o`))
+    return eval(`var o = ${input}; o`)
   }
 }
