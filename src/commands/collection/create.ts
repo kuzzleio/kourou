@@ -20,10 +20,10 @@ export default class CollectionCreate extends Kommand {
     { name: 'collection', description: 'Collection name', required: true }
   ]
 
-  async runSafe() {
-    const stdin = await this.fromStdin()
+  static readStdin = true
 
-    const body = stdin ? this.parseJs(stdin) : this.parseJs(this.flags.body)
+  async runSafe() {
+    const body = this.stdin ? this.parseJs(this.stdin) : this.parseJs(this.flags.body)
 
     if (!await this.sdk?.index.exists(this.args.index)) {
       await this.sdk?.index.create(this.args.index)

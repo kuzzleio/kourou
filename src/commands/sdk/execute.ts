@@ -4,7 +4,7 @@ import { Editor } from '../../support/editor'
 import { Kommand } from '../../common'
 import { kuzzleFlags } from '../../support/kuzzle'
 
-class SdkQuery extends Kommand {
+class SdkExecute extends Kommand {
   public static description = `
 Executes arbitrary code.
 
@@ -48,18 +48,23 @@ Other
     editor: flags.boolean({
       description: 'Open an editor (EDITOR env variable) to edit the code before executing it.'
     }),
+    'keep-alive': flags.boolean({
+      description: 'Keep the connection running (websocket only)'
+    }),
     ...kuzzleFlags,
   };
 
-  async runSafe() {
-    // try to read stdin
-    const stdin = await this.fromStdin()
+  private code = ''
 
-    if (stdin && this.flags.editor) {
-      throw new Error('Cannot use --editor when reading from STDIN')
+  async beforeConnect() {
+    this.code = this.stdin || this.flags.code || '// paste your code here'
+
+    if (this.haveSubscription) {
+      this.sdkOptions.protocol = 'ws'
     }
+  }
 
-    let code: any = stdin || this.flags.code
+  async runSafe() {
     let userError: Error | null = null
 
     const variables = (this.flags.var || [])
@@ -70,11 +75,11 @@ Other
       })
       .join('\n')
 
-    code = `
+    this.code = `
 (async () => {
   try {
 ${variables}
-    ${code}
+    ${this.code}
   }
   catch (error) {
     userError = error
@@ -83,9 +88,9 @@ ${variables}
 `
     // content from user editor
     if (this.flags.editor) {
-      const editor = new Editor(code)
+      const editor = new Editor(this.code)
       editor.run()
-      code = editor.content
+      this.code = editor.content
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -94,7 +99,7 @@ ${variables}
     let result
     try {
       // eslint-disable-next-line no-eval
-      result = await eval(code)
+      result = await eval(this.code)
     }
     catch (error) {
       userError = error
@@ -102,13 +107,27 @@ ${variables}
 
     if (userError) {
       this.logKo(`Error when executing SDK code: ${userError.message}`)
-      this.log(code)
+      this.log(this.code)
     }
     else {
       this.logOk('Successfully executed SDK code')
-      this.log(JSON.stringify(result, null, 2))
+
+      if (result !== undefined) {
+        this.log(JSON.stringify(result, null, 2))
+      }
     }
+
+    if (!userError && (this.haveSubscription || this.flags['keep-alive'])) {
+      this.logInfo('Keep alive for realtime notifications ...')
+
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      await new Promise(() => { })
+    }
+  }
+
+  get haveSubscription() {
+    return this.code.includes('sdk.realtime.subscribe')
   }
 }
 
-export default SdkQuery
+export default SdkExecute
