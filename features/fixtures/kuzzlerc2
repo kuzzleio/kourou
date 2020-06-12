@@ -1,6 +1,7 @@
 {
   "s3": {
     "bucketRegion": "Vietnam",
-    "name": "hcmc"
+    "name": "hcmc",
+    "type": "glacier"
   }
 }

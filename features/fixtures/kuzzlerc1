@@ -1,7 +1,7 @@
 {
   "s3": {
     "bucketRegion": "Vietnam",
-    "maxSize": "42KB",
-    "name": "hanoi"
+    "name": "hanoi",
+    "maxSize": "42KB"
   }
 }

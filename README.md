@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.12.0 linux-x64 node-v12.16.0
+kourou/0.13.0 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -63,7 +63,7 @@ You can impersonate a user before executing a command with the `--as` flag and a
 User impersonation require the following rights for the authenticated user: `security:createApiKey`, `security:deleteApiKey`
 
 ```bash
-$ kourou query auth:getCurrentUser --as gordon --username admin --password admin
+$ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password admin
  
  🚀 Kourou - Executes an API query.
  
@@ -105,6 +105,9 @@ $ kourou query auth:getCurrentUser --as gordon --username admin --password admin
 * [`kourou role:import PATH`](#kourou-roleimport-path)
 * [`kourou sdk:execute`](#kourou-sdkexecute)
 * [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
+* [`kourou subscribe INDEX COLLECTION`](#kourou-subscribe-index-collection)
+* [`kourou user:export`](#kourou-userexport)
+* [`kourou user:import PATH`](#kourou-userimport-path)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
@@ -136,7 +139,7 @@ EXAMPLE
   kourou api-key:check eyJhbG...QxfQrc
 ```
 
-_See code: [src/commands/api-key/check.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/api-key/check.ts)_
+_See code: [src/commands/api-key/check.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/api-key/check.ts)_
 
 ## `kourou api-key:create USER`
 
@@ -163,7 +166,7 @@ OPTIONS
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/api-key/create.ts)_
+_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/api-key/create.ts)_
 
 ## `kourou api-key:delete USER ID`
 
@@ -191,7 +194,7 @@ EXAMPLE
   kourou vault:delete sigfox-gateway 1k-BF3EBjsXdvA2PR8x
 ```
 
-_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/api-key/delete.ts)_
+_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/api-key/delete.ts)_
 
 ## `kourou api-key:search USER`
 
@@ -216,7 +219,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/api-key/search.ts)_
+_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/api-key/search.ts)_
 
 ## `kourou collection:create INDEX COLLECTION`
 
@@ -251,7 +254,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/collection/create.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/collection/create.ts)_
+_See code: [src/commands/collection/create.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/collection/create.ts)_
 
 ## `kourou collection:export INDEX COLLECTION`
 
@@ -284,7 +287,7 @@ EXAMPLES
   kourou collection:export nyc-open-data yellow-taxi --query '{ term: { city: "Saigon" } }'
 ```
 
-_See code: [src/commands/collection/export.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/collection/export.ts)_
+_See code: [src/commands/collection/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/collection/export.ts)_
 
 ## `kourou collection:import PATH`
 
@@ -312,7 +315,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/collection/import.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/collection/import.ts)_
+_See code: [src/commands/collection/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/collection/import.ts)_
 
 ## `kourou config:diff FIRST SECOND`
 
@@ -334,7 +337,7 @@ EXAMPLE
   kourou config:diff config/local/kuzzlerc config/production/kuzzlerc
 ```
 
-_See code: [src/commands/config/diff.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/config/diff.ts)_
+_See code: [src/commands/config/diff.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/config/diff.ts)_
 
 ## `kourou document:create INDEX COLLECTION`
 
@@ -366,7 +369,7 @@ EXAMPLES
   kourou document:create iot sensors < document.json
 ```
 
-_See code: [src/commands/document/create.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/document/create.ts)_
+_See code: [src/commands/document/create.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/document/create.ts)_
 
 ## `kourou document:get INDEX COLLECTION ID`
 
@@ -392,7 +395,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/document/get.ts)_
+_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/document/get.ts)_
 
 ## `kourou document:search INDEX COLLECTION`
 
@@ -427,7 +430,7 @@ EXAMPLES
   kourou document:search iot sensors --editor
 ```
 
-_See code: [src/commands/document/search.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/document/search.ts)_
+_See code: [src/commands/document/search.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/document/search.ts)_
 
 ## `kourou es:get INDEX ID`
 
@@ -447,7 +450,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/get.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/es/get.ts)_
+_See code: [src/commands/es/get.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/es/get.ts)_
 
 ## `kourou es:insert INDEX`
 
@@ -468,7 +471,7 @@ OPTIONS
   --id=id          Document ID
 ```
 
-_See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/es/insert.ts)_
+_See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/es/insert.ts)_
 
 ## `kourou es:list-index`
 
@@ -485,7 +488,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/list-index.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/es/list-index.ts)_
+_See code: [src/commands/es/list-index.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/es/list-index.ts)_
 
 ## `kourou file:decrypt FILE`
 
@@ -508,7 +511,7 @@ EXAMPLES
   kourou file:decrypt books/cryptonomicon.txt.enc -o books/cryptonomicon.txt --vault-key <vault-key>
 ```
 
-_See code: [src/commands/file/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/file/decrypt.ts)_
+_See code: [src/commands/file/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/file/decrypt.ts)_
 
 ## `kourou file:encrypt FILE`
 
@@ -531,7 +534,7 @@ EXAMPLES
   kourou file:encrypt books/cryptonomicon.txt -o books/cryptonomicon.txt.enc --vault-key <vault-key>
 ```
 
-_See code: [src/commands/file/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/file/encrypt.ts)_
+_See code: [src/commands/file/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/file/encrypt.ts)_
 
 ## `kourou file:test FILE`
 
@@ -551,7 +554,7 @@ EXAMPLE
   kourou file:test books/cryptonomicon.txt.enc --vault-key <vault-key>
 ```
 
-_See code: [src/commands/file/test.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/file/test.ts)_
+_See code: [src/commands/file/test.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/file/test.ts)_
 
 ## `kourou help [COMMAND]`
 
@@ -588,12 +591,13 @@ OPTIONS
   --host=host              [default: localhost] Kuzzle server host
   --password=password      Kuzzle user password
   --port=port              [default: 7512] Kuzzle server port
+  --preserve-anonymous     Preserve anonymous rights
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/import.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/import.ts)_
+_See code: [src/commands/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/import.ts)_
 
 ## `kourou index:export INDEX`
 
@@ -619,7 +623,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/index/export.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/index/export.ts)_
+_See code: [src/commands/index/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/index/export.ts)_
 
 ## `kourou index:import PATH`
 
@@ -650,7 +654,7 @@ EXAMPLES
   kourou index:import ./dump/iot-data --index iot-data-production --no-mappings
 ```
 
-_See code: [src/commands/index/import.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/index/import.ts)_
+_See code: [src/commands/index/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/index/import.ts)_
 
 ## `kourou instance:logs`
 
@@ -665,7 +669,7 @@ OPTIONS
   -i, --instance=instance  Kuzzle instance name
 ```
 
-_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/instance/logs.ts)_
+_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/instance/logs.ts)_
 
 ## `kourou instance:spawn`
 
@@ -681,7 +685,7 @@ OPTIONS
   --help                 show CLI help
 ```
 
-_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/instance/spawn.ts)_
+_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/instance/spawn.ts)_
 
 ## `kourou profile:export`
 
@@ -703,7 +707,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/profile/export.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/profile/export.ts)_
+_See code: [src/commands/profile/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/profile/export.ts)_
 
 ## `kourou profile:import PATH`
 
@@ -727,7 +731,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/profile/import.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/profile/import.ts)_
+_See code: [src/commands/profile/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/profile/import.ts)_
 
 ## `kourou role:export`
 
@@ -749,7 +753,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/role/export.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/role/export.ts)_
+_See code: [src/commands/role/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/role/export.ts)_
 
 ## `kourou role:import PATH`
 
@@ -763,17 +767,18 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
-  --as=as              Impersonate a user
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --password=password  Kuzzle user password
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
+  --as=as               Impersonate a user
+  --help                show CLI help
+  --host=host           [default: localhost] Kuzzle server host
+  --password=password   Kuzzle user password
+  --port=port           [default: 7512] Kuzzle server port
+  --preserve-anonymous  Preserve anonymous rights
+  --protocol=protocol   [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                 Use SSL to connect to Kuzzle
+  --username=username   [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/role/import.ts)_
+_See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/role/import.ts)_
 
 ## `kourou sdk:execute`
 
@@ -790,6 +795,7 @@ OPTIONS
   --editor             Open an editor (EDITOR env variable) to edit the code before executing it.
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
+  --keep-alive         Keep the connection running (websocket only)
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
@@ -826,7 +832,7 @@ DESCRIPTION
        - kourou sdk:execute --code 'return await sdk.server.now()' --editor
 ```
 
-_See code: [src/commands/sdk/execute.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/sdk/execute.ts)_
+_See code: [src/commands/sdk/execute.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/sdk/execute.ts)_
 
 ## `kourou sdk:query CONTROLLER:ACTION`
 
@@ -845,13 +851,24 @@ OPTIONS
   -i, --index=index            Index argument
   --as=as                      Impersonate a user
   --body=body                  [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
+
+  --display=display            [default: result] Path of the property to display from the response (empty string to
+                               display everything)
+
   --editor                     Open an editor (EDITOR env variable) to edit the request before sending.
+
   --help                       show CLI help
+
   --host=host                  [default: localhost] Kuzzle server host
+
   --password=password          Kuzzle user password
+
   --port=port                  [default: 7512] Kuzzle server port
+
   --protocol=protocol          [default: http] Kuzzle protocol (http or ws)
+
   --ssl                        Use SSL to connect to Kuzzle
+
   --username=username          [default: anonymous] Kuzzle username (local strategy)
 
 DESCRIPTION
@@ -863,7 +880,7 @@ DESCRIPTION
      index and collection names can be passed with --index (-i) and --collection (-c) flags
 
      Examples:
-       - kourou query document:get -i iot -c sensors -a _id=sigfox-42
+       - kourou sdk:query document:get -i iot -c sensors -a _id=sigfox-42
 
   Query body
 
@@ -871,19 +888,121 @@ DESCRIPTION
      body will be read from STDIN if available
 
      Examples:
-       - kourou query document:create -i iot -c sensors --body '{creation: Date.now())}'
-       - kourou query admin:loadMappings < mappings.json
-       - echo '{dynamic: "strict"}' | kourou query collection:create -i iot -c sensors
+       - kourou sdk:query document:create -i iot -c sensors --body '{creation: Date.now())}'
+       - kourou sdk:query admin:loadMappings < mappings.json
+       - echo '{dynamic: "strict"}' | kourou sdk:query collection:create -i iot -c sensors
 
   Other
 
      use the --editor flag to modify the query before sending it to Kuzzle
+     use the --display flag to display a specific property of the response
 
      Examples:
-       - kourou query document:create -i iot -c sensors --editor
+       - kourou sdk:query document:create -i iot -c sensors --editor
+       - kourou sdk:query server:now --display 'result.now'
 ```
 
-_See code: [src/commands/sdk/query.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/sdk/query.ts)_
+_See code: [src/commands/sdk/query.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/sdk/query.ts)_
+
+## `kourou subscribe INDEX COLLECTION`
+
+Subscribes to realtime notifications
+
+```
+USAGE
+  $ kourou subscribe INDEX COLLECTION
+
+ARGUMENTS
+  INDEX       Index name
+  COLLECTION  Collection name
+
+OPTIONS
+  --as=as              Impersonate a user
+
+  --display=display    [default: result] Path of the property to display from the notification (empty string to display
+                       everything)
+
+  --editor             Open an editor (EDITOR env variable) to edit the filters before subscribing.
+
+  --filters=filters    [default: {}] Set of Koncorde filters
+
+  --help               show CLI help
+
+  --host=host          [default: localhost] Kuzzle server host
+
+  --password=password  Kuzzle user password
+
+  --port=port          [default: 7512] Kuzzle server port
+
+  --protocol=protocol  [default: websocket] Kuzzle protocol (only websocket for realtime)
+
+  --scope=scope        [default: all] Subscribe to document entering or leaving the scope (all, in, out, none)
+
+  --ssl                Use SSL to connect to Kuzzle
+
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+  --users=users        [default: all] Subscribe to users entering or leaving the room (all, in, out, none)
+
+  --volatile=volatile  [default: {}] Additional subscription information used in user join/leave notifications
+
+EXAMPLES
+  kourou subscribe iot-data sensors
+  kourou subscribe iot-data sensors --filters '{ range: { temperature: { gt: 0 } } }'
+  kourou subscribe iot-data sensors --filters '{ exists: "position" }' --scope out
+  kourou subscribe iot-data sensors --users all --volatile '{ clientId: "citizen-kane" }'
+  kourou subscribe iot-data sensors --display result._source.temperature
+```
+
+_See code: [src/commands/subscribe.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/subscribe.ts)_
+
+## `kourou user:export`
+
+Exports users
+
+```
+USAGE
+  $ kourou user:export
+
+OPTIONS
+  --as=as                  Impersonate a user
+  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+  --exclude=exclude        [default: []] Exclude users by matching their IDs
+  --help                   show CLI help
+  --host=host              [default: localhost] Kuzzle server host
+  --password=password      Kuzzle user password
+  --path=path              [default: users] Dump directory
+  --port=port              [default: 7512] Kuzzle server port
+  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/user/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/export.ts)_
+
+## `kourou user:import PATH`
+
+Imports users
+
+```
+USAGE
+  $ kourou user:import PATH
+
+ARGUMENTS
+  PATH  Dump file
+
+OPTIONS
+  --as=as              Impersonate a user
+  --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
+  --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/user/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/import.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
@@ -914,7 +1033,7 @@ EXAMPLE
   kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/vault/add.ts)_
+_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/vault/add.ts)_
 
 ## `kourou vault:decrypt FILE`
 
@@ -944,7 +1063,7 @@ EXAMPLES
   kourou vault:decrypt config/secrets.enc.json -o config/secrets.json --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/vault/decrypt.ts)_
+_See code: [src/commands/vault/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/vault/decrypt.ts)_
 
 ## `kourou vault:encrypt FILE`
 
@@ -985,7 +1104,7 @@ EXAMPLES
   kourou vault:encrypt config/secrets.json -o config/secrets_prod.enc.json --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/vault/encrypt.ts)_
+_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/vault/encrypt.ts)_
 
 ## `kourou vault:show SECRETS-FILE [KEY]`
 
@@ -1016,7 +1135,7 @@ EXAMPLES
   kourou vault:show config/secrets.enc.json aws.s3.secretKey --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/vault/show.ts)_
+_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/vault/show.ts)_
 
 ## `kourou vault:test SECRETS-FILE`
 
@@ -1041,7 +1160,7 @@ EXAMPLE
   kourou vault:test config/secrets.enc.json --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/test.ts](https://github.com/kuzzleio/kourou/blob/v0.12.0/src/commands/vault/test.ts)_
+_See code: [src/commands/vault/test.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/vault/test.ts)_
 <!-- commandsstop -->
 
 # Where does this weird name comes from?

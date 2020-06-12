@@ -2,7 +2,7 @@ import { expect, test } from '@oclif/test'
 
 describe('instance:spawn', () => {
   test
-    .timeout(10000)
+    .timeout(20000)
     .stdout()
     .command(['instance:spawn'])
     .it('Spawns a new Kuzzle', ctx => {
@@ -10,7 +10,7 @@ describe('instance:spawn', () => {
     })
 
   test
-    .timeout(10000)
+    .timeout(20000)
     .stdout()
     .command(['instance:spawn', '--version', '1'])
     .it('Spawns a new Kuzzle v1', ctx => {
