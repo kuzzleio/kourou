@@ -6,7 +6,6 @@ describe('instance:spawn', () => {
     .stdout()
     .command(['instance:spawn'])
     .it('Spawns a new Kuzzle', ctx => {
-      console.log(ctx.stdout)
       expect(ctx.stdout).to.contain('Kuzzle version 2 is launching')
     })
 
