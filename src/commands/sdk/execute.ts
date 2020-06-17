@@ -55,6 +55,7 @@ Other
   };
 
   private code = ''
+  static readStdin = true
 
   async beforeConnect() {
     this.code = this.stdin || this.flags.code || '// paste your code here'
