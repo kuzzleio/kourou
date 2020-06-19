@@ -992,7 +992,7 @@ DESCRIPTION
 
   Auto-generation of credentials
 
-     With the "--generate-credentials" flag, Kourou will adds credentials for the "local" strategy.
+     With the "--generate-credentials" flag, Kourou will add credentials for the "local" strategy.
      By default, the username will be the user ID.
      Use the "generated-username" flag to use an other property than the user ID for the generated username
      The password will be a strong random 40 characters string
