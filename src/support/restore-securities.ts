@@ -31,7 +31,7 @@ export async function restoreRoles(kommand: any, dump: any, preserveAnonymous = 
     delete dump.content.anonymous
   }
 
-  const results = await OiseauBleu.map(
+  const results = await Bluebird.map(
     Object.entries(dump.content),
     ([roleId, role]: any) => (
       kommand.sdk.security.createOrReplaceRole(roleId, role, { force: true })
