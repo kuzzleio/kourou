@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.13.0 linux-x64 node-v12.16.3
+kourou/0.13.1 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -139,7 +139,7 @@ EXAMPLE
   kourou api-key:check eyJhbG...QxfQrc
 ```
 
-_See code: [src/commands/api-key/check.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/api-key/check.ts)_
+_See code: [src/commands/api-key/check.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/api-key/check.ts)_
 
 ## `kourou api-key:create USER`
 
@@ -166,7 +166,7 @@ OPTIONS
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/api-key/create.ts)_
+_See code: [src/commands/api-key/create.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/api-key/create.ts)_
 
 ## `kourou api-key:delete USER ID`
 
@@ -194,7 +194,7 @@ EXAMPLE
   kourou vault:delete sigfox-gateway 1k-BF3EBjsXdvA2PR8x
 ```
 
-_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/api-key/delete.ts)_
+_See code: [src/commands/api-key/delete.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/api-key/delete.ts)_
 
 ## `kourou api-key:search USER`
 
@@ -219,7 +219,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/api-key/search.ts)_
+_See code: [src/commands/api-key/search.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/api-key/search.ts)_
 
 ## `kourou collection:create INDEX COLLECTION`
 
@@ -254,7 +254,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/collection/create.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/collection/create.ts)_
+_See code: [src/commands/collection/create.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/collection/create.ts)_
 
 ## `kourou collection:export INDEX COLLECTION`
 
@@ -287,7 +287,7 @@ EXAMPLES
   kourou collection:export nyc-open-data yellow-taxi --query '{ term: { city: "Saigon" } }'
 ```
 
-_See code: [src/commands/collection/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/collection/export.ts)_
+_See code: [src/commands/collection/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/collection/export.ts)_
 
 ## `kourou collection:import PATH`
 
@@ -315,7 +315,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/collection/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/collection/import.ts)_
+_See code: [src/commands/collection/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/collection/import.ts)_
 
 ## `kourou config:diff FIRST SECOND`
 
@@ -337,7 +337,7 @@ EXAMPLE
   kourou config:diff config/local/kuzzlerc config/production/kuzzlerc
 ```
 
-_See code: [src/commands/config/diff.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/config/diff.ts)_
+_See code: [src/commands/config/diff.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/config/diff.ts)_
 
 ## `kourou document:create INDEX COLLECTION`
 
@@ -369,7 +369,7 @@ EXAMPLES
   kourou document:create iot sensors < document.json
 ```
 
-_See code: [src/commands/document/create.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/document/create.ts)_
+_See code: [src/commands/document/create.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/document/create.ts)_
 
 ## `kourou document:get INDEX COLLECTION ID`
 
@@ -395,7 +395,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/document/get.ts)_
+_See code: [src/commands/document/get.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/document/get.ts)_
 
 ## `kourou document:search INDEX COLLECTION`
 
@@ -430,7 +430,7 @@ EXAMPLES
   kourou document:search iot sensors --editor
 ```
 
-_See code: [src/commands/document/search.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/document/search.ts)_
+_See code: [src/commands/document/search.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/document/search.ts)_
 
 ## `kourou es:get INDEX ID`
 
@@ -450,7 +450,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/get.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/es/get.ts)_
+_See code: [src/commands/es/get.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/es/get.ts)_
 
 ## `kourou es:insert INDEX`
 
@@ -471,7 +471,7 @@ OPTIONS
   --id=id          Document ID
 ```
 
-_See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/es/insert.ts)_
+_See code: [src/commands/es/insert.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/es/insert.ts)_
 
 ## `kourou es:list-index`
 
@@ -488,7 +488,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/list-index.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/es/list-index.ts)_
+_See code: [src/commands/es/list-index.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/es/list-index.ts)_
 
 ## `kourou file:decrypt FILE`
 
@@ -511,7 +511,7 @@ EXAMPLES
   kourou file:decrypt books/cryptonomicon.txt.enc -o books/cryptonomicon.txt --vault-key <vault-key>
 ```
 
-_See code: [src/commands/file/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/file/decrypt.ts)_
+_See code: [src/commands/file/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/file/decrypt.ts)_
 
 ## `kourou file:encrypt FILE`
 
@@ -534,7 +534,7 @@ EXAMPLES
   kourou file:encrypt books/cryptonomicon.txt -o books/cryptonomicon.txt.enc --vault-key <vault-key>
 ```
 
-_See code: [src/commands/file/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/file/encrypt.ts)_
+_See code: [src/commands/file/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/file/encrypt.ts)_
 
 ## `kourou file:test FILE`
 
@@ -554,7 +554,7 @@ EXAMPLE
   kourou file:test books/cryptonomicon.txt.enc --vault-key <vault-key>
 ```
 
-_See code: [src/commands/file/test.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/file/test.ts)_
+_See code: [src/commands/file/test.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/file/test.ts)_
 
 ## `kourou help [COMMAND]`
 
@@ -597,7 +597,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/import.ts)_
+_See code: [src/commands/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/import.ts)_
 
 ## `kourou index:export INDEX`
 
@@ -623,7 +623,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/index/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/index/export.ts)_
+_See code: [src/commands/index/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/index/export.ts)_
 
 ## `kourou index:import PATH`
 
@@ -654,7 +654,7 @@ EXAMPLES
   kourou index:import ./dump/iot-data --index iot-data-production --no-mappings
 ```
 
-_See code: [src/commands/index/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/index/import.ts)_
+_See code: [src/commands/index/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/index/import.ts)_
 
 ## `kourou instance:logs`
 
@@ -669,7 +669,7 @@ OPTIONS
   -i, --instance=instance  Kuzzle instance name
 ```
 
-_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/instance/logs.ts)_
+_See code: [src/commands/instance/logs.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/instance/logs.ts)_
 
 ## `kourou instance:spawn`
 
@@ -685,7 +685,7 @@ OPTIONS
   --help                 show CLI help
 ```
 
-_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/instance/spawn.ts)_
+_See code: [src/commands/instance/spawn.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/instance/spawn.ts)_
 
 ## `kourou profile:export`
 
@@ -707,7 +707,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/profile/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/profile/export.ts)_
+_See code: [src/commands/profile/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/profile/export.ts)_
 
 ## `kourou profile:import PATH`
 
@@ -731,7 +731,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/profile/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/profile/import.ts)_
+_See code: [src/commands/profile/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/profile/import.ts)_
 
 ## `kourou role:export`
 
@@ -753,7 +753,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/role/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/role/export.ts)_
+_See code: [src/commands/role/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/role/export.ts)_
 
 ## `kourou role:import PATH`
 
@@ -778,7 +778,7 @@ OPTIONS
   --username=username   [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/role/import.ts)_
+_See code: [src/commands/role/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/role/import.ts)_
 
 ## `kourou sdk:execute`
 
@@ -832,7 +832,7 @@ DESCRIPTION
        - kourou sdk:execute --code 'return await sdk.server.now()' --editor
 ```
 
-_See code: [src/commands/sdk/execute.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/sdk/execute.ts)_
+_See code: [src/commands/sdk/execute.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/sdk/execute.ts)_
 
 ## `kourou sdk:query CONTROLLER:ACTION`
 
@@ -902,7 +902,7 @@ DESCRIPTION
        - kourou sdk:query server:now --display 'result.now'
 ```
 
-_See code: [src/commands/sdk/query.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/sdk/query.ts)_
+_See code: [src/commands/sdk/query.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/sdk/query.ts)_
 
 ## `kourou subscribe INDEX COLLECTION`
 
@@ -954,7 +954,7 @@ EXAMPLES
   kourou subscribe iot-data sensors --display result._source.temperature
 ```
 
-_See code: [src/commands/subscribe.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/subscribe.ts)_
+_See code: [src/commands/subscribe.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/subscribe.ts)_
 
 ## `kourou user:export`
 
@@ -985,10 +985,10 @@ DESCRIPTION
   The users will be exported WITHOUT their credentials since Kuzzzle can't access them.
 
   You can either:
-     - manually re-create credentials for your users
-     - use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
+     - Manually re-create credentials for your users
+     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
-     - use the "--generate-credentials" flag to auto-generate credentials for your users
+     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
   Auto-generation of credentials
 
@@ -1005,7 +1005,7 @@ DESCRIPTION
      - kourou user:export --generate-credentials --generated-username content.email
 ```
 
-_See code: [src/commands/user/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/export.ts)_
+_See code: [src/commands/user/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/user/export.ts)_
 
 ## `kourou user:import PATH`
 
@@ -1029,7 +1029,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/user/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/import.ts)_
+_See code: [src/commands/user/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/user/import.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
@@ -1060,7 +1060,7 @@ EXAMPLE
   kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/vault/add.ts)_
+_See code: [src/commands/vault/add.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/vault/add.ts)_
 
 ## `kourou vault:decrypt FILE`
 
@@ -1090,7 +1090,7 @@ EXAMPLES
   kourou vault:decrypt config/secrets.enc.json -o config/secrets.json --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/vault/decrypt.ts)_
+_See code: [src/commands/vault/decrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/vault/decrypt.ts)_
 
 ## `kourou vault:encrypt FILE`
 
@@ -1131,7 +1131,7 @@ EXAMPLES
   kourou vault:encrypt config/secrets.json -o config/secrets_prod.enc.json --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/vault/encrypt.ts)_
+_See code: [src/commands/vault/encrypt.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/vault/encrypt.ts)_
 
 ## `kourou vault:show SECRETS-FILE [KEY]`
 
@@ -1162,7 +1162,7 @@ EXAMPLES
   kourou vault:show config/secrets.enc.json aws.s3.secretKey --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/vault/show.ts)_
+_See code: [src/commands/vault/show.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/vault/show.ts)_
 
 ## `kourou vault:test SECRETS-FILE`
 
@@ -1187,7 +1187,7 @@ EXAMPLE
   kourou vault:test config/secrets.enc.json --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/test.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/vault/test.ts)_
+_See code: [src/commands/vault/test.ts](https://github.com/kuzzleio/kourou/blob/v0.13.1/src/commands/vault/test.ts)_
 <!-- commandsstop -->
 
 # Where does this weird name comes from?
