@@ -11,8 +11,9 @@ Feature: User Commands
       | profileIds | ["admin"]           |
       | email      | "alyx@blackmesa.us" |
     When I run the command "user:export" with:
-      | flag | --path    | ./dump                   |
-      | flag | --exclude | ["gordon", "test-admin"] |
+      | flag | --path    | ./dump     |
+      | flag | --exclude | gordon     |
+      | flag | --exclude | test-admin |
     And I delete the user "kleiner"
     And I delete the user "alyx"
     When I run the command "user:import" with:
