@@ -1,4 +1,9 @@
 import * as _ from 'lodash'
+import * as Bluebird from 'bluebird'
+
+// I can't find correct Bluebird types, I tried the package but he doesn't knows
+// Bluebird.map
+const OiseauBleu: any = Bluebird
 
 const sleep = (seconds: number) => new Promise((resolve: any) => setTimeout(resolve, seconds * 1000))
 
@@ -30,14 +35,14 @@ export async function restoreRoles(kommand: any, dump: any, preserveAnonymous = 
     delete dump.content.anonymous
   }
 
-  const promises = Object.entries(dump.content)
-    .map(([roleId, role]) => (
+  const results = await OiseauBleu.map(
+    Object.entries(dump.content),
+    ([roleId, role]: any) => (
       kommand.sdk.security.createOrReplaceRole(roleId, role, { force: true })
-    ))
+    ),
+    { concurrency: 10 })
 
-  await Promise.all(promises)
-
-  return promises.length
+  return results.length
 }
 
 export async function restoreProfiles(kommand: any, dump: any) {
@@ -45,14 +50,14 @@ export async function restoreProfiles(kommand: any, dump: any) {
     throw new Error('Dump file does not contain profiles definition')
   }
 
-  const promises = Object.entries(dump.content)
-    .map(([profileId, profile]) => (
+  const results = await OiseauBleu.map(
+    Object.entries(dump.content),
+    ([profileId, profile]: any) => (
       kommand.sdk.security.createOrReplaceProfile(profileId, profile, { force: true })
-    ))
+    ),
+    { concurrency: 10 })
 
-  await Promise.all(promises)
-
-  return promises.length
+  return results.length
 }
 
 export async function restoreUsers(kommand: any, dump: any) {
@@ -60,14 +65,14 @@ export async function restoreUsers(kommand: any, dump: any) {
     throw new Error('Dump file does not contain users definition')
   }
 
-  const promises = Object.entries(dump.content)
-    .map(([userId, content]) => {
-      return kommand.sdk.security.createUser(userId, { content })
+  const results = await OiseauBleu.map(
+    Object.entries(dump.content),
+    ([userId, userBody]: any) => {
+      return kommand.sdk.security.createUser(userId, userBody)
         .then(() => true)
         .catch((error: any) => kommand.logKo(`Error importing user ${userId}: ${error.message}`))
-    })
+    },
+    { concurrency: 10 })
 
-  const results = await Promise.all(promises)
-
-  return results.filter(success => success).length
+  return results.filter((success: boolean) => success).length
 }

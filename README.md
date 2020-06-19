@@ -958,24 +958,51 @@ _See code: [src/commands/subscribe.ts](https://github.com/kuzzleio/kourou/blob/v
 
 ## `kourou user:export`
 
-Exports users
+Exports users to JSON.
 
 ```
 USAGE
   $ kourou user:export
 
 OPTIONS
-  --as=as                  Impersonate a user
-  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-  --exclude=exclude        [default: []] Exclude users by matching their IDs
-  --help                   show CLI help
-  --host=host              [default: localhost] Kuzzle server host
-  --password=password      Kuzzle user password
-  --path=path              [default: users] Dump directory
-  --port=port              [default: 7512] Kuzzle server port
-  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                    Use SSL to connect to Kuzzle
-  --username=username      [default: anonymous] Kuzzle username (local strategy)
+  --as=as                                  Impersonate a user
+  --batch-size=batch-size                  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+  --exclude=exclude                        Exclude users by matching their IDs with a regexp
+  --generate-credentials                   Generate credentials with a random password for users
+  --generated-username=generated-username  [default: _id] User content property used as a username for local credentials
+  --help                                   show CLI help
+  --host=host                              [default: localhost] Kuzzle server host
+  --password=password                      Kuzzle user password
+  --path=path                              [default: users] Dump directory
+  --port=port                              [default: 7512] Kuzzle server port
+  --protocol=protocol                      [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                                    Use SSL to connect to Kuzzle
+  --username=username                      [default: anonymous] Kuzzle username (local strategy)
+
+DESCRIPTION
+  Exports users to JSON.
+
+  The users will be exported WITHOUT their credentials since Kuzzzle can't access them.
+
+  You can either:
+     - manually re-create credentials for your users
+     - use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
+  https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
+     - use the "--generate-credentials" flag to auto-generate credentials for your users
+
+  Auto-generation of credentials
+
+     With the "--generate-credentials" flag, Kourou will adds credentials for the "local" strategy.
+     By default, the username will be the user ID.
+     Use the "generated-username" flag to use an other property than the user ID for the generated username
+     The password will be a strong random 40 characters string
+
+  Examples:
+
+     - kourou user:export
+     - kourou user:export --exclude '.*admin.*' --exclude 'supervisor.*'
+     - kourou user:export --generate-credentials
+     - kourou user:export --generate-credentials --generated-username content.email
 ```
 
 _See code: [src/commands/user/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/export.ts)_
