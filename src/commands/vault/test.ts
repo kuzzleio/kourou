@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import * as _ from 'lodash'
+import  _ from 'lodash'
 import { Vault } from 'kuzzle-vault'
 
 import { Kommand } from '../../common'

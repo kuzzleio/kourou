@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import * as fs from 'fs'
+import  fs from 'fs'
 
 import { Kommand } from '../../common'
 import { kuzzleFlags } from '../../support/kuzzle'

@@ -1,4 +1,4 @@
-import * as fs from 'fs'
+import fs from 'fs'
 import cli from 'cli-ux'
 
 // tslint:disable-next-line

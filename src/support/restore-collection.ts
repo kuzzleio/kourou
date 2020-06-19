@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import * as fs from 'fs'
+import fs from 'fs'
 
 // tslint:disable-next-line
 const ndjson = require('ndjson')
