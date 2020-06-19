@@ -68,7 +68,7 @@ Examples:
   private excludes: string[] = []
 
   async beforeConnect() {
-    if (this.flags['generated-username'] && !this.flags['generate-credentials']) {
+    if (this.flags['generated-username'] !== '_id' && !this.flags['generate-credentials']) {
       throw new Error('The "--generated-username" cannot be used without "--generate-credentials"')
     }
   }
@@ -111,24 +111,26 @@ Examples:
           !user._id.match(new RegExp(exclude))
         ))
 
-        if (shouldInclude) {
-          users[user._id] = {
-            content: _.omit(user.content, ['_kuzzle_info']),
-            credentials: {}
-          }
+        if (!shouldInclude) {
+          continue;
+        }
 
-          if (this.flags['generate-credentials']) {
-            let username = `${_.get(user, this.flags['generated-username'])}`
-            let password = randomPassword()
+        users[user._id] = {
+          content: _.omit(user.content, ['_kuzzle_info']),
+          credentials: {}
+        }
 
-            // Check for empty string or undefined property converted to string
-            if (_.isEmpty(username) || username === 'undefined') {
-              this.logInfo(`User ${user._id} does not have a "${this.flags['generated-username']}" property. Use user ID instead.`)
-              username = user._id
-            }
+        if (this.flags['generate-credentials']) {
+          let username = `${_.get(user, this.flags['generated-username'])}`
+          const password = randomPassword()
 
-            users[user._id].credentials.local = { username, password }
-          }
+          // Check for empty string or undefined property converted to string
+          if (_.isEmpty(username) || username === 'undefined') {
+            this.logInfo(`User ${user._id} does not have a "${this.flags['generated-username']}" property. Use user ID instead.`)
+            username = user._id
+          } s
+
+          users[user._id].credentials.local = { username, password }
         }
       }
 
