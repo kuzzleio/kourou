@@ -1,10 +1,6 @@
 import * as _ from 'lodash'
 import * as Bluebird from 'bluebird'
 
-// I can't find correct Bluebird types, I tried the package but he doesn't knows
-// Bluebird.map
-const OiseauBleu: any = Bluebird
-
 const sleep = (seconds: number) => new Promise((resolve: any) => setTimeout(resolve, seconds * 1000))
 
 export async function restoreRoles(kommand: any, dump: any, preserveAnonymous = false) {
@@ -50,7 +46,7 @@ export async function restoreProfiles(kommand: any, dump: any) {
     throw new Error('Dump file does not contain profiles definition')
   }
 
-  const results = await OiseauBleu.map(
+  const results = await Bluebird.map(
     Object.entries(dump.content),
     ([profileId, profile]: any) => (
       kommand.sdk.security.createOrReplaceProfile(profileId, profile, { force: true })
@@ -65,7 +61,7 @@ export async function restoreUsers(kommand: any, dump: any) {
     throw new Error('Dump file does not contain users definition')
   }
 
-  const results = await OiseauBleu.map(
+  const results = await Bluebird.map(
     Object.entries(dump.content),
     ([userId, userBody]: any) => {
       return kommand.sdk.security.createUser(userId, userBody)

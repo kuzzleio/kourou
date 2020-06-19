@@ -112,7 +112,7 @@ Examples:
         ))
 
         if (!shouldInclude) {
-          continue;
+          continue
         }
 
         users[user._id] = {
@@ -128,7 +128,7 @@ Examples:
           if (_.isEmpty(username) || username === 'undefined') {
             this.logInfo(`User ${user._id} does not have a "${this.flags['generated-username']}" property. Use user ID instead.`)
             username = user._id
-          } s
+          }
 
           users[user._id].credentials.local = { username, password }
         }
