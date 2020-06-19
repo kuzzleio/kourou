@@ -1,6 +1,6 @@
-import * as fs from 'fs'
-import * as _ from 'lodash'
-import * as crypto from 'crypto'
+import fs from 'fs'
+import _ from 'lodash'
+import crypto from 'crypto'
 import path from 'path'
 
 import { flags } from '@oclif/command'

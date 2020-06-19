@@ -1,6 +1,6 @@
 import { flags } from '@oclif/command'
-import * as _ from 'lodash'
-import * as fs from 'fs'
+import  _ from 'lodash'
+import  fs from 'fs'
 import stripComments from 'strip-json-comments'
 
 import { Kommand } from '../../common'

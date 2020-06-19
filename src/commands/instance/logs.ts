@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import * as inquirer from 'inquirer'
+import  inquirer from 'inquirer'
 import execa from 'execa'
 
 import { Kommand } from '../../common'
