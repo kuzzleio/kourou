@@ -1,7 +1,7 @@
 {
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kourou": "./bin/run"
@@ -12,7 +12,9 @@
     "@oclif/command": "^1.6.1",
     "@oclif/config": "^1.15.1",
     "@oclif/plugin-help": "^2.2.3",
+    "@types/bluebird": "^3.5.32",
     "@types/inquirer": "^6.5.0",
+    "bluebird": "^3.7.2",
     "chalk": "^3.0.0",
     "cli-ux": "^5.4.6",
     "execa": "^3.4.0",

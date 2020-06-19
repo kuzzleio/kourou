@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import * as fs from 'fs'
+import  fs from 'fs'
 import path from 'path'
 
 import { Kommand } from '../../common'

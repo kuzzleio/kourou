@@ -1,4 +1,5 @@
 import { flags } from '@oclif/command'
+import { isEmpty } from 'lodash'
 
 import { Editor } from '../../support/editor'
 import { Kommand } from '../../common'
@@ -56,6 +57,8 @@ Other
 
   private code = ''
 
+  static readStdin = true
+
   async beforeConnect() {
     this.code = this.stdin || this.flags.code || '// paste your code here'
 
@@ -65,6 +68,10 @@ Other
   }
 
   async runSafe() {
+    if (isEmpty(this.code)) {
+      throw new Error('No code provided.')
+    }
+
     let userError: Error | null = null
 
     const variables = (this.flags.var || [])
