@@ -12,9 +12,10 @@ Query arguments
 
   Arguments can be passed and repeated using the --arg or -a flag.
   Index and collection names can be passed with --index (-i) and --collection (-c) flags
+  ID can be passed with the --id flag.
 
   Examples:
-    - kourou sdk:query document:get -i iot -c sensors -a _id=sigfox-42
+    - kourou sdk:query document:delete -i iot -c sensors -a refresh=wait_for
 
 Query body
 
@@ -35,13 +36,22 @@ Other
     - kourou sdk:query document:create -i iot -c sensors --editor
     - kourou sdk:query server:now --display 'result.now'
 
-Default fallback
+Default fallback to API method
 
   It's possible to use this command by only specifying the corresponding controller
-  and action as first argument
+  and action as first argument.
+  Kourou will try to infer the 4th first arguments to one the following:
+   - <index> <collection> <id> <body>
+   - <index> <collection> <body>
+  If a flag is given (-i, -c, --body or --id), then the flag value has prior to
+  argument infering.
 
   Examples:
-    - kourou document:createOrReplace -i iot -c sensors - _id=sigfox-1 --body '{}'
+    - kourou document:createOrReplace iot sensors sigfox-1 '{}'
+    - kourou collection:delete iot sensors
+    - kourou collection:list iot
+    - kourou bulk:import iot sensors '{bulkData: [...]}'
+    - kourou admin:loadMappings < mappings.json
 `;
 
   public static flags = {
@@ -65,6 +75,9 @@ Default fallback
     collection: flags.string({
       char: 'c',
       description: 'Collection argument'
+    }),
+    id: flags.string({
+      description: 'ID argument (_id)'
     }),
     display: flags.string({
       description: 'Path of the property to display from the response (empty string to display everything)',
@@ -90,6 +103,7 @@ Default fallback
 
     requestArgs.index = this.flags.index
     requestArgs.collection = this.flags.collection
+    requestArgs._id = this.flags.id
 
     for (const keyValue of this.flags.arg || []) {
       const [key, ...value] = keyValue.split('=')

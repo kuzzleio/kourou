@@ -73,6 +73,28 @@ $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password a
 [...]
 ```
 
+## Automatic command infering for API methods
+
+When no command is found, Kourou will try to execute the given command with the `sdk:query` command.  
+
+The first argument has to be the name of the controller and the action separated by a semicolon (eg `document:create`)
+
+Kourou will try to infer common arguments like `index`, `collection`, `_id` or `body`.  
+
+It will automatically infer and accept the following lists of arguments:
+ - `<command> <index>`
+    * _eg: `kourou collection:list iot`_
+ - `<command> <index> <collection>`
+    * _eg: `kourou collection:truncate iot sensors`_
+ - `<command> <index> <collection> <body>`
+    * _eg: `kourou bulk:import iot sensors '{bulkData: []}'`_
+ - `<command> <index> <collection> <id>`
+    * _eg: `kourou document:delete iot sensors sigfox-123`_
+ - `<command> <index> <collection> <id> <body>`
+    * _eg: `kourou document:create iot sensors sigfox-123 '{temperature: 42}'`_
+
+Then any argument will be passed as-is to the `sdk:query` method.
+
 # Commands
 
 <!-- commands -->
@@ -861,6 +883,8 @@ OPTIONS
 
   --host=host                  [default: localhost] Kuzzle server host
 
+  --id=id                      ID argument (_id)
+
   --password=password          Kuzzle user password
 
   --port=port                  [default: 7512] Kuzzle server port
@@ -878,9 +902,10 @@ DESCRIPTION
 
      Arguments can be passed and repeated using the --arg or -a flag.
      Index and collection names can be passed with --index (-i) and --collection (-c) flags
+     ID can be passed with the --id flag.
 
      Examples:
-       - kourou sdk:query document:get -i iot -c sensors -a _id=sigfox-42
+       - kourou sdk:query document:delete -i iot -c sensors -a refresh=wait_for
 
   Query body
 
@@ -901,13 +926,22 @@ DESCRIPTION
        - kourou sdk:query document:create -i iot -c sensors --editor
        - kourou sdk:query server:now --display 'result.now'
 
-  Default fallback
+  Default fallback to API method
 
      It's possible to use this command by only specifying the corresponding controller
-     and action as first argument
+     and action as first argument.
+     Kourou will try to infer the 4th first arguments to one the following:
+      - <index> <collection> <id> <body>
+      - <index> <collection> <body>
+     If a flag is given (-i, -c, --body or --id), then the flag value has prior to
+     argument infering.
 
      Examples:
-       - kourou document:createOrReplace -i iot -c sensors - _id=sigfox-1 --body '{}'
+       - kourou document:createOrReplace iot sensors sigfox-1 '{}'
+       - kourou collection:delete iot sensors
+       - kourou collection:list iot
+       - kourou bulk:import iot sensors '{bulkData: [...]}'
+       - kourou admin:loadMappings < mappings.json
 ```
 
 _See code: [src/commands/sdk/query.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/sdk/query.ts)_
