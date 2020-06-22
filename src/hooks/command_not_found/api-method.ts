@@ -19,7 +19,7 @@ import SdkQuery from '../../commands/sdk/query'
  * This is mainly to match easily methods from the document, bulk, realtime
  * and collection controllers.
  *
- * If one of the infered argument is passed as a flag, then Kourou will
+ * If one of the infered arguments is passed as a flag, then Kourou will
  * use the flag value and will not try to infere arguments.
  *
  * Example:
