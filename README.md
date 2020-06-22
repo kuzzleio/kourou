@@ -876,16 +876,16 @@ DESCRIPTION
 
   Query arguments
 
-     arguments can be passed and repeated using the --arg or -a flag.
-     index and collection names can be passed with --index (-i) and --collection (-c) flags
+     Arguments can be passed and repeated using the --arg or -a flag.
+     Index and collection names can be passed with --index (-i) and --collection (-c) flags
 
      Examples:
        - kourou sdk:query document:get -i iot -c sensors -a _id=sigfox-42
 
   Query body
 
-     body can be passed with the --body flag with either a JSON or JS string.
-     body will be read from STDIN if available
+     Body can be passed with the --body flag with either a JSON or JS string.
+     Body will be read from STDIN if available
 
      Examples:
        - kourou sdk:query document:create -i iot -c sensors --body '{creation: Date.now())}'
@@ -894,12 +894,20 @@ DESCRIPTION
 
   Other
 
-     use the --editor flag to modify the query before sending it to Kuzzle
-     use the --display flag to display a specific property of the response
+     Use the --editor flag to modify the query before sending it to Kuzzle
+     Use the --display flag to display a specific property of the response
 
      Examples:
        - kourou sdk:query document:create -i iot -c sensors --editor
        - kourou sdk:query server:now --display 'result.now'
+
+  Default fallback
+
+     It's possible to use this command by only specifying the corresponding controller
+     and action as first argument
+
+     Examples:
+       - kourou document:createOrReplace -i iot -c sensors - _id=sigfox-1 --body '{}'
 ```
 
 _See code: [src/commands/sdk/query.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/sdk/query.ts)_
@@ -985,10 +993,10 @@ DESCRIPTION
   The users will be exported WITHOUT their credentials since Kuzzzle can't access them.
 
   You can either:
-     - manually re-create credentials for your users
-     - use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
+     - Manually re-create credentials for your users
+     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
-     - use the "--generate-credentials" flag to auto-generate credentials for your users
+     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
   Auto-generation of credentials
 

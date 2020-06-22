@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import  _ from 'lodash'
+import _ from 'lodash'
 
 import { Kommand } from '../../common'
 import { kuzzleFlags } from '../../support/kuzzle'
@@ -10,16 +10,16 @@ Executes an API query.
 
 Query arguments
 
-  arguments can be passed and repeated using the --arg or -a flag.
-  index and collection names can be passed with --index (-i) and --collection (-c) flags
+  Arguments can be passed and repeated using the --arg or -a flag.
+  Index and collection names can be passed with --index (-i) and --collection (-c) flags
 
   Examples:
     - kourou sdk:query document:get -i iot -c sensors -a _id=sigfox-42
 
 Query body
 
-  body can be passed with the --body flag with either a JSON or JS string.
-  body will be read from STDIN if available
+  Body can be passed with the --body flag with either a JSON or JS string.
+  Body will be read from STDIN if available
 
   Examples:
     - kourou sdk:query document:create -i iot -c sensors --body '{creation: Date.now())}'
@@ -28,12 +28,20 @@ Query body
 
 Other
 
-  use the --editor flag to modify the query before sending it to Kuzzle
-  use the --display flag to display a specific property of the response
+  Use the --editor flag to modify the query before sending it to Kuzzle
+  Use the --display flag to display a specific property of the response
 
   Examples:
     - kourou sdk:query document:create -i iot -c sensors --editor
     - kourou sdk:query server:now --display 'result.now'
+
+Default fallback
+
+  It's possible to use this command by only specifying the corresponding controller
+  and action as first argument
+
+  Examples:
+    - kourou document:createOrReplace -i iot -c sensors - _id=sigfox-1 --body '{}'
 `;
 
   public static flags = {
