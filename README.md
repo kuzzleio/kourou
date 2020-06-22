@@ -84,12 +84,24 @@ Kourou will try to infer common arguments like `index`, `collection`, `_id` or `
 It will automatically infer and accept the following lists of arguments:
  - `<command> <index>`
     * _eg: `kourou collection:list iot`_
+.
+
+
  - `<command> <index> <collection>`
     * _eg: `kourou collection:truncate iot sensors`_
+.
+
+
  - `<command> <index> <collection> <body>`
     * _eg: `kourou bulk:import iot sensors '{bulkData: []}'`_
+.
+
+
  - `<command> <index> <collection> <id>`
     * _eg: `kourou document:delete iot sensors sigfox-123`_
+.
+
+
  - `<command> <index> <collection> <id> <body>`
     * _eg: `kourou document:create iot sensors sigfox-123 '{temperature: 42}'`_
 
