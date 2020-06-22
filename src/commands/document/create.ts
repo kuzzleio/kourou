@@ -7,15 +7,11 @@ export default class DocumentCreate extends Kommand {
   static description = 'Creates a document'
 
   static examples = [
-    'kourou document:create iot sensors --body \'{network: "sigfox"}\'',
+    'kourou document:create iot sensors \'{network: "sigfox"}\'',
     'kourou document:create iot sensors < document.json',
   ]
 
   static flags = {
-    body: flags.string({
-      description: 'Document body in JS or JSON format. Will be read from STDIN if available',
-      default: '{}'
-    }),
     id: flags.string({
       description: 'Optional document ID'
     }),
@@ -28,13 +24,14 @@ export default class DocumentCreate extends Kommand {
 
   static args = [
     { name: 'index', description: 'Index name', required: true },
-    { name: 'collection', description: 'Collection name', required: true }
+    { name: 'collection', description: 'Collection name', required: true },
+    { name: 'body', description: 'Document body in JS or JSON format. Will be read from STDIN if available' }
   ]
 
   static readStdin = true
 
   async runSafe() {
-    const body = this.stdin ? this.stdin : this.flags.body
+    const body = this.stdin ? this.stdin : this.args.body
 
     if (this.flags.replace) {
       const document = await this.sdk?.document.replace(
