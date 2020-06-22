@@ -12,6 +12,7 @@ import SdkQuery from '../../commands/sdk/query'
  * passed as argument in one of the following order:
  *  - <index> <collection> <id> <body>
  *  - <index> <collection> <body>
+ *  - <index> <collection> <id>
  *  - <index> <collection>
  *  - <index>
  *
