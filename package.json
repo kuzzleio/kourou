@@ -105,7 +105,7 @@
       }
     },
     "hooks": {
-      "command_not_found": "./lib/hooks/command_not_found/apiMethod"
+      "command_not_found": "./lib/hooks/command_not_found/api-method"
     }
   },
   "repository": "kuzzleio/kourou",

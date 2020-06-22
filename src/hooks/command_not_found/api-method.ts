@@ -31,9 +31,11 @@ async function callSdkQuery(args: string[]) {
   try {
     await SdkQuery.run(args)
 
+    // eslint-disable-next-line
     process.exit(0)
   }
   catch (error) {
+    // eslint-disable-next-line
     process.exit(1)
   }
 }
@@ -59,7 +61,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     commandArgs.push('-i')
     commandArgs.push(args[0])
 
-    args.splice(0, 1);
+    args.splice(0, 1)
   }
   else {
     return callSdkQuery([...commandArgs, ...args])
@@ -74,7 +76,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     commandArgs.push('-c')
     commandArgs.push(args[0])
 
-    args.splice(0, 1);
+    args.splice(0, 1)
   }
   else {
     return callSdkQuery([...commandArgs, ...args])
@@ -86,13 +88,13 @@ const hook: Hook<'command_not_found'> = async function (opts) {
       commandArgs.push('--body')
       commandArgs.push(args[0])
 
-      args.splice(0, 1);
+      args.splice(0, 1)
     }
     else if (!args.includes('--id')) {
       commandArgs.push('--id')
       commandArgs.push(args[0])
 
-      args.splice(0, 1);
+      args.splice(0, 1)
     }
   }
   else {
@@ -107,7 +109,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     commandArgs.push('--body')
     commandArgs.push(args[0])
 
-    args.splice(0, 1);
+    args.splice(0, 1)
   }
 
   return callSdkQuery([...commandArgs, ...args])
