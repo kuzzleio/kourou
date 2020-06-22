@@ -40,16 +40,19 @@ Default fallback to API method
 
   It's possible to use this command by only specifying the corresponding controller
   and action as first argument.
-  Kourou will try to infer the 4th first arguments to one the following:
-   - <index> <collection> <id> <body>
-   - <index> <collection> <body>
+  Kourou will try to infer the first arguments to one the following pattern:
+    - <command> <index>
+    - <command> <index> <collection>
+    - <command> <index> <collection> <id>
+    - <command> <index> <collection> <body>
+    - <command> <index> <collection> <id> <body>
   If a flag is given (-i, -c, --body or --id), then the flag value has prior to
   argument infering.
 
   Examples:
-    - kourou document:createOrReplace iot sensors sigfox-1 '{}'
-    - kourou collection:delete iot sensors
     - kourou collection:list iot
+    - kourou collection:delete iot sensors
+    - kourou document:createOrReplace iot sensors sigfox-1 '{}'
     - kourou bulk:import iot sensors '{bulkData: [...]}'
     - kourou admin:loadMappings < mappings.json
 `;
