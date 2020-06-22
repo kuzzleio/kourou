@@ -1,3 +1,4 @@
+import chalk from 'chalk'
 import { Hook } from '@oclif/config'
 import SdkQuery from '../../commands/sdk/query'
 
@@ -42,6 +43,8 @@ const hook: Hook<'command_not_found'> = async function (opts) {
   if (!controller || !action) {
     return
   }
+
+  this.log(chalk.yellow(`[ℹ] Unknown command "${opts.id}", fallback to API method`))
 
   const args = process.argv.slice(3)
   const commandArgs = [opts.id]
