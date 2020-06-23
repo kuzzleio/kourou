@@ -70,6 +70,7 @@
     "plugins": [
       "@oclif/plugin-help"
     ],
+    "repositoryPrefix": "<%- commandPath %>",
     "topics": {
       "api-key": {
         "description": "manage API keys"
