@@ -14,7 +14,7 @@ export default class CollectionCreate extends Kommand {
   static args = [
     { name: 'index', description: 'Index name', required: true },
     { name: 'collection', description: 'Collection name', required: true },
-    { name: 'body', description: 'ollection mappings and settings in JS or JSON format. Will be read from STDIN if available' },
+    { name: 'body', description: 'Collection mappings and settings in JS or JSON format. Will be read from STDIN if available' },
   ]
 
   static readStdin = true
