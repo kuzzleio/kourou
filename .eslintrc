@@ -8,7 +8,6 @@
     "node/no-deprecated-api": "off",
     "unicorn/no-abusive-eslint-disable": "off",
     "brace-style": "off",
-    "operator-linebreak": "off",
-    "no-console": "off"
+    "operator-linebreak": "off"
   }
 }

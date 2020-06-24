@@ -9,6 +9,7 @@ export class InstanceList extends Kommand {
 
   async runSafe() {
     const instancesList = await this.getInstancesList()
+    // eslint-disable-next-line no-console
     console.table(instancesList, [
       'name',
       'status',
