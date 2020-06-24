@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.13.0 linux-x64 node-v12.16.3
+kourou/0.13.0 linux-x64 node-v10.15.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -107,7 +107,9 @@ $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password a
 * [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
 * [`kourou subscribe INDEX COLLECTION`](#kourou-subscribe-index-collection)
 * [`kourou user:export`](#kourou-userexport)
+* [`kourou user:exportMapping`](#kourou-userexportmapping)
 * [`kourou user:import PATH`](#kourou-userimport-path)
+* [`kourou user:importMapping PATH`](#kourou-userimportmapping-path)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
@@ -985,10 +987,10 @@ DESCRIPTION
   The users will be exported WITHOUT their credentials since Kuzzzle can't access them.
 
   You can either:
-     - manually re-create credentials for your users
-     - use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
+     - Manually re-create credentials for your users
+     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
-     - use the "--generate-credentials" flag to auto-generate credentials for your users
+     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
   Auto-generation of credentials
 
@@ -1006,6 +1008,28 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/user/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/export.ts)_
+
+## `kourou user:exportMapping`
+
+Exports user mapping to JSON.
+
+```
+USAGE
+  $ kourou user:exportMapping
+
+OPTIONS
+  --as=as              Impersonate a user
+  --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
+  --password=password  Kuzzle user password
+  --path=path          [default: users] Dump directory
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/user/exportMapping.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/exportMapping.ts)_
 
 ## `kourou user:import PATH`
 
@@ -1030,6 +1054,30 @@ OPTIONS
 ```
 
 _See code: [src/commands/user/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/import.ts)_
+
+## `kourou user:importMapping PATH`
+
+Imports users
+
+```
+USAGE
+  $ kourou user:importMapping PATH
+
+ARGUMENTS
+  PATH  Dump file
+
+OPTIONS
+  --as=as              Impersonate a user
+  --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
+  --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/user/importMapping.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/importMapping.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
