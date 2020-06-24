@@ -9,6 +9,8 @@ export class InstanceList extends Kommand {
 
   async runSafe() {
     const instancesList = await this.getInstancesList()
+    // Disable eslint no-console to allow using console.table
+    // Instead of add another dependency to kourou
     // eslint-disable-next-line no-console
     console.table(instancesList, [
       'name',
