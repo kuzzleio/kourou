@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.13.0 linux-x64 node-v12.16.3
+kourou/0.13.0 linux-x64 node-v10.15.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -97,6 +97,8 @@ $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password a
 * [`kourou import PATH`](#kourou-import-path)
 * [`kourou index:export INDEX`](#kourou-indexexport-index)
 * [`kourou index:import PATH`](#kourou-indeximport-path)
+* [`kourou instance:kill`](#kourou-instancekill)
+* [`kourou instance:list`](#kourou-instancelist)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
 * [`kourou profile:export`](#kourou-profileexport)
@@ -656,6 +658,31 @@ EXAMPLES
 
 _See code: [src/commands/index/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/index/import.ts)_
 
+## `kourou instance:kill`
+
+Kill all the containers of a running kuzzle instance
+
+```
+USAGE
+  $ kourou instance:kill
+
+OPTIONS
+  -i, --instance=instance  Kuzzle instance name
+```
+
+_See code: [src/commands/instance/kill.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/instance/kill.ts)_
+
+## `kourou instance:list`
+
+Lists the Kuzzle running instances
+
+```
+USAGE
+  $ kourou instance:list
+```
+
+_See code: [src/commands/instance/list.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/instance/list.ts)_
+
 ## `kourou instance:logs`
 
 Displays the logs of a running Kuzzle
@@ -985,10 +1012,10 @@ DESCRIPTION
   The users will be exported WITHOUT their credentials since Kuzzzle can't access them.
 
   You can either:
-     - manually re-create credentials for your users
-     - use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
+     - Manually re-create credentials for your users
+     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
-     - use the "--generate-credentials" flag to auto-generate credentials for your users
+     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
   Auto-generation of credentials
 
