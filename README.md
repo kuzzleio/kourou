@@ -64,9 +64,9 @@ User impersonation require the following rights for the authenticated user: `sec
 
 ```bash
 $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password admin
- 
+
  🚀 Kourou - Executes an API query.
- 
+
  [ℹ] Connecting to http://localhost:7512 ...
  [ℹ] Impersonate user "gordon"
 
