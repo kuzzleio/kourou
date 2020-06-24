@@ -4,8 +4,15 @@ import path from 'path'
 
 import { Kommand } from '../common'
 import { kuzzleFlags } from '../support/kuzzle'
-import { restoreCollectionData, restoreCollectionMappings } from '../support/restore-collection'
-import { restoreProfiles, restoreRoles, restoreUsers } from '../support/restore-securities'
+import {
+  restoreCollectionData,
+  restoreCollectionMappings
+} from '../support/restore-collection'
+import {
+  restoreProfiles,
+  restoreRoles,
+  restoreUsers
+} from '../support/restore-securities'
 
 export default class Import extends Kommand {
   static description = 'Recursively imports dump files from a root directory'
@@ -23,12 +30,16 @@ export default class Import extends Kommand {
     ...kuzzleFlags,
     protocol: flags.string({
       description: 'Kuzzle protocol (http or websocket)',
-      default: 'ws',
-    }),
+      default: 'ws'
+    })
   }
 
   static args = [
-    { name: 'path', description: 'Root directory containing dumps', required: true },
+    {
+      name: 'path',
+      description: 'Root directory containing dumps',
+      required: true
+    }
   ]
 
   async runSafe() {
@@ -39,11 +50,15 @@ export default class Import extends Kommand {
         this.logInfo(`[collection] Start importing mappings in ${file}`)
 
         const dump = JSON.parse(fs.readFileSync(file, 'utf8'))
-        const { index, collection } = await restoreCollectionMappings(this.sdk, dump)
+        const { index, collection } = await restoreCollectionMappings(
+          this.sdk,
+          dump
+        )
 
-        this.logOk(`[collection] Imported mappings for "${index}":"${collection}"`)
-      }
-      catch (error) {
+        this.logOk(
+          `[collection] Imported mappings for "${index}":"${collection}"`
+        )
+      } catch (error) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -56,11 +71,13 @@ export default class Import extends Kommand {
           this.sdk,
           this.log.bind(this),
           Number(this.flags['batch-size']),
-          file)
+          file
+        )
 
-        this.logOk(`[collection] Imported ${total} documents in "${index}":"${collection}"`)
-      }
-      catch (error) {
+        this.logOk(
+          `[collection] Imported ${total} documents in "${index}":"${collection}"`
+        )
+      } catch (error) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -70,11 +87,14 @@ export default class Import extends Kommand {
         this.logInfo(`[roles] Start importing roles in ${file}`)
 
         const dump = JSON.parse(fs.readFileSync(file, 'utf8'))
-        const total = await restoreRoles(this, dump, this.flags['preserve-anonymous'])
+        const total = await restoreRoles(
+          this,
+          dump,
+          this.flags['preserve-anonymous']
+        )
 
         this.logOk(`[roles] Imported ${total} roles`)
-      }
-      catch (error) {
+      } catch (error) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -87,8 +107,24 @@ export default class Import extends Kommand {
         const total = await restoreProfiles(this, dump)
 
         this.logOk(`[profiles] Imported ${total} profiles`)
+      } catch (error) {
+        this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
-      catch (error) {
+    }
+    if (files.userMapping.length !== 0) {
+      const file = files.userMapping[0]
+      try {
+        this.logInfo(`[user mapping] Start importing user mapping in ${file}`)
+        const dump = JSON.parse(fs.readFileSync(file, 'utf8'))
+
+        const mapping = dump.content.mapping
+        delete mapping.profileIds
+        await this.sdk?.security.updateUserMapping({
+          properties: mapping
+        })
+
+        this.logOk('[user mapping] imported')
+      } catch (error) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -101,8 +137,7 @@ export default class Import extends Kommand {
         const total = await restoreUsers(this, dump)
 
         this.logOk(`[users] Imported ${total} users`)
-      }
-      catch (error) {
+      } catch (error) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -118,21 +153,39 @@ export default class Import extends Kommand {
     const files = entries
       .map(entry => path.join(directory, entry))
       .filter(fileName => fs.lstatSync(fileName).isFile())
-      .reduce((memo: any, file: string) => {
-        const fileType = this.getFileType(file)
+      .reduce(
+        (memo: any, file: string) => {
+          const fileType = this.getFileType(file)
 
-        memo[fileType].push(file)
+          memo[fileType].push(file)
 
-        return memo
-      }, { documents: [], mappings: [], roles: [], profiles: [], users: [] })
+          return memo
+        },
+        {
+          documents: [],
+          mappings: [],
+          roles: [],
+          profiles: [],
+          userMapping: [],
+          users: []
+        }
+      )
 
     for (const dir of directories) {
-      const { documents, mappings, roles, profiles, users } = await this.walkDirectories(dir)
+      const {
+        documents,
+        mappings,
+        roles,
+        profiles,
+        userMapping,
+        users
+      } = await this.walkDirectories(dir)
 
       files.documents = files.documents.concat(documents)
       files.mappings = files.mappings.concat(mappings)
       files.roles = files.roles.concat(roles)
       files.profiles = files.profiles.concat(profiles)
+      files.userMapping = files.userMapping.concat(userMapping)
       files.users = files.users.concat(users)
     }
 
@@ -148,9 +201,10 @@ export default class Import extends Kommand {
       const dump = JSON.parse(fs.readFileSync(file, 'utf8'))
 
       return dump.type
-    }
-    catch (error) {
-      this.logKo(`Invalid JSON file "${file}". Import skipped. ${error.message}`)
+    } catch (error) {
+      this.logKo(
+        `Invalid JSON file "${file}". Import skipped. ${error.message}`
+      )
     }
   }
 }
