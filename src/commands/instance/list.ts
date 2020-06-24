@@ -60,10 +60,11 @@ export class InstanceList extends Kommand {
       const splitted: string[] = container.split('%')
 
       const stackNumber: number = parseInt(
-        splitted[0].split('_')[0].split('-')[1]
+        splitted[0].split('_')[0].split('-')[1],
+        10
       )
       const type: string = splitted[0].split('_')[1]
-      const version: number = parseInt(splitted[1].split(':')[1])
+      const version: number = parseInt(splitted[1].split(':')[1], 10)
       const port: string = splitted[3]
       switch (type) {
         case 'kuzzle':
@@ -73,13 +74,15 @@ export class InstanceList extends Kommand {
             port.substring(
               port.indexOf('->7512/tcp') - 4,
               port.indexOf('->7512/tcp')
-            )
+            ),
+            10
           )
           break
         case 'redis':
           formatedStacks[stackNumber].redisVersion = version
           formatedStacks[stackNumber].redisPort = parseInt(
-            port.replace('/tcp', '')
+            port.replace('/tcp', ''),
+            10
           )
           break
         case 'elasticsearch':
@@ -88,7 +91,8 @@ export class InstanceList extends Kommand {
             port.substring(
               port.indexOf('->9200/tcp') - 4,
               port.indexOf('->9200/tcp')
-            )
+            ),
+            10
           )
           break
       }
