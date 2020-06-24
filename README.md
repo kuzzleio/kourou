@@ -9,10 +9,10 @@ The CLI that helps you manage your Kuzzle instances.
 
 <!-- toc -->
 
-- [kourou](#kourou)
-- [Usage](#usage)
-- [Commands](#commands)
-- [Where does this weird name comes from?](#where-does-this-weird-name-comes-from)
+* [kourou](#kourou)
+* [Usage](#usage)
+* [Commands](#commands)
+* [Where does this weird name comes from?](#where-does-this-weird-name-comes-from)
   <!-- tocstop -->
 
 :warning: This project is currently in beta and breaking changes may occur until the 1.0.0
@@ -20,7 +20,6 @@ The CLI that helps you manage your Kuzzle instances.
 # Usage
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g kourou
 $ kourou COMMAND
@@ -32,7 +31,6 @@ USAGE
   $ kourou COMMAND
 ...
 ```
-
 <!-- usagestop -->
 
 ## Connect and authenticate to Kuzzle API
@@ -40,7 +38,6 @@ USAGE
 Commands that needs to send requests to Kuzzle API can specify the Kuzzle server address and authentication informations.
 
 By command line:
-
 ```
   --host=host                    [default: localhost] Kuzzle server host
   --port=port                    [default: 7512] Kuzzle server port
@@ -51,7 +48,6 @@ By command line:
 ```
 
 By environment variables:
-
 ```
   KUZZLE_HOST                [default: localhost] Kuzzle server host
   KUZZLE_PORT                [default: 7512] Kuzzle server port
@@ -82,45 +78,45 @@ $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password a
 
 <!-- commands -->
 
-- [`kourou api-key:check TOKEN`](#kourou-api-keycheck-token)
-- [`kourou api-key:create USER`](#kourou-api-keycreate-user)
-- [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
-- [`kourou api-key:search USER`](#kourou-api-keysearch-user)
-- [`kourou collection:create INDEX COLLECTION`](#kourou-collectioncreate-index-collection)
-- [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
-- [`kourou collection:import PATH`](#kourou-collectionimport-path)
-- [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
-- [`kourou document:create INDEX COLLECTION`](#kourou-documentcreate-index-collection)
-- [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
-- [`kourou document:search INDEX COLLECTION`](#kourou-documentsearch-index-collection)
-- [`kourou es:get INDEX ID`](#kourou-esget-index-id)
-- [`kourou es:insert INDEX`](#kourou-esinsert-index)
-- [`kourou es:list-index`](#kourou-eslist-index)
-- [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
-- [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
-- [`kourou file:test FILE`](#kourou-filetest-file)
-- [`kourou help [COMMAND]`](#kourou-help-command)
-- [`kourou import PATH`](#kourou-import-path)
-- [`kourou index:export INDEX`](#kourou-indexexport-index)
-- [`kourou index:import PATH`](#kourou-indeximport-path)
-- [`kourou instance:kill`](#kourou-instancekill)
-- [`kourou instance:list`](#kourou-instancelist)
-- [`kourou instance:logs`](#kourou-instancelogs)
-- [`kourou instance:spawn`](#kourou-instancespawn)
-- [`kourou profile:export`](#kourou-profileexport)
-- [`kourou profile:import PATH`](#kourou-profileimport-path)
-- [`kourou role:export`](#kourou-roleexport)
-- [`kourou role:import PATH`](#kourou-roleimport-path)
-- [`kourou sdk:execute`](#kourou-sdkexecute)
-- [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
-- [`kourou subscribe INDEX COLLECTION`](#kourou-subscribe-index-collection)
-- [`kourou user:export`](#kourou-userexport)
-- [`kourou user:import PATH`](#kourou-userimport-path)
-- [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
-- [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
-- [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
-- [`kourou vault:show SECRETS-FILE [KEY]`](#kourou-vaultshow-secrets-file-key)
-- [`kourou vault:test SECRETS-FILE`](#kourou-vaulttest-secrets-file)
+* [`kourou api-key:check TOKEN`](#kourou-api-keycheck-token)
+* [`kourou api-key:create USER`](#kourou-api-keycreate-user)
+* [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
+* [`kourou api-key:search USER`](#kourou-api-keysearch-user)
+* [`kourou collection:create INDEX COLLECTION`](#kourou-collectioncreate-index-collection)
+* [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
+* [`kourou collection:import PATH`](#kourou-collectionimport-path)
+* [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
+* [`kourou document:create INDEX COLLECTION`](#kourou-documentcreate-index-collection)
+* [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
+* [`kourou document:search INDEX COLLECTION`](#kourou-documentsearch-index-collection)
+* [`kourou es:get INDEX ID`](#kourou-esget-index-id)
+* [`kourou es:insert INDEX`](#kourou-esinsert-index)
+* [`kourou es:list-index`](#kourou-eslist-index)
+* [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
+* [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
+* [`kourou file:test FILE`](#kourou-filetest-file)
+* [`kourou help [COMMAND]`](#kourou-help-command)
+* [`kourou import PATH`](#kourou-import-path)
+* [`kourou index:export INDEX`](#kourou-indexexport-index)
+* [`kourou index:import PATH`](#kourou-indeximport-path)
+* [`kourou instance:kill`](#kourou-instancekill)
+* [`kourou instance:list`](#kourou-instancelist)
+* [`kourou instance:logs`](#kourou-instancelogs)
+* [`kourou instance:spawn`](#kourou-instancespawn)
+* [`kourou profile:export`](#kourou-profileexport)
+* [`kourou profile:import PATH`](#kourou-profileimport-path)
+* [`kourou role:export`](#kourou-roleexport)
+* [`kourou role:import PATH`](#kourou-roleimport-path)
+* [`kourou sdk:execute`](#kourou-sdkexecute)
+* [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
+* [`kourou subscribe INDEX COLLECTION`](#kourou-subscribe-index-collection)
+* [`kourou user:export`](#kourou-userexport)
+* [`kourou user:import PATH`](#kourou-userimport-path)
+* [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
+* [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
+* [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
+* [`kourou vault:show SECRETS-FILE [KEY]`](#kourou-vaultshow-secrets-file-key)
+* [`kourou vault:test SECRETS-FILE`](#kourou-vaulttest-secrets-file)
 
 ## `kourou api-key:check TOKEN`
 
@@ -673,6 +669,7 @@ USAGE
   $ kourou instance:kill
 
 OPTIONS
+  --help                   show CLI help
   -i, --instance=instance  Kuzzle instance name
 ```
 
@@ -686,6 +683,8 @@ Lists the Kuzzle running instances
 USAGE
   $ kourou instance:logs
 
+OPTIONS
+  --help               show CLI help
 ```
 
 _See code: [src/commands/instance/list.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/instance/list.ts)_
