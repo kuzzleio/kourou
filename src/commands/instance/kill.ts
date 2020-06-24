@@ -21,7 +21,9 @@ export class InstanceLogs extends Kommand {
 
     if (!instance) {
       const instancesList = await this.getInstancesList()
-
+      if (instancesList.length === 0) {
+        throw new Error('There is no Kuzzle running instances')
+      }
       const responses: any = await inquirer.prompt([
         {
           name: 'instance',
