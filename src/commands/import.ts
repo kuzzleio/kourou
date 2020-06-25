@@ -28,7 +28,7 @@ export default class Import extends Kommand {
   }
 
   static args = [
-    { name: 'path', description: 'Root directory containing dumps', required: true }
+    { name: 'path', description: 'Root directory containing dumps', required: true },
   ]
 
   async runSafe() {
@@ -42,7 +42,8 @@ export default class Import extends Kommand {
         const { index, collection } = await restoreCollectionMappings(this.sdk, dump)
 
         this.logOk(`[collection] Imported mappings for "${index}":"${collection}"`)
-      } catch (error) {
+      }
+      catch (error) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -58,7 +59,8 @@ export default class Import extends Kommand {
           file)
 
         this.logOk(`[collection] Imported ${total} documents in "${index}":"${collection}"`)
-      } catch (error) {
+      }
+      catch (error) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -71,7 +73,8 @@ export default class Import extends Kommand {
         const total = await restoreRoles(this, dump, this.flags['preserve-anonymous'])
 
         this.logOk(`[roles] Imported ${total} roles`)
-      } catch (error) {
+      }
+      catch (error) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -89,15 +92,15 @@ export default class Import extends Kommand {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
-    if (files.userMapping.length !== 0) {
-      const file = files.userMapping[0]
+    if (files.usersMappings.length !== 0) {
+      const file = files.usersMappings[0]
       try {
         this.logInfo(`[user mapping] Start importing user mapping in ${file}`)
         const dump = JSON.parse(fs.readFileSync(file, 'utf8'))
 
         const mapping = dump.content.mapping
         delete mapping.profileIds
-        await this.sdk?.security.updateUserMapping({
+        await this.sdk?.security.updateusersMappings({
           properties: mapping
         })
 
@@ -138,16 +141,16 @@ export default class Import extends Kommand {
         memo[fileType].push(file)
 
         return memo
-        }, { documents: [], mappings: [], roles: [], profiles: [], userMapping: [], users: [] })
+      }, { documents: [], mappings: [], roles: [], profiles: [], usersMappings: [], users: [] })
 
     for (const dir of directories) {
-      const { documents, mappings, roles, profiles, userMapping, users } = await this.walkDirectories(dir)
+      const { documents, mappings, roles, profiles, usersMappings, users } = await this.walkDirectories(dir)
 
       files.documents = files.documents.concat(documents)
       files.mappings = files.mappings.concat(mappings)
       files.roles = files.roles.concat(roles)
       files.profiles = files.profiles.concat(profiles)
-      files.userMapping = files.userMapping.concat(userMapping)
+      files.usersMappings = files.usersMappings.concat(usersMappings)
       files.users = files.users.concat(users)
     }
 
