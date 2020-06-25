@@ -12,12 +12,12 @@ export class InstanceLogs extends Kommand {
   static flags = {
     instance: flags.string({
       char: 'i',
-      description: 'Kuzzle instance name'
+      description: 'Kuzzle instance name',
     }),
     follow: flags.boolean({
       char: 'f',
-      description: 'Follow log output'
-    })
+      description: 'Follow log output',
+    }),
   }
 
   async runSafe() {
@@ -30,14 +30,12 @@ export class InstanceLogs extends Kommand {
         throw new Error('There is no Kuzzle running instances')
       }
 
-      const responses: any = await inquirer.prompt([
-        {
-          name: 'instance',
-          message: 'On which kuzzle instance do you want to see the logs',
-          type: 'list',
-          choices: instancesList
-        }
-      ])
+      const responses: any = await inquirer.prompt([{
+        name: 'instance',
+        message: 'On which kuzzle instance do you want to see the logs',
+        type: 'list',
+        choices: instancesList,
+      }])
       instance = responses.instance!
     }
 
@@ -62,27 +60,17 @@ export class InstanceLogs extends Kommand {
     let containersListProcess
 
     try {
-      containersListProcess = await execa('docker', [
-        'ps',
-        '--format',
-        '"{{.Names}}"'
-      ])
+      containersListProcess = await execa('docker', ['ps', '--format', '"{{.Names}}"'])
     } catch {
-      this.warn(
-        'Something went wrong while getting kuzzle running instances list'
-      )
+      this.warn('Something went wrong while getting kuzzle running instances list')
       return []
     }
 
-    const containersList: string[] = containersListProcess.stdout
-      .replace(/"/g, '')
-      .split('\n')
+    const containersList: string[] = containersListProcess.stdout.replace(/"/g, '').split('\n')
 
-    return containersList.filter(
-      containerName =>
-        containerName.includes('kuzzle') &&
-        !containerName.includes('redis') &&
-        !containerName.includes('elasticsearch')
-    )
+    return containersList.filter(containerName =>
+      (containerName.includes('kuzzle')
+        && !containerName.includes('redis')
+        && !containerName.includes('elasticsearch')))
   }
 }
