@@ -50,22 +50,16 @@ export class InstanceLogs extends Kommand {
     instanceKill.stdout.pipe(process.stdout)
     instanceKill.stderr.pipe(process.stderr)
 
-    await instanceKill
+    return instanceKill
   }
 
   private async getInstancesList(): Promise<string[]> {
     let containersListProcess
 
     try {
-      containersListProcess = await execa('docker', [
-        'ps',
-        '--format',
-        '"{{.Names}}"'
-      ])
+      containersListProcess = await execa('docker', ['ps', '--format', '"{{.Names}}"'])
     } catch {
-      this.warn(
-        'Something went wrong while getting kuzzle running instances list'
-      )
+      this.warn('Something went wrong while getting kuzzle running instances list')
       return []
     }
 
@@ -75,9 +69,9 @@ export class InstanceLogs extends Kommand {
 
     return containersList.filter(
       containerName =>
-        containerName.includes('kuzzle') &&
-        !containerName.includes('redis') &&
-        !containerName.includes('elasticsearch')
+        containerName.includes('kuzzle')
+        && !containerName.includes('redis')
+        && !containerName.includes('elasticsearch')
     )
   }
 }

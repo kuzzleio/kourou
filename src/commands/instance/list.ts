@@ -28,15 +28,9 @@ export class InstanceList extends Kommand {
     let containersListProcess
 
     try {
-      containersListProcess = await execa('docker', [
-        'ps',
-        '--format',
-        '"{{.Names}}%{{.Image}}%{{.Status}}%{{.Ports}}"'
-      ])
+      containersListProcess = await execa('docker', ['ps', '--format', '"{{.Names}}%{{.Image}}%{{.Status}}%{{.Ports}}"'])
     } catch {
-      this.warn(
-        'Something went wrong while getting kuzzle running instances list'
-      )
+      this.warn('Something went wrong while getting kuzzle running instances list')
       return []
     }
 
@@ -77,16 +71,13 @@ export class InstanceList extends Kommand {
             port.substring(
               port.indexOf('->7512/tcp') - 4,
               port.indexOf('->7512/tcp')
-            ),
-            10
-          )
+            ), 10)
           break
         case 'redis':
           formatedStacks[stackNumber].redisVersion = version
           formatedStacks[stackNumber].redisPort = parseInt(
             port.replace('/tcp', ''),
-            10
-          )
+            10)
           break
         case 'elasticsearch':
           formatedStacks[stackNumber].esVersion = version
@@ -94,9 +85,7 @@ export class InstanceList extends Kommand {
             port.substring(
               port.indexOf('->9200/tcp') - 4,
               port.indexOf('->9200/tcp')
-            ),
-            10
-          )
+            ), 10)
           break
       }
     }
