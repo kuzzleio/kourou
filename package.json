@@ -104,6 +104,9 @@
       "sdk": {
         "description": "directly manipulate the sdk"
       }
+    },
+    "hooks": {
+      "command_not_found": "./lib/hooks/command_not_found/api-method"
     }
   },
   "repository": "kuzzleio/kourou",

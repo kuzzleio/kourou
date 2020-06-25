@@ -21,7 +21,8 @@ async function resetSecurityDefault(sdk) {
     controller: 'admin',
     action: 'loadSecurities',
     body: testSecurities,
-    refresh: 'wait_for'
+    refresh: 'wait_for',
+    onExistingUsers: 'overwrite'
   });
 
   await sdk.auth.login(
@@ -46,7 +47,8 @@ BeforeAll(({ timeout: 10 * 1000 }), async function () {
     controller: 'admin',
     action: 'loadSecurities',
     body: testSecurities,
-    refresh: 'wait_for'
+    refresh: 'wait_for',
+    onExistingUsers: 'overwrite'
   });
 
   world.sdk.disconnect();

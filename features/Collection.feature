@@ -39,9 +39,9 @@ Feature: Collection Commands
 
   Scenario: Creates a collection
     When I run the command "collection:create" with:
-      | arg  | mtp-open-data |                                  |
-      | arg  | yellow-taxi   |                                  |
-      | flag | --body        | { mappings: { dynamic: false } } |
+      | arg | mtp-open-data                      |  |
+      | arg | yellow-taxi                        |  |
+      | arg | { mappings: { dynamic: "false" } } |  |
     And I successfully call the route "collection":"getMapping" with args:
       | index      | "mtp-open-data" |
       | collection | "yellow-taxi"   |
