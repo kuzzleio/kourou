@@ -6,7 +6,7 @@ import { Kommand } from '../../common'
 import { kuzzleFlags } from '../../support/kuzzle'
 
 export default class UserExportMapping extends Kommand {
-  static description = 'Exports user mapping to JSON.'
+  static description = 'Exports users mappings to JSON.'
 
   static flags = {
     help: flags.help({}),
