@@ -12,8 +12,8 @@ export class InstanceLogs extends Kommand {
   static flags = {
     instance: flags.string({
       char: 'i',
-      description: 'Kuzzle instance name'
-    })
+      description: 'Kuzzle instance name',
+    }),
   }
 
   async runSafe() {
@@ -24,14 +24,12 @@ export class InstanceLogs extends Kommand {
       if (instancesList.length === 0) {
         throw new Error('There is no Kuzzle running instances')
       }
-      const responses: any = await inquirer.prompt([
-        {
+      const responses: any = await inquirer.prompt([{
           name: 'instance',
           message: 'Which kuzzle instance do you want to kill',
           type: 'list',
           choices: instancesList
-        }
-      ])
+      }])
       instance = responses.instance!
     }
 
@@ -63,15 +61,11 @@ export class InstanceLogs extends Kommand {
       return []
     }
 
-    const containersList: string[] = containersListProcess.stdout
-      .replace(/"/g, '')
-      .split('\n')
+    const containersList: string[] = containersListProcess.stdout.replace(/"/g, '').split('\n')
 
-    return containersList.filter(
-      containerName =>
-        containerName.includes('kuzzle')
+    return containersList.filter(containerName =>
+      (containerName.includes('kuzzle')
         && !containerName.includes('redis')
-        && !containerName.includes('elasticsearch')
-    )
+        && !containerName.includes('elasticsearch')))
   }
 }

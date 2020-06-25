@@ -34,13 +34,10 @@ export class InstanceList extends Kommand {
       return []
     }
 
-    const containersList: string[] = containersListProcess.stdout
-      .replace(/"/g, '')
-      .split('\n')
+    const containersList: string[] = containersListProcess.stdout.replace(/"/g, '').split('\n')
 
-    const stacks = [
-      ...new Set(containersList.map(container => container.split('_')[0]))
-    ].sort((stackA, stackB) => (stackA > stackB ? 1 : stackA < stackB ? -1 : 0))
+    const stacks = [...new Set(containersList.map(container => container.split('_')[0]))]
+      .sort((stackA, stackB) => (stackA > stackB ? 1 : stackA < stackB ? -1 : 0))
 
     const formatedStacks = stacks.map(stack => ({
       name: stack,
@@ -56,9 +53,7 @@ export class InstanceList extends Kommand {
     for (const container of containersList) {
       const splitted: string[] = container.split('%')
 
-      const stackNumber: number = parseInt(
-        splitted[0].split('_')[0].split('-')[1], 10
-      )
+      const stackNumber: number = parseInt(splitted[0].split('_')[0].split('-')[1], 10)
       const type: string = splitted[0].split('_')[1]
       const version: number = parseInt(splitted[1].split(':')[1], 10)
       const port: string = splitted[3]
@@ -66,25 +61,15 @@ export class InstanceList extends Kommand {
         case 'kuzzle':
           formatedStacks[stackNumber].status = splitted[2]
           formatedStacks[stackNumber].kuzzleVersion = version
-          formatedStacks[stackNumber].kuzzlePort = parseInt(
-            port.substring(
-              port.indexOf('->7512/tcp') - 4,
-              port.indexOf('->7512/tcp')
-            ), 10)
+          formatedStacks[stackNumber].kuzzlePort = parseInt(port.substring(port.indexOf('->7512/tcp') - 4, port.indexOf('->7512/tcp')), 10)
           break
         case 'redis':
           formatedStacks[stackNumber].redisVersion = version
-          formatedStacks[stackNumber].redisPort = parseInt(
-            port.replace('/tcp', ''),
-            10)
+          formatedStacks[stackNumber].redisPort = parseInt(port.replace('/tcp', ''), 10)
           break
         case 'elasticsearch':
           formatedStacks[stackNumber].esVersion = version
-          formatedStacks[stackNumber].esPort = parseInt(
-            port.substring(
-              port.indexOf('->9200/tcp') - 4,
-              port.indexOf('->9200/tcp')
-            ), 10)
+          formatedStacks[stackNumber].esPort = parseInt(port.substring(port.indexOf('->9200/tcp') - 4, port.indexOf('->9200/tcp')), 10)
           break
       }
     }
