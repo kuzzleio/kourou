@@ -4,8 +4,8 @@ import fs from 'fs'
 import { Kommand } from '../../common'
 import { kuzzleFlags } from '../../support/kuzzle'
 
-export default class UserImport extends Kommand {
-  static description = 'Imports users'
+export default class UserImportMappings extends Kommand {
+  static description = 'Imports users mappings'
 
   static flags = {
     help: flags.help({}),
@@ -19,7 +19,7 @@ export default class UserImport extends Kommand {
   static args = [{ name: 'path', description: 'Dump file', required: true }]
 
   async runSafe() {
-    this.logInfo(`Importing user mapping from ${this.args.path} ...`)
+    this.logInfo(`Importing users mappings from ${this.args.path} ...`)
 
     const dump = JSON.parse(fs.readFileSync(this.args.path, 'utf-8'))
 
@@ -29,6 +29,6 @@ export default class UserImport extends Kommand {
     await this.sdk?.security.updateUserMapping({
       properties: mapping
     })
-    this.logOk('User mapping restored')
+    this.logOk('Users mappings restored')
   }
 }

@@ -12,7 +12,7 @@ export default class UserExportMapping extends Kommand {
     help: flags.help({}),
     path: flags.string({
       description: 'Dump directory',
-      default: 'userMapping'
+      default: 'users'
     }),
     ...kuzzleFlags,
     protocol: flags.string({
@@ -22,21 +22,21 @@ export default class UserExportMapping extends Kommand {
   }
 
   async runSafe() {
-    const filename = path.join(this.flags.path, 'userMapping.json')
+    const filename = path.join(this.flags.path, 'users-mappings.json')
 
-    this.logInfo(`Exporting user mapping in ${filename} ...`)
+    this.logInfo(`Exporting users mappings in ${filename} ...`)
 
     fs.mkdirSync(this.flags.path, { recursive: true })
 
     const mapping = await this.sdk?.security.getUserMapping()
 
     const dump = {
-      type: 'userMapping',
+      type: 'users-mappings',
       content: mapping
     }
 
     fs.writeFileSync(filename, JSON.stringify(dump, null, 2))
 
-    this.logOk('User mapping dumped')
+    this.logOk('Users mappings dumped')
   }
 }
