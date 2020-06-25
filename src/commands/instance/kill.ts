@@ -17,7 +17,7 @@ export class InstanceLogs extends Kommand {
   }
 
   async runSafe() {
-    let instance: string = this.flags.instance!
+    let instance: string = this.flags.instance
 
     if (!instance) {
       const instancesList = await this.getInstancesList()

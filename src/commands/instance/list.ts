@@ -57,8 +57,7 @@ export class InstanceList extends Kommand {
       const splitted: string[] = container.split('%')
 
       const stackNumber: number = parseInt(
-        splitted[0].split('_')[0].split('-')[1],
-        10
+        splitted[0].split('_')[0].split('-')[1], 10
       )
       const type: string = splitted[0].split('_')[1]
       const version: number = parseInt(splitted[1].split(':')[1], 10)
