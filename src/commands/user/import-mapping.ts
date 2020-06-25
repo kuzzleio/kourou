@@ -24,11 +24,8 @@ export default class UserImportMappings extends Kommand {
     const dump = JSON.parse(fs.readFileSync(this.args.path, 'utf-8'))
 
     const mapping = dump.content.mapping
-    delete mapping.profileIds
 
-    await this.sdk?.security.updateUserMapping({
-      properties: mapping
-    })
+    await this.sdk?.security.updateUserMapping({ properties: mapping })
     this.logOk('Users mappings restored')
   }
 }

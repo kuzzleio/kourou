@@ -31,7 +31,7 @@ export default class UserExportMapping extends Kommand {
     const mapping = await this.sdk?.security.getUserMapping()
 
     const dump = {
-      type: 'users-mappings',
+      type: 'usersMappings',
       content: mapping
     }
 

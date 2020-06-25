@@ -92,20 +92,17 @@ export default class Import extends Kommand {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
-    if (files.usersMappings.length !== 0) {
-      const file = files.usersMappings[0]
+    for (const file of files.usersMappings) {
       try {
-        this.logInfo(`[user mapping] Start importing user mapping in ${file}`)
+        this.logInfo(`[users] Start importing users mappings in ${file}`)
         const dump = JSON.parse(fs.readFileSync(file, 'utf8'))
 
         const mapping = dump.content.mapping
-        delete mapping.profileIds
-        await this.sdk?.security.updateusersMappings({
-          properties: mapping
-        })
+        await this.sdk?.security.updateUserMapping({ properties: mapping })
 
-        this.logOk('[user mapping] imported')
-      } catch (error) {
+        this.logOk('[users] mappings imported')
+      }
+      catch (error) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
