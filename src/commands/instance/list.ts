@@ -9,8 +9,6 @@ export class InstanceList extends Kommand {
 
   async runSafe() {
     const instancesList = await this.getInstancesList()
-    // Disable eslint no-console to allow using console.table
-    // Instead of add another dependency to kourou
     // eslint-disable-next-line no-console
     console.table(instancesList, [
       'name',
@@ -29,14 +27,19 @@ export class InstanceList extends Kommand {
 
     try {
       containersListProcess = await execa('docker', ['ps', '--format', '"{{.Names}}%{{.Image}}%{{.Status}}%{{.Ports}}"'])
-    } catch {
+    }
+    catch {
       this.warn('Something went wrong while getting kuzzle running instances list')
       return []
     }
 
-    const containersList: string[] = containersListProcess.stdout.replace(/"/g, '').split('\n')
+    let containersList: string[] = containersListProcess.stdout.replace(/"/g, '').split('\n')
 
-    const stacks = [...new Set(containersList.map(container => container.split('_')[0]))]
+    containersList = containersList.filter(c => (c.match(/stack-[0-9]{0,3}_kuzzle_1/)
+     || c.match(/stack-[0-9]{0,3}_elasticsearch_1/)
+     || c.match(/stack-[0-9]{0,3}_redis_1/)))
+
+     const stacks = [...new Set(containersList.map(container => container.split('_')[0]))]
       .sort((stackA, stackB) => (stackA > stackB ? 1 : stackA < stackB ? -1 : 0))
 
     const formatedStacks = stacks.map(stack => ({
