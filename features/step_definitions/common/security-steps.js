@@ -3,7 +3,8 @@ const
   {
     Given,
     Then
-  } = require('cucumber');
+  } = require('cucumber'),
+  fs = require('fs');
 
 Given('I create a profile {string} with the following policies:', async function (profileId, dataTable) {
   const data = this.parseObject(dataTable),
@@ -111,3 +112,22 @@ Given('The user {string} should match:', async function (userId, dataTable) {
 
   should(user.content).match(expectedContent);
 })
+
+Given('I create an {string} file with content:', async function (filename, dataTable) {
+  const content = this.parseObject(dataTable)
+
+  const body = {
+    type: 'usersMappings',
+    content: {
+      mapping: {
+        profileIds: {
+          type: 'keyword'
+        },
+        ...content
+      },
+    }
+  }
+
+  fs.writeFileSync(`./dump/${filename}`, JSON.stringify(body))
+})
+
