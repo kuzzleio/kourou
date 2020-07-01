@@ -14,16 +14,29 @@ export class InstanceLogs extends Kommand {
       char: 'i',
       description: 'Kuzzle instance name',
     }),
+    all: flags.boolean({
+      char: 'a',
+      description: 'Kill all instances',
+    }),
   }
 
   async runSafe() {
     let instance: string = this.flags.instance
+    let all: boolean = this.flags.all
+
+    const instancesList = await this.getInstancesList()
+    if (instancesList.length === 0) {
+      throw new Error('There are no Kuzzle running instances')
+    }
+
+    if (all) {
+      for (const instance of instancesList) {
+        await this.killInstance(instance)
+      }
+      return
+    }
 
     if (!instance) {
-      const instancesList = await this.getInstancesList()
-      if (instancesList.length === 0) {
-        throw new Error('There are no Kuzzle running instances')
-      }
       const responses: any = await inquirer.prompt([{
           name: 'instance',
           message: 'Which kuzzle instance do you want to kill',
@@ -31,8 +44,9 @@ export class InstanceLogs extends Kommand {
           choices: instancesList
       }])
       instance = responses.instance!
+    } else if (!instancesList.includes(instance)) {
+      throw new Error('The instance parameter you setted isn\'t running')
     }
-
     await this.killInstance(instance)
   }
 
