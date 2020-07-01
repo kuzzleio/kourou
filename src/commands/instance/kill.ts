@@ -44,7 +44,8 @@ export class InstanceLogs extends Kommand {
           choices: instancesList
       }])
       instance = responses.instance!
-    } else if (!instancesList.includes(instance)) {
+    }
+    else if (!instancesList.includes(instance)) {
       throw new Error('The instance parameter you setted isn\'t running')
     }
     await this.killInstance(instance)
