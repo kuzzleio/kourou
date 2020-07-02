@@ -35,9 +35,9 @@ export class InstanceList extends Kommand {
 
     let containersList: string[] = containersListProcess.stdout.replace(/"/g, '').split('\n')
 
-    containersList = containersList.filter(c => (c.match(/stack-[0-9]{0,3}_kuzzle_1/)
-     || c.match(/stack-[0-9]{0,3}_elasticsearch_1/)
-     || c.match(/stack-[0-9]{0,3}_redis_1/)))
+    containersList = containersList.filter(c => (c.match(/stack-\d{0,3}_kuzzle_1/)
+     || c.match(/stack-\d{0,3}_elasticsearch_1/)
+     || c.match(/stack-\d{0,3}_redis_1/)))
 
      const stacks = [...new Set(containersList.map(container => container.split('_')[0]))]
       .sort((stackA, stackB) => (stackA > stackB ? 1 : stackA < stackB ? -1 : 0))

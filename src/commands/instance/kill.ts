@@ -22,7 +22,7 @@ export class InstanceLogs extends Kommand {
 
   async runSafe() {
     let instance: string = this.flags.instance
-    let all: boolean = this.flags.all
+    const all: boolean = this.flags.all
 
     const instancesList = await this.getInstancesList()
     if (instancesList.length === 0) {
@@ -30,8 +30,8 @@ export class InstanceLogs extends Kommand {
     }
 
     if (all) {
-      for (const instance of instancesList) {
-        await this.killInstance(instance)
+      for (const i of instancesList) {
+        await this.killInstance(i)
       }
       return
     }
