@@ -5,7 +5,7 @@ import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
 import { kuzzleFlags } from '../../support/kuzzle'
 
-export default class UserExportMapping extends Kommand {
+export default class UserExportMappings extends Kommand {
   static description = 'Exports users mappings to JSON.'
 
   static flags = {
