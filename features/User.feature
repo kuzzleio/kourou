@@ -32,14 +32,14 @@ Feature: User Commands
     Given I create an "user-mapping.json" file with content:
       | email      | {"type": "keyword"} |
       | age        | {"type": "integer"}  |
-    When I run the command "user:import-mapping" with:
+    When I run the command "user:import-mappings" with:
       | arg | ./dump/user-mapping.json |
     Then I successfully call the route "security":"getUserMapping"
     And The property "mapping" of the result should match:
       | profileIds | {"type": "keyword"} |
       | email | { "type": "keyword" }    |
       | age   | { "type": "integer" }     |
-    When I run the command "user:export-mapping" with:
+    When I run the command "user:export-mappings" with:
       | flag | --path    | ./dump     |
     Then The file "./dump/users-mappings.json" content should match:
       | type    | "usersMappings"                                                                                                    |
