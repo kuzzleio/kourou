@@ -2,7 +2,7 @@
 
 set -e
 
-docker-compose -f features/docker/docker-compose.yml up
+docker-compose -f features/docker/docker-compose.yml up -d
 
 echo "[$(date --rfc-3339 seconds)] - Starting Kuzzle..."
 while ! curl -f -s -o /dev/null http://localhost:7512
