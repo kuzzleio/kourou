@@ -9,6 +9,7 @@ describe('instance:kill', () => {
     .timeout(TEST_TIMEOUT)
     .stdout({ print: PRINT_STDOUT })
     .do(async () => {
+      execSync('docker ps')
       execSync('docker stop $(docker ps -aq)')
       execSync('./bin/run instance:spawn -v 2')
     })
