@@ -5,7 +5,6 @@ const TEST_TIMEOUT = 120000
 const PRINT_STDOUT = true
 
 describe('instance:kill', () => {
-  execSync('docker stop $(docker ps -aq)')
   test
     .timeout(TEST_TIMEOUT)
     .stdout({ print: PRINT_STDOUT })
