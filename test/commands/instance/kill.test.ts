@@ -10,7 +10,7 @@ describe('instance:kill', () => {
     .stdout({ print: PRINT_STDOUT })
     .do(async () => {
       execSync('docker ps')
-      execSync('docker stop $(docker ps -aq)')
+      // execSync('docker stop $(docker ps -aq)')
       execSync('./bin/run instance:spawn -v 2')
     })
     .command(['instance:kill', '-i', 'stack-0_kuzzle_1'])
