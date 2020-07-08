@@ -2,9 +2,7 @@ import { expect, test } from '@oclif/test'
 import { execSync } from 'child_process'
 
 const TEST_TIMEOUT = 120000
-const DEFAULT_WAIT = 10000
 const PRINT_STDOUT = true
-const wait = (ms = 10) => new Promise(resolve => setTimeout(resolve, ms))
 
 describe('instance:kill', () => {
   execSync('docker stop $(docker ps -aq)')
@@ -12,8 +10,8 @@ describe('instance:kill', () => {
     .timeout(TEST_TIMEOUT)
     .stdout({ print: PRINT_STDOUT })
     .do(async () => {
+      execSync('docker stop $(docker ps -aq)')
       execSync('./bin/run instance:spawn -v 2')
-      // await wait(DEFAULT_WAIT)
     })
     .command(['instance:kill', '-i', 'stack-0_kuzzle_1'])
     .it('Kill a kuzzle v2', (ctx, done) => {
@@ -27,8 +25,8 @@ describe('instance:kill', () => {
     .timeout(TEST_TIMEOUT)
     .stdout({ print: PRINT_STDOUT })
     .do(async () => {
+      execSync('docker stop $(docker ps -aq)')
       execSync('./bin/run instance:spawn -v 1')
-      // await wait(DEFAULT_WAIT)
     })
     .command(['instance:kill', '-i', 'stack-0_kuzzle_1'])
     .it('Kill a kuzzle v1', (ctx, done) => {
@@ -43,8 +41,8 @@ describe('instance:kill', () => {
     .stdout({ print: PRINT_STDOUT })
     .do(async () => {
       execSync('./bin/run instance:spawn -v 2')
+      execSync('docker stop $(docker ps -aq)')
       execSync('./bin/run instance:spawn -v 2')
-      // await wait(DEFAULT_WAIT)
     })
     .command(['instance:kill', '-i', 'stack-1_kuzzle_1'])
     .finally(() => {
@@ -62,8 +60,8 @@ describe('instance:kill', () => {
     .stdout({ print: PRINT_STDOUT })
     .do(async () => {
       execSync('./bin/run instance:spawn -v 1')
+      execSync('docker stop $(docker ps -aq)')
       execSync('./bin/run instance:spawn -v 1')
-      // await wait(DEFAULT_WAIT)
     })
     .command(['instance:kill', '-i', 'stack-1_kuzzle_1'])
     .finally(() => {
@@ -81,8 +79,8 @@ describe('instance:kill', () => {
     .stdout({ print: PRINT_STDOUT })
     .do(async () => {
       execSync('./bin/run instance:spawn -v 2')
+      execSync('docker stop $(docker ps -aq)')
       execSync('./bin/run instance:spawn -v 2')
-      // await wait(DEFAULT_WAIT)
     })
     .command(['instance:kill', '--all'])
     .it('Kill all running kuzzle', (ctx, done) => {
