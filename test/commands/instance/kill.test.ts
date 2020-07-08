@@ -2,7 +2,7 @@ import { expect, test } from '@oclif/test'
 import { execSync } from 'child_process'
 
 const TEST_TIMEOUT = 50000
-const PRINT_STDOUT = true
+const PRINT_STDOUT = false
 
 describe('instance:kill', () => {
   test
