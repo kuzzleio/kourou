@@ -35,7 +35,9 @@ export class InstanceLogs extends Kommand {
       }
       return
     }
-
+    this.logInfo(JSON.stringify(instancesList))
+    this.logInfo(instance)
+    this.logInfo(instancesList.includes(instance) ? 'true': 'false')
     if (!instance) {
       const responses: any = await inquirer.prompt([{
           name: 'instance',
