@@ -12,6 +12,7 @@ describe('instance:kill', () => {
       execSync('docker ps')
       // execSync('docker stop $(docker ps -aq)')
       execSync('./bin/run instance:spawn -v 2')
+      execSync('docker ps')
     })
     .command(['instance:kill', '-i', 'stack-0_kuzzle_1'])
     .it('Kill a kuzzle v2', (ctx, done) => {
