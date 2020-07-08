@@ -73,6 +73,7 @@ export class InstanceLogs extends Kommand {
 
     try {
       containersListProcess = await execa('docker', ['ps', '--format', '"{{.Names}}"'])
+      this.log(JSON.stringify(containersListProcess.stdout))
     }
     catch {
       this.warn('Something went wrong while getting kuzzle running instances list')
