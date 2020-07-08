@@ -49,9 +49,7 @@ jobs:
         - npm install --silent --unsafe-perm --only=dev
 
       script:
-        - cd bin
-        - ls
-        - cd ..
+        - ./bin/run -v
         - npm run test:functional:stdout
 
     # - stage: Tests
