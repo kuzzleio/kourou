@@ -52,7 +52,7 @@ export class InstanceLogs extends Kommand {
       instance = responses.instance!
     } else if (!instancesList.includes(instance)) {
       throw new Error(
-        `The instance parameter you setted ${instance} isn\'t running`
+        `The instance parameter you setted ${instance} isn't running`
       )
     }
     await this.killInstance(instance)
@@ -74,7 +74,7 @@ export class InstanceLogs extends Kommand {
       instanceName,
       'down'
     ])
-    return new Promise((resolve) => instanceKill.on('close', code => {
+    return new Promise(resolve => instanceKill.on('close', code => {
       if (code === 0) {
         cli.action.stop(
           chalk.green(
@@ -92,7 +92,7 @@ export class InstanceLogs extends Kommand {
           )
         )
       }
-      resolve();
+      resolve()
     }))
   }
 
