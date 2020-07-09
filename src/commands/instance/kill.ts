@@ -98,6 +98,6 @@ export class InstanceLogs extends Kommand {
           !containerName.includes('redis') &&
           !containerName.includes('elasticsearch')
       )
-      .map(containerName => containerName.replace('_kuzzle_1', ''))
+      .map(containerName => containerName.split('_')[0])
   }
 }
