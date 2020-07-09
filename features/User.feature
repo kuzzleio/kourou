@@ -29,7 +29,7 @@ Feature: User Commands
 
   @security
   Scenario: Export and import users mappings
-    Given I create an "user-mapping.json" file with content:
+    Given I create an user mappings file named "user-mapping.json" file with content:
       | email      | {"type": "keyword"} |
       | age        | {"type": "integer"}  |
     When I run the command "user:import-mappings" with:
