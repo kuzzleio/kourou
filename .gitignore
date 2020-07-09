@@ -7,3 +7,8 @@
 /yarn.lock
 node_modules
 secrets.*
+/dump
+/nyc-open-data
+decrypted.json
+test-secrets.enc.json
+test-secrets.json

@@ -113,7 +113,7 @@ Given('The user {string} should match:', async function (userId, dataTable) {
   should(user.content).match(expectedContent);
 })
 
-Given('I create an {string} file with content:', async function (filename, dataTable) {
+Given('I create an user mappings file named {string} file with content:', async function (filename, dataTable) {
   const content = this.parseObject(dataTable)
 
   const body = {
