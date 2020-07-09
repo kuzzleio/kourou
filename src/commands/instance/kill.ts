@@ -7,12 +7,12 @@ import { Kommand } from '../../common'
 export class InstanceLogs extends Kommand {
   static initSdk = false
 
-  static description = 'Kill all the containers of a running kuzzle instance'
+  static description = 'Stop and remove all the containers of a running kuzzle instance'
 
   static flags = {
     instance: flags.string({
       char: 'i',
-      description: 'Kuzzle instance name',
+      description: 'Kuzzle instance name [ex: stack-0]',
     }),
     all: flags.boolean({
       char: 'a',
@@ -35,9 +35,6 @@ export class InstanceLogs extends Kommand {
       }
       return
     }
-    this.logInfo(JSON.stringify(instancesList))
-    this.logInfo(instance)
-    this.logInfo(instancesList.includes(instance) ? 'true': 'false')
     if (!instance) {
       const responses: any = await inquirer.prompt([{
           name: 'instance',
@@ -54,13 +51,8 @@ export class InstanceLogs extends Kommand {
   }
 
   private async killInstance(instanceName: string) {
-    const stack: string = instanceName.split('_')[0]
-    const kuzzleName = `${stack}_kuzzle_1`
-    const esName = `${stack}_elasticsearch_1`
-    const redisName = `${stack}_redis_1`
-    const args = ['kill', kuzzleName, esName, redisName]
-
-    const instanceKill = execa('docker', args)
+    const docoFilename = `/tmp/kuzzle-${instanceName}.yml`
+    const instanceKill = execa('docker-compose', ['-f', docoFilename, '-p', instanceName, 'down'])
 
     instanceKill.stdout.pipe(process.stdout)
     instanceKill.stderr.pipe(process.stderr)
@@ -82,9 +74,11 @@ export class InstanceLogs extends Kommand {
 
     const containersList: string[] = containersListProcess.stdout.replace(/"/g, '').split('\n')
 
-    return containersList.filter(containerName =>
-      (containerName.includes('kuzzle')
+    return containersList
+      .filter(containerName =>
+        (containerName.includes('kuzzle')
         && !containerName.includes('redis')
         && !containerName.includes('elasticsearch')))
+      .map(containerName => containerName.replace('_kuzzle_1', ''))
   }
 }
