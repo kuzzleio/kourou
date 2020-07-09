@@ -107,9 +107,9 @@ $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password a
 * [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
 * [`kourou subscribe INDEX COLLECTION`](#kourou-subscribe-index-collection)
 * [`kourou user:export`](#kourou-userexport)
-* [`kourou user:exportMapping`](#kourou-userexportmapping)
+* [`kourou user:export-mappings`](#kourou-userexport-mappings)
 * [`kourou user:import PATH`](#kourou-userimport-path)
-* [`kourou user:importMapping PATH`](#kourou-userimportmapping-path)
+* [`kourou user:import-mappings PATH`](#kourou-userimport-mappings-path)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
@@ -1009,13 +1009,13 @@ DESCRIPTION
 
 _See code: [src/commands/user/export.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/export.ts)_
 
-## `kourou user:exportMapping`
+## `kourou user:export-mappings`
 
-Exports user mapping to JSON.
+Exports users mappings to JSON.
 
 ```
 USAGE
-  $ kourou user:exportMapping
+  $ kourou user:export-mappings
 
 OPTIONS
   --as=as              Impersonate a user
@@ -1029,7 +1029,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/user/exportMapping.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/exportMapping.ts)_
+_See code: [src/commands/user/export-mappings.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/export-mappings.ts)_
 
 ## `kourou user:import PATH`
 
@@ -1055,13 +1055,13 @@ OPTIONS
 
 _See code: [src/commands/user/import.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/import.ts)_
 
-## `kourou user:importMapping PATH`
+## `kourou user:import-mappings PATH`
 
-Imports users
+Imports users mappings
 
 ```
 USAGE
-  $ kourou user:importMapping PATH
+  $ kourou user:import-mappings PATH
 
 ARGUMENTS
   PATH  Dump file
@@ -1077,7 +1077,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/user/importMapping.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/importMapping.ts)_
+_See code: [src/commands/user/import-mappings.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/import-mappings.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
