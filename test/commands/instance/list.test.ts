@@ -42,7 +42,7 @@ describe('instance:list', () => {
       checkStackDetails(ctx.stdout, 0, {
         index: '0',
         name: 'stack-0',
-        status: /'Up\d{1,3}(Lessthanasecond|second|seconds|minute|minutes)'/,
+        status: /'Up(Lessthanasecond|(\d{1,3}(second|seconds|minute|minutes)'))/,
         kuzzleVersion: '2',
         kuzzlePort: '7512',
         esVersion: '7',
@@ -67,7 +67,7 @@ describe('instance:list', () => {
       checkStackDetails(ctx.stdout, 0, {
         index: '0',
         name: 'stack-0',
-        status: /'Up\d{1,3}(Lessthanasecond|second|seconds|minute|minutes)'/,
+        status: /'Up(Lessthanasecond|(\d{1,3}(second|seconds|minute|minutes)'))/,
         kuzzleVersion: '1',
         kuzzlePort: '7512',
         esVersion: '5',
@@ -93,7 +93,7 @@ describe('instance:list', () => {
       checkStackDetails(ctx.stdout, 0, {
         index: '0',
         name: 'stack-0',
-        status: /'Up\d{1,3}(Lessthanasecond|second|seconds|minute|minutes)'/,
+        status: /'Up(Lessthanasecond|(\d{1,3}(second|seconds|minute|minutes)'))/,
         kuzzleVersion: '2',
         kuzzlePort: '7512',
         esVersion: '7',
@@ -104,7 +104,7 @@ describe('instance:list', () => {
       checkStackDetails(ctx.stdout, 1, {
         index: '1',
         name: 'stack-1',
-        status: /'Up\d{1,3}(Lessthanasecond|second|seconds|minute|minutes)'/,
+        status: /'Up(Lessthanasecond|(\d{1,3}(second|seconds|minute|minutes)'))/,
         kuzzleVersion: '2',
         kuzzlePort: '7513',
         esVersion: '7',
@@ -130,7 +130,7 @@ describe('instance:list', () => {
       checkStackDetails(ctx.stdout, 0, {
         index: '0',
         name: 'stack-0',
-        status: /'Up\d{1,3}(Lessthanasecond|second|seconds|minute|minutes)'/,
+        status: /'Up(Lessthanasecond|(\d{1,3}(second|seconds|minute|minutes)'))/,
         kuzzleVersion: '1',
         kuzzlePort: '7512',
         esVersion: '5',
@@ -141,7 +141,7 @@ describe('instance:list', () => {
       checkStackDetails(ctx.stdout, 1, {
         index: '1',
         name: 'stack-1',
-        status: /'Up\d{1,3}(Lessthanasecond|second|seconds|minute|minutes)'/,
+        status: /'Up(Lessthanasecond|(\d{1,3}(second|seconds|minute|minutes)'))/,
         kuzzleVersion: '1',
         kuzzlePort: '7513',
         esVersion: '5',
@@ -168,7 +168,7 @@ describe('instance:list', () => {
       checkStackDetails(ctx.stdout, 0, {
         index: '0',
         name: 'stack-0',
-        status: /'Up\d{1,3}(Lessthanasecond|second|seconds|minute|minutes)'/,
+        status: /'Up(Lessthanasecond|(\d{1,3}(second|seconds|minute|minutes)'))/,
         kuzzleVersion: '2',
         kuzzlePort: '7512',
         esVersion: '7',
@@ -179,7 +179,7 @@ describe('instance:list', () => {
       checkStackDetails(ctx.stdout, 1, {
         index: '1',
         name: 'stack-1',
-        status: /'Up\d{1,3}(Lessthanasecond|second|seconds|minute|minutes)'/,
+        status: /'Up(Lessthanasecond|(\d{1,3}(second|seconds|minute|minutes)'))/,
         kuzzleVersion: '1',
         kuzzlePort: '7513',
         esVersion: '5',
@@ -190,7 +190,7 @@ describe('instance:list', () => {
       checkStackDetails(ctx.stdout, 2, {
         index: '2',
         name: 'stack-2',
-        status: /'Up\d{1,3}(Lessthanasecond|second|seconds|minute|minutes)'/,
+        status: /'Up(Lessthanasecond|(\d{1,3}(second|seconds|minute|minutes)'))/,
         kuzzleVersion: '2',
         kuzzlePort: '7514',
         esVersion: '7',
