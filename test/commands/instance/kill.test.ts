@@ -12,9 +12,6 @@ describe('instance:kill', () => {
       execSync('./bin/run instance:spawn -v 2')
     })
     .command(['instance:kill', '-i', 'stack-0'])
-    .finally(() => {
-      execSync('docker stop $(docker ps -aq)')
-    })
     .it('Kill a kuzzle v2', (ctx, done) => {
       expect(ctx.stdout).to.contain('Instance stack-0 successfully killed.')
       done()
@@ -27,9 +24,6 @@ describe('instance:kill', () => {
       execSync('./bin/run instance:spawn -v 1')
     })
     .command(['instance:kill', '-i', 'stack-0'])
-    .finally(() => {
-      execSync('docker stop $(docker ps -aq)')
-    })
     .it('Kill a kuzzle v1', (ctx, done) => {
       expect(ctx.stdout).to.contain('Instance stack-0 successfully killed.')
       done()
@@ -43,9 +37,6 @@ describe('instance:kill', () => {
       execSync('./bin/run instance:spawn -v 2')
     })
     .command(['instance:kill', '-i', 'stack-1'])
-    .finally(() => {
-      execSync('docker stop $(docker ps -aq)')
-    })
     .it('Kill one of some kuzzle v2', (ctx, done) => {
       expect(ctx.stdout).to.contain('Instance stack-1 successfully killed.')
       done()
@@ -59,9 +50,6 @@ describe('instance:kill', () => {
       execSync('./bin/run instance:spawn -v 1')
     })
     .command(['instance:kill', '-i', 'stack-1'])
-    .finally(() => {
-      execSync('docker stop $(docker ps -aq)')
-    })
     .it('Kill one of some kuzzle v1', (ctx, done) => {
       expect(ctx.stdout).to.contain('Instance stack-1 successfully killed.')
       done()
@@ -75,9 +63,6 @@ describe('instance:kill', () => {
       execSync('./bin/run instance:spawn -v 2')
     })
     .command(['instance:kill', '--all'])
-    .finally(() => {
-      execSync('docker stop $(docker ps -aq)')
-    })
     .it('Kill all running kuzzle', (ctx, done) => {
       expect(ctx.stdout).to.contain('Instance stack-0 successfully killed.')
       expect(ctx.stdout).to.contain('Instance stack-1 successfully killed.')
