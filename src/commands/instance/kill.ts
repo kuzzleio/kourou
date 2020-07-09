@@ -1,6 +1,10 @@
 import { flags } from '@oclif/command'
 import inquirer from 'inquirer'
 import execa from 'execa'
+import cli from 'cli-ux'
+import { ChildProcess, spawn } from 'child_process'
+import chalk from 'chalk'
+import emoji from 'node-emoji'
 
 import { Kommand } from '../../common'
 
@@ -56,18 +60,40 @@ export class InstanceLogs extends Kommand {
 
   private async killInstance(instanceName: string) {
     const docoFilename = `/tmp/kuzzle-${instanceName}.yml`
-    const instanceKill = execa('docker-compose', [
+    cli.action.start(
+      `${emoji.get('boom')}  Killing Kuzzle instance ${instanceName}`,
+      undefined,
+      {
+        stdout: true
+      }
+    )
+    const instanceKill: ChildProcess = spawn('docker-compose', [
       '-f',
       docoFilename,
       '-p',
       instanceName,
       'down'
     ])
-
-    instanceKill.stdout.pipe(process.stdout)
-    instanceKill.stderr.pipe(process.stderr)
-
-    return instanceKill
+    return new Promise((resolve) => instanceKill.on('close', code => {
+      if (code === 0) {
+        cli.action.stop(
+          chalk.green(
+            `\n${emoji.get(
+              'thumbsup'
+            )}  Instance ${instanceName} successfully killed.`
+          )
+        )
+      } else {
+        cli.action.stop(
+          chalk.red(
+            `\n${emoji.get(
+              'thumbsdown'
+            )}  Something went wrong whilde killing instance ${instanceName}.`
+          )
+        )
+      }
+      resolve();
+    }))
   }
 
   private async getInstancesList(): Promise<string[]> {
@@ -79,7 +105,6 @@ export class InstanceLogs extends Kommand {
         '--format',
         '"{{.Names}}"'
       ])
-      this.log(JSON.stringify(containersListProcess.stdout))
     } catch {
       this.warn(
         'Something went wrong while getting kuzzle running instances list'

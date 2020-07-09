@@ -8,41 +8,38 @@ describe('instance:kill', () => {
   test
     .timeout(TEST_TIMEOUT)
     .stdout({ print: PRINT_STDOUT })
-    .do(async () => {
-      execSync('docker ps')
-      // execSync('docker stop $(docker ps -aq)')
+    .do(() => {
       execSync('./bin/run instance:spawn -v 2')
-      execSync('docker ps')
     })
     .command(['instance:kill', '-i', 'stack-0'])
+    .finally(() => {
+      execSync('docker stop $(docker ps -aq)')
+    })
     .it('Kill a kuzzle v2', (ctx, done) => {
-      expect(ctx.stdout).to.contain('stack-0_kuzzle_1')
-      expect(ctx.stdout).to.contain('stack-0_elasticsearch_1')
-      expect(ctx.stdout).to.contain('stack-0_redis_1')
+      expect(ctx.stdout).to.contain('Instance stack-0 successfully killed.')
       done()
     })
 
   test
     .timeout(TEST_TIMEOUT)
     .stdout({ print: PRINT_STDOUT })
-    .do(async () => {
-      execSync('docker stop $(docker ps -aq)')
+    .do(() => {
       execSync('./bin/run instance:spawn -v 1')
     })
     .command(['instance:kill', '-i', 'stack-0'])
+    .finally(() => {
+      execSync('docker stop $(docker ps -aq)')
+    })
     .it('Kill a kuzzle v1', (ctx, done) => {
-      expect(ctx.stdout).to.contain('stack-0_kuzzle_1')
-      expect(ctx.stdout).to.contain('stack-0_elasticsearch_1')
-      expect(ctx.stdout).to.contain('stack-0_redis_1')
+      expect(ctx.stdout).to.contain('Instance stack-0 successfully killed.')
       done()
     })
 
   test
     .timeout(TEST_TIMEOUT)
     .stdout({ print: PRINT_STDOUT })
-    .do(async () => {
+    .do(() => {
       execSync('./bin/run instance:spawn -v 2')
-      execSync('docker stop $(docker ps -aq)')
       execSync('./bin/run instance:spawn -v 2')
     })
     .command(['instance:kill', '-i', 'stack-1'])
@@ -50,18 +47,15 @@ describe('instance:kill', () => {
       execSync('docker stop $(docker ps -aq)')
     })
     .it('Kill one of some kuzzle v2', (ctx, done) => {
-      expect(ctx.stdout).to.contain('stack-1_kuzzle_1')
-      expect(ctx.stdout).to.contain('stack-1_elasticsearch_1')
-      expect(ctx.stdout).to.contain('stack-1_redis_1')
+      expect(ctx.stdout).to.contain('Instance stack-1 successfully killed.')
       done()
     })
 
   test
     .timeout(TEST_TIMEOUT)
     .stdout({ print: PRINT_STDOUT })
-    .do(async () => {
+    .do(() => {
       execSync('./bin/run instance:spawn -v 1')
-      execSync('docker stop $(docker ps -aq)')
       execSync('./bin/run instance:spawn -v 1')
     })
     .command(['instance:kill', '-i', 'stack-1'])
@@ -69,28 +63,24 @@ describe('instance:kill', () => {
       execSync('docker stop $(docker ps -aq)')
     })
     .it('Kill one of some kuzzle v1', (ctx, done) => {
-      expect(ctx.stdout).to.contain('stack-1_kuzzle_1')
-      expect(ctx.stdout).to.contain('stack-1_elasticsearch_1')
-      expect(ctx.stdout).to.contain('stack-1_redis_1')
+      expect(ctx.stdout).to.contain('Instance stack-1 successfully killed.')
       done()
     })
 
   test
     .timeout(TEST_TIMEOUT)
     .stdout({ print: PRINT_STDOUT })
-    .do(async () => {
+    .do(() => {
       execSync('./bin/run instance:spawn -v 2')
-      execSync('docker stop $(docker ps -aq)')
       execSync('./bin/run instance:spawn -v 2')
     })
     .command(['instance:kill', '--all'])
+    .finally(() => {
+      execSync('docker stop $(docker ps -aq)')
+    })
     .it('Kill all running kuzzle', (ctx, done) => {
-      expect(ctx.stdout).to.contain('stack-0_kuzzle_1')
-      expect(ctx.stdout).to.contain('stack-0_elasticsearch_1')
-      expect(ctx.stdout).to.contain('stack-0_redis_1')
-      expect(ctx.stdout).to.contain('stack-1_kuzzle_1')
-      expect(ctx.stdout).to.contain('stack-1_elasticsearch_1')
-      expect(ctx.stdout).to.contain('stack-1_redis_1')
+      expect(ctx.stdout).to.contain('Instance stack-0 successfully killed.')
+      expect(ctx.stdout).to.contain('Instance stack-1 successfully killed.')
       done()
     })
 })
