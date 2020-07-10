@@ -2,9 +2,12 @@ const
   should = require('should'),
   {
     Given,
-    Then
+    Then,
+    setDefaultTimeout
   } = require('cucumber'),
   fs = require('fs');
+
+setDefaultTimeout(20 * 1000);
 
 Given('I create a profile {string} with the following policies:', async function (profileId, dataTable) {
   const data = this.parseObject(dataTable),

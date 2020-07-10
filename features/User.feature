@@ -41,6 +41,6 @@ Feature: User Commands
       | age   | { "type": "integer" }     |
     When I run the command "user:export-mappings" with:
       | flag | --path    | ./dump     |
-    Then The file "./dump/users-mappings.json" content should match:
+    Then The file "./dump/users-collection-mappings.json" content should match:
       | type    | "usersMappings"                                                                                                    |
       | content | { "mapping": { "age": { "type": "integer" }, "email": { "type": "keyword"}, "profileIds": { "type": "keyword"} } } |

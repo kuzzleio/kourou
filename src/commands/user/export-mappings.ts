@@ -6,7 +6,7 @@ import { Kommand } from '../../common'
 import { kuzzleFlags } from '../../support/kuzzle'
 
 export default class UserExportMappings extends Kommand {
-  static description = 'Exports users mappings to JSON.'
+  static description = 'Exports users collection mappings to JSON.'
 
   static flags = {
     help: flags.help({}),
@@ -22,9 +22,9 @@ export default class UserExportMappings extends Kommand {
   }
 
   async runSafe() {
-    const filename = path.join(this.flags.path, 'users-mappings.json')
+    const filename = path.join(this.flags.path, 'users-collection-mappings.json')
 
-    this.logInfo(`Exporting users mappings in ${filename} ...`)
+    this.logInfo(`Exporting users collection mappings in ${filename} ...`)
 
     fs.mkdirSync(this.flags.path, { recursive: true })
 
@@ -37,6 +37,6 @@ export default class UserExportMappings extends Kommand {
 
     fs.writeFileSync(filename, JSON.stringify(dump, null, 2))
 
-    this.logOk('Users mappings dumped')
+    this.logOk('Users collection mappings dumped')
   }
 }

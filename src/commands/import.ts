@@ -94,13 +94,13 @@ export default class Import extends Kommand {
     }
     for (const file of files.usersMappings) {
       try {
-        this.logInfo(`[users] Start importing users mappings in ${file}`)
+        this.logInfo(`[users] Start importing users collection mappings in ${file}`)
         const dump = JSON.parse(fs.readFileSync(file, 'utf8'))
 
         const mapping = dump.content.mapping
         await this.sdk?.security.updateUserMapping({ properties: mapping })
 
-        this.logOk('[users] mappings imported')
+        this.logOk('[users] collection mappings imported')
       }
       catch (error) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
