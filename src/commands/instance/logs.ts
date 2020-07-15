@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import  inquirer from 'inquirer'
+import inquirer from 'inquirer'
 import execa from 'execa'
 
 import { Kommand } from '../../common'
@@ -21,11 +21,14 @@ export class InstanceLogs extends Kommand {
   }
 
   async runSafe() {
-    let instance: string = this.flags.instance!
+    let instance: string = this.flags.instance
     const followOption: boolean = this.flags.follow
 
     if (!instance) {
       const instancesList = await this.getInstancesList()
+      if (instancesList.length === 0) {
+        throw new Error('There are no Kuzzle running instances')
+      }
 
       const responses: any = await inquirer.prompt([{
         name: 'instance',
@@ -71,4 +74,3 @@ export class InstanceLogs extends Kommand {
         && !containerName.includes('elasticsearch')))
   }
 }
-

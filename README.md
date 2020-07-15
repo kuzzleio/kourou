@@ -131,6 +131,8 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou import PATH`](#kourou-import-path)
 * [`kourou index:export INDEX`](#kourou-indexexport-index)
 * [`kourou index:import PATH`](#kourou-indeximport-path)
+* [`kourou instance:kill`](#kourou-instancekill)
+* [`kourou instance:list`](#kourou-instancelist)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
 * [`kourou profile:export`](#kourou-profileexport)
@@ -689,6 +691,31 @@ EXAMPLES
 ```
 
 _See code: [src/commands/index/import.ts](src/commands/index/import.ts)_
+
+## `kourou instance:kill`
+
+Kill all the containers of a running kuzzle instance
+
+```
+USAGE
+  $ kourou instance:kill
+
+OPTIONS
+  -i, --instance=instance  Kuzzle instance name
+```
+
+_See code: [src/commands/instance/kill.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/instance/kill.ts)_
+
+## `kourou instance:list`
+
+Lists the Kuzzle running instances
+
+```
+USAGE
+  $ kourou instance:list
+```
+
+_See code: [src/commands/instance/list.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/instance/list.ts)_
 
 ## `kourou instance:logs`
 
