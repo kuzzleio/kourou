@@ -25,4 +25,22 @@ Feature: User Commands
       | profileIds | ["admin"]           |
       | email      | "alyx@blackmesa.us" |
 
+  # user:export-mapping & user:import-mapping ==================================================
 
+  @security
+  Scenario: Export and import users mappings
+    Given I create an user mappings file named "user-mapping.json" file with content:
+      | email      | {"type": "keyword"} |
+      | age        | {"type": "integer"}  |
+    When I run the command "user:import-mappings" with:
+      | arg | ./dump/user-mapping.json |
+    Then I successfully call the route "security":"getUserMapping"
+    And The property "mapping" of the result should match:
+      | profileIds | {"type": "keyword"} |
+      | email | { "type": "keyword" }    |
+      | age   | { "type": "integer" }     |
+    When I run the command "user:export-mappings" with:
+      | flag | --path    | ./dump     |
+    Then The file "./dump/users-collection-mappings.json" content should match:
+      | type    | "usersMappings"                                                                                                    |
+      | content | { "mapping": { "age": { "type": "integer" }, "email": { "type": "keyword"}, "profileIds": { "type": "keyword"} } } |

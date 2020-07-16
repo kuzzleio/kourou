@@ -92,6 +92,20 @@ export default class Import extends Kommand {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
+    for (const file of files.usersMappings) {
+      try {
+        this.logInfo(`[users] Start importing users collection mappings in ${file}`)
+        const dump = JSON.parse(fs.readFileSync(file, 'utf8'))
+
+        const mapping = dump.content.mapping
+        await this.sdk?.security.updateUserMapping({ properties: mapping })
+
+        this.logOk('[users] collection mappings imported')
+      }
+      catch (error) {
+        this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
+      }
+    }
 
     for (const file of files.users) {
       try {
@@ -124,15 +138,16 @@ export default class Import extends Kommand {
         memo[fileType].push(file)
 
         return memo
-      }, { documents: [], mappings: [], roles: [], profiles: [], users: [] })
+      }, { documents: [], mappings: [], roles: [], profiles: [], usersMappings: [], users: [] })
 
     for (const dir of directories) {
-      const { documents, mappings, roles, profiles, users } = await this.walkDirectories(dir)
+      const { documents, mappings, roles, profiles, usersMappings, users } = await this.walkDirectories(dir)
 
       files.documents = files.documents.concat(documents)
       files.mappings = files.mappings.concat(mappings)
       files.roles = files.roles.concat(roles)
       files.profiles = files.profiles.concat(profiles)
+      files.usersMappings = files.usersMappings.concat(usersMappings)
       files.users = files.users.concat(users)
     }
 

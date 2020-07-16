@@ -143,7 +143,9 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
 * [`kourou subscribe INDEX COLLECTION`](#kourou-subscribe-index-collection)
 * [`kourou user:export`](#kourou-userexport)
+* [`kourou user:export-mappings`](#kourou-userexport-mappings)
 * [`kourou user:import PATH`](#kourou-userimport-path)
+* [`kourou user:import-mappings PATH`](#kourou-userimport-mappings-path)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
@@ -1088,6 +1090,28 @@ DESCRIPTION
 
 _See code: [src/commands/user/export.ts](src/commands/user/export.ts)_
 
+## `kourou user:export-mappings`
+
+Exports users collection mappings to JSON.
+
+```
+USAGE
+  $ kourou user:export-mappings
+
+OPTIONS
+  --as=as              Impersonate a user
+  --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
+  --password=password  Kuzzle user password
+  --path=path          [default: users] Dump directory
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/user/export-mappings.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/export-mappings.ts)_
+
 ## `kourou user:import PATH`
 
 Imports users
@@ -1111,6 +1135,30 @@ OPTIONS
 ```
 
 _See code: [src/commands/user/import.ts](src/commands/user/import.ts)_
+
+## `kourou user:import-mappings PATH`
+
+Imports users collection mappings
+
+```
+USAGE
+  $ kourou user:import-mappings PATH
+
+ARGUMENTS
+  PATH  Dump file
+
+OPTIONS
+  --as=as              Impersonate a user
+  --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
+  --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/user/import-mappings.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/import-mappings.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
