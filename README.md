@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.13.0 linux-x64 node-v12.16.3
+kourou/0.14.0 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -114,12 +114,10 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou api-key:create USER`](#kourou-api-keycreate-user)
 * [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
-* [`kourou collection:create INDEX COLLECTION`](#kourou-collectioncreate-index-collection)
+* [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
 * [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
-* [`kourou document:create INDEX COLLECTION`](#kourou-documentcreate-index-collection)
-* [`kourou document:get INDEX COLLECTION ID`](#kourou-documentget-index-collection-id)
 * [`kourou document:search INDEX COLLECTION`](#kourou-documentsearch-index-collection)
 * [`kourou es:get INDEX ID`](#kourou-esget-index-id)
 * [`kourou es:insert INDEX`](#kourou-esinsert-index)
@@ -259,36 +257,27 @@ OPTIONS
 
 _See code: [src/commands/api-key/search.ts](src/commands/api-key/search.ts)_
 
-## `kourou collection:create INDEX COLLECTION`
+## `kourou collection:create INDEX COLLECTION [BODY]`
 
 Creates a collection
 
 ```
 USAGE
-  $ kourou collection:create INDEX COLLECTION
+  $ kourou collection:create INDEX COLLECTION [BODY]
 
 ARGUMENTS
   INDEX       Index name
   COLLECTION  Collection name
+  BODY        Collection mappings and settings in JS or JSON format. Will be read from STDIN if available
 
 OPTIONS
   --as=as              Impersonate a user
-
-  --body=body          [default: {}] Collection mappings and settings in JS or JSON format. Will be read from STDIN if
-                       available
-
   --help               show CLI help
-
   --host=host          [default: localhost] Kuzzle server host
-
   --password=password  Kuzzle user password
-
   --port=port          [default: 7512] Kuzzle server port
-
   --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
-
   --ssl                Use SSL to connect to Kuzzle
-
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -376,64 +365,6 @@ EXAMPLE
 ```
 
 _See code: [src/commands/config/diff.ts](src/commands/config/diff.ts)_
-
-## `kourou document:create INDEX COLLECTION`
-
-Creates a document
-
-```
-USAGE
-  $ kourou document:create INDEX COLLECTION
-
-ARGUMENTS
-  INDEX       Index name
-  COLLECTION  Collection name
-
-OPTIONS
-  --as=as              Impersonate a user
-  --body=body          [default: {}] Document body in JS or JSON format. Will be read from STDIN if available
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --id=id              Optional document ID
-  --password=password  Kuzzle user password
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
-  --replace            Replaces the document if it already exists
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
-
-EXAMPLES
-  kourou document:create iot sensors --body '{network: "sigfox"}'
-  kourou document:create iot sensors < document.json
-```
-
-_See code: [src/commands/document/create.ts](src/commands/document/create.ts)_
-
-## `kourou document:get INDEX COLLECTION ID`
-
-Gets a document
-
-```
-USAGE
-  $ kourou document:get INDEX COLLECTION ID
-
-ARGUMENTS
-  INDEX       Index name
-  COLLECTION  Collection name
-  ID          Document ID
-
-OPTIONS
-  --as=as              Impersonate a user
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --password=password  Kuzzle user password
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
-```
-
-_See code: [src/commands/document/get.ts](src/commands/document/get.ts)_
 
 ## `kourou document:search INDEX COLLECTION`
 
@@ -696,17 +627,18 @@ _See code: [src/commands/index/import.ts](src/commands/index/import.ts)_
 
 ## `kourou instance:kill`
 
-Kill all the containers of a running kuzzle instance
+Stop and remove all the containers of a running kuzzle instance
 
 ```
 USAGE
   $ kourou instance:kill
 
 OPTIONS
-  -i, --instance=instance  Kuzzle instance name
+  -a, --all                Kill all instances
+  -i, --instance=instance  Kuzzle instance name [ex: stack-0]
 ```
 
-_See code: [src/commands/instance/kill.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/instance/kill.ts)_
+_See code: [src/commands/instance/kill.ts](src/commands/instance/kill.ts)_
 
 ## `kourou instance:list`
 
@@ -717,7 +649,7 @@ USAGE
   $ kourou instance:list
 ```
 
-_See code: [src/commands/instance/list.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/instance/list.ts)_
+_See code: [src/commands/instance/list.ts](src/commands/instance/list.ts)_
 
 ## `kourou instance:logs`
 
@@ -971,16 +903,19 @@ DESCRIPTION
 
      It's possible to use this command by only specifying the corresponding controller
      and action as first argument.
-     Kourou will try to infer the 4th first arguments to one the following:
-      - <index> <collection> <id> <body>
-      - <index> <collection> <body>
+     Kourou will try to infer the first arguments to one the following pattern:
+       - <command> <index>
+       - <command> <index> <collection>
+       - <command> <index> <collection> <id>
+       - <command> <index> <collection> <body>
+       - <command> <index> <collection> <id> <body>
      If a flag is given (-i, -c, --body or --id), then the flag value has prior to
      argument infering.
 
      Examples:
-       - kourou document:createOrReplace iot sensors sigfox-1 '{}'
-       - kourou collection:delete iot sensors
        - kourou collection:list iot
+       - kourou collection:delete iot sensors
+       - kourou document:createOrReplace iot sensors sigfox-1 '{}'
        - kourou bulk:import iot sensors '{bulkData: [...]}'
        - kourou admin:loadMappings < mappings.json
 ```
@@ -1110,7 +1045,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/user/export-mappings.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/export-mappings.ts)_
+_See code: [src/commands/user/export-mappings.ts](src/commands/user/export-mappings.ts)_
 
 ## `kourou user:import PATH`
 
@@ -1158,7 +1093,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/user/import-mappings.ts](https://github.com/kuzzleio/kourou/blob/v0.13.0/src/commands/user/import-mappings.ts)_
+_See code: [src/commands/user/import-mappings.ts](src/commands/user/import-mappings.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
