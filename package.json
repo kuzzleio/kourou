@@ -1,7 +1,7 @@
 {
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
-  "version": "0.13.1",
+  "version": "0.14.0",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kourou": "./bin/run"
@@ -51,7 +51,7 @@
     "typescript": "^3.9.5"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   },
   "files": [
     "/bin",
@@ -72,6 +72,7 @@
     "plugins": [
       "@oclif/plugin-help"
     ],
+    "repositoryPrefix": "<%- commandPath %>",
     "topics": {
       "api-key": {
         "description": "manage API keys"
@@ -103,6 +104,9 @@
       "sdk": {
         "description": "directly manipulate the sdk"
       }
+    },
+    "hooks": {
+      "command_not_found": "./lib/hooks/command_not_found/api-method"
     }
   },
   "repository": "kuzzleio/kourou",
