@@ -11,7 +11,6 @@ import { Kommand } from '../../common'
 
 const MIN_DOCO_VERSION = '1.12.0'
 
-
 const kuzzleServicesFile = `
 version: '3'
 
