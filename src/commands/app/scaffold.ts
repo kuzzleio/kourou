@@ -2,6 +2,7 @@ import path from 'path'
 import fs from 'fs'
 
 import { flags } from '@oclif/command'
+import _ from 'lodash'
 
 import { Kommand } from '../../common'
 import { execute } from '../../support/execute'
@@ -23,21 +24,42 @@ export default class AppScaffold extends Kommand {
 
   async runSafe() {
     this.logInfo(`Scaffold a new Kuzzle application in ${this.args.name}/`)
-
+    await execute('rm', '-rf', this.args.name)
     await execute('mkdir', this.args.name)
 
-    await execute('cp', `${templatesDir}/app-scaffold/app.ts`, this.args.name)
-    const packageJson = require(`${templatesDir}/app-scaffold/package.json`)
-    packageJson.name = this.args.name
-    fs.writeFileSync(
-      `${this.args.name}/package.json`,
-      JSON.stringify(packageJson, null, 2))
+    await this.renderTemplates(`${templatesDir}/app-scaffold/ts`)
 
     this.logInfo('Installing latest Kuzzle version via NPM...')
 
-    await execute('npm', 'install', 'kuzzle', { cwd: this.args.name })
-    await execute('npm', 'install', { cwd: this.args.name })
+    // await execute('npm', 'install', 'kuzzle', { cwd: this.args.name })
+    // await execute('npm', 'install', { cwd: this.args.name })
 
-    this.logOk(`Scaffolding complete. Start to develop you application in ${this.args.name}`)
+    this.logOk(`Scaffolding complete. Start to develop you application in ./${this.args.name}/`)
+  }
+
+  async renderTemplates(directory: string) {
+    const entries = fs.readdirSync(directory);
+
+    for (const entry of entries) {
+      const entryPath = `${directory}/${entry}`
+      const entryDir = path.dirname(`${this.args.name}/${entryPath}`)
+      const entryInfo = fs.statSync(entryPath)
+
+      if (entryInfo.isDirectory()) {
+        await this.renderTemplates(entryPath)
+      }
+      else if (entryInfo.isFile() || entryInfo.isSymbolicLink()) {
+        const content = fs.readFileSync(entryPath, 'utf8')
+
+        const compiled = _.template(content)
+        const rendered = compiled({ appName: this.args.name })
+
+        fs.mkdirSync(entryDir.replace(templatesDir, ''), { recursive: true })
+        fs.writeFileSync(`${this.args.name}/${entryPath.replace(templatesDir, '')}`, rendered);
+      }
+      else {
+        this.logInfo(`Skipped ${entryPath} because it's not a regular file`)
+      }
+    }
   }
 }
