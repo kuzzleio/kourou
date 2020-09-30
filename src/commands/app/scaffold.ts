@@ -31,8 +31,8 @@ export default class AppScaffold extends Kommand {
 
     this.logInfo('Installing latest Kuzzle version via NPM...')
 
-    // await execute('npm', 'install', 'kuzzle', { cwd: this.args.name })
-    // await execute('npm', 'install', { cwd: this.args.name })
+    await execute('npm', 'install', 'kuzzle', { cwd: this.args.name })
+    await execute('npm', 'install', { cwd: this.args.name })
 
     this.logOk(`Scaffolding complete. Start to develop you application in ./${this.args.name}/`)
   }
@@ -46,6 +46,8 @@ export default class AppScaffold extends Kommand {
       const entryInfo = fs.statSync(entryPath)
 
       if (entryInfo.isDirectory()) {
+        fs.mkdirSync(entryDir.replace(templatesDir, ''), { recursive: true })
+
         await this.renderTemplates(entryPath)
       }
       else if (entryInfo.isFile() || entryInfo.isSymbolicLink()) {
@@ -54,7 +56,6 @@ export default class AppScaffold extends Kommand {
         const compiled = _.template(content)
         const rendered = compiled({ appName: this.args.name })
 
-        fs.mkdirSync(entryDir.replace(templatesDir, ''), { recursive: true })
         fs.writeFileSync(`${this.args.name}/${entryPath.replace(templatesDir, '')}`, rendered);
       }
       else {
