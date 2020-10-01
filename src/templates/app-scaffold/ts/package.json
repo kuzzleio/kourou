@@ -4,6 +4,7 @@
   "description": "",
   "author": "",
   "scripts": {
+    "dev": "nodemon --ext 'js,json,ts' --inspect=0.0.0.0:9229 --exec node -r ts-node/register app.ts",
     "test": "npm run test:lint && npm run test:unit && npm run test:functional",
     "test:unit": "mocha",
     "test:functional": "cucumber-js --exit --fail-fast",

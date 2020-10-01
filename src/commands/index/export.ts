@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import  fs from 'fs'
+import fs from 'fs'
 import cli from 'cli-ux'
 import path from 'path'
 
@@ -35,7 +35,7 @@ export default class IndexExport extends Kommand {
       ? path.join(this.flags.path, this.args.index)
       : this.args.index
 
-    this.logInfo(`Dumping index "${this.args.index}" in ${exportPath}/ ...`)
+    this.logInfo(`Dumping index "${this.args.index}" in ${exportPath}${path.sep} ...`)
 
     fs.mkdirSync(exportPath, { recursive: true })
 
