@@ -12,12 +12,13 @@ type ExecutionResult = {
 
 class ExecutionError extends Error {
   public exitCode: number;
+
   public command: string;
 
   constructor(stderr: string, code: number, command: string[]) {
-    super(stderr);
+    super(stderr)
 
-    this.exitCode = code;
+    this.exitCode = code
     this.command = command.join(' ')
   }
 }

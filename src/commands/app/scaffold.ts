@@ -9,7 +9,6 @@ import { execute } from '../../support/execute'
 
 const templatesDir = path.join(__dirname, '..', '..', 'templates')
 
-
 export default class AppScaffold extends Kommand {
   static initSdk = false
 
