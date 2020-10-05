@@ -1,5 +1,4 @@
 import { spawn, ChildProcess } from 'child_process'
-import { Readable } from 'stream'
 
 interface ProcessExecutor<T> extends Promise<T> {
   process: ChildProcess;
@@ -23,6 +22,16 @@ class ExecutionError extends Error {
   }
 }
 
+/**
+ * Executes a command.
+ *
+ * The given should be given as strings as for the child_process.spawn command.
+ * If the last argument is an object, it will be passed to the child_process.spawn command.
+ *
+ * @example
+ * await execute('ls', '-la')
+ * await execute('ls', '-la', { cwd: '/home/aschen' })
+ */
 export function execute(...args: any[]): ProcessExecutor<ExecutionResult> {
   let options: any
   if (typeof args[args.length - 1] === 'object') {
