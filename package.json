@@ -110,6 +110,7 @@
   },
   "repository": "kuzzleio/kourou",
   "scripts": {
+    "build": "tsc -b",
     "dev": "./bin/run",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",

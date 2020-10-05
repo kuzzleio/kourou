@@ -2,7 +2,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const { Then } = require('cucumber');
 
-const { execute } = require('../../src/support/execute')
+const { execute } = require('../../lib/support/execute')
 
 Then('I subscribe to {string}:{string}', async function (index, collection) {
   this.props.executor = execute('./bin/run', 'subscribe', index, collection);
