@@ -32,8 +32,8 @@ export default class AppScaffold extends Kommand {
 
     this.logInfo('Installing latest Kuzzle version via NPM...')
 
-    // await execute('npm', 'install', 'kuzzle', { cwd: this.args.name })
-    // await execute('npm', 'install', { cwd: this.args.name })
+    await execute('npm', 'install', 'kuzzle', { cwd: this.args.name })
+    await execute('npm', 'install', { cwd: this.args.name })
 
     this.logOk(`Scaffolding complete. Start to develop you application in .${path.sep}${this.args.name}${path.sep}`)
   }
