@@ -1,29 +1,58 @@
-import { spawn } from 'child_process'
+import { spawn, ChildProcess } from 'child_process'
+import { Readable } from 'stream'
 
-export async function execute(...args: any[]): Promise<any> {
+interface ProcessExecutor<T> extends Promise<T> {
+  process: ChildProcess;
+}
+
+type ExecutionResult = {
+  stdout: string;
+  stderr: string;
+  exitCode: number;
+}
+
+class ExecutionError extends Error {
+  public exitCode: number;
+  public command: string;
+
+  constructor(stderr: string, code: number, command: string[]) {
+    super(stderr);
+
+    this.exitCode = code;
+    this.command = command.join(' ')
+  }
+}
+
+export function execute(...args: any[]): ProcessExecutor<ExecutionResult> {
   let options: any
   if (typeof args[args.length - 1] === 'object') {
     options = args.splice(args.length - 1)[0]
   }
 
   const [command, ...commandArgs] = args
-  const childProcess = spawn(command, commandArgs, options)
+  const process = spawn(command, commandArgs, options)
+
+  let stdout = ''
+  let stderr = ''
 
   // eslint-disable-next-line
-  childProcess.stdout.on('data', data => console.log(data.toString()))
+  process.stdout.on('data', data => stdout += data.toString())
 
   // eslint-disable-next-line
-  childProcess.stderr.on('data', data => console.error(data.toString()))
+  process.stderr.on('data', data => stderr += data.toString())
 
-  return new Promise((resolve, reject) => {
-    childProcess.on('close', code => {
+  const executor: any = new Promise((resolve, reject) => {
+    process.on('close', code => {
       if (code === 0) {
-        resolve({ code })
+        resolve({ stdout, stderr, exitCode: code })
       }
       else {
-        // eslint-disable-next-line
-        reject({ code, command: [command, ...args].join(' ') })
+        reject(new ExecutionError(stderr, code, args))
       }
     })
   })
+
+  executor.process = process
+
+  return executor as ProcessExecutor<ExecutionResult>
 }

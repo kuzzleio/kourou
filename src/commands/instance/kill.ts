@@ -1,12 +1,12 @@
 import { flags } from '@oclif/command'
 import inquirer from 'inquirer'
-import execa from 'execa'
 import cli from 'cli-ux'
 import { ChildProcess, spawn } from 'child_process'
 import chalk from 'chalk'
 import emoji from 'node-emoji'
 
 import { Kommand } from '../../common'
+import { execute } from '../../support/execute'
 
 export class InstanceLogs extends Kommand {
   static initSdk = false
@@ -100,15 +100,10 @@ export class InstanceLogs extends Kommand {
     let containersListProcess
 
     try {
-      containersListProcess = await execa('docker', [
-        'ps',
-        '--format',
-        '"{{.Names}}"'
-      ])
-    } catch {
-      this.warn(
-        'Something went wrong while getting kuzzle running instances list'
-      )
+      containersListProcess = await execute('docker', 'ps', '--format', '"{{.Names}}"')
+    }
+    catch {
+      this.warn('Something went wrong while getting kuzzle running instances list')
       return []
     }
 

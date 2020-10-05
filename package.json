@@ -17,7 +17,6 @@
     "bluebird": "^3.7.2",
     "chalk": "^3.0.0",
     "cli-ux": "^5.4.6",
-    "execa": "^3.4.0",
     "inquirer": "^7.1.0",
     "kuzzle-sdk": "^7.4.0",
     "kuzzle-vault": "^2.0.0",

@@ -1,39 +1,11 @@
 const _ = require('lodash');
 const fs = require('fs');
 const { Then } = require('cucumber');
-const { spawn } = require('child_process');
 
-function execute(command, args = []) {
-  const childProcess = spawn(command, args);
-  let stdout = '';
-  let stderr = '';
-
-  childProcess.stdout.on('data', data => {
-    stdout += data.toString();
-  });
-
-  childProcess.stderr.on('data', data => {
-    stderr += data.toString();
-  });
-
-  const executor = new Promise((resolve, reject) => {
-    childProcess.on('close', code => {
-      if (code === 0) {
-        resolve({ code, stdout, stderr });
-      }
-      else {
-        reject({ code, stdout, stderr, command: [command, ...args].join(' ') });
-      }
-    });
-  });
-
-  executor.process = childProcess;
-
-  return executor;
-}
+const { execute } = require('../../src/support/execute')
 
 Then('I subscribe to {string}:{string}', async function (index, collection) {
-  this.props.executor = execute('./bin/run', ['subscribe', index, collection]);
+  this.props.executor = execute('./bin/run', 'subscribe', index, collection);
 
   // wait to connect to Kuzzle
   await new Promise(resolve => setTimeout(resolve, 2000));
@@ -72,7 +44,7 @@ Then('I run the command {string} with:', async function (command, dataTable) {
   }
 
   try {
-    const { stdout } = await execute('./bin/run', [...command.split(' '), ...args, ...flags])
+    const { stdout } = await execute('./bin/run', ...command.split(' '), ...args, ...flags)
 
     this.props.result = stdout;
   }
@@ -94,7 +66,7 @@ Then('I run the command {string} with flags:', async function (command, dataTabl
   }
 
   try {
-    const { stdout } = await execute('./bin/run', [...command.split(' '), ...flags])
+    const { stdout } = await execute('./bin/run', ...command.split(' '), ...flags)
 
     this.props.result = stdout;
   }
@@ -113,7 +85,7 @@ Then('I run the command {string} with args:', async function (command, dataTable
   }
 
   try {
-    const { stdout } = await execute('./bin/run', [command, ...args])
+    const { stdout } = await execute('./bin/run', command, ...args)
 
     this.props.result = stdout;
   }
@@ -181,7 +153,8 @@ Then('I check the API key validity', async function () {
   try {
     const { stdout } = await execute(
       './bin/run',
-      ['api-key:check', this.props.result._source.token]);
+      'api-key:check',
+      this.props.result._source.token);
 
     this.props.result = stdout;
   }
