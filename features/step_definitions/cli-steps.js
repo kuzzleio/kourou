@@ -2,6 +2,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const { Then } = require('cucumber');
 
+// this need to build the lib with "npm run build" first
 const { execute } = require('../../lib/support/execute')
 
 Then('I subscribe to {string}:{string}', async function (index, collection) {
