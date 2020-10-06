@@ -13,6 +13,9 @@ Then('I subscribe to {string}:{string}', async function (index, collection) {
 });
 
 Then('I kill the CLI process', async function () {
+  // wait
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
   this.props.executor.process.kill();
 
   // the promise will be rejected since we killed the process
