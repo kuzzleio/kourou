@@ -1,6 +1,5 @@
-import execa from 'execa'
-
 import { Kommand } from '../../common'
+import { execute } from '../../support/execute'
 
 export class InstanceList extends Kommand {
   static initSdk = false
@@ -26,7 +25,7 @@ export class InstanceList extends Kommand {
     let containersListProcess
 
     try {
-      containersListProcess = await execa('docker', ['ps', '--format', '"{{.Names}}%{{.Image}}%{{.Status}}%{{.Ports}}"'])
+      containersListProcess = await execute('docker', 'ps', '--format', '"{{.Names}}%{{.Image}}%{{.Status}}%{{.Ports}}"')
     }
     catch {
       this.warn('Something went wrong while getting kuzzle running instances list')
@@ -36,10 +35,10 @@ export class InstanceList extends Kommand {
     let containersList: string[] = containersListProcess.stdout.replace(/"/g, '').split('\n')
 
     containersList = containersList.filter(c => (c.match(/stack-\d{0,3}_kuzzle_1/)
-     || c.match(/stack-\d{0,3}_elasticsearch_1/)
-     || c.match(/stack-\d{0,3}_redis_1/)))
+      || c.match(/stack-\d{0,3}_elasticsearch_1/)
+      || c.match(/stack-\d{0,3}_redis_1/)))
 
-     const stacks = [...new Set(containersList.map(container => container.split('_')[0]))]
+    const stacks = [...new Set(containersList.map(container => container.split('_')[0]))]
       .sort((stackA, stackB) => (stackA > stackB ? 1 : stackA < stackB ? -1 : 0))
 
     const formatedStacks = stacks.map(stack => ({

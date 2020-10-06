@@ -1,42 +1,15 @@
 const _ = require('lodash')
 const fs = require('fs')
 const { Then } = require('cucumber')
-const { spawn } = require('child_process')
 
-function execute(command, args = []) {
-  const childProcess = spawn(command, args)
-  let stdout = ''
-  let stderr = ''
-
-  childProcess.stdout.on('data', data => {
-    stdout += data.toString()
-  })
-
-  childProcess.stderr.on('data', data => {
-    stderr += data.toString()
-  })
-
-  const executor = new Promise((resolve, reject) => {
-    childProcess.on('close', code => {
-      if (code === 0) {
-        resolve({ code, stdout, stderr })
-      }
-      else {
-        reject({ code, stdout, stderr, command: [command, ...args].join(' ') })
-      }
-    })
-  })
-
-  executor.process = childProcess
-
-  return executor
-}
+// this need to build the lib with "npm run build" first
+const { execute } = require('../../lib/support/execute')
 
 Then('I subscribe to {string}:{string}', async function (index, collection) {
-  this.props.executor = execute('./bin/run', ['subscribe', index, collection])
+  this.props.executor = execute('./bin/run', 'subscribe', index, collection)
 
   // wait to connect to Kuzzle
-  await new Promise(resolve => setTimeout(resolve, 2000))
+  await new Promise(resolve => setTimeout(resolve, 4000))
 })
 
 Then('I kill the CLI process', async function () {
@@ -46,8 +19,8 @@ Then('I kill the CLI process', async function () {
   try {
     await this.props.executor
   }
-  catch ({ stdout }) {
-    this.props.result = stdout
+  catch (error) {
+    this.props.result = error.result.stdout
   }
 })
 
@@ -72,7 +45,7 @@ Then('I run the command {string} with:', async function (command, dataTable) {
   }
 
   try {
-    const { stdout } = await execute('./bin/run', [...command.split(' '), ...args, ...flags])
+    const { stdout } = await execute('./bin/run', ...command.split(' '), ...args, ...flags)
 
     this.props.result = stdout
   }
@@ -94,7 +67,7 @@ Then('I run the command {string} with flags:', async function (command, dataTabl
   }
 
   try {
-    const { stdout } = await execute('./bin/run', [...command.split(' '), ...flags])
+    const { stdout } = await execute('./bin/run', ...command.split(' '), ...flags)
 
     this.props.result = stdout
   }
@@ -113,7 +86,7 @@ Then('I run the command {string} with args:', async function (command, dataTable
   }
 
   try {
-    const { stdout } = await execute('./bin/run', [command, ...args])
+    const { stdout } = await execute('./bin/run', command, ...args)
 
     this.props.result = stdout
   }
@@ -149,7 +122,7 @@ Then(/I should( not)? match stdout with:/, function (not, dataTable) {
 })
 
 Then('a JSON file {string} containing:', function (filename, dataTable) {
-  const content = {};
+  const content = {}
   const contentRaw = this.parseObject(dataTable)
 
   for (const [path, value] of Object.entries(contentRaw)) {
@@ -180,7 +153,8 @@ Then('I check the API key validity', async function () {
   try {
     const { stdout } = await execute(
       './bin/run',
-      ['api-key:check', this.props.result._source.token])
+      'api-key:check',
+      this.props.result._source.token)
 
     this.props.result = stdout
   }
@@ -195,9 +169,10 @@ Then('I should get the correct current user with the given api-key', async funct
   try {
     const { stdout } = await execute(
       './bin/run',
-      ['auth:getCurrentUser', '--api-key', this.props.result._source.token])
+      ['sdk:query', 'auth:getCurrentUser', '--api-key', this.props.result._source.token])
 
     this.props.result = stdout
+    console.log(stdout);
     should(this.props.result).match(/"_id": "gordon"/)
   }
   catch (error) {
