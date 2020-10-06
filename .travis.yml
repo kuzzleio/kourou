@@ -66,6 +66,7 @@ jobs:
       install:
         - npm install --silent --unsafe-perm
         - npm install --silent --unsafe-perm --only=dev
+        - npm run build
 
       script:
         - bash features/run-kuzzle-stack.sh

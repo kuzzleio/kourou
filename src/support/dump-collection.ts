@@ -1,12 +1,14 @@
 import fs from 'fs'
+import path from 'path'
+
 import cli from 'cli-ux'
 
 // tslint:disable-next-line
 const ndjson = require('ndjson')
 
-export async function dumpCollectionData(sdk: any, index: string, collection: string, batchSize: number, path: string, query: any = {}) {
-  const collectionDir = `${path}/${collection}`
-  const filename = `${collectionDir}/documents.jsonl`
+export async function dumpCollectionData(sdk: any, index: string, collection: string, batchSize: number, destPath: string, query: any = {}) {
+  const collectionDir = path.join(destPath, collection)
+  const filename = path.join(collectionDir, 'documents.jsonl')
   const writeStream = fs.createWriteStream(filename)
   const waitWrite = new Promise(resolve => writeStream.on('finish', resolve))
   const ndjsonStream = ndjson.serialize()
@@ -63,9 +65,9 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
   return waitWrite
 }
 
-export async function dumpCollectionMappings(sdk: any, index: string, collection: string, path: string) {
-  const collectionDir = `${path}/${collection}`
-  const filename = `${collectionDir}/mappings.json`
+export async function dumpCollectionMappings(sdk: any, index: string, collection: string, destPath: string) {
+  const collectionDir = path.join(destPath, collection)
+  const filename = path.join(collectionDir, 'mappings.json')
 
   fs.mkdirSync(collectionDir, { recursive: true })
 

@@ -1,0 +1,7 @@
+# JS generated files from TS
+app.js
+app.d.ts
+app.js.map
+lib/**/*.d.ts
+lib/**/*.js.map
+lib/**/*.js

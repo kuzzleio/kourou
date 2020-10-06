@@ -2,13 +2,13 @@ import { flags } from '@oclif/command'
 import chalk from 'chalk'
 import { ChildProcess, spawn } from 'child_process'
 import cli from 'cli-ux'
-import execa from 'execa'
 import { writeFileSync } from 'fs'
 import Listr from 'listr'
 import net from 'net'
 import emoji from 'node-emoji'
 
 import { Kommand } from '../../common'
+import { execute } from '../../support/execute'
 
 const MIN_MAX_MAP_COUNT = 262144
 const MIN_DOCO_VERSION = '1.12.0'
@@ -124,7 +124,7 @@ export default class InstanceSpawn extends Kommand {
     writeFileSync(docoFilename, this.generateDocoFile(this.flags.version, portIndex))
 
     // clean up
-    await execa('docker-compose', ['-f', docoFilename, '-p', `stack-${portIndex}`, 'down'])
+    await execute('docker-compose', '-f', docoFilename, '-p', `stack-${portIndex}`, 'down')
 
     const doco: ChildProcess = spawn(
       'docker-compose',
@@ -175,7 +175,7 @@ export default class InstanceSpawn extends Kommand {
         title: `docker-compose exists and the version is at least ${MIN_DOCO_VERSION}`,
         task: async () => {
           try {
-            const docov = await execa('docker-compose', ['-v'])
+            const docov = await execute('docker-compose', '-v')
             const matches = docov.stdout.match(/[^0-9.]*([0-9.]*).*/)
             if (matches === null) {
               throw new Error(
@@ -209,10 +209,8 @@ export default class InstanceSpawn extends Kommand {
         title: `vm.max_map_count is greater than ${MIN_MAX_MAP_COUNT}`,
         task: async () => {
           try {
-            const sysctl = await execa('/sbin/sysctl', [
-              '-n',
-              'vm.max_map_count',
-            ])
+            const sysctl = await execute('/sbin/sysctl', '-n', 'vm.max_map_count')
+
             if (sysctl.exitCode !== 0) {
               throw new Error('Something went wrong checking vm.max_map_count')
             }
@@ -223,8 +221,9 @@ export default class InstanceSpawn extends Kommand {
                 `vm.max_map_count must be at least ${MIN_MAX_MAP_COUNT} (found ${value})`,
               )
             }
-          } catch (error) {
-            throw new Error('Something went wrong checking vm.max_map_count')
+          }
+          catch (error) {
+            throw new Error(`Something went wrong checking vm.max_map_count: ${error.message}`)
           }
         },
       },

@@ -1,8 +1,8 @@
 import { flags } from '@oclif/command'
 import inquirer from 'inquirer'
-import execa from 'execa'
 
 import { Kommand } from '../../common'
+import { execute } from '../../support/execute'
 
 export class InstanceLogs extends Kommand {
   static initSdk = false
@@ -48,10 +48,10 @@ export class InstanceLogs extends Kommand {
       args.push('-f')
     }
 
-    const instanceLogs = execa('docker', args)
+    const instanceLogs = execute('docker', ...args)
 
-    instanceLogs.stdout.pipe(process.stdout)
-    instanceLogs.stderr.pipe(process.stderr)
+    instanceLogs.process.stdout.pipe(process.stdout)
+    instanceLogs.process.stderr.pipe(process.stderr)
 
     await instanceLogs
   }
@@ -60,8 +60,9 @@ export class InstanceLogs extends Kommand {
     let containersListProcess
 
     try {
-      containersListProcess = await execa('docker', ['ps', '--format', '"{{.Names}}"'])
-    } catch {
+      containersListProcess = await execute('docker', 'ps', '--format', '"{{.Names}}"')
+    }
+    catch {
       this.warn('Something went wrong while getting kuzzle running instances list')
       return []
     }
