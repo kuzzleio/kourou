@@ -19,8 +19,8 @@ Then('I kill the CLI process', async function () {
   try {
     await this.props.executor
   }
-  catch ({ stdout }) {
-    this.props.result = stdout;
+  catch (error) {
+    this.props.result = error.result.stdout;
   }
 });
 

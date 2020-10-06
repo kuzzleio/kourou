@@ -11,14 +11,15 @@ type ExecutionResult = {
 }
 
 class ExecutionError extends Error {
-  public exitCode: number;
-
   public command: string;
 
-  constructor(stderr: string, code: number, command: string[]) {
+  public result: ExecutionResult;
+
+  constructor(stderr: string, stdout: string, code: number, command: string[]) {
     super(stderr)
 
-    this.exitCode = code
+    this.result = { stdout, stderr, exitCode: code }
+
     this.command = command.join(' ')
   }
 }
@@ -57,7 +58,7 @@ export function execute(...args: any[]): ProcessExecutor<ExecutionResult> {
         resolve({ stdout, stderr, exitCode: code })
       }
       else {
-        reject(new ExecutionError(stderr, code, args))
+        reject(new ExecutionError(stderr, stdout, code, args))
       }
     })
   })
