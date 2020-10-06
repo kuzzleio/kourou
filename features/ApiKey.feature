@@ -44,3 +44,8 @@ Feature: Api Key Management
     Given I create an API key
     When I check the API key validity
     Then I should match stdout with "API key is still valid"
+
+  @security
+  Scenario: Use an API Key to connect
+    Given I create an API key
+    Then I should get the correct current user with the given api-key

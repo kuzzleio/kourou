@@ -2,11 +2,8 @@ version: '3'
 
 services:
   kuzzle:
-    image: kuzzleio/kuzzle:2
-    command: /run.sh
+    image: kuzzleio/kuzzle:2.4.5
     container_name: kuzzle
-    volumes:
-      - "./run.sh:/run.sh"
     cap_add:
       - SYS_PTRACE
     ulimits:
