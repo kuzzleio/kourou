@@ -169,10 +169,12 @@ Then('I should get the correct current user with the given api-key', async funct
   try {
     const { stdout } = await execute(
       './bin/run',
-      ['sdk:query', 'auth:getCurrentUser', '--api-key', this.props.result._source.token])
+      'sdk:query',
+      'auth:getCurrentUser',
+      '--api-key',
+      this.props.result._source.token)
 
     this.props.result = stdout
-    console.log(stdout);
     should(this.props.result).match(/"_id": "gordon"/)
   }
   catch (error) {
