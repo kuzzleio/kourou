@@ -2,12 +2,12 @@ import { flags } from '@oclif/command'
 import chalk from 'chalk'
 import { ChildProcess, spawn } from 'child_process'
 import cli from 'cli-ux'
-import execa from 'execa'
 import { writeFileSync } from 'fs'
 import Listr from 'listr'
 import emoji from 'node-emoji'
 
 import { Kommand } from '../../common'
+import { execute } from '../../support/execute'
 
 const MIN_DOCO_VERSION = '1.12.0'
 
@@ -60,7 +60,7 @@ export default class AppStartServices extends Kommand {
     writeFileSync(docoFilename, kuzzleServicesFile)
 
     // clean up
-    await execa('docker-compose', ['-f', docoFilename, 'down'])
+    await execute('docker-compose', '-f', docoFilename, 'down')
 
     const doco: ChildProcess = spawn(
       'docker-compose',
@@ -103,7 +103,7 @@ export default class AppStartServices extends Kommand {
         title: `docker-compose exists and the version is at least ${MIN_DOCO_VERSION}`,
         task: async () => {
           try {
-            const docov = await execa('docker-compose', ['-v'])
+            const docov = await execute('docker-compose', '-v')
             const matches = docov.stdout.match(/[^0-9.]*([0-9.]*).*/)
             if (matches === null) {
               throw new Error(

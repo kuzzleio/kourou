@@ -114,6 +114,8 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou api-key:create USER`](#kourou-api-keycreate-user)
 * [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
+* [`kourou app:scaffold NAME`](#kourou-appscaffold-name)
+* [`kourou app:start-services`](#kourou-appstart-services)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
@@ -256,6 +258,38 @@ OPTIONS
 ```
 
 _See code: [src/commands/api-key/search.ts](src/commands/api-key/search.ts)_
+
+## `kourou app:scaffold NAME`
+
+Scaffold a new Kuzzle application
+
+```
+USAGE
+  $ kourou app:scaffold NAME
+
+ARGUMENTS
+  NAME  Application name
+
+OPTIONS
+  --help  show CLI help
+```
+
+_See code: [src/commands/app/scaffold.ts](src/commands/app/scaffold.ts)_
+
+## `kourou app:start-services`
+
+Starts Kuzzle services (Elasticsearch and Redis)
+
+```
+USAGE
+  $ kourou app:start-services
+
+OPTIONS
+  --check  Check prerequisite before running services
+  --help   show CLI help
+```
+
+_See code: [src/commands/app/start-services.ts](src/commands/app/start-services.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
