@@ -9,13 +9,10 @@ Then('I subscribe to {string}:{string}', async function (index, collection) {
   this.props.executor = execute('./bin/run', 'subscribe', index, collection);
 
   // wait to connect to Kuzzle
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
 Then('I kill the CLI process', async function () {
-  // wait
-  await new Promise(resolve => setTimeout(resolve, 2000));
-
   this.props.executor.process.kill();
 
   // the promise will be rejected since we killed the process
