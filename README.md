@@ -285,7 +285,7 @@ USAGE
   $ kourou app:start-services
 
 OPTIONS
-  --check  Check prerequisite before running services
+  --check  Check prerequisites before running services
   --help   show CLI help
 ```
 
