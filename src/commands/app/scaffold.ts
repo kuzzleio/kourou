@@ -12,7 +12,7 @@ const templatesDir = path.join(__dirname, '..', '..', 'templates')
 export default class AppScaffold extends Kommand {
   static initSdk = false
 
-  static description = 'Scaffold a new Kuzzle application'
+  static description = 'Scaffolds a new Kuzzle application'
 
   static flags = {
     help: flags.help(),
