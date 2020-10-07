@@ -261,7 +261,7 @@ _See code: [src/commands/api-key/search.ts](src/commands/api-key/search.ts)_
 
 ## `kourou app:scaffold NAME`
 
-Scaffold a new Kuzzle application
+Scaffolds a new Kuzzle application
 
 ```
 USAGE
@@ -285,7 +285,7 @@ USAGE
   $ kourou app:start-services
 
 OPTIONS
-  --check  Check prerequisite before running services
+  --check  Check prerequisites before running services
   --help   show CLI help
 ```
 
