@@ -261,7 +261,7 @@ _See code: [src/commands/api-key/search.ts](src/commands/api-key/search.ts)_
 
 ## `kourou app:scaffold NAME`
 
-Scaffold a new Kuzzle application
+Scaffolds a new Kuzzle application
 
 ```
 USAGE
