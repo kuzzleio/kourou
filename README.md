@@ -38,30 +38,35 @@ Commands that needs to send requests to Kuzzle API can specify the Kuzzle server
 
 By command line:
 ```
+
   --host=host                    [default: localhost] Kuzzle server host
   --port=port                    [default: 7512] Kuzzle server port
   --username=username            [default: anonymous] Kuzzle user
   --password=password            Kuzzle user password
+  --api-key=api-key              Kuzzle user api-key
   --ssl                          [default: true for port 443] Use SSL to connect to Kuzzle
-  --protocol                     [default: http] Protocol used to connect to Kuzzle (`http` or `ws`)
-```
+  --protocol                     [default: http] Protocol used to connect to Kuzzle ( `http` or `ws` )
+
+``` 
 
 By environment variables:
 ```
+
   KUZZLE_HOST                [default: localhost] Kuzzle server host
   KUZZLE_PORT                [default: 7512] Kuzzle server port
   KUZZLE_USERNAME            [default: anonymous] Kuzzle user
   KUZZLE_PASSWORD            Kuzzle user password
+  KUZZLE_API_KEY             Kuzzle user api-key
   KUZZLE_SSL                 Use SSL to connect to Kuzzle
-  KUZZLE_PROTOCOL            Protocol used to connect to Kuzzle (`http` or `ws`)
-```
+  KUZZLE_PROTOCOL            Protocol used to connect to Kuzzle ( `http` or `ws` )
+
+``` 
 
 ## User impersonation
 
-You can impersonate a user before executing a command with the `--as` flag and a user `kuid`.
+You can impersonate a user before executing a command with the `--as` flag and a user `kuid` .
 
-User impersonation require the following rights for the authenticated user: `security:createApiKey`, `security:deleteApiKey`
-
+User impersonation require the following rights for the authenticated user: `security:createApiKey` , `security:deleteApiKey`
 ```bash
 $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password admin
 
@@ -77,33 +82,33 @@ $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password a
 
 When no command is found, Kourou will try to execute the given command with the `sdk:query` command.  
 
-The first argument has to be the name of the controller and the action separated by a semicolon (eg `document:create`)
+The first argument has to be the name of the controller and the action separated by a semicolon (eg `document:create` )
 
-Kourou will try to infer common arguments like `index`, `collection`, `_id` or `body`.  
+Kourou will try to infer common arguments like `index` , `collection` , `_id` or `body` .  
 
 It will automatically infer and accept the following lists of arguments:
  - `<command> <index>`
-    * _eg: `kourou collection:list iot`_
-.
+    - _eg: `kourou collection:list iot` _
 
+.
 
  - `<command> <index> <collection>`
-    * _eg: `kourou collection:truncate iot sensors`_
-.
+    - _eg: `kourou collection:truncate iot sensors` _
 
+.
 
  - `<command> <index> <collection> <body>`
-    * _eg: `kourou bulk:import iot sensors '{bulkData: []}'`_
-.
+    - _eg: `kourou bulk:import iot sensors '{bulkData: []}'` _
 
+.
 
  - `<command> <index> <collection> <id>`
-    * _eg: `kourou document:delete iot sensors sigfox-123`_
+    - _eg: `kourou document:delete iot sensors sigfox-123` _
+
 .
 
-
  - `<command> <index> <collection> <id> <body>`
-    * _eg: `kourou document:create iot sensors sigfox-123 '{temperature: 42}'`_
+    - _eg: `kourou document:create iot sensors sigfox-123 '{temperature: 42}'` _
 
 Then any argument will be passed as-is to the `sdk:query` method.
 
@@ -164,6 +169,7 @@ ARGUMENTS
   TOKEN  API key token
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -192,6 +198,7 @@ ARGUMENTS
 
 OPTIONS
   -d, --description=description  (required) API Key description
+  --api-key=api-key              Kuzzle user api-key
   --as=as                        Impersonate a user
   --expire=expire                [default: -1] API Key validity
   --help                         show CLI help
@@ -219,6 +226,7 @@ ARGUMENTS
   ID    API Key unique ID
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -246,6 +254,7 @@ ARGUMENTS
   USER  User kuid
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --filter=filter      Filter to match the API Key descriptions
   --help               show CLI help
@@ -285,7 +294,7 @@ USAGE
   $ kourou app:start-services
 
 OPTIONS
-  --check  Check prerequisites before running services
+  --check  Check prerequisite before running services
   --help   show CLI help
 ```
 
@@ -305,6 +314,7 @@ ARGUMENTS
   BODY        Collection mappings and settings in JS or JSON format. Will be read from STDIN if available
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -330,6 +340,7 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
+  --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --editor                 Open an editor (EDITOR env variable) to edit the query before sending
@@ -362,6 +373,7 @@ ARGUMENTS
   PATH  Dump directory path
 
 OPTIONS
+  --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --collection=collection  If set, override the collection destination name
@@ -413,6 +425,7 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --editor             Open an editor (EDITOR env variable) to edit the request before sending
   --from=from          Optional offset
@@ -588,6 +601,7 @@ ARGUMENTS
   PATH  Root directory containing dumps
 
 OPTIONS
+  --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
@@ -614,6 +628,7 @@ ARGUMENTS
   INDEX  Index name
 
 OPTIONS
+  --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --help                   show CLI help
@@ -640,6 +655,7 @@ ARGUMENTS
   PATH  Dump directory or file
 
 OPTIONS
+  --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
@@ -725,6 +741,7 @@ USAGE
   $ kourou profile:export
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -750,6 +767,7 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -771,6 +789,7 @@ USAGE
   $ kourou role:export
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -796,6 +815,7 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
+  --api-key=api-key     Kuzzle user api-key
   --as=as               Impersonate a user
   --help                show CLI help
   --host=host           [default: localhost] Kuzzle server host
@@ -819,6 +839,7 @@ USAGE
 
 OPTIONS
   -v, --var=var        Additional arguments injected into the code. (eg: --var 'index="iot-data"'
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --code=code          Code to execute. Will be read from STDIN if available.
   --editor             Open an editor (EDITOR env variable) to edit the code before executing it.
@@ -878,6 +899,7 @@ OPTIONS
   -a, --arg=arg                Additional argument. Repeatable. (e.g. "-a refresh=wait_for")
   -c, --collection=collection  Collection argument
   -i, --index=index            Index argument
+  --api-key=api-key            Kuzzle user api-key
   --as=as                      Impersonate a user
   --body=body                  [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
 
@@ -969,6 +991,7 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
 
   --display=display    [default: result] Path of the property to display from the notification (empty string to display
@@ -1017,6 +1040,7 @@ USAGE
   $ kourou user:export
 
 OPTIONS
+  --api-key=api-key                        Kuzzle user api-key
   --as=as                                  Impersonate a user
   --batch-size=batch-size                  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --exclude=exclude                        Exclude users by matching their IDs with a regexp
@@ -1068,6 +1092,7 @@ USAGE
   $ kourou user:export-mappings
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -1093,6 +1118,7 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -1117,6 +1143,7 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host

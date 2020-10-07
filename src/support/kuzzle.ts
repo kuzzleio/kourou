@@ -32,6 +32,10 @@ export const kuzzleFlags = {
   }),
   as: flags.string({
     description: 'Impersonate a user',
+  }),
+  'api-key': flags.string({
+    description: 'Kuzzle user api-key',
+    default: process.env.KUZZLE_API_KEY || undefined,
   })
 }
 
@@ -50,6 +54,8 @@ export class KuzzleSDK {
 
   private protocol: string;
 
+  private apikey: string;
+
   private refreshTimer?: NodeJS.Timeout;
 
   constructor(options: any) {
@@ -59,6 +65,7 @@ export class KuzzleSDK {
     this.username = options.username
     this.password = options.password
     this.protocol = options.protocol
+    this.apikey = options['api-key']
   }
 
   public async init(logger: any) {
@@ -90,7 +97,9 @@ export class KuzzleSDK {
 
     await this.sdk.connect()
 
-    if (this.username !== 'anonymous') {
+    if (this.apikey) {
+      this.sdk.jwt = this.apikey
+    } else if (this.username !== 'anonymous') {
       const credentials = {
         username: this.username,
         password: this.password,

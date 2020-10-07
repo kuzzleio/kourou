@@ -33,6 +33,7 @@ class ExecutionError extends Error {
  * @example
  * await execute('ls', '-la')
  * await execute('ls', '-la', { cwd: '/home/aschen' })
+ * @returns {ProcessExecutor<ExecutionResult>} ProcessExecutor
  */
 export function execute(...args: any[]): ProcessExecutor<ExecutionResult> {
   let options: any
