@@ -95,6 +95,11 @@ It will automatically infer and accept the following lists of arguments:
 
 .
 
+ - `<command> <body>`
+    - _eg: `kourou security:createUser '{"content":{"profileIds":["default"]}}' --id yagmur` _
+
+.
+
  - `<command> <index> <collection>`
     - _eg: `kourou collection:truncate iot sensors` _
 
