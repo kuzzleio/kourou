@@ -27,7 +27,7 @@ const checkStackDetails = (
   expect(stackLine[9]).to.contain(expectedValues.redisPort)
 }
 
-describe('instance:list', () => {
+xdescribe('instance:list', () => {
   test
     .timeout(TEST_TIMEOUT)
     .stdout({ print: PRINT_STDOUT })
