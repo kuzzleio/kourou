@@ -94,6 +94,7 @@ export abstract class Kommand extends Command {
     }
     finally {
       this.sdk?.disconnect()
+      // eslint-disable-next-line
       process.exit(this.exitCode)
     }
   }
