@@ -902,6 +902,7 @@ OPTIONS
   --api-key=api-key            Kuzzle user api-key
   --as=as                      Impersonate a user
   --body=body                  [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
+  --body-editor                Open an editor (EDITOR env variable) to edit the body before sending.
 
   --display=display            [default: result] Path of the property to display from the response (empty string to
                                display everything)
