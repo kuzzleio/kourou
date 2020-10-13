@@ -76,6 +76,9 @@
       "api-key": {
         "description": "manage API keys"
       },
+      "app": {
+        "description": "create, manage and run applications"
+      },
       "collection": {
         "description": "dump or restore an entire data collection"
       },

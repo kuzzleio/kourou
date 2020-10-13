@@ -2,7 +2,9 @@ import path from 'path'
 import fs from 'fs'
 
 import { flags } from '@oclif/command'
+import cli from 'cli-ux'
 import _ from 'lodash'
+import chalk from 'chalk'
 
 import { Kommand } from '../../common'
 import { execute } from '../../support/execute'
@@ -12,7 +14,7 @@ const templatesDir = path.join(__dirname, '..', '..', 'templates')
 export default class AppScaffold extends Kommand {
   static initSdk = false
 
-  static description = 'Scaffold a new Kuzzle application'
+  static description = 'Scaffolds a new Kuzzle application'
 
   static flags = {
     help: flags.help(),
@@ -30,12 +32,12 @@ export default class AppScaffold extends Kommand {
     const templatePath = path.join(templatesDir, 'app-scaffold', 'ts')
     await this.renderTemplates(templatePath, templatePath)
 
-    this.logInfo('Installing latest Kuzzle version via NPM...')
+    cli.action.start('Installing latest Kuzzle version via NPM...')
 
     await execute('npm', 'install', 'kuzzle', { cwd: this.args.name })
     await execute('npm', 'install', { cwd: this.args.name })
 
-    this.logOk(`Scaffolding complete. Start to develop you application in .${path.sep}${this.args.name}${path.sep}`)
+    cli.action.stop(`\n${chalk.green(`[✔]Scaffolding complete. Start to develop you application in .${path.sep}${this.args.name}${path.sep}`)}`)
   }
 
   async renderTemplates(directory: string, templatePath: string) {

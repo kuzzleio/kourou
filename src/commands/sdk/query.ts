@@ -71,6 +71,9 @@ Default fallback to API method
     editor: flags.boolean({
       description: 'Open an editor (EDITOR env variable) to edit the request before sending.'
     }),
+    'body-editor': flags.boolean({
+      description: 'Open an editor (EDITOR env variable) to edit the body before sending.'
+    }),
     index: flags.string({
       char: 'i',
       description: 'Index argument'
@@ -123,8 +126,14 @@ Default fallback to API method
     }
 
     // content from user editor
-    if (this.flags.editor) {
+    if (this.flags.editor && this.flags['body-editor']) {
+      throw new Error('You cannot specify --editor and --body-editor at the same time')
+    }
+    else if (this.flags.editor) {
       request = this.fromEditor(request, { json: true })
+    }
+    else if (this.flags['body-editor']) {
+      request.body = this.fromEditor(request.body, { json: true })
     }
 
     const response = await this.sdk?.query(request)
