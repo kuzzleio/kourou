@@ -42,6 +42,7 @@ Default fallback to API method
   and action as first argument.
   Kourou will try to infer the first arguments to one the following pattern:
     - <command> <index>
+    - <command> <body>
     - <command> <index> <collection>
     - <command> <index> <collection> <id>
     - <command> <index> <collection> <body>
@@ -51,6 +52,7 @@ Default fallback to API method
 
   Examples:
     - kourou collection:list iot
+    - kourou security:createUser '{"content":{"profileIds":["default"]}}' --id yagmur
     - kourou collection:delete iot sensors
     - kourou document:createOrReplace iot sensors sigfox-1 '{}'
     - kourou bulk:import iot sensors '{bulkData: [...]}'

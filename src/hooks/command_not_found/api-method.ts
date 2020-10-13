@@ -15,6 +15,7 @@ import SdkQuery from '../../commands/sdk/query'
  *  - <index> <collection> <id>
  *  - <index> <collection>
  *  - <index>
+ *  - <body>
  *
  * This is mainly to match easily methods from the document, bulk, realtime
  * and collection controllers.
@@ -52,16 +53,20 @@ const hook: Hook<'command_not_found'> = async function (opts) {
   const args = process.argv.slice(3)
   const commandArgs = [opts.id]
 
-  // first positional argument (index)
-  if (args[0]
-    && args[0].charAt(0) !== '-'
-    && !args.includes('-i')
-    && !args.includes('--index')
-  ) {
-    commandArgs.push('-i')
-    commandArgs.push(args[0])
+  // first positional argument (index or body)
+  if (args[0] && args[0].charAt(0) !== '-') {
+    if (args[0].includes('{') && !args.includes('--body')) {
+      commandArgs.push('--body')
+      commandArgs.push(args[0])
 
-    args.splice(0, 1)
+      args.splice(0, 1)
+    }
+    else if (!args.includes('--index') && !args.includes('-i')) {
+      commandArgs.push('-i')
+      commandArgs.push(args[0])
+
+      args.splice(0, 1)
+    }
   }
   else {
     return callSdkQuery([...commandArgs, ...args])

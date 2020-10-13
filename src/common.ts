@@ -9,6 +9,8 @@ import { Editor, EditorParams } from './support/editor'
 export abstract class Kommand extends Command {
   protected sdk?: KuzzleSDK
 
+  private exitCode = 0
+
   public args: any
 
   public flags: any
@@ -46,7 +48,7 @@ export abstract class Kommand extends Command {
   }
 
   public logKo(message?: string): void {
-    process.exitCode = 1
+    this.exitCode = 1
     this.log(chalk.red(`[X] ${message}`))
   }
 
@@ -92,6 +94,8 @@ export abstract class Kommand extends Command {
     }
     finally {
       this.sdk?.disconnect()
+      // eslint-disable-next-line
+      process.exit(this.exitCode)
     }
   }
 
