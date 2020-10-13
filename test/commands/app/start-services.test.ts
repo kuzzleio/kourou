@@ -4,7 +4,7 @@ import { execSync } from 'child_process'
 const SECOND = 1000
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-describe('app:start-services', () => {
+xdescribe('app:start-services', () => {
   test
     .timeout(50 * SECOND)
     .stdout({ print: false })
