@@ -1,18 +1,18 @@
 import { flags } from '@oclif/command'
 import _ from 'lodash'
 
-import { Kommand } from '../common'
-import { kuzzleFlags } from '../support/kuzzle'
+import { Kommand } from '../../common'
+import { kuzzleFlags } from '../../support/kuzzle'
 
 export default class RealtimeSubscribe extends Kommand {
   static description = 'Subscribes to realtime notifications'
 
   static examples = [
-    'kourou subscribe iot-data sensors',
-    'kourou subscribe iot-data sensors --filters \'{ range: { temperature: { gt: 0 } } }\'',
-    'kourou subscribe iot-data sensors --filters \'{ exists: "position" }\' --scope out',
-    'kourou subscribe iot-data sensors --users all --volatile \'{ clientId: "citizen-kane" }\'',
-    'kourou subscribe iot-data sensors --display result._source.temperature',
+    'kourou realtime:subscribe iot-data sensors',
+    'kourou realtime:subscribe iot-data sensors --filters \'{ range: { temperature: { gt: 0 } } }\'',
+    'kourou realtime:subscribe iot-data sensors --filters \'{ exists: "position" }\' --scope out',
+    'kourou realtime:subscribe iot-data sensors --users all --volatile \'{ clientId: "citizen-kane" }\'',
+    'kourou realtime:subscribe iot-data sensors --display result._source.temperature',
   ]
 
   static flags = {

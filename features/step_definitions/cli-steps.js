@@ -1,12 +1,13 @@
-const _ = require('lodash')
 const fs = require('fs')
+
+const _ = require('lodash')
 const { Then } = require('cucumber')
 
 // this need to build the lib with "npm run build" first
 const { execute } = require('../../lib/support/execute')
 
 Then('I subscribe to {string}:{string}', async function (index, collection) {
-  this.props.executor = execute('./bin/run', 'subscribe', index, collection)
+  this.props.executor = execute('./bin/run', 'realtime:subscribe', index, collection)
 
   // wait to connect to Kuzzle
   await new Promise(resolve => setTimeout(resolve, 4000))
