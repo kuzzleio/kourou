@@ -103,10 +103,6 @@ Default fallback to API method
   async runSafe() {
     const [controller, action] = this.args['controller:action'].split(':')
 
-    if (controller === 'realtime' && action === 'subscribe') {
-      throw new Error('Use the "subscribe" command to listen to realtime notifications')
-    }
-
     const requestArgs: any = {}
 
     requestArgs.index = this.flags.index
