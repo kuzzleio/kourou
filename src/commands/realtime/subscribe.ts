@@ -70,7 +70,7 @@ export default class RealtimeSubscribe extends Kommand {
       this.args.collection,
       this.parseJs(filters),
       (notification: any) => {
-        this.logInfo('New notification')
+        this.logInfo(`New notification triggered by API action "${notification.controller}:${notification.action}"`)
 
         const display = this.flags.display === ''
           ? notification

@@ -1,7 +1,6 @@
 import { flags } from '@oclif/command'
 
-// tslint:disable-next-line
-const { Http, WebSocket, Kuzzle } = require('kuzzle-sdk')
+import { Http, WebSocket, Kuzzle } from 'kuzzle-sdk'
 
 const SECOND = 1000
 
@@ -40,7 +39,7 @@ export const kuzzleFlags = {
 }
 
 export class KuzzleSDK {
-  public sdk: any;
+  public sdk: Kuzzle;
 
   private host: string;
 
@@ -66,6 +65,9 @@ export class KuzzleSDK {
     this.password = options.password
     this.protocol = options.protocol
     this.apikey = options['api-key']
+
+    // Instantiate a fake SDK in the constructor to please TS
+    this.sdk = new Kuzzle(new WebSocket('nowhere'))
   }
 
   public async init(logger: any) {
