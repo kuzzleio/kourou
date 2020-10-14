@@ -43,6 +43,7 @@ class ApiKeySearch extends Kommand {
       for (const { _id, _source } of result.hits) {
         this.log(` - Key "${_id}"`)
         this.log(`    Description: ${_source.description}`)
+        this.log(`    Fingerprint: ${_source.fingerprint}`)
         this.log(`    Expires at: ${_source.expiresAt}`)
       }
     }
