@@ -28,7 +28,7 @@ class ApiKeySearch extends Kommand {
       }
     }
 
-    const result = await this.sdk?.security.searchApiKeys(
+    const result = await this.sdk.security.searchApiKeys(
       this.args.user,
       query,
       {

@@ -58,13 +58,13 @@ export default class DocumentSearch extends Kommand {
       request = this.fromEditor(request, { json: true })
     }
 
-    const { result } = await this.sdk?.query(request)
+    const { result } = await this.sdk.query(request)
 
-    for (const document of result.hits) {
+    for (const document of result?.hits) {
       this.logInfo(`Document ID: ${document._id}`)
       this.log(`Content: ${JSON.stringify(document._source, null, 2)}`)
     }
 
-    this.logOk(`${result.hits.length} documents fetched on a total of ${result.total}`)
+    this.logOk(`${result?.hits.length} documents fetched on a total of ${result?.total}`)
   }
 }

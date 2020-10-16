@@ -134,7 +134,7 @@ Default fallback to API method
       request.body = this.fromEditor(request.body, { json: true })
     }
 
-    const response = await this.sdk?.query(request)
+    const response = await this.sdk.query(request)
 
     const display = this.flags.display === ''
       ? response

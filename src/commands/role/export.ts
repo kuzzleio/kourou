@@ -46,7 +46,7 @@ export default class RoleDump extends Kommand {
       size: 100
     }
 
-    let result = await this.sdk?.security.searchRoles({}, options)
+    let result = await this.sdk.security.searchRoles({}, options)
 
     const roles: any = {}
 

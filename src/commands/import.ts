@@ -98,7 +98,7 @@ export default class Import extends Kommand {
         const dump = JSON.parse(fs.readFileSync(file, 'utf8'))
 
         const mapping = dump.content.mapping
-        await this.sdk?.security.updateUserMapping({ properties: mapping })
+        await this.sdk.security.updateUserMapping({ properties: mapping })
 
         this.logOk('[users] collection mappings imported')
       }

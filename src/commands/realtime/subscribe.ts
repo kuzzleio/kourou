@@ -46,7 +46,7 @@ export default class RealtimeSubscribe extends Kommand {
   static args = [
     { name: 'index', description: 'Index name', required: true },
     { name: 'collection', description: 'Collection name', required: true },
-    { name: 'filter', description: 'Set of Koncorde filters' },
+    { name: 'filters', description: 'Set of Koncorde filters' },
   ]
 
   static readStdin = true
@@ -65,7 +65,7 @@ export default class RealtimeSubscribe extends Kommand {
       filters = this.fromEditor(filters, { json: true })
     }
 
-    await this.sdk?.realtime.subscribe(
+    await this.sdk.realtime.subscribe(
       this.args.index,
       this.args.collection,
       this.parseJs(filters),

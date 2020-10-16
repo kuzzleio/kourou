@@ -163,7 +163,7 @@ export class KuzzleSDK {
   }
 
   disconnect() {
-    this.sdk?.disconnect()
+    this.sdk.disconnect()
 
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer)
