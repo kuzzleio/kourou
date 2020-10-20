@@ -130,7 +130,7 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
 * [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
-* [`kourou document:search INDEX COLLECTION`](#kourou-documentsearch-index-collection)
+* [`kourou document:search INDEX COLLECTION [QUERY]`](#kourou-documentsearch-index-collection-query)
 * [`kourou es:get INDEX ID`](#kourou-esget-index-id)
 * [`kourou es:insert INDEX`](#kourou-esinsert-index)
 * [`kourou es:list-index`](#kourou-eslist-index)
@@ -147,11 +147,11 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou instance:spawn`](#kourou-instancespawn)
 * [`kourou profile:export`](#kourou-profileexport)
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
+* [`kourou realtime:subscribe INDEX COLLECTION`](#kourou-realtimesubscribe-index-collection)
 * [`kourou role:export`](#kourou-roleexport)
 * [`kourou role:import PATH`](#kourou-roleimport-path)
 * [`kourou sdk:execute`](#kourou-sdkexecute)
 * [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
-* [`kourou subscribe INDEX COLLECTION`](#kourou-subscribe-index-collection)
 * [`kourou user:export`](#kourou-userexport)
 * [`kourou user:export-mappings`](#kourou-userexport-mappings)
 * [`kourou user:import PATH`](#kourou-userimport-path)
@@ -417,17 +417,18 @@ EXAMPLE
 
 _See code: [src/commands/config/diff.ts](src/commands/config/diff.ts)_
 
-## `kourou document:search INDEX COLLECTION`
+## `kourou document:search INDEX COLLECTION [QUERY]`
 
 Searches for documents
 
 ```
 USAGE
-  $ kourou document:search INDEX COLLECTION
+  $ kourou document:search INDEX COLLECTION [QUERY]
 
 ARGUMENTS
   INDEX       Index name
   COLLECTION  Collection name
+  QUERY       Query in JS or JSON format.
 
 OPTIONS
   --api-key=api-key    Kuzzle user api-key
@@ -439,7 +440,6 @@ OPTIONS
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
-  --query=query        [default: {}] Query in JS or JSON format.
   --scroll=scroll      Optional scroll TTL
   --size=size          Optional page size
   --sort=sort          [default: {}] Sort in JS or JSON format.
@@ -447,7 +447,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
-  kourou document:search iot sensors --query '{ term: { name: "corona" } }'
+  kourou document:search iot sensors '{ term: { name: "corona" } }'
   kourou document:search iot sensors --editor
 ```
 
@@ -785,6 +785,59 @@ OPTIONS
 
 _See code: [src/commands/profile/import.ts](src/commands/profile/import.ts)_
 
+## `kourou realtime:subscribe INDEX COLLECTION`
+
+Subscribes to realtime notifications
+
+```
+USAGE
+  $ kourou realtime:subscribe INDEX COLLECTION
+
+ARGUMENTS
+  INDEX       Index name
+  COLLECTION  Collection name
+
+OPTIONS
+  --api-key=api-key    Kuzzle user api-key
+  --as=as              Impersonate a user
+
+  --display=display    [default: result] Path of the property to display from the notification (empty string to display
+                       everything)
+
+  --editor             Open an editor (EDITOR env variable) to edit the filters before subscribing.
+
+  --filters=filters    [default: {}] Set of Koncorde filters
+
+  --help               show CLI help
+
+  --host=host          [default: localhost] Kuzzle server host
+
+  --password=password  Kuzzle user password
+
+  --port=port          [default: 7512] Kuzzle server port
+
+  --protocol=protocol  [default: websocket] Kuzzle protocol (only websocket for realtime)
+
+  --scope=scope        [default: all] Subscribe to document entering or leaving the scope (all, in, out, none)
+
+  --ssl                Use SSL to connect to Kuzzle
+
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+  --users=users        [default: all] Subscribe to users entering or leaving the room (all, in, out, none)
+
+  --volatile=volatile  [default: {}] Additional subscription information used in user join/leave notifications
+
+EXAMPLES
+  kourou realtime:subscribe iot-data sensors
+  kourou realtime:subscribe iot-data sensors --filters '{ range: { temperature: { gt: 0 } } }'
+  kourou realtime:subscribe iot-data sensors --filters '{ exists: "position" }' --scope out
+  kourou realtime:subscribe iot-data sensors --users all --volatile '{ clientId: "citizen-kane" }'
+  kourou realtime:subscribe iot-data sensors --display result._source.temperature
+```
+
+_See code: [src/commands/realtime/subscribe.ts](src/commands/realtime/subscribe.ts)_
+
 ## `kourou role:export`
 
 Exports roles
@@ -967,6 +1020,7 @@ DESCRIPTION
      and action as first argument.
      Kourou will try to infer the first arguments to one the following pattern:
        - <command> <index>
+       - <command> <body>
        - <command> <index> <collection>
        - <command> <index> <collection> <id>
        - <command> <index> <collection> <body>
@@ -976,6 +1030,7 @@ DESCRIPTION
 
      Examples:
        - kourou collection:list iot
+       - kourou security:createUser '{"content":{"profileIds":["default"]}}' --id yagmur
        - kourou collection:delete iot sensors
        - kourou document:createOrReplace iot sensors sigfox-1 '{}'
        - kourou bulk:import iot sensors '{bulkData: [...]}'
@@ -983,59 +1038,6 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/sdk/query.ts](src/commands/sdk/query.ts)_
-
-## `kourou subscribe INDEX COLLECTION`
-
-Subscribes to realtime notifications
-
-```
-USAGE
-  $ kourou subscribe INDEX COLLECTION
-
-ARGUMENTS
-  INDEX       Index name
-  COLLECTION  Collection name
-
-OPTIONS
-  --api-key=api-key    Kuzzle user api-key
-  --as=as              Impersonate a user
-
-  --display=display    [default: result] Path of the property to display from the notification (empty string to display
-                       everything)
-
-  --editor             Open an editor (EDITOR env variable) to edit the filters before subscribing.
-
-  --filters=filters    [default: {}] Set of Koncorde filters
-
-  --help               show CLI help
-
-  --host=host          [default: localhost] Kuzzle server host
-
-  --password=password  Kuzzle user password
-
-  --port=port          [default: 7512] Kuzzle server port
-
-  --protocol=protocol  [default: websocket] Kuzzle protocol (only websocket for realtime)
-
-  --scope=scope        [default: all] Subscribe to document entering or leaving the scope (all, in, out, none)
-
-  --ssl                Use SSL to connect to Kuzzle
-
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
-
-  --users=users        [default: all] Subscribe to users entering or leaving the room (all, in, out, none)
-
-  --volatile=volatile  [default: {}] Additional subscription information used in user join/leave notifications
-
-EXAMPLES
-  kourou subscribe iot-data sensors
-  kourou subscribe iot-data sensors --filters '{ range: { temperature: { gt: 0 } } }'
-  kourou subscribe iot-data sensors --filters '{ exists: "position" }' --scope out
-  kourou subscribe iot-data sensors --users all --volatile '{ clientId: "citizen-kane" }'
-  kourou subscribe iot-data sensors --display result._source.temperature
-```
-
-_See code: [src/commands/subscribe.ts](src/commands/subscribe.ts)_
 
 ## `kourou user:export`
 

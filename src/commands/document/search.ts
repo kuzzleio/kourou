@@ -7,15 +7,11 @@ export default class DocumentSearch extends Kommand {
   static description = 'Searches for documents'
 
   static examples = [
-    'kourou document:search iot sensors --query \'{ term: { name: "corona" } }\'',
+    'kourou document:search iot sensors \'{ term: { name: "corona" } }\'',
     'kourou document:search iot sensors --editor',
   ]
 
   static flags = {
-    query: flags.string({
-      description: 'Query in JS or JSON format.',
-      default: '{}'
-    }),
     sort: flags.string({
       description: 'Sort in JS or JSON format.',
       default: '{}'
@@ -38,7 +34,8 @@ export default class DocumentSearch extends Kommand {
 
   static args = [
     { name: 'index', description: 'Index name', required: true },
-    { name: 'collection', description: 'Collection name', required: true }
+    { name: 'collection', description: 'Collection name', required: true },
+    { name: 'query', description: 'Query in JS or JSON format.' },
   ]
 
   async runSafe() {
@@ -51,7 +48,7 @@ export default class DocumentSearch extends Kommand {
       size: this.flags.size,
       scroll: this.flags.scroll,
       body: {
-        query: this.parseJs(this.flags.query),
+        query: this.parseJs(this.args.query || '{}'),
         sort: this.parseJs(this.flags.sort)
       }
     }
@@ -61,13 +58,13 @@ export default class DocumentSearch extends Kommand {
       request = this.fromEditor(request, { json: true })
     }
 
-    const { result } = await this.sdk?.query(request)
+    const { result } = await this.sdk.query(request)
 
-    for (const document of result.hits) {
+    for (const document of result?.hits) {
       this.logInfo(`Document ID: ${document._id}`)
       this.log(`Content: ${JSON.stringify(document._source, null, 2)}`)
     }
 
-    this.logOk(`${result.hits.length} documents fetched on a total of ${result.total}`)
+    this.logOk(`${result?.hits.length} documents fetched on a total of ${result?.total}`)
   }
 }

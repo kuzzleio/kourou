@@ -21,7 +21,7 @@ class ApiKeyDelete extends Kommand {
   ];
 
   async runSafe() {
-    await this.sdk?.security.deleteApiKey(this.args.user, this.args.id)
+    await this.sdk.security.deleteApiKey(this.args.user, this.args.id)
 
     this.logOk(`Successfully deleted API Key "${this.args.id}" of user "${this.args.user}"`)
   }
