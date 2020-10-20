@@ -28,7 +28,7 @@ export default class UserExportMappings extends Kommand {
 
     fs.mkdirSync(this.flags.path, { recursive: true })
 
-    const mapping = await this.sdk?.security.getUserMapping()
+    const mapping = await this.sdk.security.getUserMapping()
 
     const dump = {
       type: 'usersMappings',

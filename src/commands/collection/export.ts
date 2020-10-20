@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import  fs from 'fs'
+import fs from 'fs'
 import path from 'path'
 
 import { Kommand } from '../../common'
@@ -53,10 +53,10 @@ export default class CollectionExport extends Kommand {
       query = this.fromEditor(query, { json: true })
     }
 
-    const countAll = await this.sdk?.document.count(this.args.index, this.args.collection)
-    const count = await this.sdk?.document.count(this.args.index, this.args.collection, { query })
+    const countAll = await this.sdk.document.count(this.args.index, this.args.collection)
+    const count = await this.sdk.document.count(this.args.index, this.args.collection, { query })
 
-    this.logInfo(`Dumping ${count} of ${countAll} documents from collection "${this.args.index}:${this.args.collection}" in ${path}/ ...`)
+    this.logInfo(`Dumping ${count} of ${countAll} documents from collection "${this.args.index}:${this.args.collection}" in ${path} ...`)
 
     fs.mkdirSync(exportPath, { recursive: true })
 

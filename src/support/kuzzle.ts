@@ -1,7 +1,6 @@
 import { flags } from '@oclif/command'
 
-// tslint:disable-next-line
-const { Http, WebSocket, Kuzzle } = require('kuzzle-sdk')
+import { Http, WebSocket, Kuzzle } from 'kuzzle-sdk'
 
 const SECOND = 1000
 
@@ -32,11 +31,15 @@ export const kuzzleFlags = {
   }),
   as: flags.string({
     description: 'Impersonate a user',
+  }),
+  'api-key': flags.string({
+    description: 'Kuzzle user api-key',
+    default: process.env.KUZZLE_API_KEY || undefined,
   })
 }
 
 export class KuzzleSDK {
-  public sdk: any;
+  public sdk: Kuzzle;
 
   private host: string;
 
@@ -50,6 +53,8 @@ export class KuzzleSDK {
 
   private protocol: string;
 
+  private apikey: string;
+
   private refreshTimer?: NodeJS.Timeout;
 
   constructor(options: any) {
@@ -59,6 +64,10 @@ export class KuzzleSDK {
     this.username = options.username
     this.password = options.password
     this.protocol = options.protocol
+    this.apikey = options['api-key']
+
+    // Instantiate a fake SDK in the constructor to please TS
+    this.sdk = new Kuzzle(new WebSocket('nowhere'))
   }
 
   public async init(logger: any) {
@@ -90,7 +99,9 @@ export class KuzzleSDK {
 
     await this.sdk.connect()
 
-    if (this.username !== 'anonymous') {
+    if (this.apikey) {
+      this.sdk.jwt = this.apikey
+    } else if (this.username !== 'anonymous') {
       const credentials = {
         username: this.username,
         password: this.password,
@@ -152,7 +163,7 @@ export class KuzzleSDK {
   }
 
   disconnect() {
-    this.sdk?.disconnect()
+    this.sdk.disconnect()
 
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer)

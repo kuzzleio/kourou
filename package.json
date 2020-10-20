@@ -1,7 +1,7 @@
 {
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kourou": "./bin/run"
@@ -17,9 +17,8 @@
     "bluebird": "^3.7.2",
     "chalk": "^3.0.0",
     "cli-ux": "^5.4.6",
-    "execa": "^3.4.0",
     "inquirer": "^7.1.0",
-    "kuzzle-sdk": "^7.2.0",
+    "kuzzle-sdk": "^7.4.0",
     "kuzzle-vault": "^2.0.0",
     "listr": "^0.14.3",
     "ndjson": "^1.5.0",
@@ -77,6 +76,9 @@
       "api-key": {
         "description": "manage API keys"
       },
+      "app": {
+        "description": "create, manage and run applications"
+      },
       "collection": {
         "description": "dump or restore an entire data collection"
       },
@@ -111,10 +113,13 @@
   },
   "repository": "kuzzleio/kourou",
   "scripts": {
+    "build": "tsc -b",
+    "dev": "./bin/run",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "version": "oclif-dev readme && git add README.md",
-    "test:lint": "eslint . --ext .ts --config .eslintrc",
+    "test:lint": "eslint src/ test/ --ext .ts --config .eslintrc",
+    "test:lint:fix": "eslint src/ test/ --ext .ts --fix --config .eslintrc",
     "test:functional": "npm run test:functional:stdout && npm run test:functional:cucumber",
     "test:functional:stdout": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "test:functional:cucumber": "./node_modules/.bin/cucumber-js"

@@ -28,7 +28,7 @@ class ApiKeyCreate extends Kommand {
   ]
 
   async runSafe() {
-    const apiKey = await this.sdk?.security.createApiKey(
+    const apiKey = await this.sdk.security.createApiKey(
       this.args.user,
       this.flags.description,
       {

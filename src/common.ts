@@ -7,7 +7,10 @@ import { KuzzleSDK } from './support/kuzzle'
 import { Editor, EditorParams } from './support/editor'
 
 export abstract class Kommand extends Command {
-  protected sdk?: KuzzleSDK
+  // Instantiate a dummy SDK to avoid the this.sdk notation everywhere -_-
+  protected sdk: KuzzleSDK = new KuzzleSDK({ host: 'nowhere' })
+
+  private exitCode = 0
 
   public args: any
 
@@ -46,7 +49,7 @@ export abstract class Kommand extends Command {
   }
 
   public logKo(message?: string): void {
-    process.exitCode = 1
+    this.exitCode = 1
     this.log(chalk.red(`[X] ${message}`))
   }
 
@@ -79,7 +82,7 @@ export abstract class Kommand extends Command {
       if (this.flags.as) {
         this.logInfo(`Impersonate user "${this.flags.as}"`)
 
-        await this.sdk?.impersonate(this.flags.as, async () => {
+        await this.sdk.impersonate(this.flags.as, async () => {
           await this.runSafe()
         })
       }
@@ -91,7 +94,9 @@ export abstract class Kommand extends Command {
       this.logKo(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
     }
     finally {
-      this.sdk?.disconnect()
+      this.sdk.disconnect()
+      // eslint-disable-next-line
+      process.exit(this.exitCode)
     }
   }
 

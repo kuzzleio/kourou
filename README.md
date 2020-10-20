@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.14.0 linux-x64 node-v12.16.3
+kourou/0.15.0 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -38,30 +38,35 @@ Commands that needs to send requests to Kuzzle API can specify the Kuzzle server
 
 By command line:
 ```
+
   --host=host                    [default: localhost] Kuzzle server host
   --port=port                    [default: 7512] Kuzzle server port
   --username=username            [default: anonymous] Kuzzle user
   --password=password            Kuzzle user password
+  --api-key=api-key              Kuzzle user api-key
   --ssl                          [default: true for port 443] Use SSL to connect to Kuzzle
-  --protocol                     [default: http] Protocol used to connect to Kuzzle (`http` or `ws`)
-```
+  --protocol                     [default: http] Protocol used to connect to Kuzzle ( `http` or `ws` )
+
+``` 
 
 By environment variables:
 ```
+
   KUZZLE_HOST                [default: localhost] Kuzzle server host
   KUZZLE_PORT                [default: 7512] Kuzzle server port
   KUZZLE_USERNAME            [default: anonymous] Kuzzle user
   KUZZLE_PASSWORD            Kuzzle user password
+  KUZZLE_API_KEY             Kuzzle user api-key
   KUZZLE_SSL                 Use SSL to connect to Kuzzle
-  KUZZLE_PROTOCOL            Protocol used to connect to Kuzzle (`http` or `ws`)
-```
+  KUZZLE_PROTOCOL            Protocol used to connect to Kuzzle ( `http` or `ws` )
+
+``` 
 
 ## User impersonation
 
-You can impersonate a user before executing a command with the `--as` flag and a user `kuid`.
+You can impersonate a user before executing a command with the `--as` flag and a user `kuid` .
 
-User impersonation require the following rights for the authenticated user: `security:createApiKey`, `security:deleteApiKey`
-
+User impersonation require the following rights for the authenticated user: `security:createApiKey` , `security:deleteApiKey`
 ```bash
 $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password admin
 
@@ -77,33 +82,38 @@ $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password a
 
 When no command is found, Kourou will try to execute the given command with the `sdk:query` command.  
 
-The first argument has to be the name of the controller and the action separated by a semicolon (eg `document:create`)
+The first argument has to be the name of the controller and the action separated by a semicolon (eg `document:create` )
 
-Kourou will try to infer common arguments like `index`, `collection`, `_id` or `body`.  
+Kourou will try to infer common arguments like `index` , `collection` , `_id` or `body` .  
 
 It will automatically infer and accept the following lists of arguments:
  - `<command> <index>`
-    * _eg: `kourou collection:list iot`_
+    - _eg: `kourou collection:list iot` _
+
 .
 
+ - `<command> <body>`
+    - _eg: `kourou security:createUser '{"content":{"profileIds":["default"]}}' --id yagmur` _
+
+.
 
  - `<command> <index> <collection>`
-    * _eg: `kourou collection:truncate iot sensors`_
-.
+    - _eg: `kourou collection:truncate iot sensors` _
 
+.
 
  - `<command> <index> <collection> <body>`
-    * _eg: `kourou bulk:import iot sensors '{bulkData: []}'`_
-.
+    - _eg: `kourou bulk:import iot sensors '{bulkData: []}'` _
 
+.
 
  - `<command> <index> <collection> <id>`
-    * _eg: `kourou document:delete iot sensors sigfox-123`_
+    - _eg: `kourou document:delete iot sensors sigfox-123` _
+
 .
 
-
  - `<command> <index> <collection> <id> <body>`
-    * _eg: `kourou document:create iot sensors sigfox-123 '{temperature: 42}'`_
+    - _eg: `kourou document:create iot sensors sigfox-123 '{temperature: 42}'` _
 
 Then any argument will be passed as-is to the `sdk:query` method.
 
@@ -114,11 +124,13 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou api-key:create USER`](#kourou-api-keycreate-user)
 * [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
+* [`kourou app:scaffold NAME`](#kourou-appscaffold-name)
+* [`kourou app:start-services`](#kourou-appstart-services)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
 * [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
-* [`kourou document:search INDEX COLLECTION`](#kourou-documentsearch-index-collection)
+* [`kourou document:search INDEX COLLECTION [QUERY]`](#kourou-documentsearch-index-collection-query)
 * [`kourou es:get INDEX ID`](#kourou-esget-index-id)
 * [`kourou es:insert INDEX`](#kourou-esinsert-index)
 * [`kourou es:list-index`](#kourou-eslist-index)
@@ -135,11 +147,11 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou instance:spawn`](#kourou-instancespawn)
 * [`kourou profile:export`](#kourou-profileexport)
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
+* [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
 * [`kourou role:export`](#kourou-roleexport)
 * [`kourou role:import PATH`](#kourou-roleimport-path)
 * [`kourou sdk:execute`](#kourou-sdkexecute)
 * [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
-* [`kourou subscribe INDEX COLLECTION`](#kourou-subscribe-index-collection)
 * [`kourou user:export`](#kourou-userexport)
 * [`kourou user:export-mappings`](#kourou-userexport-mappings)
 * [`kourou user:import PATH`](#kourou-userimport-path)
@@ -162,6 +174,7 @@ ARGUMENTS
   TOKEN  API key token
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -190,6 +203,7 @@ ARGUMENTS
 
 OPTIONS
   -d, --description=description  (required) API Key description
+  --api-key=api-key              Kuzzle user api-key
   --as=as                        Impersonate a user
   --expire=expire                [default: -1] API Key validity
   --help                         show CLI help
@@ -217,6 +231,7 @@ ARGUMENTS
   ID    API Key unique ID
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -244,6 +259,7 @@ ARGUMENTS
   USER  User kuid
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --filter=filter      Filter to match the API Key descriptions
   --help               show CLI help
@@ -256,6 +272,38 @@ OPTIONS
 ```
 
 _See code: [src/commands/api-key/search.ts](src/commands/api-key/search.ts)_
+
+## `kourou app:scaffold NAME`
+
+Scaffolds a new Kuzzle application
+
+```
+USAGE
+  $ kourou app:scaffold NAME
+
+ARGUMENTS
+  NAME  Application name
+
+OPTIONS
+  --help  show CLI help
+```
+
+_See code: [src/commands/app/scaffold.ts](src/commands/app/scaffold.ts)_
+
+## `kourou app:start-services`
+
+Starts Kuzzle services (Elasticsearch and Redis)
+
+```
+USAGE
+  $ kourou app:start-services
+
+OPTIONS
+  --check  Check prerequisite before running services
+  --help   show CLI help
+```
+
+_See code: [src/commands/app/start-services.ts](src/commands/app/start-services.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
@@ -271,6 +319,7 @@ ARGUMENTS
   BODY        Collection mappings and settings in JS or JSON format. Will be read from STDIN if available
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -296,6 +345,7 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
+  --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --editor                 Open an editor (EDITOR env variable) to edit the query before sending
@@ -328,6 +378,7 @@ ARGUMENTS
   PATH  Dump directory path
 
 OPTIONS
+  --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --collection=collection  If set, override the collection destination name
@@ -366,19 +417,21 @@ EXAMPLE
 
 _See code: [src/commands/config/diff.ts](src/commands/config/diff.ts)_
 
-## `kourou document:search INDEX COLLECTION`
+## `kourou document:search INDEX COLLECTION [QUERY]`
 
 Searches for documents
 
 ```
 USAGE
-  $ kourou document:search INDEX COLLECTION
+  $ kourou document:search INDEX COLLECTION [QUERY]
 
 ARGUMENTS
   INDEX       Index name
   COLLECTION  Collection name
+  QUERY       Query in JS or JSON format.
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --editor             Open an editor (EDITOR env variable) to edit the request before sending
   --from=from          Optional offset
@@ -387,7 +440,6 @@ OPTIONS
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
-  --query=query        [default: {}] Query in JS or JSON format.
   --scroll=scroll      Optional scroll TTL
   --size=size          Optional page size
   --sort=sort          [default: {}] Sort in JS or JSON format.
@@ -395,7 +447,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
-  kourou document:search iot sensors --query '{ term: { name: "corona" } }'
+  kourou document:search iot sensors '{ term: { name: "corona" } }'
   kourou document:search iot sensors --editor
 ```
 
@@ -554,6 +606,7 @@ ARGUMENTS
   PATH  Root directory containing dumps
 
 OPTIONS
+  --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
@@ -580,6 +633,7 @@ ARGUMENTS
   INDEX  Index name
 
 OPTIONS
+  --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --help                   show CLI help
@@ -606,6 +660,7 @@ ARGUMENTS
   PATH  Dump directory or file
 
 OPTIONS
+  --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
   --help                   show CLI help
@@ -691,6 +746,7 @@ USAGE
   $ kourou profile:export
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -716,6 +772,7 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -728,6 +785,58 @@ OPTIONS
 
 _See code: [src/commands/profile/import.ts](src/commands/profile/import.ts)_
 
+## `kourou realtime:subscribe INDEX COLLECTION [FILTERS]`
+
+Subscribes to realtime notifications
+
+```
+USAGE
+  $ kourou realtime:subscribe INDEX COLLECTION [FILTERS]
+
+ARGUMENTS
+  INDEX       Index name
+  COLLECTION  Collection name
+  FILTERS     Set of Koncorde filters
+
+OPTIONS
+  --api-key=api-key    Kuzzle user api-key
+  --as=as              Impersonate a user
+
+  --display=display    [default: result] Path of the property to display from the notification (empty string to display
+                       everything)
+
+  --editor             Open an editor (EDITOR env variable) to edit the filters before subscribing.
+
+  --help               show CLI help
+
+  --host=host          [default: localhost] Kuzzle server host
+
+  --password=password  Kuzzle user password
+
+  --port=port          [default: 7512] Kuzzle server port
+
+  --protocol=protocol  [default: websocket] Kuzzle protocol (only websocket for realtime)
+
+  --scope=scope        [default: all] Subscribe to document entering or leaving the scope (all, in, out, none)
+
+  --ssl                Use SSL to connect to Kuzzle
+
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+  --users=users        [default: all] Subscribe to users entering or leaving the room (all, in, out, none)
+
+  --volatile=volatile  [default: {}] Additional subscription information used in user join/leave notifications
+
+EXAMPLES
+  kourou realtime:subscribe iot-data sensors
+  kourou realtime:subscribe iot-data sensors '{ range: { temperature: { gt: 0 } } }'
+  kourou realtime:subscribe iot-data sensors '{ exists: "position" }' --scope out
+  kourou realtime:subscribe iot-data sensors --users all --volatile '{ clientId: "citizen-kane" }'
+  kourou realtime:subscribe iot-data sensors --display result._source.temperature
+```
+
+_See code: [src/commands/realtime/subscribe.ts](src/commands/realtime/subscribe.ts)_
+
 ## `kourou role:export`
 
 Exports roles
@@ -737,6 +846,7 @@ USAGE
   $ kourou role:export
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -762,6 +872,7 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
+  --api-key=api-key     Kuzzle user api-key
   --as=as               Impersonate a user
   --help                show CLI help
   --host=host           [default: localhost] Kuzzle server host
@@ -785,6 +896,7 @@ USAGE
 
 OPTIONS
   -v, --var=var        Additional arguments injected into the code. (eg: --var 'index="iot-data"'
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --code=code          Code to execute. Will be read from STDIN if available.
   --editor             Open an editor (EDITOR env variable) to edit the code before executing it.
@@ -844,8 +956,10 @@ OPTIONS
   -a, --arg=arg                Additional argument. Repeatable. (e.g. "-a refresh=wait_for")
   -c, --collection=collection  Collection argument
   -i, --index=index            Index argument
+  --api-key=api-key            Kuzzle user api-key
   --as=as                      Impersonate a user
   --body=body                  [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
+  --body-editor                Open an editor (EDITOR env variable) to edit the body before sending.
 
   --display=display            [default: result] Path of the property to display from the response (empty string to
                                display everything)
@@ -905,6 +1019,7 @@ DESCRIPTION
      and action as first argument.
      Kourou will try to infer the first arguments to one the following pattern:
        - <command> <index>
+       - <command> <body>
        - <command> <index> <collection>
        - <command> <index> <collection> <id>
        - <command> <index> <collection> <body>
@@ -914,6 +1029,7 @@ DESCRIPTION
 
      Examples:
        - kourou collection:list iot
+       - kourou security:createUser '{"content":{"profileIds":["default"]}}' --id yagmur
        - kourou collection:delete iot sensors
        - kourou document:createOrReplace iot sensors sigfox-1 '{}'
        - kourou bulk:import iot sensors '{bulkData: [...]}'
@@ -921,58 +1037,6 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/sdk/query.ts](src/commands/sdk/query.ts)_
-
-## `kourou subscribe INDEX COLLECTION`
-
-Subscribes to realtime notifications
-
-```
-USAGE
-  $ kourou subscribe INDEX COLLECTION
-
-ARGUMENTS
-  INDEX       Index name
-  COLLECTION  Collection name
-
-OPTIONS
-  --as=as              Impersonate a user
-
-  --display=display    [default: result] Path of the property to display from the notification (empty string to display
-                       everything)
-
-  --editor             Open an editor (EDITOR env variable) to edit the filters before subscribing.
-
-  --filters=filters    [default: {}] Set of Koncorde filters
-
-  --help               show CLI help
-
-  --host=host          [default: localhost] Kuzzle server host
-
-  --password=password  Kuzzle user password
-
-  --port=port          [default: 7512] Kuzzle server port
-
-  --protocol=protocol  [default: websocket] Kuzzle protocol (only websocket for realtime)
-
-  --scope=scope        [default: all] Subscribe to document entering or leaving the scope (all, in, out, none)
-
-  --ssl                Use SSL to connect to Kuzzle
-
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
-
-  --users=users        [default: all] Subscribe to users entering or leaving the room (all, in, out, none)
-
-  --volatile=volatile  [default: {}] Additional subscription information used in user join/leave notifications
-
-EXAMPLES
-  kourou subscribe iot-data sensors
-  kourou subscribe iot-data sensors --filters '{ range: { temperature: { gt: 0 } } }'
-  kourou subscribe iot-data sensors --filters '{ exists: "position" }' --scope out
-  kourou subscribe iot-data sensors --users all --volatile '{ clientId: "citizen-kane" }'
-  kourou subscribe iot-data sensors --display result._source.temperature
-```
-
-_See code: [src/commands/subscribe.ts](src/commands/subscribe.ts)_
 
 ## `kourou user:export`
 
@@ -983,6 +1047,7 @@ USAGE
   $ kourou user:export
 
 OPTIONS
+  --api-key=api-key                        Kuzzle user api-key
   --as=as                                  Impersonate a user
   --batch-size=batch-size                  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --exclude=exclude                        Exclude users by matching their IDs with a regexp
@@ -1034,6 +1099,7 @@ USAGE
   $ kourou user:export-mappings
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -1059,6 +1125,7 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -1083,6 +1150,7 @@ ARGUMENTS
   PATH  Dump file
 
 OPTIONS
+  --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host

@@ -27,7 +27,7 @@ export default class UserImportMappings extends Kommand {
 
     const mapping = dump.content.mapping
 
-    await this.sdk?.security.updateUserMapping({ properties: mapping })
+    await this.sdk.security.updateUserMapping({ properties: mapping })
     this.logOk('Users collecction mappings restored')
   }
 }

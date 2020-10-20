@@ -20,7 +20,7 @@ class ApiKeyCheck extends Kommand {
   ]
 
   async runSafe() {
-    const { valid } = await this.sdk?.auth.checkToken(this.args.token)
+    const { valid } = await this.sdk.auth.checkToken(this.args.token)
 
     if (valid) {
       this.logOk('API key is still valid')

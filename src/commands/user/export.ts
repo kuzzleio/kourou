@@ -101,7 +101,7 @@ Examples:
   async _dumpUsers() {
     const users: any = {}
 
-    let results = await this.sdk?.security.searchUsers(
+    let results = await this.sdk.security.searchUsers(
       {},
       { scroll: '5s', size: this.flags['batch-size'] })
 

@@ -22,13 +22,13 @@ export default class CollectionCreate extends Kommand {
   async runSafe() {
     const body = this.stdin ? this.stdin : this.args.body || '{}'
 
-    if (!await this.sdk?.index.exists(this.args.index)) {
-      await this.sdk?.index.create(this.args.index)
+    if (!await this.sdk.index.exists(this.args.index)) {
+      await this.sdk.index.create(this.args.index)
 
       this.logInfo(`Index "${this.args.index}" created`)
     }
 
-    await this.sdk?.collection.create(this.args.index, this.args.collection, this.parseJs(body))
+    await this.sdk.collection.create(this.args.index, this.args.collection, this.parseJs(body))
 
     this.logOk(`Collection "${this.args.index}":"${this.args.collection}" created`)
   }

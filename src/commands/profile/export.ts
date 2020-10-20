@@ -1,4 +1,4 @@
-import  fs from 'fs'
+import fs from 'fs'
 import path from 'path'
 
 import { flags } from '@oclif/command'
@@ -46,7 +46,7 @@ export default class ProfileExport extends Kommand {
       size: 100
     }
 
-    let result = await this.sdk?.security.searchProfiles({}, options)
+    let result = await this.sdk.security.searchProfiles({}, options)
 
     const profiles: any = {}
 

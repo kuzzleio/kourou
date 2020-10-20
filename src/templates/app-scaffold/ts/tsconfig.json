@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "listEmittedFiles": true,
+    "module": "commonjs",
+    "target": "es2020",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  },
+  "rootDir": "lib/",
+  "include": [
+    "app.ts",
+    "lib/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

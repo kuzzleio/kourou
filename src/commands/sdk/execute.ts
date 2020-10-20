@@ -101,7 +101,7 @@ ${variables}
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const sdk: any = this.sdk?.sdk
+    const sdk: any = this.sdk.sdk
 
     let result
     try {

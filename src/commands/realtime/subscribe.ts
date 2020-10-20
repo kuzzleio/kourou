@@ -1,25 +1,21 @@
 import { flags } from '@oclif/command'
 import _ from 'lodash'
 
-import { Kommand } from '../common'
-import { kuzzleFlags } from '../support/kuzzle'
+import { Kommand } from '../../common'
+import { kuzzleFlags } from '../../support/kuzzle'
 
 export default class RealtimeSubscribe extends Kommand {
   static description = 'Subscribes to realtime notifications'
 
   static examples = [
-    'kourou subscribe iot-data sensors',
-    'kourou subscribe iot-data sensors --filters \'{ range: { temperature: { gt: 0 } } }\'',
-    'kourou subscribe iot-data sensors --filters \'{ exists: "position" }\' --scope out',
-    'kourou subscribe iot-data sensors --users all --volatile \'{ clientId: "citizen-kane" }\'',
-    'kourou subscribe iot-data sensors --display result._source.temperature',
+    'kourou realtime:subscribe iot-data sensors',
+    'kourou realtime:subscribe iot-data sensors \'{ range: { temperature: { gt: 0 } } }\'',
+    'kourou realtime:subscribe iot-data sensors \'{ exists: "position" }\' --scope out',
+    'kourou realtime:subscribe iot-data sensors --users all --volatile \'{ clientId: "citizen-kane" }\'',
+    'kourou realtime:subscribe iot-data sensors --display result._source.temperature',
   ]
 
   static flags = {
-    filters: flags.string({
-      description: 'Set of Koncorde filters',
-      default: '{}'
-    }),
     scope: flags.string({
       description: 'Subscribe to document entering or leaving the scope (all, in, out, none)',
       default: 'all'
@@ -49,7 +45,8 @@ export default class RealtimeSubscribe extends Kommand {
 
   static args = [
     { name: 'index', description: 'Index name', required: true },
-    { name: 'collection', description: 'Collection name', required: true }
+    { name: 'collection', description: 'Collection name', required: true },
+    { name: 'filters', description: 'Set of Koncorde filters' },
   ]
 
   static readStdin = true
@@ -61,19 +58,19 @@ export default class RealtimeSubscribe extends Kommand {
   }
 
   async runSafe() {
-    let filters = this.stdin ? this.stdin : this.flags.filters
+    let filters = this.stdin ? this.stdin : this.args.filters || '{}'
 
     // content from user editor
     if (this.flags.editor) {
       filters = this.fromEditor(filters, { json: true })
     }
 
-    await this.sdk?.realtime.subscribe(
+    await this.sdk.realtime.subscribe(
       this.args.index,
       this.args.collection,
       this.parseJs(filters),
       (notification: any) => {
-        this.logInfo('New notification')
+        this.logInfo(`New notification triggered by API action "${notification.controller}:${notification.action}"`)
 
         const display = this.flags.display === ''
           ? notification

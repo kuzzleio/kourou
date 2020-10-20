@@ -6,7 +6,7 @@ const WAIT_TIME_BEFORE_TEST = 10000
 const wait = (ms = 10) => new Promise(resolve => setTimeout(resolve, ms))
 const PRINT_STDOUT = false
 
-describe('instance:spawn', () => {
+xdescribe('instance:spawn', () => {
   test
     .timeout(TEST_TIMEOUT)
     .stdout({ print: PRINT_STDOUT })

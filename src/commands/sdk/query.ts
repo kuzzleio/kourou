@@ -42,6 +42,7 @@ Default fallback to API method
   and action as first argument.
   Kourou will try to infer the first arguments to one the following pattern:
     - <command> <index>
+    - <command> <body>
     - <command> <index> <collection>
     - <command> <index> <collection> <id>
     - <command> <index> <collection> <body>
@@ -51,6 +52,7 @@ Default fallback to API method
 
   Examples:
     - kourou collection:list iot
+    - kourou security:createUser '{"content":{"profileIds":["default"]}}' --id yagmur
     - kourou collection:delete iot sensors
     - kourou document:createOrReplace iot sensors sigfox-1 '{}'
     - kourou bulk:import iot sensors '{bulkData: [...]}'
@@ -70,6 +72,9 @@ Default fallback to API method
     }),
     editor: flags.boolean({
       description: 'Open an editor (EDITOR env variable) to edit the request before sending.'
+    }),
+    'body-editor': flags.boolean({
+      description: 'Open an editor (EDITOR env variable) to edit the body before sending.'
     }),
     index: flags.string({
       char: 'i',
@@ -98,10 +103,6 @@ Default fallback to API method
   async runSafe() {
     const [controller, action] = this.args['controller:action'].split(':')
 
-    if (controller === 'realtime' && action === 'subscribe') {
-      throw new Error('Use the "subscribe" command to listen to realtime notifications')
-    }
-
     const requestArgs: any = {}
 
     requestArgs.index = this.flags.index
@@ -123,11 +124,17 @@ Default fallback to API method
     }
 
     // content from user editor
-    if (this.flags.editor) {
+    if (this.flags.editor && this.flags['body-editor']) {
+      throw new Error('You cannot specify --editor and --body-editor at the same time')
+    }
+    else if (this.flags.editor) {
       request = this.fromEditor(request, { json: true })
     }
+    else if (this.flags['body-editor']) {
+      request.body = this.fromEditor(request.body, { json: true })
+    }
 
-    const response = await this.sdk?.query(request)
+    const response = await this.sdk.query(request)
 
     const display = this.flags.display === ''
       ? response

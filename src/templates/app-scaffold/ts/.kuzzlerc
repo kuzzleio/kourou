@@ -1,0 +1,17 @@
+{
+  // ---------------------------------------------------------------------------
+  // Kuzzle configuration file
+  //
+  // You can copy this file to a valid rc file location to customize Kuzzle
+  // configuration (see https://github.com/dominictarr/rc)
+  //
+  // See Kuzzle configuration sample at https://github.com/kuzzleio/kuzzle/blob/master/.kuzzlerc.sample
+  //
+  // ---------------------------------------------------------------------------
+
+  // Custom configuration for your application
+  // You can access it within "app.config.content.application"
+  "application": {
+    "someKey": "value"
+  }
+}

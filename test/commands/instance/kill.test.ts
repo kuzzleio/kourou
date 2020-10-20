@@ -4,7 +4,7 @@ import { execSync } from 'child_process'
 const TEST_TIMEOUT = 120000
 const PRINT_STDOUT = true
 
-describe('instance:kill', () => {
+xdescribe('instance:kill', () => {
   test
     .timeout(TEST_TIMEOUT)
     .stdout({ print: PRINT_STDOUT })
