@@ -64,7 +64,7 @@ export default class AppStartServices extends Kommand {
     try {
       await execute('docker-compose', '-f', docoFilename, 'up', '-d')
 
-      this.logOk(`Elasticsearch and Redis are booting in the background right now.`)
+      this.logOk('Elasticsearch and Redis are booting in the background right now.')
       this.log(chalk.grey('\nTo watch the logs, run'))
       this.log(chalk.grey(`  docker-compose -f ${docoFilename} logs -f\n`))
       this.log('  Elasticsearch port: 9200')
