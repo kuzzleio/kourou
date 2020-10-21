@@ -1,8 +1,7 @@
+import { writeFileSync } from 'fs'
+
 import { flags } from '@oclif/command'
 import chalk from 'chalk'
-import { ChildProcess, spawn } from 'child_process'
-import cli from 'cli-ux'
-import { writeFileSync } from 'fs'
 import Listr from 'listr'
 import emoji from 'node-emoji'
 
@@ -55,44 +54,28 @@ export default class AppStartServices extends Kommand {
       throw new Error(`${emoji.get('shrug')} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle services.`)
     }
 
-    this.log(chalk.grey(`\nWriting docker-compose file to ${docoFilename}...`))
+    this.log(chalk.grey(`\nWriting docker-compose file to ${docoFilename}...\n`))
 
     writeFileSync(docoFilename, kuzzleServicesFile)
 
     // clean up
     await execute('docker-compose', '-f', docoFilename, 'down')
 
-    const doco: ChildProcess = spawn(
-      'docker-compose',
-      ['-f', docoFilename, 'up', '-d'])
+    try {
+      await execute('docker-compose', '-f', docoFilename, 'up', '-d')
 
-    const startMessage = ` ${emoji.get('rocket')} Elasticsearch and Redis are launching`
+      this.logOk(`Elasticsearch and Redis are booting in the background right now.`)
+      this.log(chalk.grey('\nTo watch the logs, run'))
+      this.log(chalk.grey(`  docker-compose -f ${docoFilename} logs -f\n`))
+      this.log('  Elasticsearch port: 9200')
+      this.log('  Redis port: 6379')
+    }
+    catch (error) {
+      this.logKo(` Something went wrong: ${error.message}`)
+      this.log(chalk.grey('If you want to investigate the problem, try running'))
 
-    cli.action.start(startMessage, undefined, { stdout: true })
-
-    const bootingMessage = `\n${emoji.get('thumbsup')} ${chalk.bold(
-      'Elasticsearch and Redis are booting',
-    )} in the background right now.`
-
-    doco.on('close', docoCode => {
-      if (docoCode === 0) {
-        cli.action.stop('done')
-        this.log(bootingMessage)
-        this.log(chalk.grey('To watch the logs, run'))
-        this.log(chalk.grey(`  docker-compose -f ${docoFilename} logs -f\n`))
-        this.log('  Elasticsearch port: 9200')
-        this.log('  Redis port: 6379')
-      }
-      else {
-        cli.action.stop(chalk.red(` Something went wrong: docker-compose exited with ${docoCode}`))
-
-        this.log(chalk.grey('If you want to investigate the problem, try running'))
-
-        this.log(chalk.grey(`  docker-compose -f ${docoFilename} up\n`))
-
-        throw new Error('docker-compose exited witn non-zero status')
-      }
-    })
+      this.log(chalk.grey(`  docker-compose -f ${docoFilename} up\n`))
+    }
   }
 
   public async checkPrerequisites(): Promise<boolean> {
