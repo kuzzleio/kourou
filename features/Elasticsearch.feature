@@ -12,9 +12,9 @@ Feature: Elasticsearch commands
     Then I should match stdout with "chuon-chuon-kim"
 
   @mappings
-  Scenario: List ES indexes
+  Scenario: Cat ES indexes
     Given a collection "nyc-open-data":"green-taxi"
-    When I run the command "es:indices:list" with flags:
+    When I run the command "es:indices:cat" with flags:
       | --grep | "nyc-open-data" |
     Then I should match stdout with "yellow-taxi"
     And I should match stdout with "green-taxi"

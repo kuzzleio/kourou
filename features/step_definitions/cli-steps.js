@@ -84,7 +84,6 @@ Then('I run the command {string} with args:', async function (command, dataTable
   const args = []
 
   for (const row of dataTable.rawTable) {
-    console.log(row)
     args.push(JSON.parse(row[0]))
   }
 
