@@ -1,6 +1,7 @@
 const fs = require('fs')
 
 const _ = require('lodash')
+const should = require('should')
 const { Then } = require('cucumber')
 
 // this need to build the lib with "npm run build" first
@@ -83,6 +84,7 @@ Then('I run the command {string} with args:', async function (command, dataTable
   const args = []
 
   for (const row of dataTable.rawTable) {
+    console.log(row)
     args.push(JSON.parse(row[0]))
   }
 

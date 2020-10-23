@@ -21,6 +21,7 @@
     "kuzzle-sdk": "^7.4.0",
     "kuzzle-vault": "^2.0.0",
     "listr": "^0.14.3",
+    "lodash": "^4.17.20",
     "ndjson": "^1.5.0",
     "node-emoji": "^1.10.0",
     "strip-json-comments": "^3.1.0",

@@ -1,21 +1,15 @@
 import { flags } from '@oclif/command'
 import { Client } from '@elastic/elasticsearch'
 
-import { Kommand } from '../../common'
+import { Kommand } from '../../../common'
 
-export default class EsInsert extends Kommand {
+export default class EsGet extends Kommand {
   static initSdk = false
 
-  static description = 'Inserts a document directly into ES (will replace if exists)'
+  static description = 'Gets a document from ES'
 
   static flags = {
-    body: flags.string({
-      description: 'Document body in JSON',
-      default: '{}'
-    }),
-    id: flags.string({
-      description: 'Document ID'
-    }),
+    help: flags.help(),
     host: flags.string({
       char: 'h',
       description: 'Elasticsearch server host',
@@ -26,11 +20,11 @@ export default class EsInsert extends Kommand {
       description: 'Elasticsearch server port',
       default: process.env.KUZZLE_PORT || '9200',
     }),
-    help: flags.help(),
   }
 
   static args = [
     { name: 'index', description: 'ES Index name', required: true },
+    { name: 'id', description: 'Document ID', required: true }
   ]
 
   async runSafe() {
@@ -41,12 +35,11 @@ export default class EsInsert extends Kommand {
 
     const esRequest = {
       index: this.args.index,
-      id: this.flags.id,
-      body: this.flags.body,
+      id: this.args.id
     }
 
-    await esClient.index(esRequest)
+    const { body } = await esClient.get(esRequest)
 
-    this.logOk('Document successfully inserted.')
+    this.log(JSON.stringify(body, null, 2))
   }
 }
