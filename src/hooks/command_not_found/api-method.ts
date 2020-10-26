@@ -28,19 +28,6 @@ import SdkQuery from '../../commands/sdk/query'
  *  - kourou bulk:import index collection '{bulkData: []}'
  */
 
-async function callSdkQuery(args: string[]) {
-  try {
-    await SdkQuery.run(args)
-
-    // eslint-disable-next-line
-    process.exit(0)
-  }
-  catch (error) {
-    // eslint-disable-next-line
-    process.exit(1)
-  }
-}
-
 const hook: Hook<'command_not_found'> = async function (opts) {
   const [controller, action] = opts.id.split(':')
 
@@ -69,7 +56,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     }
   }
   else {
-    return callSdkQuery([...commandArgs, ...args])
+    return await SdkQuery.run([...commandArgs, ...args])
   }
 
   // 2th positional argument (collection)
@@ -84,7 +71,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     args.splice(0, 1)
   }
   else {
-    return callSdkQuery([...commandArgs, ...args])
+    return await SdkQuery.run([...commandArgs, ...args])
   }
 
   // 3th positional argument (_id or body)
@@ -103,7 +90,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     }
   }
   else {
-    return callSdkQuery([...commandArgs, ...args])
+    return await SdkQuery.run([...commandArgs, ...args])
   }
 
   // 4th positional argument (body)
@@ -117,7 +104,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     args.splice(0, 1)
   }
 
-  return callSdkQuery([...commandArgs, ...args])
+  await SdkQuery.run([...commandArgs, ...args])
 }
 
 export default hook
