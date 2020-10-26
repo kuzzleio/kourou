@@ -131,9 +131,9 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
 * [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
 * [`kourou document:search INDEX COLLECTION [QUERY]`](#kourou-documentsearch-index-collection-query)
-* [`kourou es:get INDEX ID`](#kourou-esget-index-id)
-* [`kourou es:insert INDEX`](#kourou-esinsert-index)
-* [`kourou es:list-index`](#kourou-eslist-index)
+* [`kourou es:indices:get INDEX ID`](#kourou-esindicesget-index-id)
+* [`kourou es:indices:insert INDEX`](#kourou-esindicesinsert-index)
+* [`kourou es:indices:cat`](#kourou-esindicescat)
 * [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
 * [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
 * [`kourou file:test FILE`](#kourou-filetest-file)
@@ -453,13 +453,13 @@ EXAMPLES
 
 _See code: [src/commands/document/search.ts](src/commands/document/search.ts)_
 
-## `kourou es:get INDEX ID`
+## `kourou es:indices:get INDEX ID`
 
 Gets a document from ES
 
 ```
 USAGE
-  $ kourou es:get INDEX ID
+  $ kourou es:indices:get INDEX ID
 
 ARGUMENTS
   INDEX  ES Index name
@@ -471,15 +471,15 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/get.ts](src/commands/es/get.ts)_
+_See code: [src/commands/es/indices/get.ts](src/commands/es/indices/get.ts)_
 
-## `kourou es:insert INDEX`
+## `kourou es:indices:insert INDEX`
 
 Inserts a document directly into ES (will replace if exists)
 
 ```
 USAGE
-  $ kourou es:insert INDEX
+  $ kourou es:indices:insert INDEX
 
 ARGUMENTS
   INDEX  ES Index name
@@ -492,15 +492,15 @@ OPTIONS
   --id=id          Document ID
 ```
 
-_See code: [src/commands/es/insert.ts](src/commands/es/insert.ts)_
+_See code: [src/commands/es/indices/insert.ts](src/commands/es/indices/insert.ts)_
 
-## `kourou es:list-index`
+## `kourou es:indices:cat`
 
 Lists available ES indexes
 
 ```
 USAGE
-  $ kourou es:list-index
+  $ kourou es:indices:cat
 
 OPTIONS
   -g, --grep=grep  Match output with pattern
@@ -509,7 +509,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/list-index.ts](src/commands/es/list-index.ts)_
+_See code: [src/commands/es/indices/cat.ts](src/commands/es/indices/cat.ts)_
 
 ## `kourou file:decrypt FILE`
 

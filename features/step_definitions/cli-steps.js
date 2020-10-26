@@ -1,6 +1,7 @@
 const fs = require('fs')
 
 const _ = require('lodash')
+const should = require('should')
 const { Then } = require('cucumber')
 
 // this need to build the lib with "npm run build" first
