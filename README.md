@@ -11,7 +11,7 @@ The CLI that helps you manage your Kuzzle instances.
 * [kourou](#kourou)
 * [Usage](#usage)
 * [Commands](#commands)
-* [Where does this weird name comes from?](#where-does-this-weird-name-comes-from)
+* [Where does this weird name come from?](#where-does-this-weird-name-come-from)
 <!-- tocstop -->
 
 :warning: This project is currently in beta and breaking changes may occur until the 1.0.0
@@ -1322,6 +1322,6 @@ EXAMPLE
 _See code: [src/commands/vault/test.ts](src/commands/vault/test.ts)_
 <!-- commandsstop -->
 
-# Where does this weird name comes from?
+# Where does this weird name come from?
 
 We liked the idea that this CLI is like a launchpad for the Kuzzle rocket. The place where you launch and pilot your Kuzzle instance. The place where the European Space Agency launches their rockets is in the country near the city of [Kourou](https://www.wikiwand.com/en/Kourou), in French Guiana, so we liked the idea that the Kuzzle rockets would take off from there.
