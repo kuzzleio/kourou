@@ -201,4 +201,8 @@ export class KuzzleSDK {
   get realtime() {
     return this.sdk.realtime
   }
+
+  get ms() {
+    return this.sdk.ms
+  }
 }
