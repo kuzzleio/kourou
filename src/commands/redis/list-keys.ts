@@ -27,6 +27,11 @@ export default class RedisListKeys extends Kommand {
     { name: 'match', description: 'Match Redis keys with a pattern', default: '*' },
   ]
 
+  static examples = [
+    'kourou redis:list-keys "*cluster*"',
+    'kourou redis:list-keys "counters/*" --remove',
+  ]
+
   static readStdin = true
 
   async runSafe() {
