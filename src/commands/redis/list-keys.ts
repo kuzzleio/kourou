@@ -46,7 +46,7 @@ export default class RedisListKeys extends Kommand {
     let pages = 0
 
     do {
-      const result = await this.sdk.ms.scan(cursor, { count, match });
+      const result = await this.sdk.ms.scan(cursor, { count, match })
 
       cursor = result.cursor
 
@@ -59,7 +59,7 @@ export default class RedisListKeys extends Kommand {
       process.stdout.write('\r')
 
       if (maxPages !== -1 && pages >= maxPages) {
-        break;
+        break
       }
     } while (cursor !== '0')
 
@@ -73,10 +73,10 @@ export default class RedisListKeys extends Kommand {
 
     if (this.flags.remove) {
       await this.sdk.ms.del(keys)
-      this.logOk(`${keys.length} keys deleted`);
+      this.logOk(`${keys.length} keys deleted`)
     }
     else {
-      this.logOk(`${keys.length} keys retrieved`);
+      this.logOk(`${keys.length} keys retrieved`)
     }
   }
 }
