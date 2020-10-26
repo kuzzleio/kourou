@@ -45,7 +45,7 @@ By command line:
   --password=password            Kuzzle user password
   --api-key=api-key              Kuzzle user api-key
   --ssl                          [default: true for port 443] Use SSL to connect to Kuzzle
-  --protocol                     [default: http] Protocol used to connect to Kuzzle ( `http` or `ws` )
+  --protocol                     [default: ws] Protocol used to connect to Kuzzle ( `http` or `ws` )
 
 ``` 
 
