@@ -47,14 +47,14 @@ jobs:
         - KOUROU_RUNTIME=npm run dev:package
 
       install:
+        # install kourou dependencies for packing and testing
+        - npm install --silent --unsafe-perm
         # create npm package
         - npm pack
         # extract to ./package/
         - tar xf kourou-$(node -e 'console.log(require("./package.json").version)').tgz
         # install kourou production dependencies for package
         - npm install --prefix package --silent --unsafe-perm --only production
-        # install kourou dependencies for testing
-        - npm install --silent --unsafe-perm
         # ensure tests always use the generated package
         - rm -rf ./bin
 
@@ -77,14 +77,14 @@ jobs:
         - "KOUROU_RUNTIME=npm run dev:package"
 
       install:
+        # install kourou dependencies for packing and testing
+        - npm install --silent --unsafe-perm
         # create npm package
         - npm pack
         # extract to ./package/
         - tar xf kourou-$(node -e 'console.log(require("./package.json").version)').tgz
         # install kourou production dependencies for package
         - npm install --prefix package --silent --unsafe-perm --only production
-        # install kourou dependencies for testing
-        - npm install --silent --unsafe-perm
         # ensure tests always use the generated package
         - rm -rf ./bin
 

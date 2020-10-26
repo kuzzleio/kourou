@@ -56,7 +56,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     }
   }
   else {
-    return await SdkQuery.run([...commandArgs, ...args])
+    return SdkQuery.run([...commandArgs, ...args])
   }
 
   // 2th positional argument (collection)
@@ -71,7 +71,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     args.splice(0, 1)
   }
   else {
-    return await SdkQuery.run([...commandArgs, ...args])
+    return SdkQuery.run([...commandArgs, ...args])
   }
 
   // 3th positional argument (_id or body)
@@ -90,7 +90,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     }
   }
   else {
-    return await SdkQuery.run([...commandArgs, ...args])
+    return SdkQuery.run([...commandArgs, ...args])
   }
 
   // 4th positional argument (body)
