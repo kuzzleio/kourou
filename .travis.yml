@@ -73,7 +73,7 @@ jobs:
           - ~/.cache
           - node_modules # NPM packages
 
-       env:
+      env:
         - "KOUROU_RUNTIME=npm run dev:package"
 
       install:
