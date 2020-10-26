@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.14.0 linux-x64 node-v12.16.3
+kourou/0.15.1 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -147,7 +147,7 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou instance:spawn`](#kourou-instancespawn)
 * [`kourou profile:export`](#kourou-profileexport)
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
-* [`kourou realtime:subscribe INDEX COLLECTION`](#kourou-realtimesubscribe-index-collection)
+* [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
 * [`kourou role:export`](#kourou-roleexport)
 * [`kourou role:import PATH`](#kourou-roleimport-path)
 * [`kourou sdk:execute`](#kourou-sdkexecute)
@@ -785,17 +785,18 @@ OPTIONS
 
 _See code: [src/commands/profile/import.ts](src/commands/profile/import.ts)_
 
-## `kourou realtime:subscribe INDEX COLLECTION`
+## `kourou realtime:subscribe INDEX COLLECTION [FILTERS]`
 
 Subscribes to realtime notifications
 
 ```
 USAGE
-  $ kourou realtime:subscribe INDEX COLLECTION
+  $ kourou realtime:subscribe INDEX COLLECTION [FILTERS]
 
 ARGUMENTS
   INDEX       Index name
   COLLECTION  Collection name
+  FILTERS     Set of Koncorde filters
 
 OPTIONS
   --api-key=api-key    Kuzzle user api-key
@@ -805,8 +806,6 @@ OPTIONS
                        everything)
 
   --editor             Open an editor (EDITOR env variable) to edit the filters before subscribing.
-
-  --filters=filters    [default: {}] Set of Koncorde filters
 
   --help               show CLI help
 
@@ -830,8 +829,8 @@ OPTIONS
 
 EXAMPLES
   kourou realtime:subscribe iot-data sensors
-  kourou realtime:subscribe iot-data sensors --filters '{ range: { temperature: { gt: 0 } } }'
-  kourou realtime:subscribe iot-data sensors --filters '{ exists: "position" }' --scope out
+  kourou realtime:subscribe iot-data sensors '{ range: { temperature: { gt: 0 } } }'
+  kourou realtime:subscribe iot-data sensors '{ exists: "position" }' --scope out
   kourou realtime:subscribe iot-data sensors --users all --volatile '{ clientId: "citizen-kane" }'
   kourou realtime:subscribe iot-data sensors --display result._source.temperature
 ```
