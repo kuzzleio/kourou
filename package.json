@@ -115,6 +115,7 @@
   "scripts": {
     "build": "tsc -b",
     "dev": "./bin/run",
+    "dev:package": "./package/bin/run",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "version": "oclif-dev readme && git add README.md",

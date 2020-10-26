@@ -43,10 +43,15 @@ jobs:
           - ~/.npm
           - ~/.cache
           - node_modules # NPM packages
+      env:
+        - KOUROU_RUNTIME=npm run dev:package
 
       install:
-        - npm install --silent --unsafe-perm
-        - npm install --silent --unsafe-perm --only=dev
+        - npm pack # create npm package
+        - tar xf kourou-*-.tgz # extract to ./package/
+        - npm install --prefix package --silent --unsafe-perm
+        - npm install --silent --unsafe-perm --only-dev
+        - rm -rf ./bin # ensure tests always use the generated package
 
       script:
         - npm run test:functional:stdout
@@ -63,10 +68,20 @@ jobs:
           - ~/.cache
           - node_modules # NPM packages
 
+       env:
+        - "KOUROU_RUNTIME=npm run dev:package"
+
       install:
+        # create npm package
+        - npm pack
+        # extract to ./package/
+        - tar xf kourou-$(node -e 'console.log(require("./package.json").version)').tgz
+        # install kourou production dependencies for package
+        - npm install --prefix package --silent --unsafe-perm --only production
+        # install kourou dependencies for testing
         - npm install --silent --unsafe-perm
-        - npm install --silent --unsafe-perm --only=dev
-        - npm run build
+        # ensure tests always use the generated package
+        - rm -rf ./bin
 
       script:
         - bash features/run-kuzzle-stack.sh
