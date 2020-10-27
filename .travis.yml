@@ -44,7 +44,7 @@ jobs:
           - ~/.cache
           - node_modules # NPM packages
       env:
-        - KOUROU_RUNTIME=npm run dev:package
+        - KOUROU_RUNTIME="npm run dev:package"
 
       install:
         # install kourou dependencies for packing and testing
@@ -74,7 +74,7 @@ jobs:
           - node_modules # NPM packages
 
       env:
-        - "KOUROU_RUNTIME=npm run dev:package"
+        - KOUROU_RUNTIME="npm run dev:package"
 
       install:
         # install kourou dependencies for packing and testing
