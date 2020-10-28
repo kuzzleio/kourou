@@ -3,6 +3,9 @@
   "vetur.format.defaultFormatter.ts": "prettier",
   "vetur.format.defaultFormatter.js": "prettier-eslint",
   "vetur.format.enable": false,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "editor.defaultFormatter": "vscode.typescript-language-features",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "[feature]": {
+    "editor.defaultFormatter": "alexkrechik.cucumberautocomplete"
+  }
 }

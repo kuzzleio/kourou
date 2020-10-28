@@ -113,7 +113,7 @@ ${variables}
     }
 
     if (userError) {
-      this.logKo(`Error when executing SDK code: ${userError.message}`)
+      this.logKo(`Error when executing SDK code: ${userError}`)
       this.log(this.code)
     }
     else {

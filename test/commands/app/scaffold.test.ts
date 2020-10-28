@@ -3,11 +3,13 @@ import fs from 'fs'
 
 import should from 'should'
 
+import { kourou } from '../../support'
+
 describe('app:scaffold', () => {
   it('creates desired files and install packages', () => {
     execSync('rm -rf blackmesa/')
 
-    execSync('npm run dev -- app:scaffold blackmesa')
+    kourou('app:scaffold blackmesa')
 
     should(fs.existsSync('blackmesa/.eslintignore')).be.eql(true)
     should(fs.existsSync('blackmesa/.eslintrc.json')).be.eql(true)
