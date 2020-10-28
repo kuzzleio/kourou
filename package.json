@@ -119,7 +119,7 @@
     "dev:package": "./package/bin/run",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "tar czf templates.tgz templates/ && rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "postinstall": "tar xf templates.tgz",
+    "postinstall": "(file -f templates.tgz 2&> /dev/null && tar xf templates.tgz) || true",
     "version": "oclif-dev readme && git add README.md",
     "test:lint": "eslint src/ test/ --ext .ts --config .eslintrc",
     "test:lint:fix": "eslint src/ test/ --ext .ts --fix --config .eslintrc",
