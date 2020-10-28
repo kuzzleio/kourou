@@ -9,11 +9,13 @@ Feature: Generic Import
       | _id               | body                              |
       | "chuon-chuon-kim" | { "city": "hcmc", "district": 1 } |
       | "the-hive"        | { "city": "hcmc", "district": 2 } |
+    And I refresh the collection
     And a collection "nyc-open-data":"green-taxi"
     And I "create" the following documents:
       | _id                | body                              |
       | "chuon-chuon-kim2" | { "city": "hcmc", "district": 1 } |
       | "the-hive2"        | { "city": "hcmc", "district": 2 } |
+    And I refresh the collection
     And I run the command "index:export" with:
       | arg  | nyc-open-data |        |
       | flag | --path        | ./dump |
