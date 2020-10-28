@@ -57,7 +57,8 @@
     "/bin",
     "/lib",
     "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
+    "/oclif.manifest.json",
+    "/templates.tgz"
   ],
   "homepage": "https://github.com/kuzzleio/kourou",
   "keywords": [
@@ -117,7 +118,8 @@
     "build": "tsc -b",
     "dev": "./bin/run",
     "postpack": "rm -f oclif.manifest.json",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "prepack": "tar czf templates.tgz templates/ && rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "postinstall": "(file -f templates.tgz 2&> /dev/null && tar xf templates.tgz) || true",
     "version": "oclif-dev readme && git add README.md",
     "test:lint": "eslint src/ test/ --ext .ts --config .eslintrc",
     "test:lint:fix": "eslint src/ test/ --ext .ts --fix --config .eslintrc",

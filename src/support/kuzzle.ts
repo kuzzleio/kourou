@@ -27,7 +27,7 @@ export const kuzzleFlags = {
   }),
   protocol: flags.string({
     description: 'Kuzzle protocol (http or ws)',
-    default: process.env.KUZZLE_PROTOCOL || 'http',
+    default: process.env.KUZZLE_PROTOCOL || 'ws',
   }),
   as: flags.string({
     description: 'Impersonate a user',
@@ -101,7 +101,8 @@ export class KuzzleSDK {
 
     if (this.apikey) {
       this.sdk.jwt = this.apikey
-    } else if (this.username !== 'anonymous') {
+    }
+    else if (this.username !== 'anonymous') {
       const credentials = {
         username: this.username,
         password: this.password,

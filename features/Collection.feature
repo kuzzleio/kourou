@@ -10,6 +10,7 @@ Feature: Collection Commands
       | "chuon-chuon-kim" | { "city": "hcmc", "district": 1 }     |
       | "the-hive-vn"     | { "city": "hcmc", "district": 2 }     |
       | "the-hive-th"     | { "city": "changmai", "district": 7 } |
+    And I refresh the collection
     # collection:export
     When I run the command "collection:export" with:
       | arg  | nyc-open-data |                            |
