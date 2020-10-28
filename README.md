@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.15.1 linux-x64 node-v12.16.3
+kourou/0.16.0 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -857,7 +857,7 @@ OPTIONS
   --max=max            [default: -1] Maximum number of page to retrieve (-1 to retrieve everything)
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --remove             Remove matching keys
   --size=size          [default: 100] Page size
   --ssl                Use SSL to connect to Kuzzle
