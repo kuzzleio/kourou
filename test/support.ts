@@ -1,7 +1,7 @@
 import { execSync } from 'child_process'
 
 export function kourou(command: string) {
-  const runtime = process.env.KOUROU_RUNTIME || 'npm run dev'
+  const runtime = process.env.KOUROU_RUNTIME || './bin/run'
 
-  execSync(`${runtime} -- ${command}`)
+  execSync(`${runtime} ${command}`)
 }

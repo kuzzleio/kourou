@@ -7,11 +7,9 @@ const { Then } = require('cucumber')
 const { execute } = require('../../lib/support/execute')
 
 function kourou(...command) {
-  const npmRuntime = process.env.KOUROU_RUNTIME === 'npm run dev:package'
-    ? 'dev:package'
-    : 'dev';
+  const kourouRuntime = process.env.KOUROU_RUNTIME || './bin/run'
 
-  return execute('npm', 'run', npmRuntime, '--', ...command);
+  return execute(kourouRuntime, ...command);
 }
 
 Then('I subscribe to {string}:{string}', async function (index, collection) {

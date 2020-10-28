@@ -116,7 +116,6 @@
   "scripts": {
     "build": "tsc -b",
     "dev": "./bin/run",
-    "dev:package": "./package/bin/run",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "tar czf templates.tgz templates/ && rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "postinstall": "(file -f templates.tgz 2&> /dev/null && tar xf templates.tgz) || true",
