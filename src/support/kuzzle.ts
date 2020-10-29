@@ -1,5 +1,7 @@
 import { flags } from '@oclif/command'
 
+import packageJson from '../../package.json'
+
 import { Http, WebSocket, Kuzzle } from 'kuzzle-sdk'
 
 const SECOND = 1000
@@ -92,6 +94,10 @@ export class KuzzleSDK {
       port: this.port,
       sslConnection: this.ssl,
     }))
+
+    this.sdk.volatile = {
+      client: `kourou@${packageJson.version}`
+    }
 
     this.sdk.on('networkError', (error: any) => logger.logKo(error.message))
 
