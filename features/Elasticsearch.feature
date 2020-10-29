@@ -30,3 +30,35 @@ Feature: Elasticsearch commands
       | "&nyc-open-data.yellow-taxi" |
       | "kindred"                    |
     Then I should match stdout with "kindred"
+
+  Scenario: Create a snapshot repository
+    When I run the command "es:snapshots:create-repository" with:
+      | arg  | backup         |           |
+      | arg  | /tmp/snapshots |           |
+      | flag | --host         | localhost |
+      | flag | --port         | 9200      |
+      | flag | --compress     |           |
+    Then I should match stdout with "Success"
+
+  Scenario: Dump ES data to a snapshot into a repository
+    When I run the command "es:snapshots:dump" with:
+      | arg  | backup        |           |
+      | arg  | test-snapshot |           |
+      | flag | --host        | localhost |
+      | flag | --port        | 9200      |
+    Then I should match stdout with "Success"
+
+  Scenario: List all available snapshots of a repository
+    When I run the command "es:snapshots:list" with:
+      | arg  | backup |           |
+      | flag | --host | localhost |
+      | flag | --port | 9200      |
+    Then I should match stdout with "test-snapshot"
+
+  Scenario: List all available snapshots of a repository
+    When I run the command "es:snapshots:restore" with:
+      | arg  | backup        |           |
+      | arg  | test-snapshot |           |
+      | flag | --host        | localhost |
+      | flag | --port        | 9200      |
+    Then I should match stdout with "Success"
