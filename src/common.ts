@@ -158,6 +158,6 @@ export abstract class Kommand extends Command {
     }
 
     // eslint-disable-next-line no-eval
-    return eval(`var o = ${input} o`)
+    return eval(`var o = ${input}; o`)
   }
 }
