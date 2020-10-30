@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true
   },
-  "rootDir": "src/",
+  "rootDir": ".",
   "include": [
     "src/**/*"
   ],
