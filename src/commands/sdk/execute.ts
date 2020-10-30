@@ -123,6 +123,7 @@ ${variables}
       this.logOk('Successfully executed SDK code')
 
       if (result !== undefined) {
+        // eslint-disable-next-line no-console
         console.log(JSON.stringify(result, null, 2))
       }
     }

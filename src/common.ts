@@ -38,7 +38,7 @@ export abstract class Kommand extends Command {
 
   public log(message?: string): void {
     if (this.flags['print-raw']) {
-      return;
+      return
     }
 
     super.log(` ${message}`)
@@ -46,7 +46,7 @@ export abstract class Kommand extends Command {
 
   public logOk(message: string): void {
     if (this.flags['print-raw']) {
-      return;
+      return
     }
 
     this.log(chalk.green(`[✔] ${message}`))
@@ -54,7 +54,7 @@ export abstract class Kommand extends Command {
 
   public logInfo(message: string): void {
     if (this.flags['print-raw']) {
-      return;
+      return
     }
 
     this.log(chalk.yellow(`[ℹ] ${message}`))
@@ -62,7 +62,7 @@ export abstract class Kommand extends Command {
 
   public logKo(message?: string): void {
     if (this.flags['print-raw']) {
-      return;
+      return
     }
 
     this.exitCode = 1
@@ -158,6 +158,6 @@ export abstract class Kommand extends Command {
     }
 
     // eslint-disable-next-line no-eval
-    return eval(`var o = ${input}; o`)
+    return eval(`var o = ${input} o`)
   }
 }
