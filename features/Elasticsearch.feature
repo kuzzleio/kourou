@@ -55,7 +55,7 @@ Feature: Elasticsearch commands
       | flag | --port | 9200      |
     Then I should match stdout with "test-snapshot"
 
-  Scenario: List all available snapshots of a repository
+  Scenario: Restore a snapshot into a running ES instance
     When I run the command "es:snapshots:restore" with:
       | arg  | backup        |           |
       | arg  | test-snapshot |           |
