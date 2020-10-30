@@ -11,7 +11,7 @@ The CLI that helps you manage your Kuzzle instances.
 * [kourou](#kourou)
 * [Usage](#usage)
 * [Commands](#commands)
-* [Where does this weird name comes from?](#where-does-this-weird-name-comes-from)
+* [Where does this weird name come from?](#where-does-this-weird-name-come-from)
 <!-- tocstop -->
 
 :warning: This project is currently in beta and breaking changes may occur until the 1.0.0
@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.15.1 linux-x64 node-v12.16.3
+kourou/0.16.0 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -45,7 +45,7 @@ By command line:
   --password=password            Kuzzle user password
   --api-key=api-key              Kuzzle user api-key
   --ssl                          [default: true for port 443] Use SSL to connect to Kuzzle
-  --protocol                     [default: http] Protocol used to connect to Kuzzle ( `http` or `ws` )
+  --protocol                     [default: ws] Protocol used to connect to Kuzzle ( `http` or `ws` )
 
 ``` 
 
@@ -131,9 +131,9 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
 * [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
 * [`kourou document:search INDEX COLLECTION [QUERY]`](#kourou-documentsearch-index-collection-query)
+* [`kourou es:indices:cat`](#kourou-esindicescat)
 * [`kourou es:indices:get INDEX ID`](#kourou-esindicesget-index-id)
 * [`kourou es:indices:insert INDEX`](#kourou-esindicesinsert-index)
-* [`kourou es:indices:cat`](#kourou-esindicescat)
 * [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
 * [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
 * [`kourou file:test FILE`](#kourou-filetest-file)
@@ -148,6 +148,7 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou profile:export`](#kourou-profileexport)
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
 * [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
+* [`kourou redis:list-keys [MATCH]`](#kourou-redislist-keys-match)
 * [`kourou role:export`](#kourou-roleexport)
 * [`kourou role:import PATH`](#kourou-roleimport-path)
 * [`kourou sdk:execute`](#kourou-sdkexecute)
@@ -180,7 +181,7 @@ OPTIONS
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -211,7 +212,7 @@ OPTIONS
   --id=id                        API Key unique ID
   --password=password            Kuzzle user password
   --port=port                    [default: 7512] Kuzzle server port
-  --protocol=protocol            [default: http] Kuzzle protocol (http or ws)
+  --protocol=protocol            [default: ws] Kuzzle protocol (http or ws)
   --ssl                          Use SSL to connect to Kuzzle
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -237,7 +238,7 @@ OPTIONS
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -266,7 +267,7 @@ OPTIONS
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -325,7 +326,7 @@ OPTIONS
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -439,7 +440,7 @@ OPTIONS
   --host=host          [default: localhost] Kuzzle server host
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --scroll=scroll      Optional scroll TTL
   --size=size          Optional page size
   --sort=sort          [default: {}] Sort in JS or JSON format.
@@ -452,6 +453,23 @@ EXAMPLES
 ```
 
 _See code: [src/commands/document/search.ts](src/commands/document/search.ts)_
+
+## `kourou es:indices:cat`
+
+Lists available ES indexes
+
+```
+USAGE
+  $ kourou es:indices:cat
+
+OPTIONS
+  -g, --grep=grep  Match output with pattern
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/indices/cat.ts](src/commands/es/indices/cat.ts)_
 
 ## `kourou es:indices:get INDEX ID`
 
@@ -493,23 +511,6 @@ OPTIONS
 ```
 
 _See code: [src/commands/es/indices/insert.ts](src/commands/es/indices/insert.ts)_
-
-## `kourou es:indices:cat`
-
-Lists available ES indexes
-
-```
-USAGE
-  $ kourou es:indices:cat
-
-OPTIONS
-  -g, --grep=grep  Match output with pattern
-  -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 9200] Elasticsearch server port
-  --help           show CLI help
-```
-
-_See code: [src/commands/es/indices/cat.ts](src/commands/es/indices/cat.ts)_
 
 ## `kourou file:decrypt FILE`
 
@@ -837,6 +838,38 @@ EXAMPLES
 
 _See code: [src/commands/realtime/subscribe.ts](src/commands/realtime/subscribe.ts)_
 
+## `kourou redis:list-keys [MATCH]`
+
+Lists keys stored in Redis
+
+```
+USAGE
+  $ kourou redis:list-keys [MATCH]
+
+ARGUMENTS
+  MATCH  [default: *] Match Redis keys with a pattern
+
+OPTIONS
+  --api-key=api-key    Kuzzle user api-key
+  --as=as              Impersonate a user
+  --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
+  --max=max            [default: -1] Maximum number of page to retrieve (-1 to retrieve everything)
+  --password=password  Kuzzle user password
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
+  --remove             Remove matching keys
+  --size=size          [default: 100] Page size
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLES
+  kourou redis:list-keys "*cluster*"
+  kourou redis:list-keys "counters/*" --remove
+```
+
+_See code: [src/commands/redis/list-keys.ts](src/commands/redis/list-keys.ts)_
+
 ## `kourou role:export`
 
 Exports roles
@@ -905,7 +938,7 @@ OPTIONS
   --keep-alive         Keep the connection running (websocket only)
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: http] Kuzzle protocol (http or ws)
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -976,7 +1009,7 @@ OPTIONS
 
   --port=port                  [default: 7512] Kuzzle server port
 
-  --protocol=protocol          [default: http] Kuzzle protocol (http or ws)
+  --protocol=protocol          [default: ws] Kuzzle protocol (http or ws)
 
   --ssl                        Use SSL to connect to Kuzzle
 
@@ -1322,6 +1355,6 @@ EXAMPLE
 _See code: [src/commands/vault/test.ts](src/commands/vault/test.ts)_
 <!-- commandsstop -->
 
-# Where does this weird name comes from?
+# Where does this weird name come from?
 
 We liked the idea that this CLI is like a launchpad for the Kuzzle rocket. The place where you launch and pilot your Kuzzle instance. The place where the European Space Agency launches their rockets is in the country near the city of [Kourou](https://www.wikiwand.com/en/Kourou), in French Guiana, so we liked the idea that the Kuzzle rockets would take off from there.

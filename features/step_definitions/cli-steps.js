@@ -7,8 +7,14 @@ const { Then } = require('cucumber')
 // this need to build the lib with "npm run build" first
 const { execute } = require('../../lib/support/execute')
 
+function kourou(...command) {
+  const kourouRuntime = process.env.KOUROU_RUNTIME || './bin/run'
+
+  return execute(kourouRuntime, ...command);
+}
+
 Then('I subscribe to {string}:{string}', async function (index, collection) {
-  this.props.executor = execute('./bin/run', 'realtime:subscribe', index, collection)
+  this.props.executor = kourou('realtime:subscribe', index, collection)
 
   // wait to connect to Kuzzle
   await new Promise(resolve => setTimeout(resolve, 4000))
@@ -47,7 +53,7 @@ Then('I run the command {string} with:', async function (command, dataTable) {
   }
 
   try {
-    const { stdout } = await execute('./bin/run', ...command.split(' '), ...args, ...flags)
+    const { stdout } = await kourou(...command.split(' '), ...args, ...flags)
 
     this.props.result = stdout
   }
@@ -69,7 +75,7 @@ Then('I run the command {string} with flags:', async function (command, dataTabl
   }
 
   try {
-    const { stdout } = await execute('./bin/run', ...command.split(' '), ...flags)
+    const { stdout } = await kourou(...command.split(' '), ...flags)
 
     this.props.result = stdout
   }
@@ -88,7 +94,7 @@ Then('I run the command {string} with args:', async function (command, dataTable
   }
 
   try {
-    const { stdout } = await execute('./bin/run', command, ...args)
+    const { stdout } = await kourou(command, ...args)
 
     this.props.result = stdout
   }
@@ -153,8 +159,7 @@ Then('I create an API key', async function () {
 
 Then('I check the API key validity', async function () {
   try {
-    const { stdout } = await execute(
-      './bin/run',
+    const { stdout } = await kourou(
       'api-key:check',
       this.props.result._source.token)
 
@@ -169,8 +174,7 @@ Then('I check the API key validity', async function () {
 
 Then('I should get the correct current user with the given api-key', async function () {
   try {
-    const { stdout } = await execute(
-      './bin/run',
+    const { stdout } = await kourou(
       'sdk:query',
       'auth:getCurrentUser',
       '--api-key',

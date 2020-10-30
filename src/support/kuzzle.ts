@@ -1,5 +1,7 @@
 import { flags } from '@oclif/command'
 
+import packageJson from '../../package.json'
+
 import { Http, WebSocket, Kuzzle } from 'kuzzle-sdk'
 
 const SECOND = 1000
@@ -27,7 +29,7 @@ export const kuzzleFlags = {
   }),
   protocol: flags.string({
     description: 'Kuzzle protocol (http or ws)',
-    default: process.env.KUZZLE_PROTOCOL || 'http',
+    default: process.env.KUZZLE_PROTOCOL || 'ws',
   }),
   as: flags.string({
     description: 'Impersonate a user',
@@ -93,6 +95,10 @@ export class KuzzleSDK {
       sslConnection: this.ssl,
     }))
 
+    this.sdk.volatile = {
+      client: `kourou@${packageJson.version}`
+    }
+
     this.sdk.on('networkError', (error: any) => logger.logKo(error.message))
 
     logger.logInfo(`Connecting to ${this.protocol}${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
@@ -101,7 +107,8 @@ export class KuzzleSDK {
 
     if (this.apikey) {
       this.sdk.jwt = this.apikey
-    } else if (this.username !== 'anonymous') {
+    }
+    else if (this.username !== 'anonymous') {
       const credentials = {
         username: this.username,
         password: this.password,
@@ -200,5 +207,9 @@ export class KuzzleSDK {
 
   get realtime() {
     return this.sdk.realtime
+  }
+
+  get ms() {
+    return this.sdk.ms
   }
 }
