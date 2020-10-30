@@ -72,7 +72,7 @@ jobs:
         - bash features/run-kuzzle-stack.sh
         - npm run test:functional:cucumber
       after_failure:
-        - docker-compose logs
+        - docker-compose -f features/docker/docker-compose.yml logs
 
     - stage: Deploy
       name: Deploy Kourou on NPM
