@@ -37,29 +37,46 @@ export abstract class Kommand extends Command {
   }
 
   public log(message?: string): void {
+    if (this.flags['print-raw']) {
+      return;
+    }
+
     super.log(` ${message}`)
   }
 
   public logOk(message: string): void {
+    if (this.flags['print-raw']) {
+      return;
+    }
+
     this.log(chalk.green(`[✔] ${message}`))
   }
 
   public logInfo(message: string): void {
+    if (this.flags['print-raw']) {
+      return;
+    }
+
     this.log(chalk.yellow(`[ℹ] ${message}`))
   }
 
   public logKo(message?: string): void {
+    if (this.flags['print-raw']) {
+      return;
+    }
+
     this.exitCode = 1
     this.log(chalk.red(`[X] ${message}`))
   }
 
   async run() {
-    this.printCommand()
     const kommand = (this.constructor as unknown) as any
 
     const result = this.parse(kommand)
     this.args = result.args
     this.flags = result.flags
+
+    this.printCommand()
 
     if (kommand.readStdin) {
       this.stdin = this.fromStdin()

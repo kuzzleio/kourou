@@ -52,6 +52,9 @@ Other
     'keep-alive': flags.boolean({
       description: 'Keep the connection running (websocket only)'
     }),
+    'print-raw': flags.boolean({
+      description: 'Print only the script result to stdout'
+    }),
     ...kuzzleFlags,
   };
 
@@ -120,7 +123,7 @@ ${variables}
       this.logOk('Successfully executed SDK code')
 
       if (result !== undefined) {
-        this.log(JSON.stringify(result, null, 2))
+        console.log(JSON.stringify(result, null, 2))
       }
     }
 
