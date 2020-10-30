@@ -4,7 +4,9 @@
     "importHelpers": true,
     "module": "commonjs",
     "outDir": "lib",
-    "rootDir": ".",
+    "rootDirs": [
+      "./src"
+    ],
     "strict": true,
     "target": "es2017",
     "esModuleInterop": true,
@@ -14,6 +16,6 @@
     "src/**/*"
   ],
   "exclude": [
-    "src/templates/**/*"
+    "src/templates/**/*",
   ]
 }
