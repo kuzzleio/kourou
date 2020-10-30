@@ -2,6 +2,10 @@
 
 set -e
 
+# Create the folder where will be stored snapshots
+mkdir -p /tmp/snapshots
+
+# Launch the kuzzle stack
 docker-compose -f features/docker/docker-compose.yml up -d
 
 echo "[$(date --rfc-3339 seconds)] - Starting Kuzzle..."
