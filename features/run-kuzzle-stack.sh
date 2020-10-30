@@ -4,6 +4,7 @@ set -e
 
 # Create the folder where will be stored snapshots
 mkdir -p /tmp/snapshots
+chown -R elasticsearch:elasticsearch /tmp/snapshots
 
 # Launch the kuzzle stack
 docker-compose -f features/docker/docker-compose.yml up -d
