@@ -6,7 +6,7 @@ import { Kommand } from '../../../common'
 export default class EsCreateSnapshot extends Kommand {
   static initSdk = false
 
-  static description = 'Create a snapshot repository inside an ES instance'
+  static description = 'Create a FS snapshot repository inside an ES instance'
 
   static flags = {
     compress: flags.boolean({

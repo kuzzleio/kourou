@@ -134,6 +134,10 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou es:indices:cat`](#kourou-esindicescat)
 * [`kourou es:indices:get INDEX ID`](#kourou-esindicesget-index-id)
 * [`kourou es:indices:insert INDEX`](#kourou-esindicesinsert-index)
+* [`kourou es:snapshots:create-repository REPOSITORY LOCATION`](#kourou-essnapshotscreate-repository-repository-location)
+* [`kourou es:snapshots:dump REPOSITORY NAME`](#kourou-essnapshotsdump-repository-name)
+* [`kourou es:snapshots:list REPOSITORY`](#kourou-essnapshotslist-repository)
+* [`kourou es:snapshots:restore REPOSITORY NAME`](#kourou-essnapshotsrestore-repository-name)
 * [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
 * [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
 * [`kourou file:test FILE`](#kourou-filetest-file)
@@ -511,6 +515,85 @@ OPTIONS
 ```
 
 _See code: [src/commands/es/indices/insert.ts](src/commands/es/indices/insert.ts)_
+
+## `kourou es:snapshots:create-repository REPOSITORY LOCATION`
+
+Create a FS snapshot repository inside an ES instance
+
+```
+USAGE
+  $ kourou es:snapshots:create-repository REPOSITORY LOCATION
+
+ARGUMENTS
+  REPOSITORY ES repository name
+  LOCATION ES snapshot repository location
+
+OPTIONS
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --help           show CLI help
+  --compress       Compress data when storing them
+```
+
+_See code: [src/commands/es/snapshots/create-repository.ts](src/commands/es/snapshots/create-repository.ts)_
+
+## `kourou es:snapshots:dump REPOSITORY NAME`
+
+Create a FS snapshot repository inside an ES instance
+
+```
+USAGE
+  $ kourou es:snapshots:dump REPOSITORY NAME
+
+ARGUMENTS
+  REPOSITORY ES repository name
+  NAME ES snapshot name
+
+OPTIONS
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/snapshots/dump.ts](src/commands/es/snapshots/dump.ts)_
+
+## `kourou es:snapshots:list REPOSITORY`
+
+List all snapshot from a repository acknowledge by an ES instance
+
+```
+USAGE
+  $ kourou es:snapshots:list REPOSITORY
+
+ARGUMENTS
+  REPOSITORY ES repository name
+
+OPTIONS
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/snapshots/list.ts](src/commands/es/snapshots/list.ts)_
+
+## `kourou es:snapshots:restore REPOSITORY`
+
+Restore a snapshot into an ES instance
+
+```
+USAGE
+  $ kourou es:snapshots:restore REPOSITORY
+
+ARGUMENTS
+  REPOSITORY ES repository name
+
+OPTIONS
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/snapshots/restore.ts](src/commands/es/snapshots/restore.ts)_
 
 ## `kourou file:decrypt FILE`
 

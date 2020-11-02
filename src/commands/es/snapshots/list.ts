@@ -6,7 +6,7 @@ import { Kommand } from '../../../common'
 export default class ESlistSnapshot extends Kommand {
   static initSdk = false
 
-  static description = 'List all snapshot from a repository acknoledge by an ES instance'
+  static description = 'List all snapshot from a repository acknowledge by an ES instance'
 
   static flags = {
     host: flags.string({
