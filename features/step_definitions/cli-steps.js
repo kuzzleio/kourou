@@ -5,7 +5,7 @@ const should = require('should')
 const { Then } = require('cucumber')
 
 // this need to build the lib with "npm run build" first
-const { execute } = require('../../lib/src/support/execute')
+const { execute } = require('../../lib/support/execute')
 
 function kourou(...command) {
   const kourouRuntime = process.env.KOUROU_RUNTIME || './bin/run'
