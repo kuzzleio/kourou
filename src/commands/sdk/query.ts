@@ -21,7 +21,7 @@ Default fallback to API action
     - <command> <index> <collection> <body>
     - <command> <index> <collection> <id> <body>
 
-  If a flag is given (-i, -c, --body or --id), then the flag value has prior to
+  If a flag is given (-i, -c, --body or --id), then the flag value has priority over
   argument infering.
 
   Examples:
