@@ -78,7 +78,7 @@ $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password a
 [...]
 ```
 
-## Automatic command infering for API methods
+## Automatic command infering for API actions
 
 When no command is found, Kourou will try to execute the given command with the `sdk:query` command.  
 
