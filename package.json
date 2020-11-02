@@ -78,9 +78,6 @@
       "api-key": {
         "description": "manage API keys"
       },
-      "auth": {
-        "description": "lol"
-      },
       "app": {
         "description": "create, manage and run applications"
       },

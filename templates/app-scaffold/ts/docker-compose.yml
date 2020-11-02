@@ -4,7 +4,6 @@ services:
   kuzzle:
     image: kuzzleio/kuzzle-runner
     command: npm run dev
-    user: "${UID}:${GID}"
     cap_add:
       - SYS_PTRACE
     ulimits:
