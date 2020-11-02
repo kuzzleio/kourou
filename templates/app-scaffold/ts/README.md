@@ -2,18 +2,18 @@
 
 _An application running with [Kuzzle](https://github.com/kuzzleio/kuzzle)_
 
-## Installation and run
+## Development
+
+### Installation
 
 Requirement: 
- - Node.js >= 12
- - NPM >= 6
  - Docker
  - Docker-Compose
 
-First, install [Kourou](https://github.com/kuzzleio/kourou), the Kuzzle CLI: `npm install -g kourou`
+First you need to install dependencies. You can use the `npm run install:docker` to install dependencies from inside the container.
 
-Then you need to start the services used by Kuzzle, Elasticsearch and Redis. You can run those services in the background with the following command: `kourou app:start-services`
+### Run
 
-Finally you can start your application with `kourou app:run`.  
+You can use the `npm run dev:docker` to run the application with it's dependencies.  
 
-Under the hood this command simply run Node.js with Typescript as following: `node -r ts-node/register app.ts`
+The application will be reloaded on code change.
