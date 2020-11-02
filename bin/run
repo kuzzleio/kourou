@@ -1,5 +1,34 @@
 #!/usr/bin/env node
 
+const { Config } = require('@oclif/config')
+
+const SdkQuery = require('../lib/commands/sdk/query')
+
+/**
+ * Monkey patch of the Config.findCommand method to return the Api Action hook help
+ * This hook try to infer API controller and action when not matching command can be found.
+ */
+function findCommand(id, opts = {}) {
+  const command = this.commands.find(c => c.id === id || c.aliases.includes(id));
+
+  if (command)
+    return command;
+
+  if (id.includes(':')) {
+    const sdkQuery = this.commands.find(c => c.id === 'sdk:query')
+    sdkQuery.id = '<controller>:<action>'
+    sdkQuery.description = SdkQuery.FALLBACK_DESCRIPTION
+    sdkQuery.args = []
+    sdkQuery.usage = ''
+    return sdkQuery
+  }
+
+  if (opts.must)
+    errors_1.error(`command ${id} not found`);
+}
+
+Config.prototype.findCommand = findCommand
+
 require('@oclif/command').run()
-.then(require('@oclif/command/flush'))
-.catch(require('@oclif/errors/handle'))
+  .then(require('@oclif/command/flush'))
+  .catch(require('@oclif/errors/handle'))

@@ -4,7 +4,34 @@ import _ from 'lodash'
 import { Kommand } from '../../common'
 import { kuzzleFlags } from '../../support/kuzzle'
 
+import ApiActiondHook from '../../hooks/command_not_found/api-action'
+
 class SdkQuery extends Kommand {
+  public static FALLBACK_DESCRIPTION = `
+Default fallback to API action
+
+  It's possible to use the "sdk:query" command by only specifying the corresponding controller
+  and action as first argument.
+
+  Kourou will try to infer the first arguments to one the following pattern:
+    - <command> <index>
+    - <command> <body>
+    - <command> <index> <collection>
+    - <command> <index> <collection> <id>
+    - <command> <index> <collection> <body>
+    - <command> <index> <collection> <id> <body>
+
+  If a flag is given (-i, -c, --body or --id), then the flag value has prior to
+  argument infering.
+
+  Examples:
+    - kourou collection:list iot
+    - kourou security:createUser '{"content":{"profileIds":["default"]}}' --id yagmur
+    - kourou collection:delete iot sensors
+    - kourou document:createOrReplace iot sensors sigfox-1 '{}'
+    - kourou bulk:import iot sensors '{bulkData: [...]}'
+    - kourou admin:loadMappings < mappings.json
+`
   public static description = `
 Executes an API query.
 
@@ -36,27 +63,7 @@ Other
     - kourou sdk:query document:create -i iot -c sensors --editor
     - kourou sdk:query server:now --display 'result.now'
 
-Default fallback to API method
-
-  It's possible to use this command by only specifying the corresponding controller
-  and action as first argument.
-  Kourou will try to infer the first arguments to one the following pattern:
-    - <command> <index>
-    - <command> <body>
-    - <command> <index> <collection>
-    - <command> <index> <collection> <id>
-    - <command> <index> <collection> <body>
-    - <command> <index> <collection> <id> <body>
-  If a flag is given (-i, -c, --body or --id), then the flag value has prior to
-  argument infering.
-
-  Examples:
-    - kourou collection:list iot
-    - kourou security:createUser '{"content":{"profileIds":["default"]}}' --id yagmur
-    - kourou collection:delete iot sensors
-    - kourou document:createOrReplace iot sensors sigfox-1 '{}'
-    - kourou bulk:import iot sensors '{bulkData: [...]}'
-    - kourou admin:loadMappings < mappings.json
+${SdkQuery.FALLBACK_DESCRIPTION}
 `;
 
   public static flags = {

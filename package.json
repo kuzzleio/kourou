@@ -78,6 +78,9 @@
       "api-key": {
         "description": "manage API keys"
       },
+      "auth": {
+        "description": "lol"
+      },
       "app": {
         "description": "create, manage and run applications"
       },
@@ -110,7 +113,7 @@
       }
     },
     "hooks": {
-      "command_not_found": "./lib/hooks/command_not_found/api-method"
+      "command_not_found": "./lib/hooks/command_not_found/api-action"
     }
   },
   "repository": "kuzzleio/kourou",
