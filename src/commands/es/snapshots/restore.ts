@@ -30,7 +30,7 @@ export default class ESRestore extends Kommand {
   async getIndices(esClient: Client) {
     const beforeResponse = await esClient.cat.indices({ format: 'json' })
 
-    const indices: string[] = beforeResponse.body
+    const indices = beforeResponse.body
       .map(({ index }: { index: string }) => index)
 
     return indices
@@ -42,8 +42,8 @@ export default class ESRestore extends Kommand {
 
     const esClient = new Client({ node })
 
-    const indicesBeforeRestore = await this.getIndices(esClient)
-    for (const index of indicesBeforeRestore) {
+    const indices = await this.getIndices(esClient)
+    for (const index of indices) {
       await esClient.indices.close({ index })
     }
 
@@ -55,11 +55,6 @@ export default class ESRestore extends Kommand {
 
     const response = await esClient.snapshot.restore(esRequest)
 
-    const indicesAfterRestore = await this.getIndices(esClient)
-    for (const index of indicesAfterRestore) {
-      await esClient.indices.open({ index })
-    }
-
-    this.logOk(`Success ${JSON.stringify(response.body)}`)
+    this.logOk(`Success ${JSON.stringify(response.body, null, 2)}`)
   }
 }

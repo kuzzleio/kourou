@@ -3,7 +3,7 @@ import { Client } from '@elastic/elasticsearch'
 
 import { Kommand } from '../../../common'
 
-export default class ESlistSnapshot extends Kommand {
+export default class EsSnapshotslist extends Kommand {
   static initSdk = false
 
   static description = 'List all snapshot from a repository acknowledge by an ES instance'
