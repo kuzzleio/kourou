@@ -14,7 +14,8 @@ const templatesDir = path.join(__dirname, '..', '..', '..', 'templates')
 
 const TEMPLATED_ENTRIES = [
   'package.json',
-  'app.ts'
+  'app.ts',
+  'README.md'
 ]
 
 export default class AppScaffold extends Kommand {
