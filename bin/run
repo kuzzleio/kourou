@@ -1,33 +1,30 @@
 #!/usr/bin/env node
 
-const { Config } = require('@oclif/config')
+const { default: Help } = require('@oclif/plugin-help')
 
-const SdkQuery = require('../lib/commands/sdk/query')
-
+const Help_showHelp = Help.prototype.showHelp;
 /**
- * Monkey patch of the Config.findCommand method to return the Api Action hook help
- * This hook try to infer API controller and action when not matching command can be found.
+ * Monkey patch of the Help.showHelp method to catch the error when a command is
+ * not found and add a meaningfull error message about the API action hook
  */
-function findCommand(id, opts = {}) {
-  const command = this.commands.find(c => c.id === id || c.aliases.includes(id));
+function showHelp(...args) {
+  const context = this;
 
-  if (command)
-    return command;
-
-  if (id.includes(':')) {
-    const sdkQuery = this.commands.find(c => c.id === 'sdk:query')
-    sdkQuery.id = '<controller>:<action>'
-    sdkQuery.description = SdkQuery.FALLBACK_DESCRIPTION
-    sdkQuery.args = []
-    sdkQuery.usage = ''
-    return sdkQuery
+  try {
+    return Help_showHelp.call(context, ...args);
   }
+  catch (error) {
+    error.message += `
 
-  if (opts.must)
-    errors_1.error(`command ${id} not found`);
+If you tried to execute and API action you can see
+available options by displaying the "sdk:query" command help:
+  - kourou sdk:query --help`;
+
+    throw error;
+  }
 }
 
-Config.prototype.findCommand = findCommand
+Help.prototype.showHelp = showHelp
 
 require('@oclif/command').run()
   .then(require('@oclif/command/flush'))
