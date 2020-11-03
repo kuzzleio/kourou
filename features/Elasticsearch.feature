@@ -41,7 +41,7 @@ Feature: Elasticsearch commands
     Then I should match stdout with "Success"
 
   Scenario: Dump ES data to a snapshot into a repository
-    When I run the command "es:snapshots:dump" with:
+    When I run the command "es:snapshots:create" with:
       | arg  | backup        |           |
       | arg  | test-snapshot |           |
       | flag | --host        | localhost |
@@ -55,7 +55,7 @@ Feature: Elasticsearch commands
       | flag | --port | 9200      |
     Then I should match stdout with "test-snapshot"
 
-  Scenario: Restore a snapshot into a running ES instance
+  Scenario: Sucessfully Restore a snapshot into a running ES instance
     When I run the command "es:snapshots:restore" with:
       | arg  | backup        |           |
       | arg  | test-snapshot |           |

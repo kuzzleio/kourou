@@ -43,18 +43,27 @@ export default class ESRestore extends Kommand {
     const esClient = new Client({ node })
 
     const indices = await this.getIndices(esClient)
-    for (const index of indices) {
-      await esClient.indices.close({ index })
+
+    try {
+      for (const index of indices) {
+        await esClient.indices.close({ index })
+      }
+
+      const esRequest = {
+        repository: this.args.repository,
+        snapshot: this.args.name,
+        body: {}
+      }
+
+      const response = await esClient.snapshot.restore(esRequest)
+
+      this.logOk(`Success ${JSON.stringify(response.body, null, 2)}`)
+    } catch (error) {
+      this.logKo(`Failed to restore requested snapshot ${this.args.name}`)
+    } finally {
+      for (const index of indices) {
+        await esClient.indices.open({ index })
+      }
     }
-
-    const esRequest = {
-      repository: this.args.repository,
-      snapshot: this.args.name,
-      body: {}
-    }
-
-    const response = await esClient.snapshot.restore(esRequest)
-
-    this.logOk(`Success ${JSON.stringify(response.body, null, 2)}`)
   }
 }

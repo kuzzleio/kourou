@@ -135,7 +135,7 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou es:indices:get INDEX ID`](#kourou-esindicesget-index-id)
 * [`kourou es:indices:insert INDEX`](#kourou-esindicesinsert-index)
 * [`kourou es:snapshots:create-repository REPOSITORY LOCATION`](#kourou-essnapshotscreate-repository-repository-location)
-* [`kourou es:snapshots:dump REPOSITORY NAME`](#kourou-essnapshotsdump-repository-name)
+* [`kourou es:snapshots:create REPOSITORY NAME`](#kourou-essnapshotscreate-repository-name)
 * [`kourou es:snapshots:list REPOSITORY`](#kourou-essnapshotslist-repository)
 * [`kourou es:snapshots:restore REPOSITORY NAME`](#kourou-essnapshotsrestore-repository-name)
 * [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
@@ -537,13 +537,13 @@ OPTIONS
 
 _See code: [src/commands/es/snapshots/create-repository.ts](src/commands/es/snapshots/create-repository.ts)_
 
-## `kourou es:snapshots:dump REPOSITORY NAME`
+## `kourou es:snapshots:create REPOSITORY NAME`
 
 Create a FS snapshot repository inside an ES instance
 
 ```
 USAGE
-  $ kourou es:snapshots:dump REPOSITORY NAME
+  $ kourou es:snapshots:create REPOSITORY NAME
 
 ARGUMENTS
   REPOSITORY ES repository name
