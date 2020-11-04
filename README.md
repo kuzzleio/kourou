@@ -134,10 +134,10 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou es:indices:cat`](#kourou-esindicescat)
 * [`kourou es:indices:get INDEX ID`](#kourou-esindicesget-index-id)
 * [`kourou es:indices:insert INDEX`](#kourou-esindicesinsert-index)
-* [`kourou es:snapshots:create-repository REPOSITORY LOCATION`](#kourou-essnapshotscreate-repository-repository-location)
-* [`kourou es:snapshots:create REPOSITORY NAME`](#kourou-essnapshotscreate-repository-name)
-* [`kourou es:snapshots:list REPOSITORY`](#kourou-essnapshotslist-repository)
-* [`kourou es:snapshots:restore REPOSITORY NAME`](#kourou-essnapshotsrestore-repository-name)
+* [`kourou es:snapshot:create-repository REPOSITORY LOCATION`](#kourou-essnapshotcreate-repository-repository-location)
+* [`kourou es:snapshot:create REPOSITORY NAME`](#kourou-essnapshotcreate-repository-name)
+* [`kourou es:snapshot:list REPOSITORY`](#kourou-essnapshotlist-repository)
+* [`kourou es:snapshot:restore REPOSITORY NAME`](#kourou-essnapshotrestore-repository-name)
 * [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
 * [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
 * [`kourou file:test FILE`](#kourou-filetest-file)
@@ -516,13 +516,13 @@ OPTIONS
 
 _See code: [src/commands/es/indices/insert.ts](src/commands/es/indices/insert.ts)_
 
-## `kourou es:snapshots:create-repository REPOSITORY LOCATION`
+## `kourou es:snapshot:create-repository REPOSITORY LOCATION`
 
 Create a FS snapshot repository inside an ES instance
 
 ```
 USAGE
-  $ kourou es:snapshots:create-repository REPOSITORY LOCATION
+  $ kourou es:snapshot:create-repository REPOSITORY LOCATION
 
 ARGUMENTS
   REPOSITORY ES repository name
@@ -535,15 +535,15 @@ OPTIONS
   --compress       Compress data when storing them
 ```
 
-_See code: [src/commands/es/snapshots/create-repository.ts](src/commands/es/snapshots/create-repository.ts)_
+_See code: [src/commands/es/snapshot/create-repository.ts](src/commands/es/snapshot/create-repository.ts)_
 
-## `kourou es:snapshots:create REPOSITORY NAME`
+## `kourou es:snapshot:create REPOSITORY NAME`
 
 Create a FS snapshot repository inside an ES instance
 
 ```
 USAGE
-  $ kourou es:snapshots:create REPOSITORY NAME
+  $ kourou es:snapshot:create REPOSITORY NAME
 
 ARGUMENTS
   REPOSITORY ES repository name
@@ -555,15 +555,15 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/snapshots/dump.ts](src/commands/es/snapshots/dump.ts)_
+_See code: [src/commands/es/snapshot/dump.ts](src/commands/es/snapshot/dump.ts)_
 
-## `kourou es:snapshots:list REPOSITORY`
+## `kourou es:snapshot:list REPOSITORY`
 
 List all snapshot from a repository acknowledge by an ES instance
 
 ```
 USAGE
-  $ kourou es:snapshots:list REPOSITORY
+  $ kourou es:snapshot:list REPOSITORY
 
 ARGUMENTS
   REPOSITORY ES repository name
@@ -574,15 +574,15 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/snapshots/list.ts](src/commands/es/snapshots/list.ts)_
+_See code: [src/commands/es/snapshot/list.ts](src/commands/es/snapshot/list.ts)_
 
-## `kourou es:snapshots:restore REPOSITORY`
+## `kourou es:snapshot:restore REPOSITORY`
 
 Restore a snapshot into an ES instance
 
 ```
 USAGE
-  $ kourou es:snapshots:restore REPOSITORY
+  $ kourou es:snapshot:restore REPOSITORY
 
 ARGUMENTS
   REPOSITORY ES repository name
@@ -593,7 +593,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/snapshots/restore.ts](src/commands/es/snapshots/restore.ts)_
+_See code: [src/commands/es/snapshot/restore.ts](src/commands/es/snapshot/restore.ts)_
 
 ## `kourou file:decrypt FILE`
 

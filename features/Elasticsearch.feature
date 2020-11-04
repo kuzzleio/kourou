@@ -32,7 +32,7 @@ Feature: Elasticsearch commands
     Then I should match stdout with "kindred"
 
   Scenario: Create a snapshot repository
-    When I run the command "es:snapshots:create-repository" with:
+    When I run the command "es:snapshot:create-repository" with:
       | arg  | backup         |           |
       | arg  | /tmp/snapshots |           |
       | flag | --host         | localhost |
@@ -41,22 +41,22 @@ Feature: Elasticsearch commands
     Then I should match stdout with "Success"
 
   Scenario: Dump ES data to a snapshot into a repository
-    When I run the command "es:snapshots:create" with:
+    When I run the command "es:snapshot:create" with:
       | arg  | backup        |           |
       | arg  | test-snapshot |           |
       | flag | --host        | localhost |
       | flag | --port        | 9200      |
     Then I should match stdout with "Success"
 
-  Scenario: List all available snapshots of a repository
-    When I run the command "es:snapshots:list" with:
+  Scenario: List all available snapshot of a repository
+    When I run the command "es:snapshot:list" with:
       | arg  | backup |           |
       | flag | --host | localhost |
       | flag | --port | 9200      |
     Then I should match stdout with "test-snapshot"
 
   Scenario: Sucessfully Restore a snapshot into a running ES instance
-    When I run the command "es:snapshots:restore" with:
+    When I run the command "es:snapshot:restore" with:
       | arg  | backup        |           |
       | arg  | test-snapshot |           |
       | flag | --host        | localhost |
