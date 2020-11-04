@@ -1,4 +1,4 @@
-version: "3"
+version: "3.4"
 
 services:
   kuzzle:
@@ -30,7 +30,13 @@ services:
     image: redis:5
 
   elasticsearch:
-    image: kuzzleio/elasticsearch:7
+    build:
+      dockerfile: Dockerfile
+      context: ./elasticsearch
+      target: elasticsearch
+    container_name: kuzzle_elasticsearch
+    volumes:
+      - "/tmp/snapshots:/tmp/snapshots"
     ports:
       - "9200:9200"
     ulimits:

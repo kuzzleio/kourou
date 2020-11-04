@@ -65,16 +65,14 @@ jobs:
       name: "Kourou Functional Cucumber Tests"
       language: node_js
       node_js: 12
-      env:
-        - NODE_ENV=test
       cache:
         directories:
           - ~/.npm
           - ~/.cache
           - node_modules # NPM packages
-
       env:
         - KOUROU_RUNTIME="./package/bin/run"
+        - NODE_ENV=test
 
       install:
         # install kourou dependencies for packing and testing
@@ -91,6 +89,8 @@ jobs:
       script:
         - bash features/run-kuzzle-stack.sh
         - npm run test:functional:cucumber
+      after_failure:
+        - docker-compose -f features/docker/docker-compose.yml logs
 
     - stage: Deploy
       name: Deploy Kourou on NPM
