@@ -91,7 +91,12 @@ export abstract class Kommand extends Command {
 
     try {
       if (kommand.initSdk) {
-        this.sdk = new KuzzleSDK({ ...this.flags, ...this.sdkOptions })
+        this.sdk = new KuzzleSDK({
+          ...this.flags,
+          ...this.sdkOptions,
+          appName: this.config.name,
+          appVersion: this.config.version
+        })
 
         await this.sdk.init(this)
       }

@@ -1,7 +1,5 @@
 import { flags } from '@oclif/command'
 
-import packageJson from '../../package.json'
-
 import { Http, WebSocket, Kuzzle } from 'kuzzle-sdk'
 
 const SECOND = 1000
@@ -59,6 +57,10 @@ export class KuzzleSDK {
 
   private refreshTimer?: NodeJS.Timeout;
 
+  private appVersion: string
+
+  private appName: string
+
   constructor(options: any) {
     this.host = options.host
     this.port = parseInt(options.port, 10)
@@ -67,6 +69,8 @@ export class KuzzleSDK {
     this.password = options.password
     this.protocol = options.protocol
     this.apikey = options['api-key']
+    this.appVersion = options.appVersion
+    this.appName = options.appName
 
     // Instantiate a fake SDK in the constructor to please TS
     this.sdk = new Kuzzle(new WebSocket('nowhere'))
@@ -96,7 +100,7 @@ export class KuzzleSDK {
     }))
 
     this.sdk.volatile = {
-      client: `kourou@${packageJson.version}`
+      client: `${this.appName}@${this.appVersion}`
     }
 
     this.sdk.on('networkError', (error: any) => logger.logKo(error.message))
