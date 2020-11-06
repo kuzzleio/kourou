@@ -2,7 +2,6 @@ import path from 'path'
 import fs from 'fs'
 
 import { flags } from '@oclif/command'
-import cli from 'cli-ux'
 import _ from 'lodash'
 import chalk from 'chalk'
 import Listr from 'listr'
@@ -44,7 +43,7 @@ export default class AppScaffold extends Kommand {
         task: () => this.renderTemplates(templatePath, templatePath)
       },
       {
-        title: `Installing latest Kuzzle version via NPM and Docker (this can take some time)`,
+        title: 'Installing latest Kuzzle version via NPM and Docker (this can take some time)',
         task: () =>
           execute('npm', 'run', 'npm:docker', 'install', 'kuzzle', { cwd: this.args.name })
       },

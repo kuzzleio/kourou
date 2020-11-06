@@ -4,8 +4,6 @@ import _ from 'lodash'
 import { Kommand } from '../../common'
 import { kuzzleFlags } from '../../support/kuzzle'
 
-import ApiActiondHook from '../../hooks/command_not_found/api-action'
-
 class SdkQuery extends Kommand {
   public static description = `
 Executes an API query.
