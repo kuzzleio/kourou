@@ -112,8 +112,10 @@ Default fallback to API action
     requestArgs._id = this.flags.id
 
     for (const keyValue of this.flags.arg || []) {
-      const [key, ...value] = keyValue.split('=')
-      requestArgs[key] = value.join()
+      const key = keyValue.substr(0, keyValue.indexOf('='));
+      const value = keyValue.substr(keyValue.indexOf('=') + 1);
+
+      requestArgs[key] = value;
     }
 
     const body = this.stdin ? this.stdin : this.flags.body
@@ -135,7 +137,7 @@ Default fallback to API action
     else if (this.flags['body-editor']) {
       request.body = this.fromEditor(request.body, { json: true })
     }
-    console.log(require('util').inspect(request.body))
+    console.log(require('util').inspect(request))
     const response = await this.sdk.query(request)
 
     const display = this.flags.display === ''
