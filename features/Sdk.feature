@@ -27,7 +27,7 @@ Feature: SDK commands
   Scenario: Execute code in the SDK context
     Given an existing collection "nyc-open-data":"yellow-taxi"
     When I run the command "sdk:execute" with:
-      | flag | --code | return await sdk.document.create("nyc-open-data", "yellow-taxi", { name: "Adrien" }, "document-adrien"); |
+      | arg | return await sdk.document.create("nyc-open-data", "yellow-taxi", { name: "Adrien" }, "document-adrien"); |
     Then The document "document-adrien" content match:
       | name | "Adrien" |
     And I should match stdout with "document-adrien"
