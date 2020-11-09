@@ -135,7 +135,7 @@ Default fallback to API action
     else if (this.flags['body-editor']) {
       request.body = this.fromEditor(request.body, { json: true })
     }
-
+    console.log(require('util').inspect(request.body))
     const response = await this.sdk.query(request)
 
     const display = this.flags.display === ''
