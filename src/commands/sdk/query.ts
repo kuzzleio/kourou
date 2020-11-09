@@ -68,6 +68,10 @@ Default fallback to API action
       description: 'Additional argument. Repeatable. (e.g. "-a refresh=wait_for")',
       multiple: true
     }),
+    ['arg-js']: flags.string({
+      description: 'Additional argument in JS or JSON format. Repeatable. (e.g. "--arg-js sort=\'[{ _id: "desc" }]\'")',
+      multiple: true
+    }),
     body: flags.string({
       description: 'Request body in JS or JSON format. Will be read from STDIN if available.',
       default: '{}'
@@ -118,6 +122,13 @@ Default fallback to API action
       requestArgs[key] = value;
     }
 
+    for (const keyValue of this.flags['arg-js'] || []) {
+      const key = keyValue.substr(0, keyValue.indexOf('='));
+      const value = keyValue.substr(keyValue.indexOf('=') + 1);
+
+      requestArgs[key] = this.parseJs(value);
+    }
+
     const body = this.stdin ? this.stdin : this.flags.body
 
     let request = {
@@ -137,7 +148,7 @@ Default fallback to API action
     else if (this.flags['body-editor']) {
       request.body = this.fromEditor(request.body, { json: true })
     }
-    console.log(require('util').inspect(request))
+
     const response = await this.sdk.query(request)
 
     const display = this.flags.display === ''
