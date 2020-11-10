@@ -26,7 +26,7 @@ export default class CollectionExport extends Kommand {
       description: 'Open an editor (EDITOR env variable) to edit the query before sending'
     }),
     format: flags.string({
-      description: 'JSONL or RAW - RAW will export in Kuzzle format',
+      description: 'JSONL or kuzzle - kuzzle will export in Kuzzle format',
       default: 'JSONL'
     }),
     ...kuzzleFlags,

@@ -76,7 +76,7 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
     }
   } while ((results = await results.next()))
 
-  if (format.toLocaleLowerCase() === 'raw') {
+  if (format.toLocaleLowerCase() === 'kuzzle') {
     await writeLine(rawDocuments)
   }
 
