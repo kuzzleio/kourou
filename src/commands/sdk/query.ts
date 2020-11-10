@@ -36,10 +36,11 @@ Other
     - kourou sdk:query document:create -i iot -c sensors --editor
     - kourou sdk:query server:now --display 'result.now'
 
-Default fallback to API method
+Default fallback to API action
 
-  It's possible to use this command by only specifying the corresponding controller
+  It's possible to use the "sdk:query" command by only specifying the corresponding controller
   and action as first argument.
+
   Kourou will try to infer the first arguments to one the following pattern:
     - <command> <index>
     - <command> <body>
@@ -47,15 +48,16 @@ Default fallback to API method
     - <command> <index> <collection> <id>
     - <command> <index> <collection> <body>
     - <command> <index> <collection> <id> <body>
-  If a flag is given (-i, -c, --body or --id), then the flag value has prior to
+
+  If a flag is given (-i, -c, --body or --id), then the flag value has priority over
   argument infering.
 
   Examples:
     - kourou collection:list iot
-    - kourou security:createUser '{"content":{"profileIds":["default"]}}' --id yagmur
+    - kourou security:createUser '{ "content": { "profileIds": ["default"] } }' --id yagmur
     - kourou collection:delete iot sensors
     - kourou document:createOrReplace iot sensors sigfox-1 '{}'
-    - kourou bulk:import iot sensors '{bulkData: [...]}'
+    - kourou bulk:import iot sensors '{ bulkData: [...] }'
     - kourou admin:loadMappings < mappings.json
 `;
 
@@ -88,7 +90,7 @@ Default fallback to API method
       description: 'ID argument (_id)'
     }),
     display: flags.string({
-      description: 'Path of the property to display from the response (empty string to display everything)',
+      description: 'Path of the property to display from the response (empty string to display the result)',
       default: 'result'
     }),
     ...kuzzleFlags,
@@ -110,8 +112,10 @@ Default fallback to API method
     requestArgs._id = this.flags.id
 
     for (const keyValue of this.flags.arg || []) {
-      const [key, ...value] = keyValue.split('=')
-      requestArgs[key] = value.join()
+      const key = keyValue.substr(0, keyValue.indexOf('='))
+      const value = keyValue.substr(keyValue.indexOf('=') + 1)
+
+      requestArgs[key] = value
     }
 
     const body = this.stdin ? this.stdin : this.flags.body

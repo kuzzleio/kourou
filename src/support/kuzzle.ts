@@ -57,6 +57,10 @@ export class KuzzleSDK {
 
   private refreshTimer?: NodeJS.Timeout;
 
+  private appVersion: string
+
+  private appName: string
+
   constructor(options: any) {
     this.host = options.host
     this.port = parseInt(options.port, 10)
@@ -65,6 +69,8 @@ export class KuzzleSDK {
     this.password = options.password
     this.protocol = options.protocol
     this.apikey = options['api-key']
+    this.appVersion = options.appVersion
+    this.appName = options.appName
 
     // Instantiate a fake SDK in the constructor to please TS
     this.sdk = new Kuzzle(new WebSocket('nowhere'))
@@ -92,6 +98,10 @@ export class KuzzleSDK {
       port: this.port,
       sslConnection: this.ssl,
     }))
+
+    this.sdk.volatile = {
+      client: `${this.appName}@${this.appVersion}`
+    }
 
     this.sdk.on('networkError', (error: any) => logger.logKo(error.message))
 
@@ -172,6 +182,18 @@ export class KuzzleSDK {
   }
 
   public query(request: any) {
+    // Convert string to boolean when protocol is WebSocket
+    if (this.protocol === 'ws') {
+      for (const [key, value] of Object.entries(request)) {
+        if (value === 'true') {
+          request[key] = true
+        }
+        else if (value === 'false') {
+          request[key] = false
+        }
+      }
+    }
+
     return this.sdk.query(request)
   }
 

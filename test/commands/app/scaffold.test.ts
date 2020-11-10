@@ -25,5 +25,5 @@ describe('app:scaffold', () => {
     should(packageJson.name).be.eql('blackmesa')
 
     should(packageJson.dependencies.kuzzle).not.be.undefined()
-  }).timeout(240 * 1000) // long timeout because of npm install which slow af
+  }).timeout(500 * 1000) // long timeout because of npm install which is slow af (and specially in Travis)
 })

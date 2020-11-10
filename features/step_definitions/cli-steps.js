@@ -10,7 +10,7 @@ const { execute } = require('../../lib/support/execute')
 function kourou(...command) {
   const kourouRuntime = process.env.KOUROU_RUNTIME || './bin/run'
 
-  return execute(kourouRuntime, ...command);
+  return execute(kourouRuntime, ...command)
 }
 
 Then('I subscribe to {string}:{string}', async function (index, collection) {

@@ -19,12 +19,12 @@ Code Execution
 
 Provide code
 
-  code can be passed with the --code flag
+  code can be passed as an argument
   code will be read from STDIN if available
 
   Examples:
-    - kourou sdk:execute --code 'return await sdk.server.now()'
-    - kourou sdk:execute --code 'return await sdk.index.exists(index)' --var 'index="iot-data"'
+    - kourou sdk:execute 'return await sdk.server.now()'
+    - kourou sdk:execute 'return await sdk.index.exists(index)' --var 'index="iot-data"'
     - kourou sdk:execute < snippet.js
     - echo 'return await sdk.server.now()' | kourou sdk:execute
 
@@ -33,14 +33,11 @@ Other
   use the --editor flag to modify the code before executing it
 
   Examples:
-    - kourou sdk:execute --code 'return await sdk.server.now()' --editor
+    - kourou sdk:execute 'return await sdk.server.now()' --editor
 `;
 
   public static flags = {
     help: flags.help(),
-    code: flags.string({
-      description: 'Code to execute. Will be read from STDIN if available.'
-    }),
     var: flags.string({
       char: 'v',
       description: 'Additional arguments injected into the code. (eg: --var \'index="iot-data"\'',
@@ -55,12 +52,16 @@ Other
     ...kuzzleFlags,
   };
 
+  public static args = [
+    { name: 'code', description: 'Code to execute. Will be read from STDIN if available.', required: false },
+  ]
+
   private code = ''
 
   static readStdin = true
 
   async beforeConnect() {
-    this.code = this.stdin || this.flags.code || '// paste your code here'
+    this.code = this.stdin || this.args.code || '// paste your code here'
 
     if (this.haveSubscription) {
       this.sdkOptions.protocol = 'ws'

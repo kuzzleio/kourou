@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.16.0 linux-x64 node-v12.16.3
+kourou/0.17.0 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -134,6 +134,10 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou es:indices:cat`](#kourou-esindicescat)
 * [`kourou es:indices:get INDEX ID`](#kourou-esindicesget-index-id)
 * [`kourou es:indices:insert INDEX`](#kourou-esindicesinsert-index)
+* [`kourou es:snapshot:create REPOSITORY NAME`](#kourou-essnapshotcreate-repository-name)
+* [`kourou es:snapshot:create-repository REPOSITORY LOCATION`](#kourou-essnapshotcreate-repository-repository-location)
+* [`kourou es:snapshot:list REPOSITORY`](#kourou-essnapshotlist-repository)
+* [`kourou es:snapshot:restore REPOSITORY NAME`](#kourou-essnapshotrestore-repository-name)
 * [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
 * [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
 * [`kourou file:test FILE`](#kourou-filetest-file)
@@ -151,7 +155,7 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou redis:list-keys [MATCH]`](#kourou-redislist-keys-match)
 * [`kourou role:export`](#kourou-roleexport)
 * [`kourou role:import PATH`](#kourou-roleimport-path)
-* [`kourou sdk:execute`](#kourou-sdkexecute)
+* [`kourou sdk:execute [CODE]`](#kourou-sdkexecute-code)
 * [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
 * [`kourou user:export`](#kourou-userexport)
 * [`kourou user:export-mappings`](#kourou-userexport-mappings)
@@ -511,6 +515,86 @@ OPTIONS
 ```
 
 _See code: [src/commands/es/indices/insert.ts](src/commands/es/indices/insert.ts)_
+
+## `kourou es:snapshot:create REPOSITORY NAME`
+
+Create a snapshot repository inside an ES instance
+
+```
+USAGE
+  $ kourou es:snapshot:create REPOSITORY NAME
+
+ARGUMENTS
+  REPOSITORY  ES repository name
+  NAME        ES snapshot name
+
+OPTIONS
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/snapshot/create.ts](src/commands/es/snapshot/create.ts)_
+
+## `kourou es:snapshot:create-repository REPOSITORY LOCATION`
+
+Create a FS snapshot repository inside an ES instance
+
+```
+USAGE
+  $ kourou es:snapshot:create-repository REPOSITORY LOCATION
+
+ARGUMENTS
+  REPOSITORY  ES repository name
+  LOCATION    ES snapshot repository location
+
+OPTIONS
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --compress       Compress data when storing them
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/snapshot/create-repository.ts](src/commands/es/snapshot/create-repository.ts)_
+
+## `kourou es:snapshot:list REPOSITORY`
+
+List all snapshot from a repository acknowledge by an ES instance
+
+```
+USAGE
+  $ kourou es:snapshot:list REPOSITORY
+
+ARGUMENTS
+  REPOSITORY  Name of repository from which to fetch the snapshot information
+
+OPTIONS
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/snapshot/list.ts](src/commands/es/snapshot/list.ts)_
+
+## `kourou es:snapshot:restore REPOSITORY NAME`
+
+Restore a snapshot into an ES instance
+
+```
+USAGE
+  $ kourou es:snapshot:restore REPOSITORY NAME
+
+ARGUMENTS
+  REPOSITORY  ES repository name
+  NAME        ES snapshot name
+
+OPTIONS
+  -h, --host=host  [default: localhost] Elasticsearch server host
+  -p, --port=port  [default: 9200] Elasticsearch server port
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/snapshot/restore.ts](src/commands/es/snapshot/restore.ts)_
 
 ## `kourou file:decrypt FILE`
 
@@ -919,19 +1003,21 @@ OPTIONS
 
 _See code: [src/commands/role/import.ts](src/commands/role/import.ts)_
 
-## `kourou sdk:execute`
+## `kourou sdk:execute [CODE]`
 
 Executes arbitrary code.
 
 ```
 USAGE
-  $ kourou sdk:execute
+  $ kourou sdk:execute [CODE]
+
+ARGUMENTS
+  CODE  Code to execute. Will be read from STDIN if available.
 
 OPTIONS
   -v, --var=var        Additional arguments injected into the code. (eg: --var 'index="iot-data"'
   --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
-  --code=code          Code to execute. Will be read from STDIN if available.
   --editor             Open an editor (EDITOR env variable) to edit the code before executing it.
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
@@ -955,12 +1041,12 @@ DESCRIPTION
 
   Provide code
 
-     code can be passed with the --code flag
+     code can be passed as an argument
      code will be read from STDIN if available
 
      Examples:
-       - kourou sdk:execute --code 'return await sdk.server.now()'
-       - kourou sdk:execute --code 'return await sdk.index.exists(index)' --var 'index="iot-data"'
+       - kourou sdk:execute 'return await sdk.server.now()'
+       - kourou sdk:execute 'return await sdk.index.exists(index)' --var 'index="iot-data"'
        - kourou sdk:execute < snippet.js
        - echo 'return await sdk.server.now()' | kourou sdk:execute
 
@@ -969,7 +1055,7 @@ DESCRIPTION
      use the --editor flag to modify the code before executing it
 
      Examples:
-       - kourou sdk:execute --code 'return await sdk.server.now()' --editor
+       - kourou sdk:execute 'return await sdk.server.now()' --editor
 ```
 
 _See code: [src/commands/sdk/execute.ts](src/commands/sdk/execute.ts)_
@@ -995,7 +1081,7 @@ OPTIONS
   --body-editor                Open an editor (EDITOR env variable) to edit the body before sending.
 
   --display=display            [default: result] Path of the property to display from the response (empty string to
-                               display everything)
+                               display the result)
 
   --editor                     Open an editor (EDITOR env variable) to edit the request before sending.
 
@@ -1046,10 +1132,11 @@ DESCRIPTION
        - kourou sdk:query document:create -i iot -c sensors --editor
        - kourou sdk:query server:now --display 'result.now'
 
-  Default fallback to API method
+  Default fallback to API action
 
-     It's possible to use this command by only specifying the corresponding controller
+     It's possible to use the "sdk:query" command by only specifying the corresponding controller
      and action as first argument.
+
      Kourou will try to infer the first arguments to one the following pattern:
        - <command> <index>
        - <command> <body>
@@ -1057,15 +1144,16 @@ DESCRIPTION
        - <command> <index> <collection> <id>
        - <command> <index> <collection> <body>
        - <command> <index> <collection> <id> <body>
-     If a flag is given (-i, -c, --body or --id), then the flag value has prior to
+
+     If a flag is given (-i, -c, --body or --id), then the flag value has priority over
      argument infering.
 
      Examples:
        - kourou collection:list iot
-       - kourou security:createUser '{"content":{"profileIds":["default"]}}' --id yagmur
+       - kourou security:createUser '{ "content": { "profileIds": ["default"] } }' --id yagmur
        - kourou collection:delete iot sensors
        - kourou document:createOrReplace iot sensors sigfox-1 '{}'
-       - kourou bulk:import iot sensors '{bulkData: [...]}'
+       - kourou bulk:import iot sensors '{ bulkData: [...] }'
        - kourou admin:loadMappings < mappings.json
 ```
 
