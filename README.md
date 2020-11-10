@@ -12,6 +12,7 @@ The CLI that helps you manage your Kuzzle instances.
 * [Usage](#usage)
 * [Commands](#commands)
 * [Where does this weird name come from?](#where-does-this-weird-name-come-from)
+* [Have fun with a quine](#have-fun-with-a-quine)
 <!-- tocstop -->
 
 :warning: This project is currently in beta and breaking changes may occur until the 1.0.0
@@ -1024,6 +1025,7 @@ OPTIONS
   --keep-alive         Keep the connection running (websocket only)
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
+  --print-raw          Print only the script result to stdout
   --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
@@ -1446,3 +1448,19 @@ _See code: [src/commands/vault/test.ts](src/commands/vault/test.ts)_
 # Where does this weird name come from?
 
 We liked the idea that this CLI is like a launchpad for the Kuzzle rocket. The place where you launch and pilot your Kuzzle instance. The place where the European Space Agency launches their rockets is in the country near the city of [Kourou](https://www.wikiwand.com/en/Kourou), in French Guiana, so we liked the idea that the Kuzzle rockets would take off from there.
+
+# Have fun with a quine
+
+[Quine](https://en.wikipedia.org/wiki/Quine_(computing)) are programs able to print their own source code.
+
+```bash
+$ kourou-dev sdk:execute --print-raw --code '(
+  function quine() {
+    const sq = String.fromCharCode(39);
+    const lp = String.fromCharCode(40);
+    const rp = String.fromCharCode(41);
+
+    console.log("kourou-dev sdk:execute --print-raw --code " + sq + lp + quine.toString() + rp + lp + rp + ";" + sq)
+  }
+)()'
+```
