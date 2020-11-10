@@ -1,5 +1,31 @@
 #!/usr/bin/env node
 
+const { default: Help } = require('@oclif/plugin-help')
+
+const Help_showHelp = Help.prototype.showHelp;
+/**
+ * Monkey patch of the Help.showHelp method to catch the error when a command is
+ * not found and add a meaningfull error message about the API action hook
+ */
+function showHelp(...args) {
+  const context = this;
+
+  try {
+    return Help_showHelp.call(context, ...args);
+  }
+  catch (error) {
+    error.message += `
+
+If you tried to execute and API action you can see
+available options by displaying the "sdk:query" command help:
+  - kourou sdk:query --help`;
+
+    throw error;
+  }
+}
+
+Help.prototype.showHelp = showHelp
+
 require('@oclif/command').run()
-.then(require('@oclif/command/flush'))
-.catch(require('@oclif/errors/handle'))
+  .then(require('@oclif/command/flush'))
+  .catch(require('@oclif/errors/handle'))

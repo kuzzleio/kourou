@@ -182,6 +182,18 @@ export class KuzzleSDK {
   }
 
   public query(request: any) {
+    // Convert string to boolean when protocol is WebSocket
+    if (this.protocol === 'ws') {
+      for (const [key, value] of Object.entries(request)) {
+        if (value === 'true') {
+          request[key] = true
+        }
+        else if (value === 'false') {
+          request[key] = false
+        }
+      }
+    }
+
     return this.sdk.query(request)
   }
 

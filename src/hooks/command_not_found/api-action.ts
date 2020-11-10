@@ -3,7 +3,7 @@ import { Hook } from '@oclif/config'
 import SdkQuery from '../../commands/sdk/query'
 
 /**
- * Hooks that run the corresponding API method with sdk:query.
+ * Hooks that run the corresponding API action with sdk:query.
  *
  * Example:
  *  - kourou document:create -i index -c collection --id foobar-1 --body '{}'
@@ -35,7 +35,7 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     return
   }
 
-  this.log(chalk.yellow(`[ℹ] Unknown command "${opts.id}", fallback to API method`))
+  this.log(chalk.yellow(`[ℹ] Unknown command "${opts.id}", fallback to API action`))
 
   const args = process.argv.slice(3)
   const commandArgs = [opts.id]
