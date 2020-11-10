@@ -24,7 +24,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.16.0 linux-x64 node-v12.16.3
+kourou/0.17.0 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -1081,7 +1081,7 @@ OPTIONS
   --body-editor                Open an editor (EDITOR env variable) to edit the body before sending.
 
   --display=display            [default: result] Path of the property to display from the response (empty string to
-                               display everything)
+                               display the result)
 
   --editor                     Open an editor (EDITOR env variable) to edit the request before sending.
 
