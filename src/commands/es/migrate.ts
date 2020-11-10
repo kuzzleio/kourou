@@ -14,12 +14,12 @@ export default class EsMigrate extends Kommand {
     static flags = {
         help: flags.help(),
         src: flags.string({
-            description: 'Source Elasticsearch server URL (',
+            description: 'Source Elasticsearch server URL (ej: http://localhost:9200)',
             env: 'KUZZLE_ES_SRC',
             required: true
         }),
         dest: flags.string({
-            description: 'Destination Elasticsearch server URL',
+            description: 'Destination Elasticsearch server URL (ej: http://localhost:9200)',
             env: 'KUZZLE_ES_DEST',
             required: true
         }),
