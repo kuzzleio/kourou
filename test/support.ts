@@ -11,5 +11,6 @@ export function kourou(command: string) {
     console.log(error)
     console.log('STDOUT: ', error.stdout.toString())
     console.log('STDOUT: ', error.stderr.toString())
+    throw error
   }
 }
