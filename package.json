@@ -1,7 +1,7 @@
 {
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kourou": "./bin/run"
@@ -12,7 +12,7 @@
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/plugin-help": "^2.2.3",
-    "@types/bluebird": "^3.5.32",
+    "@types/bluebird": "^3.5.33",
     "@types/inquirer": "^6.5.0",
     "bluebird": "^3.7.2",
     "chalk": "^3.0.0",
@@ -35,7 +35,7 @@
     "@types/compare-version": "^0.1.31",
     "@types/listr": "^0.14.2",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^10.17.43",
+    "@types/node": "^10.17.44",
     "@types/node-emoji": "^1.8.1",
     "chai": "^4.2.0",
     "cucumber": "^6.0.5",
