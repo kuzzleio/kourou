@@ -353,7 +353,7 @@ OPTIONS
   --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-  --format=format          JSONL or kuzzle - kuzzle will export in Kuzzle format usable for fixtures
+  --format=format          jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal fixtures and jsonl will be usable to re import those data whith kourou
   --editor                 Open an editor (EDITOR env variable) to edit the query before sending
   --help                   show CLI help
   --host=host              [default: localhost] Kuzzle server host
@@ -722,7 +722,7 @@ OPTIONS
   --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-  --format=format          JSONL or kuzzle - kuzzle will export in Kuzzle format usable for fixtures
+  --format=format          jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal fixtures and jsonl will be usable to re import those data whith kourou
   --help                   show CLI help
   --host=host              [default: localhost] Kuzzle server host
   --password=password      Kuzzle user password
