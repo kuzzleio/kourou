@@ -14,12 +14,12 @@ export default class EsMigrate extends Kommand {
     static flags = {
         help: flags.help(),
         src: flags.string({
-            description: 'Source Elasticsearch server URL (ej: http://localhost:9200)',
+            description: 'Source Elasticsearch server URL',
             env: 'KUZZLE_ES_SRC',
             required: true
         }),
         dest: flags.string({
-            description: 'Destination Elasticsearch server URL (ej: http://localhost:9200)',
+            description: 'Destination Elasticsearch server URL',
             env: 'KUZZLE_ES_DEST',
             required: true
         }),
@@ -27,17 +27,20 @@ export default class EsMigrate extends Kommand {
             description: 'Reset destination Elasticsearch server',
             default: false,
         }),
-        limit: flags.integer({
-            description: 'Document transfer limit',
+        'batch-size': flags.integer({
+            description: 'How many documents to move in batch per operation',
             default: 1000,
         }),
-        force: flags.boolean({
-            description: 'Force migration and skip confirmation interactive prompts',
+        'no-interactive': flags.boolean({
+            description: 'Skip confirmation interactive prompts (perfect for scripting)',
             default: false,
         }),
     }
 
-    static args = []
+    static examples = [
+        'kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --limit 2000',
+        'kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --limit 2000 --no-interactive'
+    ]
 
     private src: any
 
@@ -49,14 +52,12 @@ export default class EsMigrate extends Kommand {
         await this.dest.indices.create({ index, body: mappings })
     }
 
-    private async migrateData(index: string, limit: number) {
+    private async migrateData(index: string, batch_size: number) {
         const queue = []
-        // Quick scroll duration estimation based on number of documents per hit
-        const scrollDuration = 5 * (limit % 1000) > 0 ? `${5 * (limit % 1000)}s` : '5s'
         const { body } = await this.src.search({
             index,
-            scroll: scrollDuration,
-            size: limit,
+            scroll: '20s',
+            size: batch_size,
             body: {
                 query: {
                     match_all: {}
@@ -89,8 +90,8 @@ export default class EsMigrate extends Kommand {
             progressBar.update(count)
 
             const { body: { hits } } = await this.src.scroll({
-                scrollId: scrollId,
-                scroll: scrollDuration
+                scrollId,
+                scroll: '20s'
             })
             queue.push(hits)
         }
@@ -103,7 +104,7 @@ export default class EsMigrate extends Kommand {
         this.src = new Client({ node: this.flags.src })
         this.dest = new Client({ node: this.flags.dest })
 
-        if (this.flags.reset && !this.flags.force) {
+        if (this.flags.reset && !this.flags['no-interactive']) {
             this.log(chalk.red(`${emoji.get('fire')} Are you sure you want to reset ${chalk.bold(this.flags.dest)}?`))
             await cli.confirm(chalk.redBright(` ${emoji.get('fire')} You will lose all the data stored in it (Type "yes" to confirm)`))
             await this.dest.indices.delete({ index: '_all' })
@@ -123,7 +124,7 @@ export default class EsMigrate extends Kommand {
             await this.migrateMappings(index)
             this.logOk('Mappings successfully imported!')
 
-            const count = await this.migrateData(index, this.flags.limit)
+            const count = await this.migrateData(index, this.flags['batch-size'])
             if (count === 0) {
                 this.logInfo('No documents to import\n')
             } else {
