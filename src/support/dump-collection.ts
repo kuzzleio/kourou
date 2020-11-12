@@ -8,7 +8,7 @@ const ndjson = require('ndjson')
 
 export async function dumpCollectionData(sdk: any, index: string, collection: string, batchSize: number, destPath: string, query: any = {}, format = 'jsonl') {
   const collectionDir = path.join(destPath, collection)
-  const filename = path.join(collectionDir, (format.toLowerCase() === 'jsonl ? 'documents.jsonl' : 'documents.json'))
+  const filename = path.join(collectionDir, (format.toLowerCase() === 'jsonl' ? 'documents.jsonl' : 'documents.json'))
   const writeStream = fs.createWriteStream(filename)
   const waitWrite = new Promise(resolve => writeStream.on('finish', resolve))
   const ndjsonStream = ndjson.serialize()
@@ -104,5 +104,5 @@ export async function dumpCollectionMappings(sdk: any, index: string, collection
     }
   }
 
-  fs.writeFileSync(filename, JSON.stringify((format.toLowerCase() === 'jsonl ? dump : mappings), null, 2))
+  fs.writeFileSync(filename, JSON.stringify((format.toLowerCase() === 'jsonl' ? dump : mappings), null, 2))
 }
