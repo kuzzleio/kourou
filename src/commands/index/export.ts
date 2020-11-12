@@ -8,7 +8,7 @@ import { kuzzleFlags } from '../../support/kuzzle'
 import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-collection'
 
 export default class IndexExport extends Kommand {
-  static description = 'Exports an index (JSONL format or kuzzle Kuzzle format)'
+  static description = 'Exports an index (JSONL or Kuzzle format)'
 
   static flags = {
     help: flags.help({}),
@@ -20,8 +20,8 @@ export default class IndexExport extends Kommand {
       default: '2000'
     }),
     format: flags.string({
-      description: 'JSONL or kuzzle - kuzzle will export in Kuzzle format',
-      default: 'JSONL'
+      description: '"jsonl" or "kuzzle" - "jsonl" will export in Kourou format and "kuzzle" will export in Kuzzle fixtures format',
+      default: 'jsonl'
     }),
     ...kuzzleFlags,
     protocol: flags.string({
