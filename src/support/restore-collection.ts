@@ -1,15 +1,13 @@
 import chalk from 'chalk'
 import fs from 'fs'
-
-// tslint:disable-next-line
-const ndjson = require('ndjson')
+import ndjson = require('ndjson')
 
 function handleError(log: any, dumpFile: string, error: any) {
   if (error.status === 206) {
     const
       errorFile = `${dumpFile.split('.').slice(0, -1).join('.')}-errors.jsonl`
     const writeStream = fs.createWriteStream(errorFile, { flags: 'a' })
-    const serialize = ndjson.serialize().pipe(writeStream)
+    const serialize = ndjson.stringify().pipe(writeStream)
 
     serialize.on('data', (line: string) => (writeStream.write(line)))
 
@@ -70,9 +68,9 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
                   handleError(log, dumpFile, error)
                   readStream.resume()
                 }
-                catch (error) {
+                catch (e) {
                   readStream.end()
-                  reject(error)
+                  reject(e)
                 }
               })
           }
@@ -106,8 +104,8 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
                 handleError(log, dumpFile, error)
                 reject(error)
               }
-              catch (error) {
-                reject(error)
+              catch (e) {
+                reject(e)
               }
             })
         }
@@ -142,6 +140,7 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
  * @param {String} dump - Dump object (type, content)
  * @param {String} index - Override index name
  * @param {String} collection - Override collection name
+ * @returns {void}
  */
 export async function restoreCollectionMappings(sdk: any, dump: any, index?: string, collection?: string) {
   if (dump.type !== 'mappings') {

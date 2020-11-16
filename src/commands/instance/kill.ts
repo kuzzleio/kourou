@@ -49,12 +49,17 @@ export class InstanceLogs extends Kommand {
           choices: instancesList
         }
       ])
-      instance = responses.instance!
-    } else if (!instancesList.includes(instance)) {
-      throw new Error(
-        `The instance parameter you setted ${instance} isn't running`
-      )
+
+      if (!responses.instance) {
+        throw new Error('A running instance must be selected');
+      }
+
+      instance = responses.instance
     }
+    else if (!instancesList.includes(instance)) {
+      throw new Error(`The instance parameter you setted ${instance} isn't running`)
+    }
+
     await this.killInstance(instance)
   }
 

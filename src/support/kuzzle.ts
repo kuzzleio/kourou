@@ -139,30 +139,22 @@ export class KuzzleSDK {
    *
    * @param {string} userKuid - User kuid to impersonate
    * @param {Function} callback - Callback that will be impersonated
+   * @returns {void}
    */
-  public async impersonate(userKuid: string, callback: Function) {
+  public async impersonate(userKuid: string, callback: { (): Promise<void> }) {
     const currentToken = this.sdk.jwt
 
     let apiKey: any
 
     try {
-      const apiKey = await this.security.createApiKey(
+      apiKey = await this.security.createApiKey(
         userKuid,
         'Kourou impersonation token',
         { expiresIn: '2h', refresh: false })
 
       this.sdk.jwt = apiKey._source.token
 
-      const promise = callback()
-
-      if (typeof promise !== 'object' && typeof promise.then !== 'function') {
-        throw new TypeError('The impersonate callback function must return a promise')
-      }
-
-      await promise
-    }
-    catch (error) {
-      throw error
+      await callback()
     }
     finally {
       this.sdk.jwt = currentToken
