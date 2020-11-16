@@ -64,9 +64,9 @@ export class ConfigKeyDiff extends Kommand {
   _keyChanges(base: any, object: any) {
     const changes: any = {}
 
-    const walkObject = (base: any, object: any, path: any = []) => {
-      for (const key of Object.keys(base)) {
-        if (object[key] === undefined) {
+    const walkObject = (_base: any, _object: any, path: any = []) => {
+      for (const key of Object.keys(_base)) {
+        if (_object[key] === undefined) {
           const ar: [] = []
           const ar2: [] = []
           ar.concat(ar2)
@@ -74,15 +74,15 @@ export class ConfigKeyDiff extends Kommand {
         }
       }
 
-      for (const key of Object.keys(object)) {
-        if (base[key] === undefined) {
+      for (const key of Object.keys(_object)) {
+        if (_base[key] === undefined) {
           changes[[...path, key].join('.')] = 'was added'
         }
-        else if (!_.isEqual(object[key], base[key]) && _.isObject(object[key]) && _.isObject(base[key])) {
-          walkObject(base[key], object[key], [...path, key])
+        else if (!_.isEqual(_object[key], _base[key]) && _.isObject(_object[key]) && _.isObject(_base[key])) {
+          walkObject(_base[key], _object[key], [...path, key])
         }
-        else if (this.flags.values && base[key] !== object[key]) {
-          changes[[...path, key].join('.')] = `value is "${object[key]}" and was "${base[key]}"`
+        else if (this.flags.values && _base[key] !== _object[key]) {
+          changes[[...path, key].join('.')] = `value is "${_object[key]}" and was "${_base[key]}"`
         }
       }
     }

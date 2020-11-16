@@ -36,7 +36,12 @@ export class InstanceLogs extends Kommand {
         type: 'list',
         choices: instancesList,
       }])
-      instance = responses.instance!
+
+      if (!responses.instance) {
+        throw new Error('A running Kuzzle instance must be selected.');
+      }
+
+      instance = responses.instance
     }
 
     await this.showInstanceLogs(instance, followOption)
@@ -50,8 +55,8 @@ export class InstanceLogs extends Kommand {
 
     const instanceLogs = execute('docker', ...args)
 
-    instanceLogs.process.stdout.pipe(process.stdout)
-    instanceLogs.process.stderr.pipe(process.stderr)
+    instanceLogs.process.stdout?.pipe(process.stdout)
+    instanceLogs.process.stderr?.pipe(process.stderr)
 
     await instanceLogs
   }

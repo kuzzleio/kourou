@@ -2,16 +2,14 @@ import fs from 'fs'
 import path from 'path'
 
 import cli from 'cli-ux'
-
-// tslint:disable-next-line
-const ndjson = require('ndjson')
+import ndjson from 'ndjson'
 
 export async function dumpCollectionData(sdk: any, index: string, collection: string, batchSize: number, destPath: string, query: any = {}) {
   const collectionDir = path.join(destPath, collection)
   const filename = path.join(collectionDir, 'documents.jsonl')
   const writeStream = fs.createWriteStream(filename)
   const waitWrite = new Promise(resolve => writeStream.on('finish', resolve))
-  const ndjsonStream = ndjson.serialize()
+  const ndjsonStream = ndjson.stringify()
   const options = {
     scroll: '1m',
     size: batchSize

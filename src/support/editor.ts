@@ -1,8 +1,6 @@
 import fs from 'fs'
 import { spawnSync } from 'child_process'
-
-// tslint:disable-next-line
-const tmp = require('tmp')
+import tmp from 'tmp'
 
 export interface EditorParams {
   json?: boolean;
