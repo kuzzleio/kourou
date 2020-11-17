@@ -21,7 +21,7 @@ export class InstanceList extends Kommand {
     ])
   }
 
-  private async getInstancesList(): Promise<object[]> {
+  private async getInstancesList(): Promise<Record<string, unknown>[]> {
     let containersListProcess
 
     try {

@@ -103,7 +103,6 @@ export abstract class Kommand extends Command {
 
       if (this.flags.as) {
         this.logInfo(`Impersonate user "${this.flags.as}"`)
-
         await this.sdk.impersonate(this.flags.as, async () => {
           await this.runSafe()
         })
@@ -144,7 +143,11 @@ export abstract class Kommand extends Command {
     return fs.readFileSync(0, 'utf8')
   }
 
-  fromEditor(defaultContent: object | string, options?: EditorParams): object {
+  fromEditor(
+    defaultContent: Record<string, unknown> | string,
+    options?: EditorParams
+  ): Record<string, unknown>
+  {
     let content = defaultContent
 
     if (typeof content !== 'string') {

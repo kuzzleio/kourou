@@ -1,0 +1,7 @@
+{
+  "reporter": "spec",
+  "recursive": true,
+  "slow": 2000,
+  "timeout": 5000,
+  "require": ["source-map-support/register", "ts-node/register"]
+}
