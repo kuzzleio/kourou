@@ -16,7 +16,7 @@ This command installs the dependencies listed in the `package.json` file of this
 
 ### Run
 
-You can use the following command  to run your application in development mode:
+You can use the following command to run your application in development mode:
 
 `npm run dev:docker`
 
