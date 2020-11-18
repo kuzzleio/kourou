@@ -35,7 +35,7 @@ export default class AppScaffold extends Kommand {
 
     const tasks = new Listr([
       {
-        title: `Creating ${chalk.gray(this.args.name + path.sep)} directory`,
+        title: `Creating directory: ${chalk.gray(this.args.name + path.sep)}`,
         task: () => execute('mkdir', this.args.name)
       },
       {
@@ -43,15 +43,15 @@ export default class AppScaffold extends Kommand {
         task: () => this.renderTemplates(templatePath, templatePath)
       },
       {
-        title: 'Installing latest Kuzzle version via NPM and Docker (this can take some time)',
+        title: 'Installing dependencies (this can take some time)',
         task: () =>
-          execute('npm', 'run', 'npm:docker', 'install', 'kuzzle', { cwd: this.args.name })
+          execute('npm', 'run', 'install:docker', { cwd: this.args.name })
       },
     ])
 
     await tasks.run()
 
-    this.logOk(`Scaffolding complete! Use "${chalk.grey('npm run dev:docker')}" to run your application`)
+    this.logOk(`Scaffolding complete! Use "${chalk.grey('cd ' + this.args.name + ' && npm run dev:docker')}" to run your application`)
   }
 
   async renderTemplates(directory: string, templatePath: string) {
