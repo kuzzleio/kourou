@@ -26,7 +26,7 @@ export default class CollectionExport extends Kommand {
       description: 'Open an editor (EDITOR env variable) to edit the query before sending'
     }),
     format: flags.string({
-      description: '"jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal fixtures and jsonl will be usable to re import those data whith kourou',
+      description: '"jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal fixtures and jsonl allows to import that data back with kourou',
       default: 'JSONL'
     }),
     ...kuzzleFlags,

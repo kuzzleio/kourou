@@ -357,7 +357,7 @@ OPTIONS
   --editor                 Open an editor (EDITOR env variable) to edit the query before sending
 
   --format=format          [default: JSONL] "jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal
-                           fixtures and jsonl will be usable to re import those data whith kourou
+                           fixtures and jsonl allows to import that data back with kourou
 
   --help                   show CLI help
 
@@ -736,7 +736,7 @@ OPTIONS
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
 
   --format=format          [default: jsonl] "jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal
-                           fixtures and jsonl will be usable to re import those data whith kourou
+                           fixtures and jsonl allows to import that data back with kourou
 
   --help                   show CLI help
 

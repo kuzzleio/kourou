@@ -20,7 +20,7 @@ export default class IndexExport extends Kommand {
       default: '2000'
     }),
     format: flags.string({
-      description: '"jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal fixtures and jsonl will be usable to re import those data with kourou',
+      description: '"jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal fixtures and jsonl will be usable to import that data back with kourou',
       default: 'jsonl'
     }),
     ...kuzzleFlags,
