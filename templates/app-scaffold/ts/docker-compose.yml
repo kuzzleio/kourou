@@ -32,5 +32,7 @@ services:
 
   elasticsearch:
     image: kuzzleio/elasticsearch:7
+    ports:
+      - "9200:9200"
     ulimits:
       nofile: 65536
