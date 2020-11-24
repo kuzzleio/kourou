@@ -4,9 +4,9 @@ import path from 'path'
 import cli from 'cli-ux'
 import ndjson from 'ndjson'
 
-export async function dumpCollectionData(sdk: any, index: string, collection: string, batchSize: number, destPath: string, query: any = {}) {
+export async function dumpCollectionData(sdk: any, index: string, collection: string, batchSize: number, destPath: string, query: any = {}, format = 'jsonl') {
   const collectionDir = path.join(destPath, collection)
-  const filename = path.join(collectionDir, 'documents.jsonl')
+  const filename = path.join(collectionDir, (format.toLowerCase() === 'jsonl' ? 'documents.jsonl' : 'documents.json'))
   const writeStream = fs.createWriteStream(filename)
   const waitWrite = new Promise(resolve => writeStream.on('finish', resolve))
   const ndjsonStream = ndjson.stringify()
@@ -34,7 +34,9 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
 
   fs.mkdirSync(collectionDir, { recursive: true })
 
-  await writeLine({ type: 'collection', index, collection })
+  if (format.toLowerCase() === 'jsonl') {
+    await writeLine({ type: 'collection', index, collection })
+  }
 
   let results = await sdk.document.search(index, collection, { query }, options)
 
@@ -43,18 +45,38 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
   })
   progressBar.start(results.total, 0)
 
+  const rawDocuments: any = {
+    [index]: {
+      [collection]: []
+    }
+  }
+
   do {
     progressBar.update(results.fetched)
 
     for (const hit of results.hits) {
-      const document = {
-        _id: hit._id,
-        body: hit._source
-      }
+      let document = null
+      if (format.toLocaleLowerCase() === 'jsonl') {
+        document = {
+          _id: hit._id,
+          body: hit._source
+        }
 
-      await writeLine(document)
+        await writeLine(document)
+      } else {
+        rawDocuments[index][collection].push({
+          index: {
+            _id: hit._id
+          }
+        })
+        rawDocuments[index][collection].push(hit._source)
+      }
     }
   } while ((results = await results.next()))
+
+  if (format.toLocaleLowerCase() === 'kuzzle') {
+    await writeLine(rawDocuments)
+  }
 
   progressBar.stop()
   ndjsonStream.end()
@@ -63,7 +85,7 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
   return waitWrite
 }
 
-export async function dumpCollectionMappings(sdk: any, index: string, collection: string, destPath: string) {
+export async function dumpCollectionMappings(sdk: any, index: string, collection: string, destPath: string, format = 'jsonl') {
   const collectionDir = path.join(destPath, collection)
   const filename = path.join(collectionDir, 'mappings.json')
 
@@ -80,5 +102,5 @@ export async function dumpCollectionMappings(sdk: any, index: string, collection
     }
   }
 
-  fs.writeFileSync(filename, JSON.stringify(dump, null, 2))
+  fs.writeFileSync(filename, JSON.stringify((format.toLowerCase() === 'jsonl' ? dump : mappings), null, 2))
 }

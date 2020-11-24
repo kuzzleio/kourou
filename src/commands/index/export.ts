@@ -8,7 +8,7 @@ import { kuzzleFlags } from '../../support/kuzzle'
 import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-collection'
 
 export default class IndexExport extends Kommand {
-  static description = 'Exports an index (JSONL format)'
+  static description = 'Exports an index (JSONL or Kuzzle format)'
 
   static flags = {
     help: flags.help({}),
@@ -18,6 +18,10 @@ export default class IndexExport extends Kommand {
     'batch-size': flags.string({
       description: 'Maximum batch size (see limits.documentsFetchCount config)',
       default: '2000'
+    }),
+    format: flags.string({
+      description: '"jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal fixtures and jsonl will be usable to import that data back with kourou',
+      default: 'jsonl'
     }),
     ...kuzzleFlags,
     protocol: flags.string({
@@ -48,14 +52,17 @@ export default class IndexExport extends Kommand {
             this.sdk,
             this.args.index,
             collection.name,
-            exportPath)
+            exportPath,
+            this.flags.format)
 
           await dumpCollectionData(
             this.sdk,
             this.args.index,
             collection.name,
             Number(this.flags['batch-size']),
-            exportPath)
+            exportPath,
+            {},
+            this.flags.format)
 
           cli.action.stop()
         }

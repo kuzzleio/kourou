@@ -355,14 +355,26 @@ OPTIONS
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --editor                 Open an editor (EDITOR env variable) to edit the query before sending
+
+  --format=format          [default: JSONL] "jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal
+                           fixtures and jsonl allows to import that data back with kourou
+
   --help                   show CLI help
+
   --host=host              [default: localhost] Kuzzle server host
+
   --password=password      Kuzzle user password
+
   --path=path              Dump root directory
+
   --port=port              [default: 7512] Kuzzle server port
+
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
+
   --query=query            [default: {}] Only dump documents matching the query (JS or JSON format)
+
   --ssl                    Use SSL to connect to Kuzzle
+
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
@@ -709,7 +721,7 @@ _See code: [src/commands/import.ts](src/commands/import.ts)_
 
 ## `kourou index:export INDEX`
 
-Exports an index (JSONL format)
+Exports an index (JSONL or Kuzzle format)
 
 ```
 USAGE
@@ -722,13 +734,24 @@ OPTIONS
   --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+
+  --format=format          [default: jsonl] "jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal
+                           fixtures and jsonl allows to import that data back with kourou
+
   --help                   show CLI help
+
   --host=host              [default: localhost] Kuzzle server host
+
   --password=password      Kuzzle user password
+
   --path=path              Dump root directory
+
   --port=port              [default: 7512] Kuzzle server port
+
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
+
   --ssl                    Use SSL to connect to Kuzzle
+
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
