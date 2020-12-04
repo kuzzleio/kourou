@@ -2,12 +2,8 @@ name: Run tests
 
 on: [push]
 
-env:
-  KOUROU_RUNTIME: "./package/bin/run"
-  NODE_ENV: test
-
 jobs:
-  tests:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +18,10 @@ jobs:
           npm install --silent --unsafe-perm --only=dev
           npm run prepack
 
+  lint:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Kourou Lint
         uses: actions/setup-node@v1
         with:
@@ -31,28 +31,41 @@ jobs:
           npm install --silent --unsafe-perm --only=dev
           npm run test:lint
 
-      # - name: Kourou Functional Stdout Tests
-      #   uses: actions/setup-node@v1
-      #   with:
-      #     node-version: "12"
-      # - run: |
-      #     npm install --silent --unsafe-perm
-      #     npm pack
-      #     tar xf kourou-$(node -e 'console.log(require("./package.json").version)').tgz
-      #     npm install --prefix package --silent --unsafe-perm --only production
-      #     rm -rf ./bin
-      #     npm run test:functional:stdout
-      #     bash features/run-kuzzle-stack.sh
-      #     npm run test:functional:cucumber
+  functional-test-stdout:
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      KOUROU_RUNTIME: "./package/bin/run"
+      NODE_ENV: test
+    steps:
+      - name: Kourou Functional Stdout Tests
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+      - run: |
+          npm install --silent --unsafe-perm
+          npm pack
+          tar xf kourou-$(node -e 'console.log(require("./package.json").version)').tgz
+          npm install --prefix package --silent --unsafe-perm --only production
+          rm -rf ./bin
+          npm run test:functional:stdout
 
-      # - name: Lint project
-      #   uses: actions/setup-node@v1
-      #   with:
-      #     node-version: "12"
-      # - run: |
-      #     npm install --silent --unsafe-perm
-      #     npm pack
-      #     tar xf kourou-$(node -e 'console.log(require("./package.json").version)').tgz
-      #     npm install --prefix package --silent --unsafe-perm --only production
-      #     rm -rf ./bin
-      #     npm run test:functional:stdout
+  functional-test-cucumber:
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      KOUROU_RUNTIME: "./package/bin/run"
+      NODE_ENV: test
+    steps:
+      - name: Kourou Functional Cucumber Tests
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+      - run: |
+          npm install --silent --unsafe-perm
+          npm pack
+          tar xf kourou-$(node -e 'console.log(require("./package.json").version)').tgz
+          npm install --prefix package --silent --unsafe-perm --only production
+          rm -rf ./bin
+          bash features/run-kuzzle-stack.sh
+          npm run test:functional:cucumber
