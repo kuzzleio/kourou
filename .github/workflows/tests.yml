@@ -13,7 +13,6 @@ jobs:
         with:
           node-version: "12"
       - run: npm install --silent --unsafe-perm
-      - run: npm install --silent --unsafe-perm --only=dev
       - run: npm run prepack
 
   lint:
@@ -25,7 +24,6 @@ jobs:
         with:
           node-version: "12"
       - run: npm install --silent --unsafe-perm
-      - run: npm install --silent --unsafe-perm --only=dev
       - run: npm run test:lint
 
   functional-test-stdout:
