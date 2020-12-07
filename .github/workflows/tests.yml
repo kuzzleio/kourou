@@ -25,8 +25,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "12"
-      - run:   npm install --silent --unsafe-perm
-      - run:  npm install --silent --unsafe-perm --only=dev
+      - run: npm install --silent --unsafe-perm
+      - run: npm install --silent --unsafe-perm --only=dev
       - run: npm run test:lint
 
   functional-test-stdout:
@@ -65,18 +65,3 @@ jobs:
       - run: rm -rf ./bin
       - run: bash features/run-kuzzle-stack.sh
       - run: npm run test:functional:cucumber
-
-  deploy:
-    runs-on: ubuntu-latest
-    if: contains(github.ref, "master")
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '12'
-        registry-url: 'https://registry.npmjs.org'
-    - run: npm install
-    - run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
