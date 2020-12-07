@@ -5,7 +5,6 @@ on: [release]
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: contains(github.ref, "master")
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
