@@ -12,10 +12,9 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: "12"
-      - run: |
-          npm install --silent --unsafe-perm
-          npm install --silent --unsafe-perm --only=dev
-          npm run prepack
+      - run: npm install --silent --unsafe-perm
+      - run: npm install --silent --unsafe-perm --only=dev
+      - run: npm run prepack
 
   lint:
     runs-on: ubuntu-latest
