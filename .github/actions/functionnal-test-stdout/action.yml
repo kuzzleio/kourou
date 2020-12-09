@@ -1,0 +1,17 @@
+name: Functional Tests
+description: Run Functional Tests
+runs:
+  using: "composite"
+  steps:
+    - run: npm install --silent --unsafe-perm
+      shell: bash
+    - run: npm pack
+      shell: bash
+    - run: tar xf kourou-$(node -e 'console.log(require("./package.json").version)').tgz
+      shell: bash
+    - run: npm install --prefix package --silent --unsafe-perm --only production
+      shell: bash
+    - run: rm -rf ./bin
+      shell: bash
+    - run: npm run test:functional:stdout
+      shell: bash

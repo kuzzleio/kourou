@@ -1,0 +1,9 @@
+name: Build
+description: Run Build
+runs:
+  using: "composite"
+  steps:
+    - run: npm install --silent --unsafe-perm
+      shell: bash
+    - run: npm run prepack
+      shell: bash
