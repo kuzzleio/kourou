@@ -55,6 +55,7 @@ jobs:
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
+          KOUROU_RUNTIME: "./package/bin/run"
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -65,6 +66,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12"
+      - uses: ./.github/actions/build
       - uses: ./.github/actions/functional-test-stdout
 
   functional-test-cucumber:
@@ -77,6 +79,8 @@ jobs:
         uses: actions/cache@v2
         env:
           cache-name: cache-node-modules
+          KOUROU_RUNTIME: "./package/bin/run"
+          NODE_ENV: "test"
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -87,4 +91,5 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12"
+      - uses: ./.github/actions/build
       - uses: ./.github/actions/functional-test-cucumber
