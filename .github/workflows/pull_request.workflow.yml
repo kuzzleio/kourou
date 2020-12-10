@@ -64,6 +64,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12"
+      - uses: ./.github/actions/build
       - uses: ./.github/actions/functional-test-stdout
 
   functional-test-cucumber:
@@ -85,4 +86,5 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "12"
+      - uses: ./.github/actions/build
       - uses: ./.github/actions/functional-test-cucumber
