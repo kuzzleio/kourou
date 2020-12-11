@@ -66,7 +66,6 @@ jobs:
       - uses: actions/setup-node@v1.4.4
         with:
           node-version: "12"
-      - uses: ./.github/actions/build
       - uses: ./.github/actions/functional-test-stdout
         env:
           KOUROU_RUNTIME: "./package/bin/run"
@@ -92,7 +91,6 @@ jobs:
       - uses: actions/setup-node@v1.4.4
         with:
           node-version: "12"
-      - uses: ./.github/actions/build
       - uses: ./.github/actions/functional-test-cucumber
         env:
           KOUROU_RUNTIME: "./package/bin/run"
