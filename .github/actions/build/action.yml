@@ -3,7 +3,9 @@ description: Run Build
 runs:
   using: "composite"
   steps:
-    - run: npm install --silent
+    - name: Install deps
+      run: npm install --silent
       shell: bash
-    - run: npm run prepack
+    - name : Run prepack
+      run: npm run prepack
       shell: bash
