@@ -3,24 +3,18 @@ description: Run Functional Tests
 runs:
   using: "composite"
   steps:
-    - name: Install deps
-      run: npm install --silent
-      shell: bash
-    - name: Pack the app
-      run: npm pack
-      shell: bash
-    - name: Extract package version
-      run: tar xf kourou-$(node -e 'console.log(require("./package.json").version)').tgz
-      shell: bash
-    - name: Install deps production only
-      run: npm install --prefix package --silent --only production
-      shell: bash
-    - name: Make sure we use the generated ./bin
-      run: rm -rf ./bin
-      shell: bash
-    - name: Run the Kuzzle stack
-      run: features/run-kuzzle-stack.sh
+    - name: Prepare tests
+      run: |
+        npm install --silent
+        npm pack
+        tar xf kourou-$(node -e 'console.log(require("./package.json").version)').tgz
+        npm install --prefix package --silent --only production
+        rm -rf ./bin
       shell: bash
     - name: Run functional test using cucumber
-      run: npm run test:functional:cucumber
+      run: |
+        features/run-kuzzle-stack.sh
+        npm run test:functional:cucumber
+      env:
+        KOUROU_RUNTIME: "./package/bin/run"
       shell: bash

@@ -67,8 +67,7 @@ jobs:
         with:
           node-version: "12"
       - uses: ./.github/actions/functional-test-stdout
-        env:
-          KOUROU_RUNTIME: "./package/bin/run"
+
 
   functional-test-cucumber:
     name: Functional Test Cucumber
@@ -92,5 +91,3 @@ jobs:
         with:
           node-version: "12"
       - uses: ./.github/actions/functional-test-cucumber
-        env:
-          KOUROU_RUNTIME: "./package/bin/run"
