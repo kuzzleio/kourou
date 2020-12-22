@@ -48,7 +48,7 @@ jobs:
 
   functional-test-stdout:
     name: Functional Test Stdout
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     needs: lint
     steps:
       - uses: actions/checkout@v2
