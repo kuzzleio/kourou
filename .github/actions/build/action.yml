@@ -6,6 +6,6 @@ runs:
     - name: Install deps
       run: npm install --silent
       shell: bash
-    - name : Run prepack
-      run: npm run prepack
+    - name : Build and package the application
+      run: npm run pack
       shell: bash

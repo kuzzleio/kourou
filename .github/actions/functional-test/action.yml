@@ -1,20 +1,21 @@
 name: Functional Tests
 description: Run Functional Tests
+inputs:
+  test-set:
+    description: Test set to run
+    required: true
 runs:
   using: "composite"
   steps:
     - name: Prepare tests
       run: |
-        npm install --silent
-        npm pack
-        tar xf kourou-$(node -e 'console.log(require("./package.json").version)').tgz
+        tar xfz ./kourou.tgz
         npm install --prefix package --silent --only production
-        rm -rf ./bin
       shell: bash
-    - name: Run functional test stdout
+    - name: Run functional test using cucumber
       run: |
         features/run-kuzzle-stack.sh
-        npm run test:functional:stdout
+        npm run test:functional:${{ inputs.test-set }}
       env:
-        KOUROU_RUNTIME: "./package/bin/run"
+        KOUROU_RUNTIME: ./package/bin/run"
       shell: bash

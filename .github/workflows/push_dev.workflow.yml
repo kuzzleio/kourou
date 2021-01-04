@@ -1,6 +1,9 @@
 name: Run tests
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - develop
 
 jobs:
   lint:
@@ -83,3 +86,4 @@ jobs:
       - uses: ./.github/actions/functional-test
         with:
           test-set: ${{ matrix.test-set }}
+
