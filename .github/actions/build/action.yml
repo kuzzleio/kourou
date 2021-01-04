@@ -7,5 +7,5 @@ runs:
       run: npm install --silent
       shell: bash
     - name : Build and package the application
-      run: npm run pack
+      run: npm pack
       shell: bash
