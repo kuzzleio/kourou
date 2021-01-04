@@ -7,16 +7,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Prepare tests
-      run: |
-        ls -la
-        tar xfz ./kourou.tgz
-        npm install --prefix package --silent --only production
-      shell: bash
-    - name: Run functional test using cucumber
+    - name: Run functional test
       run: |
         features/run-kuzzle-stack.sh
         npm run test:functional:${{ inputs.test-set }}
-      env:
-        KOUROU_RUNTIME: ./package/bin/run"
       shell: bash

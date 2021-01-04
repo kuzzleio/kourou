@@ -79,6 +79,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: kourou-build
+      - name: Unpack and prepare artifact for tests
+        run: |
+          tar xfz ./kourou-*.tgz
+          npm install --prefix package --silent --only production
       - uses: ./.github/actions/functional-test
+        env:
+          KOUROU_RUNTIME: ./package/bin/run"
         with:
           test-set: ${{ matrix.test-set }}
