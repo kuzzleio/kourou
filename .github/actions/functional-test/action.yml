@@ -9,6 +9,7 @@ runs:
   steps:
     - name: Prepare tests
       run: |
+        ls -la
         tar xfz ./kourou.tgz
         npm install --prefix package --silent --only production
       shell: bash
