@@ -9,6 +9,7 @@ runs:
   steps:
     - name: Run functional test
       run: |
+        npm install --silent --only dev
         features/run-kuzzle-stack.sh
         npm run test:functional:${{ inputs.test-set }}
       shell: bash
