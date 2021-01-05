@@ -4,8 +4,8 @@ runs:
   using: "composite"
   steps:
     - name: Install deps
-      run: npm install --silent
+      run: npm ci --silent
       shell: bash
-    - name : Build and package the application
+    - name: Build and package the application
       run: npm pack
       shell: bash
