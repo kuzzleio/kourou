@@ -1,0 +1,11 @@
+name: Build
+description: Run Build
+runs:
+  using: "composite"
+  steps:
+    - name: Install deps
+      run: npm ci --silent
+      shell: bash
+    - name: Build and package the application
+      run: npm pack
+      shell: bash

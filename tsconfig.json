@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "noUncheckedIndexedAccess": true,
     "declaration": true,
     "importHelpers": true,
     "module": "commonjs",
