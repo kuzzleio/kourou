@@ -135,6 +135,7 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou es:indices:cat`](#kourou-esindicescat)
 * [`kourou es:indices:get INDEX ID`](#kourou-esindicesget-index-id)
 * [`kourou es:indices:insert INDEX`](#kourou-esindicesinsert-index)
+* [`kourou es:migrate`](#kourou-esmigrate)
 * [`kourou es:snapshot:create REPOSITORY NAME`](#kourou-essnapshotcreate-repository-name)
 * [`kourou es:snapshot:create-repository REPOSITORY LOCATION`](#kourou-essnapshotcreate-repository-repository-location)
 * [`kourou es:snapshot:list REPOSITORY`](#kourou-essnapshotlist-repository)
@@ -528,6 +529,30 @@ OPTIONS
 ```
 
 _See code: [src/commands/es/indices/insert.ts](src/commands/es/indices/insert.ts)_
+
+## `kourou es:migrate`
+
+Migrate all the index from one Elasticsearch server to another
+
+```
+USAGE
+  $ kourou es:migrate
+
+OPTIONS
+  --batch-size=batch-size  [default: 1000] How many documents to move in batch per operation
+  --dest=dest              (required) Destination Elasticsearch server URL
+  --help                   show CLI help
+  --no-interactive         Skip confirmation interactive prompts (perfect for scripting)
+  --reset                  Reset destination Elasticsearch server
+  --src=src                (required) Source Elasticsearch server URL
+
+EXAMPLES
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
+  --no-interactive
+```
+
+_See code: [src/commands/es/migrate/index.ts](src/commands/es/migrate/index.ts)_
 
 ## `kourou es:snapshot:create REPOSITORY NAME`
 
