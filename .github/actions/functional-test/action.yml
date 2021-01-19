@@ -8,9 +8,10 @@ runs:
   using: "composite"
   steps:
     - name: Run functional test
+      shell: bash
       run: |
+        set -x
         cd package
-        npm install --silent
+        npm install
         features/run-kuzzle-stack.sh
         npm run test:functional:${{ inputs.test-set }}
-      shell: bash
