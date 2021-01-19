@@ -1,7 +1,8 @@
+import fs from 'fs'
+
 import { flags } from '@oclif/command'
-import  _ from 'lodash'
-import  fs from 'fs'
-import { Cryptonomicon } from 'kuzzle-vault'
+import _ from 'lodash'
+import { Cryptonomicon, Vault } from 'kuzzle-vault'
 
 import { Kommand } from '../../common'
 
@@ -45,10 +46,11 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
     }
 
     const cryptonomicon = new Cryptonomicon(this.flags['vault-key'])
+    const PARSER = Vault.getParser(this.args['secrets-file']);
 
     let encryptedSecrets = {}
     if (fs.existsSync(this.args['secrets-file'])) {
-      encryptedSecrets = JSON.parse(fs.readFileSync(this.args['secrets-file'], 'utf8'))
+      encryptedSecrets = PARSER.parse(fs.readFileSync(this.args['secrets-file'], 'utf8'))
 
       try {
         cryptonomicon.decryptObject(encryptedSecrets)
@@ -60,7 +62,7 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 
     _.set(encryptedSecrets, this.args.key, cryptonomicon.encryptString(this.args.value))
 
-    fs.writeFileSync(this.args['secrets-file'], JSON.stringify(encryptedSecrets, null, 2))
+    fs.writeFileSync(this.args['secrets-file'], PARSER.stringify(encryptedSecrets, null, 2))
 
     this.logOk(`Key "${this.args.key}" has been securely added "${this.args['secrets-file']}"`)
   }
