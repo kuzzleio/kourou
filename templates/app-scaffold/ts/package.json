@@ -19,7 +19,9 @@
   },
   "main": "app.ts",
   "license": "Apache-2.0",
-  "dependencies": {},
+  "dependencies": {
+    "kuzzle": "^2"
+  },
   "devDependencies": {
     "@types/node": "^14.6.0",
     "@typescript-eslint/eslint-plugin": "^3.9.1",
