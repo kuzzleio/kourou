@@ -4,13 +4,18 @@
   "description": "",
   "author": "",
   "scripts": {
-    "dev": "nodemon --ext 'js,json,ts' --inspect=0.0.0.0:9229 --exec node -r ts-node/register app.ts",
+    "npm:docker": "docker-compose run kuzzle npm",
+    "install:docker": "npm run npm:docker install",
+    "dev:docker": "docker-compose up",
+    "services": "npx kourou app:start-services",
+    "dev": "npx nodemon --ext 'js,json,ts' --inspect=0.0.0.0:9229 --exec node -r ts-node/register app.ts",
     "test": "npm run test:lint && npm run test:unit && npm run test:functional",
     "test:unit": "mocha",
     "test:functional": "cucumber-js --exit --fail-fast",
     "test:lint": "eslint ./src --ext .ts --config .eslintrc.json",
     "test:lint:fix": "eslint ./src --ext .ts --config .eslintrc.json --fix",
-    "build": "tsc --build tsconfig.json"
+    "build": "tsc --build tsconfig.json",
+    "clean": "npm run build | grep TSFILE | cut -d' ' -f 2 | xargs rm"
   },
   "main": "app.ts",
   "license": "Apache-2.0",
