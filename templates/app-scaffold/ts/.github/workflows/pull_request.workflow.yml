@@ -22,9 +22,7 @@ jobs:
       - uses: actions/setup-node@v1.4.4
         with:
           node-version: "12"
-      - run: |
-           npm install
-           npm run test:lint
+      - uses: ./.github/actions/backend-lint
 
   functional-tests:
      name: Functional Tests
@@ -46,9 +44,4 @@ jobs:
        - uses: actions/setup-node@v1.4.4
          with:
            node-version: "12"
-       - run: |
-           npm install
-           npm run build
-           docker-compose up -d
-           bash features/wait-kuzzle.sh
-           npm run test:functional
+       - uses: ./.github/actions/backend-functional-test

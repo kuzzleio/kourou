@@ -13,6 +13,10 @@ const World = require('./world');
 BeforeAll({ timeout: 30 * 1000 }, async function () {
   const world = new World({});
 
+  if (world.port.toString() === '443') {
+    throw new Error(`Detecting tests on port 443. Are you targeting a production server? (${world.host})`)
+  }
+
   world.sdk = new Kuzzle(
     new WebSocket(world.host, { port: world.port })
   );

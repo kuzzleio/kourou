@@ -1,0 +1,14 @@
+name: Backend - Functional Tests
+description: Run Functional Tests for backend
+runs:
+  using: "composite"
+  steps:
+    - name: Run backend functional test
+      shell: bash
+      run: |
+           cd backend
+           npm install
+           npm run build
+           DOCKER_COMMAND="npm run prod" docker-compose up -d
+           bash features/wait-kuzzle.sh
+           npm run test:functional
