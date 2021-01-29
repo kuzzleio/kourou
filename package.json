@@ -21,7 +21,7 @@
     "cli-ux": "^5.5.1",
     "inquirer": "^7.3.3",
     "kuzzle-sdk": "^7.4.1",
-    "kuzzle-vault": "^2.0.0",
+    "kuzzle-vault": "^2.0.4",
     "listr": "^0.14.3",
     "lodash": "^4.17.20",
     "ndjson": "^2.0.0",

@@ -6,8 +6,8 @@
   "scripts": {
     "npm:docker": "docker-compose run kuzzle npm",
     "install:docker": "npm run npm:docker install",
-    "services": "npx kourou app:start-services",
     "dev:docker": "docker-compose up",
+    "services": "npx kourou app:start-services",
     "dev": "npx nodemon --ext 'js,json,ts' --inspect=0.0.0.0:9229 --exec node -r ts-node/register app.ts",
     "test": "npm run test:lint && npm run test:unit && npm run test:functional",
     "test:unit": "mocha",
@@ -30,7 +30,7 @@
     "eslint": "^7.18.0",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-loader": "^4.0.2",
-    "mocha": "8.2.1",
+    "mocha": "8.0.1",
     "mock-require": "^3.0.3",
     "nodemon": "^2.0.7",
     "rewire": "^5.0.0",
