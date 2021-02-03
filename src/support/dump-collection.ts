@@ -18,7 +18,7 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
   const writeLine = (content: any) => {
     return new Promise(resolve => {
       if (ndjsonStream.write(content)) {
-        resolve()
+        resolve(undefined)
       }
       else {
         ndjsonStream.once('drain', resolve)

@@ -54,7 +54,7 @@ export function execute(...args: any[]): ProcessExecutor<ExecutionResult> {
   process.stderr.on('data', data => stderr += data.toString())
 
   const executor: any = new Promise((resolve, reject) => {
-    process.on('close', code => {
+    process.on('close', (code: any) => {
       if (code === 0) {
         resolve({ stdout, stderr, exitCode: code })
       }
