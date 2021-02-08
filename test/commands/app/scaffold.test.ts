@@ -24,6 +24,6 @@ describe('app:scaffold', () => {
     const packageJson = JSON.parse(fs.readFileSync('blackmesa/package.json', 'utf8'))
     should(packageJson.name).be.eql('blackmesa')
 
-    should(packageJson.dependencies.kuzzle).not.be.undefined()
+    should(packageJson.dependencies).have.property('kuzzle')
   }).timeout(500 * 1000) // long timeout because of npm install which is slow af (and specially in Travis)
 })
