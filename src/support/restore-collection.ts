@@ -97,7 +97,7 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
               process.stdout.write(`  ${total} documents imported`)
               process.stdout.write('\r')
 
-              resolve()
+              resolve(undefined)
             })
             .catch((error: any) => {
               try {
@@ -110,7 +110,7 @@ export async function restoreCollectionData(sdk: any, log: any, batchSize: numbe
             })
         }
         else {
-          resolve()
+          resolve(undefined)
         }
       })
   })

@@ -12,6 +12,7 @@ The CLI that helps you manage your Kuzzle instances.
 * [Usage](#usage)
 * [Commands](#commands)
 * [Where does this weird name come from?](#where-does-this-weird-name-come-from)
+* [Have fun with a quine](#have-fun-with-a-quine)
 <!-- tocstop -->
 
 :warning: This project is currently in beta and breaking changes may occur until the 1.0.0
@@ -24,7 +25,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.17.2 linux-x64 node-v12.16.2
+kourou/0.18.0 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -134,6 +135,7 @@ Then any argument will be passed as-is to the `sdk:query` method.
 * [`kourou es:indices:cat`](#kourou-esindicescat)
 * [`kourou es:indices:get INDEX ID`](#kourou-esindicesget-index-id)
 * [`kourou es:indices:insert INDEX`](#kourou-esindicesinsert-index)
+* [`kourou es:migrate`](#kourou-esmigrate)
 * [`kourou es:snapshot:create REPOSITORY NAME`](#kourou-essnapshotcreate-repository-name)
 * [`kourou es:snapshot:create-repository REPOSITORY LOCATION`](#kourou-essnapshotcreate-repository-repository-location)
 * [`kourou es:snapshot:list REPOSITORY`](#kourou-essnapshotlist-repository)
@@ -354,14 +356,26 @@ OPTIONS
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
   --editor                 Open an editor (EDITOR env variable) to edit the query before sending
+
+  --format=format          [default: JSONL] "jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal
+                           fixtures and jsonl allows to import that data back with kourou
+
   --help                   show CLI help
+
   --host=host              [default: localhost] Kuzzle server host
+
   --password=password      Kuzzle user password
+
   --path=path              Dump root directory
+
   --port=port              [default: 7512] Kuzzle server port
+
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
+
   --query=query            [default: {}] Only dump documents matching the query (JS or JSON format)
+
   --ssl                    Use SSL to connect to Kuzzle
+
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
@@ -515,6 +529,30 @@ OPTIONS
 ```
 
 _See code: [src/commands/es/indices/insert.ts](src/commands/es/indices/insert.ts)_
+
+## `kourou es:migrate`
+
+Migrate all the index from one Elasticsearch server to another
+
+```
+USAGE
+  $ kourou es:migrate
+
+OPTIONS
+  --batch-size=batch-size  [default: 1000] How many documents to move in batch per operation
+  --dest=dest              (required) Destination Elasticsearch server URL
+  --help                   show CLI help
+  --no-interactive         Skip confirmation interactive prompts (perfect for scripting)
+  --reset                  Reset destination Elasticsearch server
+  --src=src                (required) Source Elasticsearch server URL
+
+EXAMPLES
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
+  --no-interactive
+```
+
+_See code: [src/commands/es/migrate.ts](src/commands/es/migrate.ts)_
 
 ## `kourou es:snapshot:create REPOSITORY NAME`
 
@@ -677,7 +715,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
 
 ## `kourou import PATH`
 
@@ -708,7 +746,7 @@ _See code: [src/commands/import.ts](src/commands/import.ts)_
 
 ## `kourou index:export INDEX`
 
-Exports an index (JSONL format)
+Exports an index (JSONL or Kuzzle format)
 
 ```
 USAGE
@@ -721,13 +759,24 @@ OPTIONS
   --api-key=api-key        Kuzzle user api-key
   --as=as                  Impersonate a user
   --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+
+  --format=format          [default: jsonl] "jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal
+                           fixtures and jsonl allows to import that data back with kourou
+
   --help                   show CLI help
+
   --host=host              [default: localhost] Kuzzle server host
+
   --password=password      Kuzzle user password
+
   --path=path              Dump root directory
+
   --port=port              [default: 7512] Kuzzle server port
+
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
+
   --ssl                    Use SSL to connect to Kuzzle
+
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -1024,6 +1073,7 @@ OPTIONS
   --keep-alive         Keep the connection running (websocket only)
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
+  --print-raw          Print only the script result to stdout
   --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
@@ -1446,3 +1496,19 @@ _See code: [src/commands/vault/test.ts](src/commands/vault/test.ts)_
 # Where does this weird name come from?
 
 We liked the idea that this CLI is like a launchpad for the Kuzzle rocket. The place where you launch and pilot your Kuzzle instance. The place where the European Space Agency launches their rockets is in the country near the city of [Kourou](https://www.wikiwand.com/en/Kourou), in French Guiana, so we liked the idea that the Kuzzle rockets would take off from there.
+
+# Have fun with a quine
+
+[Quine](https://en.wikipedia.org/wiki/Quine_(computing)) are programs able to print their own source code.
+
+```bash
+$ kourou-dev sdk:execute --print-raw --code '(
+  function quine() {
+    const sq = String.fromCharCode(39);
+    const lp = String.fromCharCode(40);
+    const rp = String.fromCharCode(41);
+
+    console.log("kourou-dev sdk:execute --print-raw --code " + sq + lp + quine.toString() + rp + lp + rp + ";" + sq)
+  }
+)()'
+```

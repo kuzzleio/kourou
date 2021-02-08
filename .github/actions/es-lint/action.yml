@@ -1,0 +1,11 @@
+name: ESLint
+description: Run ESLint
+runs:
+  using: "composite"
+  steps:
+    - name: Install deps
+      run: npm ci
+      shell: bash
+    - name: Run lint tests
+      run: npm run  test:lint
+      shell: bash

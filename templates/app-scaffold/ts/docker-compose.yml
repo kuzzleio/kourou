@@ -3,7 +3,7 @@ version: "3"
 services:
   kuzzle:
     image: kuzzleio/kuzzle-runner
-    command: npm run dev
+    command: ${DOCKER_COMMAND:-npm run dev}
     cap_add:
       - SYS_PTRACE
     ulimits:

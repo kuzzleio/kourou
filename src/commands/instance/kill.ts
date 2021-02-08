@@ -97,7 +97,7 @@ export class InstanceLogs extends Kommand {
           )
         )
       }
-      resolve()
+      resolve(undefined)
     }))
   }
 

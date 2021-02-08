@@ -25,6 +25,10 @@ export default class CollectionExport extends Kommand {
     editor: flags.boolean({
       description: 'Open an editor (EDITOR env variable) to edit the query before sending'
     }),
+    format: flags.string({
+      description: '"jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal fixtures and jsonl allows to import that data back with kourou',
+      default: 'JSONL'
+    }),
     ...kuzzleFlags,
     protocol: flags.string({
       description: 'Kuzzle protocol (http or websocket)',
@@ -64,7 +68,8 @@ export default class CollectionExport extends Kommand {
       this.sdk,
       this.args.index,
       this.args.collection,
-      exportPath)
+      exportPath,
+      this.flags.format)
 
     await dumpCollectionData(
       this.sdk,
@@ -72,7 +77,8 @@ export default class CollectionExport extends Kommand {
       this.args.collection,
       Number(this.flags['batch-size']),
       exportPath,
-      query)
+      query,
+      this.flags.format)
 
     this.logOk(`Collection ${this.args.index}:${this.args.collection} dumped`)
   }

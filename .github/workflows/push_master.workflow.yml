@@ -1,0 +1,106 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - uses: actions/setup-node@v1.4.4
+        with:
+          node-version: 12
+      - uses: ./.github/actions/es-lint
+
+  build:
+    name: Build
+    runs-on: ubuntu-18.04
+    needs: [lint]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - uses: actions/setup-node@v1.4.4
+        with:
+          node-version: 12
+      - uses: ./.github/actions/build
+      - name: Store build archive as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: kourou-build
+          path: ./kourou-*.tgz
+
+  functional-test:
+    name: Functional Test - ${{ matrix.test-set }}
+    runs-on: ubuntu-18.04
+    needs: [build]
+    strategy:
+      matrix:
+        test-set: [stdout, cucumber]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+          NODE_ENV: test
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - uses: actions/setup-node@v1.4.4
+        with:
+          node-version: 12
+      - name: Recover previously built Kourou
+        uses: actions/download-artifact@v2
+        with:
+          name: kourou-build
+      - name: Unpack and prepare artifact for tests
+        run: |
+          tar xfz ./kourou-*.tgz
+          cp -fr .mocharc.json .nycrc tsconfig.json features test package/
+      - uses: ./.github/actions/functional-test
+        with:
+          test-set: ${{ matrix.test-set }}
+
+  deploy:
+    name: Deploy to NPM.js
+    runs-on: ubuntu-18.04
+    needs: [functional-test]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: "https://registry.npmjs.org"
+      - run: npm install
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

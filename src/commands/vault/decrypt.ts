@@ -1,7 +1,8 @@
-import  fs from 'fs'
-import  _ from 'lodash'
+import fs from 'fs'
+
+import _ from 'lodash'
 import { flags } from '@oclif/command'
-import { Cryptonomicon } from 'kuzzle-vault'
+import { Cryptonomicon, Vault } from 'kuzzle-vault'
 
 import { Kommand } from '../../common'
 
@@ -64,9 +65,11 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
       throw new Error(`File "${this.args.file}" does not exists`)
     }
 
+    const PARSER = Vault.getParser(this.args.file);
+
     let encryptedSecrets = {}
     try {
-      encryptedSecrets = JSON.parse(fs.readFileSync(this.args.file, 'utf8'))
+      encryptedSecrets = PARSER.parse(fs.readFileSync(this.args.file, 'utf8'))
     }
     catch (error) {
       throw new Error(`Cannot read secrets from file "${this.args.file}": ${error.message}`)
@@ -74,7 +77,7 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 
     const secrets = cryptonomicon.decryptObject(encryptedSecrets)
 
-    fs.writeFileSync(outputFile, JSON.stringify(secrets, null, 2))
+    fs.writeFileSync(outputFile, PARSER.stringify(secrets, null, 2))
 
     this.logOk(`Secrets were successfully decrypted into the file ${outputFile}`)
   }
