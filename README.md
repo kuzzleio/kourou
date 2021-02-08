@@ -25,7 +25,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.17.2 linux-x64 node-v12.16.2
+kourou/0.18.0 linux-x64 node-v12.16.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -552,7 +552,7 @@ EXAMPLES
   --no-interactive
 ```
 
-_See code: [src/commands/es/migrate/index.ts](src/commands/es/migrate/index.ts)_
+_See code: [src/commands/es/migrate.ts](src/commands/es/migrate.ts)_
 
 ## `kourou es:snapshot:create REPOSITORY NAME`
 
@@ -715,7 +715,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.0/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
 
 ## `kourou import PATH`
 
