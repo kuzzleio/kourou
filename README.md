@@ -1502,13 +1502,15 @@ We liked the idea that this CLI is like a launchpad for the Kuzzle rocket. The p
 [Quine](https://en.wikipedia.org/wiki/Quine_(computing)) are programs able to print their own source code.
 
 ```bash
-$ kourou-dev sdk:execute --print-raw --code '(
+$ kourou sdk:execute --print-raw '(
   function quine() {
-    const sq = String.fromCharCode(39);
-    const lp = String.fromCharCode(40);
-    const rp = String.fromCharCode(41);
+    const quote = String.fromCharCode(39);
+    const lparen = String.fromCharCode(40);
+    const rparen = String.fromCharCode(41);
 
-    console.log("kourou-dev sdk:execute --print-raw --code " + sq + lp + quine.toString() + rp + lp + rp + ";" + sq)
+    console.log("kourou sdk:execute --print-raw " + quote + lparen + quine.toString() + rparen + lparen + rparen + ";" + quote)
   }
 )()'
 ```
+
+(Kuzzle must be accessible and running in local)
