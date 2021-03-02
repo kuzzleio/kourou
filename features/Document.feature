@@ -11,8 +11,8 @@ Feature: Document Management
       | body | { "name": "Sebastien", "city": "Cassis" } |
     And I refresh the collection
     When I run the command "document:search" with:
-      | arg | nyc-open-data                |
-      | arg | yellow-taxi                  |
-      | arg | { term: { city: "Saigon" } } |
+      | arg | nyc-open-data                  |
+      | arg | yellow-taxi                    |
+      | arg | { equals: { city: "Saigon" } } |
     Then I should match stdout with "Adrien"
     And I should not match stdout with "Sebastien"
