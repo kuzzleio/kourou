@@ -7,7 +7,8 @@ export default class DocumentSearch extends Kommand {
   static description = 'Searches for documents'
 
   static examples = [
-    'kourou document:search iot sensors \'{ term: { name: "corona" } }\'',
+    'kourou document:search iot sensors \'{ equals: { name: "corona" } }\'',
+    'kourou document:search iot sensors \'{ match: { name: "cOrOnna" } }\' -a lang=elasticsearch',
     'kourou document:search iot sensors --editor',
   ]
 
