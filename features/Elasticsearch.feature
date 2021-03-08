@@ -33,32 +33,24 @@ Feature: Elasticsearch commands
 
   Scenario: Create a snapshot repository
     When I run the command "es:snapshot:create-repository" with:
-      | arg  | backup         |           |
-      | arg  | /tmp/snapshots |           |
-      | flag | --host         | localhost |
-      | flag | --port         | 9200      |
-      | flag | --compress     |           |
+      | arg  | backup         |  |
+      | arg  | /tmp/snapshots |  |
+      | flag | --compress     |  |
     Then I should match stdout with "Success"
 
   Scenario: Dump ES data to a snapshot into a repository
     When I run the command "es:snapshot:create" with:
-      | arg  | backup        |           |
-      | arg  | test-snapshot |           |
-      | flag | --host        | localhost |
-      | flag | --port        | 9200      |
+      | arg | backup        |  |
+      | arg | test-snapshot |  |
     Then I should match stdout with "Success"
 
   Scenario: List all available snapshot of a repository
     When I run the command "es:snapshot:list" with:
-      | arg  | backup |           |
-      | flag | --host | localhost |
-      | flag | --port | 9200      |
+      | arg | backup |  |
     Then I should match stdout with "test-snapshot"
 
   Scenario: Sucessfully Restore a snapshot into a running ES instance
     When I run the command "es:snapshot:restore" with:
-      | arg  | backup        |           |
-      | arg  | test-snapshot |           |
-      | flag | --host        | localhost |
-      | flag | --port        | 9200      |
+      | arg | backup        |  |
+      | arg | test-snapshot |  |
     Then I should match stdout with "Success"

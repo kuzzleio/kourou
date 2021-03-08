@@ -9,15 +9,10 @@ export default class EsSnapshotsCreate extends Kommand {
   static description = 'Create a snapshot repository inside an ES instance'
 
   static flags = {
-    host: flags.string({
-      char: 'h',
-      description: 'Elasticsearch server host',
-      default: process.env.KUZZLE_HOST || 'localhost',
-    }),
-    port: flags.string({
-      char: 'p',
-      description: 'Elasticsearch server port',
-      default: process.env.KUZZLE_PORT || '9200',
+    node: flags.string({
+      char: 'n',
+      description: 'Elasticsearch server URL',
+      default: 'http://localhost:9200',
     }),
     help: flags.help(),
   }
@@ -28,10 +23,7 @@ export default class EsSnapshotsCreate extends Kommand {
   ]
 
   async runSafe() {
-    // @todo support ssl
-    const node = `http://${this.flags.host}:${this.flags.port}`
-
-    const esClient = new Client({ node })
+    const esClient = new Client({ node: this.flags.node })
 
     const esRequest = {
       repository: this.args.repository,
