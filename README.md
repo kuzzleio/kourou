@@ -25,7 +25,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.18.0 linux-x64 node-v12.16.3
+kourou/1.19.1 linux-x64 node-v12.13.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -447,7 +447,7 @@ USAGE
 ARGUMENTS
   INDEX       Index name
   COLLECTION  Collection name
-  QUERY       Query in JS or JSON format.
+  QUERY       Search query in JS or JSON format.
 
 OPTIONS
   --api-key=api-key    Kuzzle user api-key
@@ -456,6 +456,7 @@ OPTIONS
   --from=from          Optional offset
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
+  --lang=lang          [default: koncorde] Specify the query language to use
   --password=password  Kuzzle user password
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
@@ -466,7 +467,8 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
-  kourou document:search iot sensors '{ term: { name: "corona" } }'
+  kourou document:search iot sensors '{ equals: { name: "corona" } }'
+  kourou document:search iot sensors '{ match: { name: "cOrOnna" } }' -a lang=elasticsearch
   kourou document:search iot sensors --editor
 ```
 
@@ -482,8 +484,7 @@ USAGE
 
 OPTIONS
   -g, --grep=grep  Match output with pattern
-  -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 9200] Elasticsearch server port
+  -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --help           show CLI help
 ```
 
@@ -502,8 +503,7 @@ ARGUMENTS
   ID     Document ID
 
 OPTIONS
-  -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 9200] Elasticsearch server port
+  -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --help           show CLI help
 ```
 
@@ -521,8 +521,7 @@ ARGUMENTS
   INDEX  ES Index name
 
 OPTIONS
-  -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 9200] Elasticsearch server port
+  -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --body=body      [default: {}] Document body in JSON
   --help           show CLI help
   --id=id          Document ID
@@ -567,8 +566,7 @@ ARGUMENTS
   NAME        ES snapshot name
 
 OPTIONS
-  -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 9200] Elasticsearch server port
+  -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --help           show CLI help
 ```
 
@@ -587,8 +585,7 @@ ARGUMENTS
   LOCATION    ES snapshot repository location
 
 OPTIONS
-  -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 9200] Elasticsearch server port
+  -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --compress       Compress data when storing them
   --help           show CLI help
 ```
@@ -607,8 +604,7 @@ ARGUMENTS
   REPOSITORY  Name of repository from which to fetch the snapshot information
 
 OPTIONS
-  -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 9200] Elasticsearch server port
+  -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --help           show CLI help
 ```
 
@@ -627,8 +623,7 @@ ARGUMENTS
   NAME        ES snapshot name
 
 OPTIONS
-  -h, --host=host  [default: localhost] Elasticsearch server host
-  -p, --port=port  [default: 9200] Elasticsearch server port
+  -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --help           show CLI help
 ```
 
