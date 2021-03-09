@@ -7,7 +7,8 @@ export default class DocumentSearch extends Kommand {
   static description = 'Searches for documents'
 
   static examples = [
-    'kourou document:search iot sensors \'{ term: { name: "corona" } }\'',
+    'kourou document:search iot sensors \'{ equals: { name: "corona" } }\'',
+    'kourou document:search iot sensors \'{ match: { name: "cOrOnna" } }\' -a lang=elasticsearch',
     'kourou document:search iot sensors --editor',
   ]
 
@@ -25,6 +26,10 @@ export default class DocumentSearch extends Kommand {
     scroll: flags.string({
       description: 'Optional scroll TTL'
     }),
+    lang: flags.string({
+      description: 'Specify the query language to use',
+      default: 'koncorde'
+    }),
     editor: flags.boolean({
       description: 'Open an editor (EDITOR env variable) to edit the request before sending'
     }),
@@ -35,7 +40,7 @@ export default class DocumentSearch extends Kommand {
   static args = [
     { name: 'index', description: 'Index name', required: true },
     { name: 'collection', description: 'Collection name', required: true },
-    { name: 'query', description: 'Query in JS or JSON format.' },
+    { name: 'query', description: 'Search query in JS or JSON format.' },
   ]
 
   async runSafe() {
@@ -47,6 +52,7 @@ export default class DocumentSearch extends Kommand {
       from: this.flags.from,
       size: this.flags.size,
       scroll: this.flags.scroll,
+      lang: this.flags.lang,
       body: {
         query: this.parseJs(this.args.query || '{}'),
         sort: this.parseJs(this.flags.sort)
