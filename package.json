@@ -20,7 +20,7 @@
     "chalk": "^4.1.0",
     "cli-ux": "^5.5.1",
     "inquirer": "^8.0.0",
-    "kuzzle-sdk": "^7.5.6",
+    "kuzzle-sdk": "^7.6.1",
     "kuzzle-vault": "^2.0.4",
     "listr": "^0.14.3",
     "lodash": "^4.17.21",
