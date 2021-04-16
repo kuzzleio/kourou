@@ -15,7 +15,8 @@ do
 
     if [ $tries -eq $max_tries ]; then
         docker-compose logs
-
+        curl http://localhost:7512?pretty
+        echo "Cannot connect to Kuzzle after $tries s. Aborting."
         exit 1
     fi
 

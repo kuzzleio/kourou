@@ -112,7 +112,12 @@ export abstract class Kommand extends Command {
       }
     }
     catch (error) {
-      this.logKo(`${error.stack || error.message}\n\tstatus: ${error.status}\n\tid: ${error.id}`)
+      const stack = error.kuzzleStack || error.stack
+      const errorLink = typeof error.id === 'string' && error.id.split('.').length === 3
+        ? ` (https://docs.kuzzle.io/core/2/api/errors/error-codes/${error.id.split('.')[0]})`
+        : ''
+
+      this.logKo(`Error stack: \n${stack || error.message}\n\nError status: ${error.status}\n\nError id: ${error.id}${errorLink}`)
     }
     finally {
       this.sdk.disconnect()
@@ -146,8 +151,7 @@ export abstract class Kommand extends Command {
   fromEditor(
     defaultContent: Record<string, unknown> | string,
     options?: EditorParams
-  ): Record<string, unknown>
-  {
+  ): Record<string, unknown> {
     let content = defaultContent
 
     if (typeof content !== 'string') {
