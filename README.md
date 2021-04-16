@@ -25,7 +25,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.19.1 linux-x64 node-v12.13.0
+kourou/0.19.2 linux-x64 node-v12.20.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -710,7 +710,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
 
 ## `kourou import PATH`
 
