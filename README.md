@@ -116,7 +116,10 @@ It will automatically infer and accept the following lists of arguments:
  - `<command> <index> <collection> <id> <body>`
     - _eg: `kourou document:create iot sensors sigfox-123 '{temperature: 42}'` _
 
-Then any argument will be passed as-is to the `sdk:query` method.
+All other arguments and options will be passed as-is to the `sdk:query` method.
+
+> Note: you can pass arguments to the API actions with the `--arg` or `-a` option in your command, e.g.
+> `kourou security:createFirstAdmin '{ ...credentials here... }' -a reset=true`
 
 # Commands
 
