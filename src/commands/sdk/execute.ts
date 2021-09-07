@@ -118,7 +118,7 @@ ${variables}
 
     if (userError) {
       this.logKo(`Error when executing SDK code: ${userError}`)
-      this.log(this.code)
+      this.log(userError.stack)
     }
     else {
       this.logOk('Successfully executed SDK code')
