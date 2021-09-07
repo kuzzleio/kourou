@@ -14,7 +14,6 @@ describe('app:scaffold', () => {
     should(fs.existsSync('blackmesa/.eslintignore')).be.eql(true)
     should(fs.existsSync('blackmesa/.eslintrc.json')).be.eql(true)
     should(fs.existsSync('blackmesa/.gitignore')).be.eql(true)
-    should(fs.existsSync('blackmesa/.kuzzlerc')).be.eql(true)
     should(fs.existsSync('blackmesa/.mocharc.json')).be.eql(true)
     should(fs.existsSync('blackmesa/app.ts')).be.eql(true)
     should(fs.existsSync('blackmesa/package.json')).be.eql(true)
