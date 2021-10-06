@@ -25,7 +25,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.19.1 linux-x64 node-v12.13.0
+kourou/0.19.1 linux-x64 node-v14.17.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -713,7 +713,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
 
 ## `kourou import PATH`
 
@@ -773,9 +773,15 @@ OPTIONS
 
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
 
+  --query=query            [default: {}] Only dump documents in collections matching the query (JS or JSON format)
+
   --ssl                    Use SSL to connect to Kuzzle
 
   --username=username      [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLES
+  kourou index:export nyc-open-data
+  kourou index:export nyc-open-data --query '{"range":{"_kuzzle_info.createdAt":{"gt":1632935638866}}}'
 ```
 
 _See code: [src/commands/index/export.ts](src/commands/index/export.ts)_
