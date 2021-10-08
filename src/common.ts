@@ -111,7 +111,7 @@ export abstract class Kommand extends Command {
         await this.runSafe()
       }
     }
-    catch (error) {
+    catch (error: any) {
       const stack = error.kuzzleStack || error.stack
       const errorLink = typeof error.id === 'string' && error.id.split('.').length === 3
         ? ` (https://docs.kuzzle.io/core/2/api/errors/error-codes/${error.id.split('.')[0]})`

@@ -50,7 +50,7 @@ export default class ESRestore extends Kommand {
       const response = await esClient.snapshot.restore(esRequest)
 
       this.logOk(`Success ${JSON.stringify(response.body, null, 2)}`)
-    } catch (error) {
+    } catch (error: any) {
       this.logKo(`Failed to restore requested snapshot ${this.args.name}`)
     } finally {
       for (const index of indices) {

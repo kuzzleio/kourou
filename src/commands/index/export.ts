@@ -19,6 +19,10 @@ export default class IndexExport extends Kommand {
       description: 'Maximum batch size (see limits.documentsFetchCount config)',
       default: '2000'
     }),
+    query: flags.string({
+      description: 'Only dump documents in collections matching the query (JS or JSON format)',
+      default: '{}'
+    }),
     format: flags.string({
       description: '"jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal fixtures and jsonl allows to import that data back with kourou',
       default: 'jsonl'
@@ -34,10 +38,17 @@ export default class IndexExport extends Kommand {
     { name: 'index', description: 'Index name', required: true },
   ]
 
+  static examples = [
+    'kourou index:export nyc-open-data',
+    'kourou index:export nyc-open-data --query \'{"range":{"_kuzzle_info.createdAt":{"gt":1632935638866}}}\'',
+  ]
+
   async runSafe() {
     const exportPath = this.flags.path
       ? path.join(this.flags.path, this.args.index)
       : this.args.index
+
+    const query = this.parseJs(this.flags.query)
 
     this.logInfo(`Dumping index "${this.args.index}" in ${exportPath}${path.sep} ...`)
 
@@ -61,13 +72,13 @@ export default class IndexExport extends Kommand {
             collection.name,
             Number(this.flags['batch-size']),
             exportPath,
-            {},
+            query,
             this.flags.format)
 
           cli.action.stop()
         }
       }
-      catch (error) {
+      catch (error: any) {
         this.logKo(`Error when exporting collection "${collection.name}": ${error}`)
       }
     }

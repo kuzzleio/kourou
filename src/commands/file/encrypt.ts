@@ -1,5 +1,5 @@
-import  fs from 'fs'
-import  _ from 'lodash'
+import fs from 'fs'
+import _ from 'lodash'
 import { flags } from '@oclif/command'
 import { Cryptonomicon } from 'kuzzle-vault'
 
@@ -62,7 +62,7 @@ export class VaultEncrypt extends Kommand {
     try {
       content = fs.readFileSync(this.args.file, 'utf8')
     }
-    catch (error) {
+    catch (error: any) {
       throw new Error(`Cannot read file "${this.args.file}": ${error.message}`)
     }
 

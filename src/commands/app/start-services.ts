@@ -70,7 +70,7 @@ export default class AppStartServices extends Kommand {
       this.log('  Elasticsearch port: 9200')
       this.log('  Redis port: 6379')
     }
-    catch (error) {
+    catch (error: any) {
       this.logKo(` Something went wrong: ${error.message}`)
       this.log(chalk.grey('If you want to investigate the problem, try running'))
 
@@ -106,10 +106,10 @@ export default class AppStartServices extends Kommand {
                   `The detected version of docker-compose (${docoVersion}) is not recent enough (${MIN_DOCO_VERSION})`,
                 )
               }
-            } catch (error) {
+            } catch (error: any) {
               throw new Error(error)
             }
-          } catch (error) {
+          } catch (error: any) {
             throw new Error(
               'No docker-compose found. Are you sure docker-compose is installed?',
             )
@@ -123,7 +123,7 @@ export default class AppStartServices extends Kommand {
 
       return true
     }
-    catch (error) {
+    catch (error: any) {
       this.logKo(error.message)
 
       return false

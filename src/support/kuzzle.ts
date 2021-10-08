@@ -124,7 +124,7 @@ export class KuzzleSDK {
         try {
           await this.sdk.auth.refreshToken()
         }
-        catch (error) {
+        catch (error: any) {
           logger.logKo(`Cannot refresh token: ${error.message}`)
         }
       }, 80 * SECOND)
@@ -150,7 +150,7 @@ export class KuzzleSDK {
       apiKey = await this.security.createApiKey(
         userKuid,
         'Kourou impersonation token',
-        { expiresIn: '2h', refresh: false })
+        { expiresIn: '2h', refresh: false } as any)
 
       this.sdk.jwt = apiKey._source.token
 
