@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command'
-import  _ from 'lodash'
+import _ from 'lodash'
 import { Vault } from 'kuzzle-vault'
 
 import { Kommand } from '../../common'
@@ -43,7 +43,7 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
       vault.decrypt(this.args['secrets-file'])
       this.logOk('Secrets file can be decrypted')
     }
-    catch (error) {
+    catch (error: any) {
       this.logKo(`Secrets file cannot be decrypted: ${error.message}`)
     }
   }

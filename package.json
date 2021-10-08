@@ -1,7 +1,7 @@
 {
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
-  "version": "0.19.2",
+  "version": "0.19.3",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kourou": "./bin/run"
@@ -20,7 +20,7 @@
     "chalk": "^4.1.0",
     "cli-ux": "^5.5.1",
     "inquirer": "^8.0.0",
-    "kuzzle-sdk": "^7.6.2",
+    "kuzzle-sdk": "^7.7.6",
     "kuzzle-vault": "^2.0.4",
     "listr": "^0.14.3",
     "lodash": "^4.17.21",

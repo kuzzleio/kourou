@@ -43,7 +43,7 @@ export default class Import extends Kommand {
 
         this.logOk(`[collection] Imported mappings for "${index}":"${collection}"`)
       }
-      catch (error) {
+      catch (error: any) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -60,7 +60,7 @@ export default class Import extends Kommand {
 
         this.logOk(`[collection] Imported ${total} documents in "${index}":"${collection}"`)
       }
-      catch (error) {
+      catch (error: any) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -74,7 +74,7 @@ export default class Import extends Kommand {
 
         this.logOk(`[roles] Imported ${total} roles`)
       }
-      catch (error) {
+      catch (error: any) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -88,7 +88,7 @@ export default class Import extends Kommand {
 
         this.logOk(`[profiles] Imported ${total} profiles`)
       }
-      catch (error) {
+      catch (error: any) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -102,7 +102,7 @@ export default class Import extends Kommand {
 
         this.logOk('[users] collection mappings imported')
       }
-      catch (error) {
+      catch (error: any) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -116,7 +116,7 @@ export default class Import extends Kommand {
 
         this.logOk(`[users] Imported ${total} users`)
       }
-      catch (error) {
+      catch (error: any) {
         this.logKo(`Error during import of ${file}: ${error.message}. Skipped.`)
       }
     }
@@ -164,7 +164,7 @@ export default class Import extends Kommand {
 
       return dump.type
     }
-    catch (error) {
+    catch (error: any) {
       this.logKo(`Invalid JSON file "${file}". Import skipped. ${error.message}`)
     }
   }

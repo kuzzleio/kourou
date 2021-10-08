@@ -112,13 +112,13 @@ ${variables}
       // eslint-disable-next-line no-eval
       result = await eval(this.code)
     }
-    catch (error) {
+    catch (error: any) {
       userError = error
     }
 
     if (userError) {
       this.logKo(`Error when executing SDK code: ${userError}`)
-      this.log(this.code)
+      this.log(userError.stack)
     }
     else {
       this.logOk('Successfully executed SDK code')

@@ -25,7 +25,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.19.2 linux-x64 node-v12.20.0
+kourou/0.19.3 linux-x64 node-v14.17.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -48,7 +48,7 @@ By command line:
   --ssl                          [default: true for port 443] Use SSL to connect to Kuzzle
   --protocol                     [default: ws] Protocol used to connect to Kuzzle ( `http` or `ws` )
 
-``` 
+```
 
 By environment variables:
 ```
@@ -61,7 +61,7 @@ By environment variables:
   KUZZLE_SSL                 Use SSL to connect to Kuzzle
   KUZZLE_PROTOCOL            Protocol used to connect to Kuzzle ( `http` or `ws` )
 
-``` 
+```
 
 ## User impersonation
 
@@ -81,11 +81,11 @@ $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password a
 
 ## Automatic command infering for API actions
 
-When no command is found, Kourou will try to execute the given command with the `sdk:query` command.  
+When no command is found, Kourou will try to execute the given command with the `sdk:query` command.
 
 The first argument has to be the name of the controller and the action separated by a semicolon (eg `document:create` )
 
-Kourou will try to infer common arguments like `index` , `collection` , `_id` or `body` .  
+Kourou will try to infer common arguments like `index` , `collection` , `_id` or `body` .
 
 It will automatically infer and accept the following lists of arguments:
  - `<command> <index>`
@@ -116,7 +116,10 @@ It will automatically infer and accept the following lists of arguments:
  - `<command> <index> <collection> <id> <body>`
     - _eg: `kourou document:create iot sensors sigfox-123 '{temperature: 42}'` _
 
-Then any argument will be passed as-is to the `sdk:query` method.
+All other arguments and options will be passed as-is to the `sdk:query` method.
+
+> Note: you can pass arguments to the API actions with the `--arg` or `-a` option in your command, e.g.
+> `kourou security:createFirstAdmin '{ ...credentials here... }' -a reset=true`
 
 # Commands
 
@@ -770,9 +773,15 @@ OPTIONS
 
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
 
+  --query=query            [default: {}] Only dump documents in collections matching the query (JS or JSON format)
+
   --ssl                    Use SSL to connect to Kuzzle
 
   --username=username      [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLES
+  kourou index:export nyc-open-data
+  kourou index:export nyc-open-data --query '{"range":{"_kuzzle_info.createdAt":{"gt":1632935638866}}}'
 ```
 
 _See code: [src/commands/index/export.ts](src/commands/index/export.ts)_

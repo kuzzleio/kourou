@@ -195,10 +195,10 @@ export default class InstanceSpawn extends Kommand {
                   `The detected version of docker-compose (${docoVersion}) is not recent enough (${MIN_DOCO_VERSION})`,
                 )
               }
-            } catch (error) {
+            } catch (error: any) {
               throw new Error(error)
             }
-          } catch (error) {
+          } catch (error: any) {
             throw new Error(
               'No docker-compose found. Are you sure docker-compose is installed?',
             )
@@ -222,7 +222,7 @@ export default class InstanceSpawn extends Kommand {
               )
             }
           }
-          catch (error) {
+          catch (error: any) {
             throw new Error(`Something went wrong checking vm.max_map_count: ${error.message}`)
           }
         },
@@ -232,7 +232,7 @@ export default class InstanceSpawn extends Kommand {
     try {
       await checks.run()
       return true
-    } catch (error) {
+    } catch (error: any) {
       this.logKo(error.message)
       return false
     }

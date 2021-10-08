@@ -1,5 +1,5 @@
-import  fs from 'fs'
-import  _ from 'lodash'
+import fs from 'fs'
+import _ from 'lodash'
 import { flags } from '@oclif/command'
 import { Cryptonomicon } from 'kuzzle-vault'
 
@@ -44,7 +44,7 @@ export class FileTest extends Kommand {
     try {
       encryptedContent = fs.readFileSync(this.args.file, 'utf8')
     }
-    catch (error) {
+    catch (error: any) {
       throw new Error(`Cannot read encrypted content from file "${this.args.file}": ${error.message}`)
     }
 
@@ -52,7 +52,7 @@ export class FileTest extends Kommand {
       cryptonomicon.decryptString(encryptedContent)
       this.logOk('Encrypted file can be decrypted')
     }
-    catch (error) {
+    catch (error: any) {
       this.logKo(`Encrypted file cannot be decrypted: ${error.message}`)
     }
   }

@@ -7,7 +7,7 @@ export function kourou(command: string) {
   try {
     execSync(`${runtime} ${command}`)
   }
-  catch (error) {
+  catch (error: any) {
     console.log(error)
     console.log('STDOUT: ', error.stdout.toString())
     console.log('STDOUT: ', error.stderr.toString())
