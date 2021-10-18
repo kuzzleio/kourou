@@ -1,12 +1,13 @@
-import { writeFileSync } from 'fs'
-
 import { flags } from '@oclif/command'
 import chalk from 'chalk'
 import Listr from 'listr'
 import emoji from 'node-emoji'
+import fs from 'fs';
 
 import { Kommand } from '../../common'
 import { execute } from '../../support/execute'
+
+const MIN_TF_VERSION = '1.0.0'
 
 export default class MinikubeStart extends Kommand {
   static initSdk = false
@@ -22,8 +23,6 @@ export default class MinikubeStart extends Kommand {
   };
 
   async runSafe() {
-    const docoFilename = '/tmp/kuzzle-services.yml'
-
     const successfullCheck = this.flags.check ?
       await this.checkPrerequisites() : true
 
@@ -33,16 +32,25 @@ export default class MinikubeStart extends Kommand {
       throw new Error(`${emoji.get('shrug')} Your system doesn't satisfy all the prerequisites`)
     }
 
-    // clean up
-    await execute('docker-compose', '-f', docoFilename, 'down')
+    this.log(`\nDeleting previous minikube cluster`)
+    await execute('minikube', 'delete')
+    this.log(`\nStarting minikube`)
+    await execute('minikube', 'start')
 
-    await execute('docker-compose', '-f', docoFilename, 'up', '-d')
+    this.log(`\nCloning scaffold into /tmp/scaffold`)
 
-    this.logOk('Elasticsearch and Redis are booting in the background right now.')
-    this.log(chalk.grey('\nTo watch the logs, run'))
-    this.log(chalk.grey(`  docker-compose -f ${docoFilename} logs -f\n`))
-    this.log('  Elasticsearch port: 9200')
-    this.log('  Redis port: 6379')
+    try {
+      fs.statSync('/tmp/scaffold');
+      await execute('rm', '-rf', '/tmp/scaffold')
+    } catch (error) {
+      this.log('/tmp/scaffold does not exists, cloning ...')
+    } finally {
+      await execute('git', 'clone', 'git@github.com:kuzzleio/scaffolds.git', '/tmp/scaffold')
+      this.log(`\nInit module`)
+      await execute('terraform', '-chdir=/tmp/scaffold/tf-minikube', 'init')
+      this.log(`\nApply module`)
+      await execute('terraform', '-chdir=/tmp/scaffold/tf-minikube', 'apply', '-auto-approve')
+    }
   }
 
   public async checkPrerequisites(): Promise<boolean> {
@@ -50,26 +58,19 @@ export default class MinikubeStart extends Kommand {
 
     const checks: Listr = new Listr([
       {
+        title: `Git is installed`,
+        task: async () => {
+          await execute('git', 'version')
+        }
+      },
+      {
         title: `Minikube is installed`,
         task: async () => {
-          const minikubeVersionCommand = await execute('minikube', 'version')
-          const matches = minikubeVersionCommand.stdout.match(/[^0-9.]*([0-9.]*).*/)
-          if (matches === null) {
-            throw new Error(
-              'Unable to read minikube. This is weird.',
-            )
-          }
-          const minikubeVersion = matches.length > 0 ? matches[1] : null
-
-          if (minikubeVersion === null) {
-            throw new Error(
-              'Unable to read minikube version. This is weird.',
-            )
-          }
+          await execute('minikube', 'version')
         },
       },
       {
-        title: `Terraform is installed`,
+        title: `Terraform is installed and at the right version`,
         task: async () => {
           const terraformVersionCommand = await execute('terraform', 'version')
           const matches = terraformVersionCommand.stdout.match(/[^0-9.]*([0-9.]*).*/)
@@ -84,6 +85,12 @@ export default class MinikubeStart extends Kommand {
           if (terraformVersion === null) {
             throw new Error(
               'Unable to read terraform version. This is weird.',
+            )
+          }
+
+          if (terraformVersion < MIN_TF_VERSION) {
+            throw new Error(
+              `The detected version of Terraform (${terraformVersion}) is not recent enough (${MIN_TF_VERSION})`,
             )
           }
         },

@@ -83,6 +83,8 @@ jobs:
         run: |
           tar xfz ./kourou-*.tgz
           cp -fr .mocharc.json .nycrc tsconfig.json features test package/
+      - name: Start minikube
+        uses: medyagh/setup-minikube@master
       - uses: ./.github/actions/functional-test
         with:
           test-set: ${{ matrix.test-set }}
