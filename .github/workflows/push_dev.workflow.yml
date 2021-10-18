@@ -86,6 +86,9 @@ jobs:
         run: |
           tar xfz ./kourou-*.tgz
           cp -fr .mocharc.json .nycrc tsconfig.json features test package/
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.8
       - name: Start minikube
         uses: medyagh/setup-minikube@master
       - uses: ./.github/actions/functional-test
