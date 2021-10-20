@@ -14,7 +14,7 @@ xdescribe('minikube:start', () => {
     })
     .it('Spawns Kuzzle v2 stack', async (ctx, done) => {
       await wait(10 * SECOND)
-      expect(ctx.stdout).to.contain('Terraform applied successfuly')
+      expect(ctx.stdout).to.contain('Apply completed')
       done()
     })
 })
