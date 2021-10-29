@@ -130,6 +130,7 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
 * [`kourou app:scaffold NAME`](#kourou-appscaffold-name)
 * [`kourou app:start-services`](#kourou-appstart-services)
+* [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
@@ -314,6 +315,29 @@ OPTIONS
 ```
 
 _See code: [src/commands/app/start-services.ts](src/commands/app/start-services.ts)_
+
+## `kourou autocomplete [SHELL]`
+
+display autocomplete installation instructions
+
+```
+USAGE
+  $ kourou autocomplete [SHELL]
+
+ARGUMENTS
+  SHELL  shell type
+
+OPTIONS
+  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
+
+EXAMPLES
+  $ kourou autocomplete
+  $ kourou autocomplete bash
+  $ kourou autocomplete zsh
+  $ kourou autocomplete --refresh-cache
+```
+
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.3.0/src/commands/autocomplete/index.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
