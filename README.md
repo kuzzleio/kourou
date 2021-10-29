@@ -25,7 +25,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.19.1 linux-x64 node-v14.17.0
+kourou/0.19.3 linux-x64 node-v14.17.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -48,7 +48,7 @@ By command line:
   --ssl                          [default: true for port 443] Use SSL to connect to Kuzzle
   --protocol                     [default: ws] Protocol used to connect to Kuzzle ( `http` or `ws` )
 
-``` 
+```
 
 By environment variables:
 ```
@@ -61,7 +61,7 @@ By environment variables:
   KUZZLE_SSL                 Use SSL to connect to Kuzzle
   KUZZLE_PROTOCOL            Protocol used to connect to Kuzzle ( `http` or `ws` )
 
-``` 
+```
 
 ## User impersonation
 
@@ -81,11 +81,11 @@ $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password a
 
 ## Automatic command infering for API actions
 
-When no command is found, Kourou will try to execute the given command with the `sdk:query` command.  
+When no command is found, Kourou will try to execute the given command with the `sdk:query` command.
 
 The first argument has to be the name of the controller and the action separated by a semicolon (eg `document:create` )
 
-Kourou will try to infer common arguments like `index` , `collection` , `_id` or `body` .  
+Kourou will try to infer common arguments like `index` , `collection` , `_id` or `body` .
 
 It will automatically infer and accept the following lists of arguments:
  - `<command> <index>`
@@ -550,7 +550,7 @@ OPTIONS
 
 EXAMPLES
   kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
   --no-interactive
 ```
 
@@ -1244,7 +1244,7 @@ DESCRIPTION
 
   You can either:
      - Manually re-create credentials for your users
-     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
+     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
      - Use the "--generate-credentials" flag to auto-generate credentials for your users
 

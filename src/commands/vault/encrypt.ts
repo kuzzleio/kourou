@@ -83,7 +83,7 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
     try {
       secrets = PARSER.parse(fs.readFileSync(this.args.file, 'utf8'))
     }
-    catch (error) {
+    catch (error: any) {
       throw new Error(`Cannot read secrets from file "${this.args.file}": ${error.message}`)
     }
 

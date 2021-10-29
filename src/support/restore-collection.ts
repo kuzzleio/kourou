@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import fs from 'fs'
-import ndjson = require('ndjson')
+import ndjson from 'ndjson'
 
 function handleError(log: any, dumpFile: string, error: any) {
   if (error.status === 206) {

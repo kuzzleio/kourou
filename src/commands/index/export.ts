@@ -78,7 +78,7 @@ export default class IndexExport extends Kommand {
           cli.action.stop()
         }
       }
-      catch (error) {
+      catch (error: any) {
         this.logKo(`Error when exporting collection "${collection.name}": ${error}`)
       }
     }

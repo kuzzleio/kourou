@@ -1,5 +1,5 @@
-import  path from 'path'
-import  fs from 'fs'
+import path from 'path'
+import fs from 'fs'
 
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
@@ -68,7 +68,7 @@ export default class IndexImport extends Kommand {
 
         this.logOk(`Successfully imported ${total} documents in "${dstIndex}:${collection}"`)
       }
-      catch (error) {
+      catch (error: any) {
         this.logKo(`Error when importing collection from "${dumpDir}": ${error}`)
       }
     }

@@ -112,7 +112,7 @@ ${variables}
       // eslint-disable-next-line no-eval
       result = await eval(this.code)
     }
-    catch (error) {
+    catch (error: any) {
       userError = error
     }
 

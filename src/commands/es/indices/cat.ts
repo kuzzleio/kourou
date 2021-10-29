@@ -37,7 +37,7 @@ export default class EsListIndex extends Kommand {
       this.log(JSON.stringify(indexes, null, 2))
 
     }
-    catch (error) {
+    catch (error: any) {
       console.log(error)
     }
   }
