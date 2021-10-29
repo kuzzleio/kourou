@@ -27,3 +27,5 @@ paths:
     $ref: "./documents/create.yaml#/DocumentCreate"
   /document/createOrReplace:
     $ref: "./documents/createOrReplace.yaml#/DocumentCreateOrReplace"
+  /document/delete:
+    $ref: "./documents/delete.yaml#/DocumentDelete"
