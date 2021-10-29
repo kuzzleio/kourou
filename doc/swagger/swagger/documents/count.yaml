@@ -1,0 +1,29 @@
+DocumentCount:
+  post:
+    summary: "Counts documents in a collection."
+    tags:
+      - document
+    parameters:
+      - name: body
+        in: "body"
+        description: "Counts documents in a collection."
+        required: true
+        schema:
+          $ref: "./definitions.yaml#/definitions/document"
+    responses:
+      200:
+        description: "Counts documents in a collection."
+        schema:
+          $ref: "./definitions.yaml#/definitions/response"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The user ID.
+        username:
+          type: string
+          description: The user name.

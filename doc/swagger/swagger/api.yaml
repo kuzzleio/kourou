@@ -1,0 +1,25 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters."
+  version: "1.0.0"
+  title: "Swagger Kuzzle"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "job@kuzzle.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "kuzzle.swagger.io"
+basePath: "/v2"
+tags:
+- name: "document"
+  description: "Everything about document action"
+  externalDocs:
+    description: "More about document action"
+    url: "https://docs.kuzzle.io/core/1/api/essentials/connecting-to-kuzzle/"
+schemes:
+- "https"
+- "http"
+paths:
+  /document/count:
+    $ref: "./documents/count.yaml#/DocumentCount"

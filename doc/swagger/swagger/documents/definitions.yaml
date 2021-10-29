@@ -1,0 +1,37 @@
+definitions:
+  document:
+    type: "object"
+    properties:
+      controller:
+        type: "string"
+        enum: "document"
+      action:
+        type: "string"
+        enum: "count"
+      index:
+        type: "string"
+      collection:
+        type: "string"
+  response:
+    type: "object"
+    properties:
+      status:
+        type: "integer"
+      error:
+        type: "object"
+      index:
+        type: "string"
+      collection:
+        type: "string"
+      controller:
+        type: "string"
+      action:
+        type: "string"
+      requestId:
+        type: "integer"
+        description: "unique request identifie"
+      result:
+        type: "object"
+        properties:
+          count:
+            type: "integer"
