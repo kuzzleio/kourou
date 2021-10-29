@@ -35,3 +35,5 @@ paths:
     $ref: "./documents/get.yaml#/DocumentGet"
   /document/replace:
     $ref: "./documents/replace.yaml#/DocumentReplace"
+  /document/update:
+    $ref: "./documents/update.yaml#/DocumentUpdate"
