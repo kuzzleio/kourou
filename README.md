@@ -550,7 +550,7 @@ OPTIONS
 
 EXAMPLES
   kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
   --no-interactive
 ```
 
@@ -1244,7 +1244,7 @@ DESCRIPTION
 
   You can either:
      - Manually re-create credentials for your users
-     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
+     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
      - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
