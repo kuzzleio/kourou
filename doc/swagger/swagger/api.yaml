@@ -25,3 +25,5 @@ paths:
     $ref: "./documents/count.yaml#/DocumentCount"
   /document/create:
     $ref: "./documents/create.yaml#/DocumentCreate"
+  /document/createOrReplace:
+    $ref: "./documents/createOrReplace.yaml#/DocumentCreateOrReplace"
