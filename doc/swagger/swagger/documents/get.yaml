@@ -9,16 +9,16 @@ DocumentGet:
         description: "Gets a document."
         required: true
         schema:
-          $ref: "#/components/schemas/CreateRequest"
+          $ref: "#/components/schemas/GetRequest"
     responses:
       200:
         description: "Gets a document."
         schema:
-            $ref: "#/components/schemas/CreateResponse"
+            $ref: "#/components/schemas/GetResponse"
 
 components:
   schemas:
-    CreateRequest:
+    GetRequest:
       allOf:
         - $ref: "./definitions.yaml#/definitions/BasicRequest"
         - type: "object"
@@ -29,7 +29,7 @@ components:
             includeTrash:
               type: "boolean"
               description: "if true, documents in the trashcan can be returned"
-    CreateResponse:
+    GetResponse:
       allOf:
         - $ref: "./definitions.yaml#/definitions/BasicResponse"
         - type: "object"
