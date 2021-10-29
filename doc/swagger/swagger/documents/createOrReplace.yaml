@@ -1,5 +1,5 @@
 DocumentCreateOrReplace:
-  post:
+  put:
     summary: "Creates a new document in the persistent data storage, or replaces its content if it already exists."
     tags:
       - document

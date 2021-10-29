@@ -1,5 +1,5 @@
 DocumentDeleteByQuery:
-  post:
+  delete:
     summary: "Deletes documents matching the provided search query."
     tags:
       - document

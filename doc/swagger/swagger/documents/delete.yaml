@@ -1,5 +1,5 @@
 DocumentDelete:
-  post:
+  delete:
     summary: "Deletes a document."
     tags:
       - document

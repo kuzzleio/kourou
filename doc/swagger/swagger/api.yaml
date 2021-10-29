@@ -31,3 +31,5 @@ paths:
     $ref: "./documents/delete.yaml#/DocumentDelete"
   /document/deleteByQuery:
     $ref: "./documents/deleteByQuery.yaml#/DocumentDeleteByQuery"
+  /document/get:
+    $ref: "./documents/get.yaml#/DocumentGet"
