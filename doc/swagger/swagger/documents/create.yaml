@@ -1,0 +1,43 @@
+DocumentCreate:
+  post:
+    summary: "Creates a new document in the persistent data storage."
+    tags:
+      - document
+    parameters:
+      - name: body
+        in: "body"
+        description: "Creates a new document in the persistent data storage."
+        required: true
+        schema:
+          $ref: "#/components/schemas/CreateRequest"
+    responses:
+      200:
+        description: "Creates a new document in the persistent data storage."
+        schema:
+            $ref: "#/components/schemas/CreateResponse"
+
+components:
+  schemas:
+    CreateRequest:
+      allOf:
+        - $ref: "./definitions.yaml#/definitions/BasicRequest"
+        - type: "object"
+          properties:
+            _id:
+              type: "string"
+              description: "documentId"
+    CreateResponse:
+      allOf:
+        - $ref: "./definitions.yaml#/definitions/BasicResponse"
+        - type: "object"
+          properties:
+            result:
+              type: "object"
+              properties:
+                _id:
+                  type: "string"
+                  description: "documentId"
+                _version:
+                  type: "integer"
+                _sources:
+                  type: "object"

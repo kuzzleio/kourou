@@ -1,5 +1,5 @@
 definitions:
-  document:
+  BasicRequest:
     type: "object"
     properties:
       controller:
@@ -12,7 +12,7 @@ definitions:
         type: "string"
       collection:
         type: "string"
-  response:
+  BasicResponse:
     type: "object"
     properties:
       status:
@@ -30,8 +30,3 @@ definitions:
       requestId:
         type: "integer"
         description: "unique request identifie"
-      result:
-        type: "object"
-        properties:
-          count:
-            type: "integer"

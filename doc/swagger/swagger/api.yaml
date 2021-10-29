@@ -23,3 +23,5 @@ schemes:
 paths:
   /document/count:
     $ref: "./documents/count.yaml#/DocumentCount"
+  /document/create:
+    $ref: "./documents/create.yaml#/DocumentCreate"

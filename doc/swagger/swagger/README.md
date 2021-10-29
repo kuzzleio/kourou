@@ -14,3 +14,5 @@
 
 - [data types](https://swagger.io/docs/specification/data-models/data-types/)
 - [split open api spec into multiple files](https://davidgarcia.dev/posts/how-to-split-open-api-spec-into-multiple-files/)
+- [Describe parameters](https://swagger.io/docs/specification/describing-parameters/)
+- [Inheritance and Polymorphism](https://swagger.io/docs/specification/data-models/inheritance-and-polymorphism/)

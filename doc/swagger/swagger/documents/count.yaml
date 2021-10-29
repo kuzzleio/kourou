@@ -9,21 +9,25 @@ DocumentCount:
         description: "Counts documents in a collection."
         required: true
         schema:
-          $ref: "./definitions.yaml#/definitions/document"
+          $ref: "#/components/schemas/CountRequest"
     responses:
       200:
         description: "Counts documents in a collection."
         schema:
-          $ref: "./definitions.yaml#/definitions/response"
+          $ref: "#/components/schemas/CountResponse"
 
 components:
   schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: The user ID.
-        username:
-          type: string
-          description: The user name.
+    CountRequest:
+      allOf:
+        - $ref: "./definitions.yaml#/definitions/BasicRequest"
+    CountResponse:
+      allOf:
+        - $ref: "./definitions.yaml#/definitions/BasicResponse"
+        - type: "object"
+          properties:
+            result:
+              type: "object"
+              properties:
+                count:
+                  type: "integer"
