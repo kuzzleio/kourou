@@ -26,8 +26,14 @@ export default class CollectionExport extends Kommand {
       description: 'Open an editor (EDITOR env variable) to edit the query before sending'
     }),
     format: flags.string({
-      description: '"jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal fixtures and jsonl allows to import that data back with kourou',
-      default: 'JSONL'
+      description: `"kuzzle" will export in Kuzzle format usable for internal fixtures,
+"jsonl" allows to import that data back with kourou,
+"csv" allows to import data into Excel (please, specify the fields to export using the --fields option).`,
+      options: ['jsonl', 'kuzzle', 'csv'],
+      default: 'jsonl'
+    }),
+    fields: flags.string({
+      description: '[CSV format only] The fields to be included in the CSV export in dot-path format (e.g. "myObject.myProperty.mySubProperty")'
     }),
     ...kuzzleFlags,
     protocol: flags.string({
@@ -60,7 +66,7 @@ export default class CollectionExport extends Kommand {
     const countAll = await this.sdk.document.count(this.args.index, this.args.collection)
     const count = await this.sdk.document.count(this.args.index, this.args.collection, { query })
 
-    this.logInfo(`Dumping ${count} of ${countAll} documents from collection "${this.args.index}:${this.args.collection}" in ${path} ...`)
+    this.logInfo(`Dumping ${count} of ${countAll} documents from collection "${this.args.index}:${this.args.collection}" in ${exportPath} ...`)
 
     fs.mkdirSync(exportPath, { recursive: true })
 
