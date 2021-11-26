@@ -25,7 +25,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.19.3 linux-x64 node-v14.17.0
+kourou/0.19.4 linux-x64 node-v14.17.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -130,7 +130,6 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
 * [`kourou app:scaffold NAME`](#kourou-appscaffold-name)
 * [`kourou app:start-services`](#kourou-appstart-services)
-* [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
@@ -315,29 +314,6 @@ OPTIONS
 ```
 
 _See code: [src/commands/app/start-services.ts](src/commands/app/start-services.ts)_
-
-## `kourou autocomplete [SHELL]`
-
-display autocomplete installation instructions
-
-```
-USAGE
-  $ kourou autocomplete [SHELL]
-
-ARGUMENTS
-  SHELL  shell type
-
-OPTIONS
-  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
-
-EXAMPLES
-  $ kourou autocomplete
-  $ kourou autocomplete bash
-  $ kourou autocomplete zsh
-  $ kourou autocomplete --refresh-cache
-```
-
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.3.0/src/commands/autocomplete/index.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
@@ -574,7 +550,7 @@ OPTIONS
 
 EXAMPLES
   kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
   --no-interactive
 ```
 
@@ -737,7 +713,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.3/src/commands/help.ts)_
 
 ## `kourou import PATH`
 
@@ -1268,7 +1244,7 @@ DESCRIPTION
 
   You can either:
      - Manually re-create credentials for your users
-     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
+     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
      - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
