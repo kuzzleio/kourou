@@ -149,7 +149,8 @@ class CSVDumper extends AbstractDumper {
     batchSize: number,
     destPath: string,
     query: any = {},
-    protected readonly fields: string[]
+    protected readonly fields: string[],
+    protected readonly separator = ','
   ) {
     super(sdk, index, collection, batchSize, destPath, query)
   }
@@ -165,7 +166,7 @@ class CSVDumper extends AbstractDumper {
       this.fields.splice(this.fields.indexOf('_id'), 1)
     }
     this.fields.unshift('_id')
-    return this.writeLine(this.fields.join(','))
+    return this.writeLine(this.fields.join(this.separator))
   }
   writeLine(line: any): Promise<void> {
     if (!this.writeStream) {
@@ -176,7 +177,7 @@ class CSVDumper extends AbstractDumper {
   }
   onResult(document: { _id: string; _source: any }): Promise<void> {
     const values = [document._id, ...pickValues(document._source, this.fields)]
-    return this.writeLine(values)
+    return this.writeLine(values.join(this.separator))
   }
   tearDown(): Promise<void> {
     return new Promise(resolve => resolve())
