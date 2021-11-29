@@ -3,6 +3,7 @@ import path from 'path'
 
 import cli from 'cli-ux'
 import ndjson from 'ndjson'
+import { pickValues } from '../common'
 
 abstract class AbstractDumper {
   protected collectionDir: string
@@ -19,7 +20,6 @@ abstract class AbstractDumper {
     protected readonly batchSize: number,
     protected readonly destPath: string,
     protected readonly query: any = {},
-    protected readonly format = 'jsonl'
   ) {
     this.collectionDir = path.join(this.destPath, this.collection)
     this.options = {
@@ -141,98 +141,63 @@ class KuzzleDumper extends JSONLDumper {
   }
 }
 
-export async function dumpCollectionData(sdk: any, index: string, collection: string, batchSize: number, destPath: string, query: any = {}, format = 'jsonl') {
+class CSVDumper extends AbstractDumper {
+  constructor(
+    sdk: any,
+    index: string,
+    collection: string,
+    batchSize: number,
+    destPath: string,
+    query: any = {},
+    protected readonly fields: string[]
+  ) {
+    super(sdk, index, collection, batchSize, destPath, query)
+  }
+
+  protected get fileExtension(): string {
+    return 'csv'
+  }
+  setup(): Promise<void> {
+    return new Promise(resolve => resolve())
+  }
+  writeHeader(): Promise<void> {
+    if (this.fields.includes('_id')) {
+      this.fields.splice(this.fields.indexOf('_id'), 1)
+    }
+    this.fields.unshift('_id')
+    return this.writeLine(this.fields.join(','))
+  }
+  writeLine(line: any): Promise<void> {
+    if (!this.writeStream) {
+      throw new Error('Cannot write data: WriteStream is not initialized.')
+    }
+    this.writeStream.write(line)
+    return new Promise(resolve => resolve())
+  }
+  onResult(document: { _id: string; _source: any }): Promise<void> {
+    const values = [document._id, ...pickValues(document._source, this.fields)]
+    return this.writeLine(values)
+  }
+  tearDown(): Promise<void> {
+    return new Promise(resolve => resolve())
+  }
+}
+
+export async function dumpCollectionData(sdk: any, index: string, collection: string, batchSize: number, destPath: string, query: any = {}, format = 'jsonl', fields: string[] = []) {
   let dumper: AbstractDumper
   switch (format.toLowerCase()) {
     case 'jsonl':
-      dumper = new JSONLDumper(sdk, index, collection, batchSize, destPath, query, format)
+      dumper = new JSONLDumper(sdk, index, collection, batchSize, destPath, query)
+      return dumper.dump();
+
+    case 'csv':
+      dumper = new CSVDumper(sdk, index, collection, batchSize, destPath, query, fields)
       return dumper.dump();
 
     default:
-      dumper = new KuzzleDumper(sdk, index, collection, batchSize, destPath, query, format)
+      dumper = new KuzzleDumper(sdk, index, collection, batchSize, destPath, query)
       return dumper.dump();
   }
-  // const collectionDir = path.join(destPath, collection)
-  // const filename = path.join(collectionDir, (format.toLowerCase() === 'jsonl' ? 'documents.jsonl' : 'documents.json'))
-  // const writeStream = fs.createWriteStream(filename)
-  // const waitWrite = new Promise(resolve => writeStream.on('finish', resolve))
-  // const ndjsonStream = ndjson.stringify()
-  // const options = {
-  //   scroll: '1m',
-  //   size: batchSize
-  // }
-
-  // // WriteLine
-  // const writeLine = (content: any) => {
-  //   return new Promise(resolve => {
-  //     if (ndjsonStream.write(content)) {
-  //       resolve(undefined)
-  //     }
-  //     else {
-  //       ndjsonStream.once('drain', resolve)
-  //     }
-  //   })
-  // }
-
-  // writeStream.on('error', error => {
-  //   throw error
-  // })
-
-  // // Setup
-  // ndjsonStream.on('data', (line: string) => writeStream.write(line))
-
-  // fs.mkdirSync(collectionDir, { recursive: true })
-
-  // // Write Header
-  // if (format.toLowerCase() === 'jsonl') {
-  //   await writeLine({ type: 'collection', index, collection })
-  // }
-
-  // let results = await sdk.document.search(index, collection, { query }, options)
-
-  // const progressBar = cli.progress({
-  //   format: `Dumping ${collection} |{bar}| {percentage}% || {value}/{total} documents`
-  // })
-  // progressBar.start(results.total, 0)
-
-  // const rawDocuments: any = {
-  //   [index]: {
-  //     [collection]: []
-  //   }
-  // }
-
-  // do {
-  //   progressBar.update(results.fetched)
-
-  //   for (const hit of results.hits) {
-  //     let document = null
-  //     if (format.toLocaleLowerCase() === 'jsonl') {
-  //       document = {
-  //         _id: hit._id,
-  //         body: hit._source
-  //       }
-
-  //       await writeLine(document)
-  //     } else {
-  //       rawDocuments[index][collection].push({
-  //         index: {
-  //           _id: hit._id
-  //         }
-  //       })
-  //       rawDocuments[index][collection].push(hit._source)
-  //     }
-  //   }
-  // } while ((results = await results.next()))
-
-  // if (format.toLocaleLowerCase() === 'kuzzle') {
-  //   await writeLine(rawDocuments)
-  // }
-
-  // progressBar.stop()
-  // ndjsonStream.end()
-  // writeStream.end()
-
-  // return waitWrite
 }
 
 export async function dumpCollectionMappings(sdk: any, index: string, collection: string, destPath: string, format = 'jsonl') {

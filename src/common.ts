@@ -173,3 +173,15 @@ export abstract class Kommand extends Command {
     return eval(`var o = ${input}; o`)
   }
 }
+
+/**
+ * An iteration-order-safe version of lodash.values
+ *
+ * @param object The object containing the values
+ * @param fields The field names to pick in the right order
+ * @returns The values in the same order as the fields
+ * @see https://lodash.com/docs/4.17.15#values
+ */
+ export function pickValues(object: any, fields: string[]): any[] {
+  return fields.map(f => object[f])
+}
