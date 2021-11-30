@@ -28,11 +28,20 @@ abstract class AbstractDumper {
     }
   }
 
-  abstract setup(): Promise<void>
-  abstract writeHeader(): Promise<void>
+  public setup(): Promise<void> {
+    return new Promise(resolve => resolve())
+  }
+
+  public writeHeader(): Promise<void> {
+    return new Promise(resolve => resolve())
+  }
+
   abstract writeLine(line: any): Promise<void>
   abstract onResult(document: {_id: string, _source: any}): Promise<void>
-  abstract tearDown(): Promise<void>
+
+  public tearDown(): Promise<void> {
+    return new Promise(resolve => resolve())
+  }
 
   async dump(): Promise<void> {
     this.filename = path.join(this.collectionDir, `documents.${this.fileExtension}`)
@@ -107,9 +116,6 @@ class JSONLDumper extends AbstractDumper {
   onResult(document: {_id: string, _source: any}): Promise<void> {
     return this.writeLine({_id: document._id, body: document._source})
   }
-  tearDown(): Promise<void> {
-    return new Promise(resolve => resolve())
-  }
   protected get fileExtension() {
     return 'jsonl'
   }
@@ -123,9 +129,6 @@ class KuzzleDumper extends JSONLDumper {
   }
   protected get fileExtension() {
     return 'json'
-  }
-  async writeHeader(): Promise<void> {
-    return new Promise(resolve => resolve())
   }
   onResult(document: {_id: string, _source: any}): Promise<void> {
     this.rawDocuments[this.index][this.collection].push({
@@ -178,9 +181,6 @@ class CSVDumper extends AbstractDumper {
   onResult(document: { _id: string; _source: any }): Promise<void> {
     const values = [document._id, ...pickValues(document._source, this.fields)]
     return this.writeLine(values.join(this.separator))
-  }
-  tearDown(): Promise<void> {
-    return new Promise(resolve => resolve())
   }
 }
 
