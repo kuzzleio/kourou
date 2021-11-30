@@ -25,7 +25,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.19.3 linux-x64 node-v14.17.0
+kourou/0.19.3 darwin-x64 node-v14.18.1
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -379,31 +379,36 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
-  --api-key=api-key        Kuzzle user api-key
-  --as=as                  Impersonate a user
-  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-  --editor                 Open an editor (EDITOR env variable) to edit the query before sending
+  --api-key=api-key          Kuzzle user api-key
+  --as=as                    Impersonate a user
+  --batch-size=batch-size    [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+  --editor                   Open an editor (EDITOR env variable) to edit the query before sending
 
-  --format=format          [default: JSONL] "jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal
-                           fixtures and jsonl allows to import that data back with kourou
+  --fields=fields            [CSV format only] The fields to be included in the CSV export in dot-path format (e.g.
+                             "myObject.myProperty.mySubProperty")
 
-  --help                   show CLI help
+  --format=jsonl|kuzzle|csv  [default: jsonl] "kuzzle" will export in Kuzzle format usable for internal fixtures,
+                             "jsonl" allows to import that data back with kourou,
+                             "csv" allows to import data into Excel (please, specify the fields to export using the
+                             --fields option).
 
-  --host=host              [default: localhost] Kuzzle server host
+  --help                     show CLI help
 
-  --password=password      Kuzzle user password
+  --host=host                [default: localhost] Kuzzle server host
 
-  --path=path              Dump root directory
+  --password=password        Kuzzle user password
 
-  --port=port              [default: 7512] Kuzzle server port
+  --path=path                Dump root directory
 
-  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
+  --port=port                [default: 7512] Kuzzle server port
 
-  --query=query            [default: {}] Only dump documents matching the query (JS or JSON format)
+  --protocol=protocol        [default: ws] Kuzzle protocol (http or websocket)
 
-  --ssl                    Use SSL to connect to Kuzzle
+  --query=query              [default: {}] Only dump documents matching the query (JS or JSON format)
 
-  --username=username      [default: anonymous] Kuzzle username (local strategy)
+  --ssl                      Use SSL to connect to Kuzzle
+
+  --username=username        [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
   kourou collection:export nyc-open-data yellow-taxi
@@ -574,7 +579,7 @@ OPTIONS
 
 EXAMPLES
   kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
   --no-interactive
 ```
 
@@ -737,7 +742,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.3/src/commands/help.ts)_
 
 ## `kourou import PATH`
 
@@ -1268,7 +1273,7 @@ DESCRIPTION
 
   You can either:
      - Manually re-create credentials for your users
-     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
+     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
      - Use the "--generate-credentials" flag to auto-generate credentials for your users
 

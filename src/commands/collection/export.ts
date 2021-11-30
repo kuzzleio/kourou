@@ -61,6 +61,10 @@ export default class CollectionExport extends Kommand {
       ? this.flags.fields.split(',')
       : []
 
+    if (this.flags.format === 'csv' && fields.length === 0) {
+      this.logInfo('It looks like you are exporting to CSV but you did not select any field. Only document IDs will be exported.')
+    }
+
     let query = this.parseJs(this.flags.query)
 
     if (this.flags.editor) {
