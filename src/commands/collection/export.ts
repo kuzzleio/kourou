@@ -33,7 +33,12 @@ export default class CollectionExport extends Kommand {
       default: 'jsonl'
     }),
     fields: flags.string({
-      description: '[CSV format only] The fields to be included in the CSV export in dot-path format (e.g. "myObject.myProperty.mySubProperty")'
+      description: `[CSV format only] The list of fields to be included in the CSV export in dot-path format.
+
+Example:
+--fields oneField,anotherField,yetAnotherOne.nested.moarNested
+
+Note that the '_id' field is always included in the CSV export.`
     }),
     ...kuzzleFlags,
     protocol: flags.string({

@@ -379,36 +379,57 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
-  --api-key=api-key          Kuzzle user api-key
-  --as=as                    Impersonate a user
-  --batch-size=batch-size    [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-  --editor                   Open an editor (EDITOR env variable) to edit the query before sending
+  --api-key=api-key
+      Kuzzle user api-key
 
-  --fields=fields            [CSV format only] The fields to be included in the CSV export in dot-path format (e.g.
-                             "myObject.myProperty.mySubProperty")
+  --as=as
+      Impersonate a user
 
-  --format=jsonl|kuzzle|csv  [default: jsonl] "kuzzle" will export in Kuzzle format usable for internal fixtures,
-                             "jsonl" allows to import that data back with kourou,
-                             "csv" allows to import data into Excel (please, specify the fields to export using the
-                             --fields option).
+  --batch-size=batch-size
+      [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
 
-  --help                     show CLI help
+  --editor
+      Open an editor (EDITOR env variable) to edit the query before sending
 
-  --host=host                [default: localhost] Kuzzle server host
+  --fields=fields
+      [CSV format only] The list of fields to be included in the CSV export in dot-path format.
 
-  --password=password        Kuzzle user password
+      Example:
+      --fields oneField,anotherField,yetAnotherOne.nested.moarNested
 
-  --path=path                Dump root directory
+      Note that the '_id' field is always included in the CSV export.
 
-  --port=port                [default: 7512] Kuzzle server port
+  --format=jsonl|kuzzle|csv
+      [default: jsonl] "kuzzle" will export in Kuzzle format usable for internal fixtures,
+      "jsonl" allows to import that data back with kourou,
+      "csv" allows to import data into Excel (please, specify the fields to export using the --fields option).
 
-  --protocol=protocol        [default: ws] Kuzzle protocol (http or websocket)
+  --help
+      show CLI help
 
-  --query=query              [default: {}] Only dump documents matching the query (JS or JSON format)
+  --host=host
+      [default: localhost] Kuzzle server host
 
-  --ssl                      Use SSL to connect to Kuzzle
+  --password=password
+      Kuzzle user password
 
-  --username=username        [default: anonymous] Kuzzle username (local strategy)
+  --path=path
+      Dump root directory
+
+  --port=port
+      [default: 7512] Kuzzle server port
+
+  --protocol=protocol
+      [default: ws] Kuzzle protocol (http or websocket)
+
+  --query=query
+      [default: {}] Only dump documents matching the query (JS or JSON format)
+
+  --ssl
+      Use SSL to connect to Kuzzle
+
+  --username=username
+      [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
   kourou collection:export nyc-open-data yellow-taxi
