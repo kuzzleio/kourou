@@ -57,6 +57,10 @@ export default class CollectionExport extends Kommand {
       ? path.join(this.flags.path, this.args.index)
       : this.args.index
 
+    const fields = this.flags.fields
+      ? this.flags.fields.split(',')
+      : []
+
     let query = this.parseJs(this.flags.query)
 
     if (this.flags.editor) {
@@ -84,7 +88,8 @@ export default class CollectionExport extends Kommand {
       Number(this.flags['batch-size']),
       exportPath,
       query,
-      this.flags.format)
+      this.flags.format,
+      fields)
 
     this.logOk(`Collection ${this.args.index}:${this.args.collection} dumped`)
   }

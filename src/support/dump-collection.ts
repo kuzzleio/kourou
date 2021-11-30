@@ -159,20 +159,20 @@ class CSVDumper extends AbstractDumper {
     return 'csv'
   }
   setup(): Promise<void> {
-    return new Promise(resolve => resolve())
-  }
-  writeHeader(): Promise<void> {
     if (this.fields.includes('_id')) {
       this.fields.splice(this.fields.indexOf('_id'), 1)
     }
-    this.fields.unshift('_id')
-    return this.writeLine(this.fields.join(this.separator))
+    return new Promise(resolve => resolve())
+  }
+  writeHeader(): Promise<void> {
+    return this.writeLine(['_id', ...this.fields].join(this.separator))
   }
   writeLine(line: any): Promise<void> {
     if (!this.writeStream) {
       throw new Error('Cannot write data: WriteStream is not initialized.')
     }
     this.writeStream.write(line)
+    this.writeStream.write('\n')
     return new Promise(resolve => resolve())
   }
   onResult(document: { _id: string; _source: any }): Promise<void> {
