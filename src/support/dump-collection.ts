@@ -28,22 +28,54 @@ abstract class AbstractDumper {
     }
   }
 
-  public setup(): Promise<void> {
-    return new Promise(resolve => resolve())
+  /**
+   * One-shot call before the dump. Can be used to
+   * perform setup operations before dumping.
+   *
+   * @returns void
+   */
+  public async setup() {
+    return
   }
 
-  public writeHeader(): Promise<void> {
-    return new Promise(resolve => resolve())
+  /**
+   * One-shot call before iterating over the data. Can be
+   * used to write the header of the dumped output.
+   * @returns void
+   */
+  public async writeHeader() {
+    return
   }
 
-  abstract writeLine(line: any): Promise<void>
+  /**
+   * You can put here the logic to write into the dump.
+   *
+   * @param data The data to be written to the dump (can be
+   *             an item or anything else).
+   */
+  abstract writeLine(data: any): Promise<void>
+
+  /**
+   * Iterative call, on each item in the collection to
+   * be dumped. Useful to perform transformations on the data
+   * before writing it in the dump. Usually, writeLine is
+   * called by this hook.
+   *
+   * @param document The document to be written in a line of the dump.
+   */
   abstract onResult(document: {_id: string, _source: any}): Promise<void>
 
-  public tearDown(): Promise<void> {
-    return new Promise(resolve => resolve())
+  public async tearDown() {
+    return
   }
 
-  async dump(): Promise<void> {
+  /**
+   * The loop that iterates over the documents of the collection and
+   * calls all the other hooks.
+   *
+   * @returns a promise resolving when the dump is finished.
+   */
+  async dump() {
     this.filename = path.join(this.collectionDir, `documents.${this.fileExtension}`)
     this.writeStream = fs.createWriteStream(this.filename)
     const waitWrite: Promise<void> = new Promise(
@@ -91,16 +123,16 @@ abstract class AbstractDumper {
 class JSONLDumper extends AbstractDumper {
   protected ndjsonStream = ndjson.stringify()
 
-  setup(): Promise<void> {
+  async setup() {
     this.ndjsonStream.on('data', (line: string) => {
       if (!this.writeStream) {
         throw new Error('Cannot write data: WriteStream is not initialized.')
       }
       this.writeStream.write(line)
     })
-    return new Promise(resolve => resolve())
+    return
   }
-  async writeHeader(): Promise<void> {
+  async writeHeader() {
     await this.writeLine({ type: 'collection', index: this.index, collection: this.collection })
   }
   writeLine(content: any): Promise<void> {
@@ -130,14 +162,14 @@ class KuzzleDumper extends JSONLDumper {
   protected get fileExtension() {
     return 'json'
   }
-  onResult(document: {_id: string, _source: any}): Promise<void> {
+  async onResult(document: {_id: string, _source: any}) {
     this.rawDocuments[this.index][this.collection].push({
       index: {
         _id: document._id
       }
     })
     this.rawDocuments[this.index][this.collection].push(document._source)
-    return new Promise(resolve => resolve())
+    return
   }
   tearDown(): Promise<void> {
     return this.writeLine(this.rawDocuments)
@@ -170,13 +202,13 @@ class CSVDumper extends AbstractDumper {
   writeHeader(): Promise<void> {
     return this.writeLine(['_id', ...this.fields].join(this.separator))
   }
-  writeLine(line: any): Promise<void> {
+  async writeLine(line: any) {
     if (!this.writeStream) {
       throw new Error('Cannot write data: WriteStream is not initialized.')
     }
     this.writeStream.write(line)
     this.writeStream.write('\n')
-    return new Promise(resolve => resolve())
+    return
   }
   onResult(document: { _id: string; _source: any }): Promise<void> {
     const values = [document._id, ...pickValues(document._source, this.fields)]
