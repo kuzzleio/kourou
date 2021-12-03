@@ -23,7 +23,7 @@ abstract class AbstractDumper {
   ) {
     this.collectionDir = path.join(this.destPath, this.collection)
     this.options = {
-      scroll: '1m',
+      scroll: '2s',
       size: batchSize
     }
   }
@@ -34,18 +34,13 @@ abstract class AbstractDumper {
    *
    * @returns void
    */
-  public async setup() {
-    return
-  }
+  public async setup() {}
 
   /**
    * One-shot call before iterating over the data. Can be
    * used to write the header of the dumped output.
-   * @returns void
    */
-  public async writeHeader() {
-    return
-  }
+  public async writeHeader() {}
 
   /**
    * You can put here the logic to write into the dump.
@@ -65,9 +60,7 @@ abstract class AbstractDumper {
    */
   abstract onResult(document: {_id: string, _source: any}): Promise<void>
 
-  public async tearDown() {
-    return
-  }
+  public async tearDown() {}
 
   /**
    * The loop that iterates over the documents of the collection and
@@ -193,13 +186,12 @@ class CSVDumper extends AbstractDumper {
   protected get fileExtension(): string {
     return 'csv'
   }
-  setup(): Promise<void> {
+  setup() {
     if (this.fields.includes('_id')) {
       this.fields.splice(this.fields.indexOf('_id'), 1)
     }
-    return new Promise(resolve => resolve())
   }
-  writeHeader(): Promise<void> {
+  writeHeader() {
     return this.writeLine(['_id', ...this.fields].join(this.separator))
   }
   async writeLine(line: any) {
