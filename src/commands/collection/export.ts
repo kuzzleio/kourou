@@ -38,7 +38,8 @@ export default class CollectionExport extends Kommand {
 Example:
 --fields oneField,anotherField,yetAnotherOne.nested.moarNested
 
-Note that the '_id' field is always included in the CSV export.`
+Note that the '_id' field is always included in the CSV export. Leaving this option empty implies that all
+exportable fields in the mapping will be exported.`
     }),
     ...kuzzleFlags,
     protocol: flags.string({
@@ -67,7 +68,7 @@ Note that the '_id' field is always included in the CSV export.`
       : []
 
     if (this.flags.format === 'csv' && fields.length === 0) {
-      this.logInfo('It looks like you are exporting to CSV but you did not select any field. Only document IDs will be exported.')
+      this.logInfo('It looks like you are exporting to CSV but you did not select any field. All exportable fields in the mapping will be exported.')
     }
 
     let query = this.parseJs(this.flags.query)

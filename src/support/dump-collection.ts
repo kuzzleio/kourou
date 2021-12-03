@@ -4,6 +4,52 @@ import path from 'path'
 import cli from 'cli-ux'
 import ndjson from 'ndjson'
 import { pickValues } from '../common'
+import { JSONObject, CollectionController } from 'kuzzle-sdk'
+/**
+ * Flatten an object transform:
+ * {
+ *  title: "kuzzle",
+ *  info : {
+ *    tag: "news"
+ *  }
+ * }
+ *
+ * Into an object like:
+ * {
+ *  title: "kuzzle",
+ *  info.tag: news
+ * }
+ *
+ * @param {Object} target the object we have to flatten
+ * @returns {Object} the flattened object
+ */
+ function flattenObject(target: JSONObject): JSONObject {
+  const output = {};
+
+  flattenStep(output, target);
+
+  return output;
+}
+
+function flattenStep(
+  output: JSONObject,
+  object: JSONObject,
+  prev: string | null = null): void {
+  const keys = Object.keys(object);
+
+  for(let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    const value = object[key];
+    const newKey = prev ? prev + '.' + key : key;
+
+    if (Object.prototype.toString.call(value) === '[object Object]') {
+      output[newKey] = value;
+      flattenStep(output, value, newKey);
+    }
+
+    output[newKey] = value;
+  }
+}
 
 abstract class AbstractDumper {
   protected collectionDir: string
@@ -34,12 +80,14 @@ abstract class AbstractDumper {
    *
    * @returns void
    */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public async setup() {}
 
   /**
    * One-shot call before iterating over the data. Can be
    * used to write the header of the dumped output.
    */
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public async writeHeader() {}
 
   /**
@@ -60,6 +108,7 @@ abstract class AbstractDumper {
    */
   abstract onResult(document: {_id: string, _source: any}): Promise<void>
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public async tearDown() {}
 
   /**
@@ -177,7 +226,7 @@ class CSVDumper extends AbstractDumper {
     batchSize: number,
     destPath: string,
     query: any = {},
-    protected readonly fields: string[],
+    protected fields: string[],
     protected readonly separator = ','
   ) {
     super(sdk, index, collection, batchSize, destPath, query)
@@ -186,9 +235,20 @@ class CSVDumper extends AbstractDumper {
   protected get fileExtension(): string {
     return 'csv'
   }
-  setup() {
-    if (this.fields.includes('_id')) {
-      this.fields.splice(this.fields.indexOf('_id'), 1)
+  async setup() {
+    if (!this.fields.length) {
+      // If no field has been selected, then all fields are selected.
+      const mappings = await (this.sdk.collection as CollectionController).getMapping(this.index, this.collection)
+      if (!mappings.properties) {
+        return
+      }
+      this.fields = Object.keys(flattenObject(mappings.properties))
+    } else {
+      // Delete '_id' from the selected fields, since IDs are
+      // _always_ exported.
+      if (this.fields.includes('_id')) {
+        this.fields.splice(this.fields.indexOf('_id'), 1)
+      }
     }
   }
   writeHeader() {
