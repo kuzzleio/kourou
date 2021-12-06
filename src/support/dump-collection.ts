@@ -38,7 +38,7 @@ export async function dumpCollectionData(sdk: any, index: string, collection: st
     await writeLine({ type: 'collection', index, collection })
   }
 
-  let results = await sdk.document.search(index, collection, { query }, options)
+  let results = await sdk.document.search(index, collection, { query, sort: '_kuzzle_info.createdAt' }, options)
 
   const progressBar = cli.progress({
     format: `Dumping ${collection} |{bar}| {percentage}% || {value}/{total} documents`
