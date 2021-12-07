@@ -4,6 +4,10 @@
     "no-invalid-this": 0,
     "no-console": 0,
     "no-new": 0,
-    "new-cap": 0
+    "new-cap": 0,
+    "@typescript-eslint/no-var-requires": 0
+  },
+  "env": {
+    "node": true
   }
 }
