@@ -15,3 +15,4 @@ runs:
         npm install
         features/run-kuzzle-stack.sh
         npm run test:functional:${{ inputs.test-set }}
+        docker-compose -f features/docker/docker-compose.yml logs
