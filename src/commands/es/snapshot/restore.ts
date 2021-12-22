@@ -47,7 +47,15 @@ export default class ESRestore extends Kommand {
         body: {}
       }
 
+      const { body } = await esClient.cat.indices({ format: 'json' })
+      const indexes: string[] = body
+        .map(({ index }: { index: string }) => index);
+
+      await esClient.indices.close({ index: indexes });
+
       const response = await esClient.snapshot.restore(esRequest)
+
+      await esClient.indices.open({ index: indexes });
 
       this.logOk(`Success ${JSON.stringify(response.body, null, 2)}`)
     } catch (error: any) {
