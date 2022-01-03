@@ -48,9 +48,3 @@ Feature: Elasticsearch commands
     When I run the command "es:snapshot:list" with:
       | arg | backup |  |
     Then I should match stdout with "test-snapshot"
-
-  Scenario: Sucessfully Restore a snapshot into a running ES instance
-    When I run the command "es:snapshot:restore" with:
-      | arg | backup        |  |
-      | arg | test-snapshot |  |
-    Then I should match stdout with "Success"

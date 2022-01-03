@@ -25,7 +25,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.19.4 linux-x64 node-v14.17.0
+kourou/0.19.5 linux-x64 node-v14.17.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -130,6 +130,7 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
 * [`kourou app:scaffold NAME`](#kourou-appscaffold-name)
 * [`kourou app:start-services`](#kourou-appstart-services)
+* [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
@@ -315,6 +316,29 @@ OPTIONS
 
 _See code: [src/commands/app/start-services.ts](src/commands/app/start-services.ts)_
 
+## `kourou autocomplete [SHELL]`
+
+display autocomplete installation instructions
+
+```
+USAGE
+  $ kourou autocomplete [SHELL]
+
+ARGUMENTS
+  SHELL  shell type
+
+OPTIONS
+  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
+
+EXAMPLES
+  $ kourou autocomplete
+  $ kourou autocomplete bash
+  $ kourou autocomplete zsh
+  $ kourou autocomplete --refresh-cache
+```
+
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.3.0/src/commands/autocomplete/index.ts)_
+
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
 Creates a collection
@@ -355,31 +379,57 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
-  --api-key=api-key        Kuzzle user api-key
-  --as=as                  Impersonate a user
-  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-  --editor                 Open an editor (EDITOR env variable) to edit the query before sending
+  --api-key=api-key
+      Kuzzle user api-key
 
-  --format=format          [default: JSONL] "jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal
-                           fixtures and jsonl allows to import that data back with kourou
+  --as=as
+      Impersonate a user
 
-  --help                   show CLI help
+  --batch-size=batch-size
+      [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
 
-  --host=host              [default: localhost] Kuzzle server host
+  --editor
+      Open an editor (EDITOR env variable) to edit the query before sending
 
-  --password=password      Kuzzle user password
+  --fields=fields
+      [CSV format only] The list of fields to be included in the CSV export in dot-path format.
 
-  --path=path              Dump root directory
+      Example:
+      --fields oneField,anotherField,yetAnotherOne.nested.moarNested
 
-  --port=port              [default: 7512] Kuzzle server port
+      Note that the '_id' field is always included in the CSV export.
 
-  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
+  --format=jsonl|kuzzle|csv
+      [default: jsonl] "kuzzle" will export in Kuzzle format usable for internal fixtures,
+      "jsonl" allows to import that data back with kourou,
+      "csv" allows to import data into Excel (please, specify the fields to export using the --fields option).
 
-  --query=query            [default: {}] Only dump documents matching the query (JS or JSON format)
+  --help
+      show CLI help
 
-  --ssl                    Use SSL to connect to Kuzzle
+  --host=host
+      [default: localhost] Kuzzle server host
 
-  --username=username      [default: anonymous] Kuzzle username (local strategy)
+  --password=password
+      Kuzzle user password
+
+  --path=path
+      Dump root directory
+
+  --port=port
+      [default: 7512] Kuzzle server port
+
+  --protocol=protocol
+      [default: ws] Kuzzle protocol (http or websocket)
+
+  --query=query
+      [default: {}] Only dump documents matching the query (JS or JSON format)
+
+  --ssl
+      Use SSL to connect to Kuzzle
+
+  --username=username
+      [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
   kourou collection:export nyc-open-data yellow-taxi
@@ -550,7 +600,7 @@ OPTIONS
 
 EXAMPLES
   kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
   --no-interactive
 ```
 
@@ -713,7 +763,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.3/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
 
 ## `kourou import PATH`
 
@@ -1087,29 +1137,29 @@ DESCRIPTION
 
   Code Execution
 
-     Provided code will be executed in an async method.
-     You can access a connected and authenticated SDK with the "sdk" variable.
-     Templated variable passed as the command arguments are also accessible within the same name.
-     Returned value will be printed on the standard output (e.g. 'return await sdk.server.now();').
-     Errors will be caught and printed on the error output (e.g. 'throw new Error("failure");').
+    Provided code will be executed in an async method.
+    You can access a connected and authenticated SDK with the "sdk" variable.
+    Templated variable passed as the command arguments are also accessible within the same name.
+    Returned value will be printed on the standard output (e.g. 'return await sdk.server.now();').
+    Errors will be caught and printed on the error output (e.g. 'throw new Error("failure");').
 
   Provide code
 
-     code can be passed as an argument
-     code will be read from STDIN if available
+    code can be passed as an argument
+    code will be read from STDIN if available
 
-     Examples:
-       - kourou sdk:execute 'return await sdk.server.now()'
-       - kourou sdk:execute 'return await sdk.index.exists(index)' --var 'index="iot-data"'
-       - kourou sdk:execute < snippet.js
-       - echo 'return await sdk.server.now()' | kourou sdk:execute
+    Examples:
+      - kourou sdk:execute 'return await sdk.server.now()'
+      - kourou sdk:execute 'return await sdk.index.exists(index)' --var 'index="iot-data"'
+      - kourou sdk:execute < snippet.js
+      - echo 'return await sdk.server.now()' | kourou sdk:execute
 
   Other
 
-     use the --editor flag to modify the code before executing it
+    use the --editor flag to modify the code before executing it
 
-     Examples:
-       - kourou sdk:execute 'return await sdk.server.now()' --editor
+    Examples:
+      - kourou sdk:execute 'return await sdk.server.now()' --editor
 ```
 
 _See code: [src/commands/sdk/execute.ts](src/commands/sdk/execute.ts)_
@@ -1160,55 +1210,55 @@ DESCRIPTION
 
   Query arguments
 
-     Arguments can be passed and repeated using the --arg or -a flag.
-     Index and collection names can be passed with --index (-i) and --collection (-c) flags
-     ID can be passed with the --id flag.
+    Arguments can be passed and repeated using the --arg or -a flag.
+    Index and collection names can be passed with --index (-i) and --collection (-c) flags
+    ID can be passed with the --id flag.
 
-     Examples:
-       - kourou sdk:query document:delete -i iot -c sensors -a refresh=wait_for
+    Examples:
+      - kourou sdk:query document:delete -i iot -c sensors -a refresh=wait_for
 
   Query body
 
-     Body can be passed with the --body flag with either a JSON or JS string.
-     Body will be read from STDIN if available
+    Body can be passed with the --body flag with either a JSON or JS string.
+    Body will be read from STDIN if available
 
-     Examples:
-       - kourou sdk:query document:create -i iot -c sensors --body '{creation: Date.now())}'
-       - kourou sdk:query admin:loadMappings < mappings.json
-       - echo '{dynamic: "strict"}' | kourou sdk:query collection:create -i iot -c sensors
+    Examples:
+      - kourou sdk:query document:create -i iot -c sensors --body '{creation: Date.now())}'
+      - kourou sdk:query admin:loadMappings < mappings.json
+      - echo '{dynamic: "strict"}' | kourou sdk:query collection:create -i iot -c sensors
 
   Other
 
-     Use the --editor flag to modify the query before sending it to Kuzzle
-     Use the --display flag to display a specific property of the response
+    Use the --editor flag to modify the query before sending it to Kuzzle
+    Use the --display flag to display a specific property of the response
 
-     Examples:
-       - kourou sdk:query document:create -i iot -c sensors --editor
-       - kourou sdk:query server:now --display 'result.now'
+    Examples:
+      - kourou sdk:query document:create -i iot -c sensors --editor
+      - kourou sdk:query server:now --display 'result.now'
 
   Default fallback to API action
 
-     It's possible to use the "sdk:query" command by only specifying the corresponding controller
-     and action as first argument.
+    It's possible to use the "sdk:query" command by only specifying the corresponding controller
+    and action as first argument.
 
-     Kourou will try to infer the first arguments to one the following pattern:
-       - <command> <index>
-       - <command> <body>
-       - <command> <index> <collection>
-       - <command> <index> <collection> <id>
-       - <command> <index> <collection> <body>
-       - <command> <index> <collection> <id> <body>
+    Kourou will try to infer the first arguments to one the following pattern:
+      - <command> <index>
+      - <command> <body>
+      - <command> <index> <collection>
+      - <command> <index> <collection> <id>
+      - <command> <index> <collection> <body>
+      - <command> <index> <collection> <id> <body>
 
-     If a flag is given (-i, -c, --body or --id), then the flag value has priority over
-     argument infering.
+    If a flag is given (-i, -c, --body or --id), then the flag value has priority over
+    argument infering.
 
-     Examples:
-       - kourou collection:list iot
-       - kourou security:createUser '{ "content": { "profileIds": ["default"] } }' --id yagmur
-       - kourou collection:delete iot sensors
-       - kourou document:createOrReplace iot sensors sigfox-1 '{}'
-       - kourou bulk:import iot sensors '{ bulkData: [...] }'
-       - kourou admin:loadMappings < mappings.json
+    Examples:
+      - kourou collection:list iot
+      - kourou security:createUser '{ "content": { "profileIds": ["default"] } }' --id yagmur
+      - kourou collection:delete iot sensors
+      - kourou document:createOrReplace iot sensors sigfox-1 '{}'
+      - kourou bulk:import iot sensors '{ bulkData: [...] }'
+      - kourou admin:loadMappings < mappings.json
 ```
 
 _See code: [src/commands/sdk/query.ts](src/commands/sdk/query.ts)_
@@ -1243,24 +1293,24 @@ DESCRIPTION
   The users will be exported WITHOUT their credentials since Kuzzzle can't access them.
 
   You can either:
-     - Manually re-create credentials for your users
-     - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
+    - Manually re-create credentials for your users
+    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
-     - Use the "--generate-credentials" flag to auto-generate credentials for your users
+    - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
   Auto-generation of credentials
 
-     With the "--generate-credentials" flag, Kourou will add credentials for the "local" strategy.
-     By default, the username will be the user ID.
-     Use the "generated-username" flag to use an other property than the user ID for the generated username
-     The password will be a strong random 40 characters string
+    With the "--generate-credentials" flag, Kourou will add credentials for the "local" strategy.
+    By default, the username will be the user ID.
+    Use the "generated-username" flag to use an other property than the user ID for the generated username
+    The password will be a strong random 40 characters string
 
   Examples:
 
-     - kourou user:export
-     - kourou user:export --exclude '.*admin.*' --exclude 'supervisor.*'
-     - kourou user:export --generate-credentials
-     - kourou user:export --generate-credentials --generated-username content.email
+    - kourou user:export
+    - kourou user:export --exclude '.*admin.*' --exclude 'supervisor.*'
+    - kourou user:export --generate-credentials
+    - kourou user:export --generate-credentials --generated-username content.email
 ```
 
 _See code: [src/commands/user/export.ts](src/commands/user/export.ts)_
@@ -1422,11 +1472,11 @@ DESCRIPTION
 
   Example:
   {
-     aws: {
-       s3: {
-         keyId: 'b61e267676660c314b006b06'
-       }
-     }
+    aws: {
+      s3: {
+        keyId: 'b61e267676660c314b006b06'
+      }
+    }
   }
 
   Encrypted secrets are meant to be loaded inside an application with Kuzzle Vault.
@@ -1459,8 +1509,8 @@ DESCRIPTION
   Prints an encrypted secrets file content.
 
   This method can display either:
-    - the entire content of the secrets file
-    - a single key value
+   - the entire content of the secrets file
+   - a single key value
 
   See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 
