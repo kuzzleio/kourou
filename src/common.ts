@@ -2,6 +2,8 @@ import { Command } from '@oclif/command'
 import chalk from 'chalk'
 import emoji from 'node-emoji'
 import fs from 'fs'
+import get from 'lodash/get'
+import isObject from 'lodash/isObject'
 
 import { KuzzleSDK } from './support/kuzzle'
 import { Editor, EditorParams } from './support/editor'
@@ -172,4 +174,31 @@ export abstract class Kommand extends Command {
     // eslint-disable-next-line no-eval
     return eval(`var o = ${input}; o`)
   }
+}
+
+/**
+ * An iteration-order-safe version of lodash.values
+ *
+ * @param object The object containing the values
+ * @param fields The field names to pick in the right order
+ * @returns The values in the same order as the fields
+ * @see https://lodash.com/docs/4.17.15#values
+ */
+ export function pickValues(object: any, fields: string[]): any[] {
+  return fields.map(f => formatValueForCSV(get(object, f)))
+}
+
+/**
+ * Formats the value for correct CSV output, avoiding to return
+ * values that would badly serialize in CSV.
+ *
+ * @param value The value to format
+ * @returns The value or a string telling the value is not scalar
+ */
+export function formatValueForCSV(value: any) {
+  if (isObject(value)) {
+    return '[NOT_SCALAR]'
+  }
+
+  return value
 }

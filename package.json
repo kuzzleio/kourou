@@ -7,6 +7,19 @@
     "kourou": "./bin/run"
   },
   "bugs": "https://github.com/kuzzleio/kourou/issues",
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "./bin/run",
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "tar czf templates.tgz templates/ && rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "postinstall": "[ -f templates.tgz ] && tar xf templates.tgz || true",
+    "version": "oclif-dev readme && git add README.md",
+    "test:lint": "eslint src/ test/ --ext .ts",
+    "test:lint:fix": "eslint src/ test/ --ext .ts --fix",
+    "test:functional": "npm run build && npm run test:functional:stdout && npm run test:functional:cucumber",
+    "test:functional:stdout": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "test:functional:cucumber": "./node_modules/.bin/cucumber-js --fail-fast"
+  },
   "dependencies": {
     "@elastic/elasticsearch": "^7.12.0",
     "@oclif/command": "^1.8.0",
@@ -122,18 +135,5 @@
     }
   },
   "repository": "kuzzleio/kourou",
-  "scripts": {
-    "build": "tsc -b",
-    "dev": "./bin/run",
-    "postpack": "rm -f oclif.manifest.json",
-    "prepack": "tar czf templates.tgz templates/ && rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "postinstall": "[ -f templates.tgz ] && tar xf templates.tgz || true",
-    "version": "oclif-dev readme && git add README.md",
-    "test:lint": "eslint src/ test/ --ext .ts",
-    "test:lint:fix": "eslint src/ test/ --ext .ts --fix",
-    "test:functional": "npm run build && npm run test:functional:stdout && npm run test:functional:cucumber",
-    "test:functional:stdout": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
-    "test:functional:cucumber": "./node_modules/.bin/cucumber-js"
-  },
   "types": "lib/index.d.ts"
 }

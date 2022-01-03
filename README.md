@@ -379,31 +379,57 @@ ARGUMENTS
   COLLECTION  Collection name
 
 OPTIONS
-  --api-key=api-key        Kuzzle user api-key
-  --as=as                  Impersonate a user
-  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-  --editor                 Open an editor (EDITOR env variable) to edit the query before sending
+  --api-key=api-key
+      Kuzzle user api-key
 
-  --format=format          [default: JSONL] "jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal
-                           fixtures and jsonl allows to import that data back with kourou
+  --as=as
+      Impersonate a user
 
-  --help                   show CLI help
+  --batch-size=batch-size
+      [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
 
-  --host=host              [default: localhost] Kuzzle server host
+  --editor
+      Open an editor (EDITOR env variable) to edit the query before sending
 
-  --password=password      Kuzzle user password
+  --fields=fields
+      [CSV format only] The list of fields to be included in the CSV export in dot-path format.
 
-  --path=path              Dump root directory
+      Example:
+      --fields oneField,anotherField,yetAnotherOne.nested.moarNested
 
-  --port=port              [default: 7512] Kuzzle server port
+      Note that the '_id' field is always included in the CSV export.
 
-  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
+  --format=jsonl|kuzzle|csv
+      [default: jsonl] "kuzzle" will export in Kuzzle format usable for internal fixtures,
+      "jsonl" allows to import that data back with kourou,
+      "csv" allows to import data into Excel (please, specify the fields to export using the --fields option).
 
-  --query=query            [default: {}] Only dump documents matching the query (JS or JSON format)
+  --help
+      show CLI help
 
-  --ssl                    Use SSL to connect to Kuzzle
+  --host=host
+      [default: localhost] Kuzzle server host
 
-  --username=username      [default: anonymous] Kuzzle username (local strategy)
+  --password=password
+      Kuzzle user password
+
+  --path=path
+      Dump root directory
+
+  --port=port
+      [default: 7512] Kuzzle server port
+
+  --protocol=protocol
+      [default: ws] Kuzzle protocol (http or websocket)
+
+  --query=query
+      [default: {}] Only dump documents matching the query (JS or JSON format)
+
+  --ssl
+      Use SSL to connect to Kuzzle
+
+  --username=username
+      [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
   kourou collection:export nyc-open-data yellow-taxi
@@ -574,7 +600,7 @@ OPTIONS
 
 EXAMPLES
   kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
   --no-interactive
 ```
 
@@ -1268,7 +1294,7 @@ DESCRIPTION
 
   You can either:
     - Manually re-create credentials for your users
-    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
+    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
