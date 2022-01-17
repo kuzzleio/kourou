@@ -120,6 +120,10 @@ export abstract class Kommand extends Command {
         : ''
 
       this.logKo(`Error stack: \n${stack || error.message}\n\nError status: ${error.status}\n\nError id: ${error.id}${errorLink}`)
+
+      for (const err of error.errors) {
+        this.logKo(err)
+      }
     }
     finally {
       this.sdk.disconnect()
@@ -184,7 +188,7 @@ export abstract class Kommand extends Command {
  * @returns The values in the same order as the fields
  * @see https://lodash.com/docs/4.17.15#values
  */
- export function pickValues(object: any, fields: string[]): any[] {
+export function pickValues(object: any, fields: string[]): any[] {
   return fields.map(f => formatValueForCSV(get(object, f)))
 }
 
