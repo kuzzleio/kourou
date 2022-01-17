@@ -1,18 +1,31 @@
 {
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
-  "version": "0.19.4",
+  "version": "0.19.5",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kourou": "./bin/run"
   },
   "bugs": "https://github.com/kuzzleio/kourou/issues",
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "./bin/run",
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "tar czf templates.tgz templates/ && rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "postinstall": "[ -f templates.tgz ] && tar xf templates.tgz || true",
+    "version": "oclif-dev readme && git add README.md",
+    "test:lint": "eslint src/ test/ --ext .ts",
+    "test:lint:fix": "eslint src/ test/ --ext .ts --fix",
+    "test:functional": "npm run build && npm run test:functional:stdout && npm run test:functional:cucumber",
+    "test:functional:stdout": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "test:functional:cucumber": "./node_modules/.bin/cucumber-js --fail-fast"
+  },
   "dependencies": {
     "@elastic/elasticsearch": "^7.12.0",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/plugin-autocomplete": "^0.3.0",
-    "@oclif/plugin-help": "^3.2.2",
+    "@oclif/plugin-help": "3.2.2",
     "@types/bluebird": "^3.5.33",
     "@types/inquirer": "^7.3.1",
     "@types/ndjson": "^2.0.0",
@@ -122,18 +135,5 @@
     }
   },
   "repository": "kuzzleio/kourou",
-  "scripts": {
-    "build": "tsc -b",
-    "dev": "./bin/run",
-    "postpack": "rm -f oclif.manifest.json",
-    "prepack": "tar czf templates.tgz templates/ && rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "postinstall": "[ -f templates.tgz ] && tar xf templates.tgz || true",
-    "version": "oclif-dev readme && git add README.md",
-    "test:lint": "eslint src/ test/ --ext .ts",
-    "test:lint:fix": "eslint src/ test/ --ext .ts --fix",
-    "test:functional": "npm run build && npm run test:functional:stdout && npm run test:functional:cucumber",
-    "test:functional:stdout": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
-    "test:functional:cucumber": "./node_modules/.bin/cucumber-js"
-  },
   "types": "lib/index.d.ts"
 }
