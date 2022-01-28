@@ -25,7 +25,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.19.5 linux-x64 node-v14.17.0
+kourou/0.20.0 linux-x64 node-v14.17.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -143,7 +143,6 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou es:snapshot:create REPOSITORY NAME`](#kourou-essnapshotcreate-repository-name)
 * [`kourou es:snapshot:create-repository REPOSITORY LOCATION`](#kourou-essnapshotcreate-repository-repository-location)
 * [`kourou es:snapshot:list REPOSITORY`](#kourou-essnapshotlist-repository)
-* [`kourou es:snapshot:restore REPOSITORY NAME`](#kourou-essnapshotrestore-repository-name)
 * [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
 * [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
 * [`kourou file:test FILE`](#kourou-filetest-file)
@@ -397,7 +396,8 @@ OPTIONS
       Example:
       --fields oneField,anotherField,yetAnotherOne.nested.moarNested
 
-      Note that the '_id' field is always included in the CSV export.
+      Note that the '_id' field is always included in the CSV export. Leaving this option empty implies that all
+      exportable fields in the mapping will be exported.
 
   --format=jsonl|kuzzle|csv
       [default: jsonl] "kuzzle" will export in Kuzzle format usable for internal fixtures,
@@ -600,7 +600,7 @@ OPTIONS
 
 EXAMPLES
   kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
   --no-interactive
 ```
 
@@ -662,25 +662,6 @@ OPTIONS
 ```
 
 _See code: [src/commands/es/snapshot/list.ts](src/commands/es/snapshot/list.ts)_
-
-## `kourou es:snapshot:restore REPOSITORY NAME`
-
-Restore a snapshot into an ES instance
-
-```
-USAGE
-  $ kourou es:snapshot:restore REPOSITORY NAME
-
-ARGUMENTS
-  REPOSITORY  ES repository name
-  NAME        ES snapshot name
-
-OPTIONS
-  -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
-  --help           show CLI help
-```
-
-_See code: [src/commands/es/snapshot/restore.ts](src/commands/es/snapshot/restore.ts)_
 
 ## `kourou file:decrypt FILE`
 
@@ -1294,7 +1275,7 @@ DESCRIPTION
 
   You can either:
     - Manually re-create credentials for your users
-    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
+    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 

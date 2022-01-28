@@ -66,7 +66,7 @@ export default class DocumentSearch extends Kommand {
 
     const { result } = await this.sdk.query(request)
 
-    for (const document of result?.hits) {
+    for (const document of result?.hits || []) {
       this.logInfo(`Document ID: ${document._id}`)
       this.log(`Content: ${JSON.stringify(document._source, null, 2)}`)
     }

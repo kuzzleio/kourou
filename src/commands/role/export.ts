@@ -42,7 +42,6 @@ export default class RoleDump extends Kommand {
 
   async _dumpRoles() {
     const options = {
-      scroll: '3s',
       size: 100
     }
 
