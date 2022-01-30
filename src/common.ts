@@ -122,7 +122,7 @@ export abstract class Kommand extends Command {
       this.logKo(`Error stack: \n${stack || error.message}\n\nError status: ${error.status}\n\nError id: ${error.id}${errorLink}`)
 
       for (const err of error.errors) {
-        this.logKo(err)
+        this.logKo(`${err.document._id} : ${err.reason}`)
       }
     }
     finally {
