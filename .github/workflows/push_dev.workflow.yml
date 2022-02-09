@@ -85,7 +85,7 @@ jobs:
       - name: Unpack and prepare artifact for tests
         run: |
           tar xfz ./kourou-*.tgz
-          cp -fr .mocharc.json .nycrc tsconfig.json features test package/
+          cp -fr .mocharc.json .nycrc tsconfig.json features test scripts package/
       - uses: ./.github/actions/functional-test
         with:
           test-set: ${{ matrix.test-set }}
