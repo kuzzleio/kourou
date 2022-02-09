@@ -126,7 +126,7 @@ export abstract class Kommand extends Command {
       }
 
       try {
-        await this.analytics.track(kommand.id, 'kourou', require('../package.json').version);
+        await this.analytics.track(kommand.id, this.config.name, this.config.version);
       } catch (_) { /* We should not interfere with the process exit code */ }
     }
     catch (error: any) {
