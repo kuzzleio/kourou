@@ -6,6 +6,5 @@ if [ -f templates.tgz ];
 fi
 
 echo """
-Kourou send anonymous usage info to our open source analytics server Kepler to help us improve the product.
-Set KUZZLE_ANALYTICS=false to disable this behavior.
+Kourou send anonymous usage info to our open source analytics server Kepler to help us improve the product. Set KOUROU_USAGE=false to disable this behavior.
 """

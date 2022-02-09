@@ -31,8 +31,8 @@ export abstract class Kommand extends Command {
   constructor(argv: any, config: any) {
     super(argv, config)
 
-    if (process.env.KOUROU_ANALYTICS
-      && process.env.KOUROU_ANALYTICS !== 'true'
+    if (process.env.KOUROU_USAGE
+      && process.env.KOUROU_USAGE !== 'true'
     ) {
       this.analytics.turnOff();
     }
