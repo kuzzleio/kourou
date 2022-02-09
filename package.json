@@ -12,7 +12,7 @@
     "dev": "./bin/run",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "tar czf templates.tgz templates/ && rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "postinstall": "[ -f templates.tgz ] && tar xf templates.tgz || true",
+    "postinstall": "./scripts/postinstall.sh",
     "version": "oclif-dev readme && git add README.md",
     "test:lint": "eslint src/ test/ --ext .ts",
     "test:lint:fix": "eslint src/ test/ --ext .ts --fix",

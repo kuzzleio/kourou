@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-[ -f templates.tgz ] && tar xf templates.tgz
+if [ -f templates.tgz ]; 
+  then 
+  tar xf templates.tgz
+fi
 
 echo """
 This version of Kourou embed usage analytics.
