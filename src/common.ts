@@ -4,7 +4,7 @@ import emoji from 'node-emoji'
 import fs from 'fs'
 import get from 'lodash/get'
 import isObject from 'lodash/isObject'
-
+import KeplerCompanion from 'kepler-companion';
 import { KuzzleSDK } from './support/kuzzle'
 import { Editor, EditorParams } from './support/editor'
 
@@ -13,6 +13,8 @@ export abstract class Kommand extends Command {
   protected sdk: KuzzleSDK = new KuzzleSDK({ host: 'nowhere' })
 
   private exitCode = 0
+
+  private analytics: KeplerCompanion = new KeplerCompanion();
 
   public args: any
 
@@ -25,6 +27,16 @@ export abstract class Kommand extends Command {
   public stdin: string | undefined = undefined
 
   public sdkOptions: any = {}
+
+  constructor(argv: any, config: any) {
+    super(argv, config)
+
+    if (process.env.KOUROU_ANALYTICS
+      && process.env.KOUROU_ANALYTICS !== 'true'
+    ) {
+      this.analytics.turnOff();
+    }
+  }
 
   public printCommand() {
     const klass: any = this.constructor
@@ -112,6 +124,10 @@ export abstract class Kommand extends Command {
       else {
         await this.runSafe()
       }
+
+      try {
+        await this.analytics.track(kommand.id, 'kourou', require('../package.json').version);
+      } catch (_) { /* We should not interfere with the process exit code */ }
     }
     catch (error: any) {
       const stack = error.kuzzleStack || error.stack
