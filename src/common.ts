@@ -115,9 +115,9 @@ export abstract class Kommand extends Command {
         await this.sdk.init(this)
       }
 
-      const analytics = () => {
+      const analytics = async () => {
         try {
-          return this.analytics.track(kommand.id, this.config.name, this.config.version);
+          return await this.analytics.track(kommand.id, this.config.name, this.config.version);
         } catch (_) { /* We should not interfere with the process exit code */ }
       }
 
