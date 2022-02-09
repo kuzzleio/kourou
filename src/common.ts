@@ -115,12 +115,6 @@ export abstract class Kommand extends Command {
         await this.sdk.init(this)
       }
 
-      const analytics = async () => {
-        try {
-          return await this.analytics.track(kommand.id, this.config.name, this.config.version);
-        } catch (_) { /* We should not interfere with the process exit code */ }
-      }
-
       const runCmd = () => {
         if (this.flags.as) {
           this.logInfo(`Impersonate user "${this.flags.as}"`)
@@ -133,7 +127,10 @@ export abstract class Kommand extends Command {
         }
       }
 
-      await Promise.all([analytics(), runCmd()]);
+      await Promise.all([
+        this.analytics.track({ action: kommand.id, product: this.config.name, version: this.config.version }),
+        runCmd()
+      ]);
     }
     catch (error: any) {
       const stack = error.kuzzleStack || error.stack
