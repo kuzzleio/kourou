@@ -34,7 +34,7 @@
     "chalk": "^4.1.0",
     "cli-ux": "^5.5.1",
     "inquirer": "^8.0.0",
-    "kepler-companion": "^1.0.1",
+    "kepler-companion": "^1.0.2",
     "kuzzle-sdk": "^7.8.4",
     "kuzzle-vault": "^2.0.4",
     "listr": "^0.14.3",
