@@ -115,19 +115,25 @@ export abstract class Kommand extends Command {
         await this.sdk.init(this)
       }
 
-      if (this.flags.as) {
-        this.logInfo(`Impersonate user "${this.flags.as}"`)
-        await this.sdk.impersonate(this.flags.as, async () => {
-          await this.runSafe()
-        })
-      }
-      else {
-        await this.runSafe()
+      const analytics = () => {
+        try {
+          return this.analytics.track(kommand.id, this.config.name, this.config.version);
+        } catch (_) { /* We should not interfere with the process exit code */ }
       }
 
-      try {
-        await this.analytics.track(kommand.id, this.config.name, this.config.version);
-      } catch (_) { /* We should not interfere with the process exit code */ }
+      const runCmd = () => {
+        if (this.flags.as) {
+          this.logInfo(`Impersonate user "${this.flags.as}"`)
+          return this.sdk.impersonate(this.flags.as, async () => {
+            return this.runSafe()
+          })
+        }
+        else {
+          return this.runSafe()
+        }
+      }
+
+      await Promise.all([analytics(), runCmd()]);
     }
     catch (error: any) {
       const stack = error.kuzzleStack || error.stack
