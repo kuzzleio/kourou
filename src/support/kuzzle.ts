@@ -61,6 +61,8 @@ export class KuzzleSDK {
 
   private appName: string
 
+  private ttl: string;
+
   constructor(options: any) {
     this.host = options.host
     this.port = parseInt(options.port, 10)
@@ -68,9 +70,10 @@ export class KuzzleSDK {
     this.username = options.username
     this.password = options.password
     this.protocol = options.protocol
-    this.apikey = options['api-key']
+    this.apikey = options['api-key'] || options.apiKey
     this.appVersion = options.appVersion
     this.appName = options.appName
+    this.ttl = options.ttl || '90s'
 
     // Instantiate a fake SDK in the constructor to please TS
     this.sdk = new Kuzzle(new WebSocket('nowhere'))
@@ -119,7 +122,7 @@ export class KuzzleSDK {
         password: this.password,
       }
 
-      await this.sdk.auth.login('local', credentials, '90s')
+      await this.sdk.auth.login('local', credentials, this.ttl)
 
       this.refreshTimer = setInterval(async () => {
         try {

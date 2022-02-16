@@ -20,11 +20,17 @@ export abstract class Kommand extends Command {
 
   public static initSdk = true
 
+  public static disableLog = false
+
   public static readStdin = false
 
   public stdin: string | undefined = undefined
 
   public sdkOptions: any = {}
+
+  private get logSilent() {
+    return this.flags['print-raw'] || (this.constructor as any).disableLog
+  }
 
   public printCommand() {
     const klass: any = this.constructor
@@ -39,7 +45,7 @@ export abstract class Kommand extends Command {
   }
 
   public log(message?: string): void {
-    if (this.flags['print-raw']) {
+    if (this.logSilent) {
       return
     }
 
@@ -47,7 +53,7 @@ export abstract class Kommand extends Command {
   }
 
   public logOk(message: string): void {
-    if (this.flags['print-raw']) {
+    if (this.logSilent) {
       return
     }
 
@@ -55,7 +61,7 @@ export abstract class Kommand extends Command {
   }
 
   public logInfo(message: string): void {
-    if (this.flags['print-raw']) {
+    if (this.logSilent) {
       return
     }
 
@@ -63,7 +69,7 @@ export abstract class Kommand extends Command {
   }
 
   public logKo(message?: string): void {
-    if (this.flags['print-raw']) {
+    if (this.logSilent) {
       return
     }
 
