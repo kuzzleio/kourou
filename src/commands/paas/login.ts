@@ -10,7 +10,7 @@ class PaasLogin extends Kommand {
   static disableLog = true;
   static initSdk = false;
 
-  private host = 'api.console.kloud.kuzzle.io';
+  private host = 'api.console.paas.kuzzle.io';
   private port = 443;
   private ssl = true;
 
