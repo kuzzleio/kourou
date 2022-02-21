@@ -79,7 +79,8 @@
     "/lib",
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json",
-    "/templates.tgz"
+    "/templates.tgz",
+    "/scripts"
   ],
   "homepage": "https://github.com/kuzzleio/kourou",
   "keywords": [
