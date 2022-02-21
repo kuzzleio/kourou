@@ -4,7 +4,7 @@ import emoji from 'node-emoji'
 import fs from 'fs'
 import get from 'lodash/get'
 import isObject from 'lodash/isObject'
-
+import KeplerCompanion from 'kepler-companion';
 import { KuzzleSDK } from './support/kuzzle'
 import { Editor, EditorParams } from './support/editor'
 
@@ -13,6 +13,8 @@ export abstract class Kommand extends Command {
   protected sdk: KuzzleSDK = new KuzzleSDK({ host: 'nowhere' })
 
   private exitCode = 0
+
+  private analytics: KeplerCompanion = new KeplerCompanion();
 
   public args: any
 
@@ -25,6 +27,16 @@ export abstract class Kommand extends Command {
   public stdin: string | undefined = undefined
 
   public sdkOptions: any = {}
+
+  constructor(argv: any, config: any) {
+    super(argv, config)
+
+    if (process.env.KOUROU_USAGE
+      && process.env.KOUROU_USAGE !== 'true'
+    ) {
+      this.analytics.turnOff();
+    }
+  }
 
   public printCommand() {
     const klass: any = this.constructor
@@ -103,15 +115,22 @@ export abstract class Kommand extends Command {
         await this.sdk.init(this)
       }
 
-      if (this.flags.as) {
-        this.logInfo(`Impersonate user "${this.flags.as}"`)
-        await this.sdk.impersonate(this.flags.as, async () => {
-          await this.runSafe()
-        })
+      const runCmd = () => {
+        if (this.flags.as) {
+          this.logInfo(`Impersonate user "${this.flags.as}"`)
+          return this.sdk.impersonate(this.flags.as, async () => {
+            return this.runSafe()
+          })
+        }
+        else {
+          return this.runSafe()
+        }
       }
-      else {
-        await this.runSafe()
-      }
+
+      await Promise.all([
+        this.analytics.track({ action: kommand.id, product: this.config.name, version: this.config.version }),
+        runCmd()
+      ]);
     }
     catch (error: any) {
       const stack = error.kuzzleStack || error.stack
