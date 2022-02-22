@@ -14,7 +14,7 @@ export abstract class Kommand extends Command {
 
   private exitCode = 0
 
-  private analytics: KeplerCompanion = new KeplerCompanion();
+  private telemetry: KeplerCompanion = new KeplerCompanion();
 
   public args: any
 
@@ -34,7 +34,7 @@ export abstract class Kommand extends Command {
     if (process.env.KOUROU_USAGE
       && process.env.KOUROU_USAGE !== 'true'
     ) {
-      this.analytics.turnOff();
+      this.telemetry.turnOff();
     }
   }
 
@@ -103,6 +103,7 @@ export abstract class Kommand extends Command {
     // Lifecycle hook
     await this.beforeConnect()
 
+    let error = false;
     try {
       if (kommand.initSdk) {
         this.sdk = new KuzzleSDK({
@@ -115,22 +116,15 @@ export abstract class Kommand extends Command {
         await this.sdk.init(this)
       }
 
-      const runCmd = () => {
-        if (this.flags.as) {
-          this.logInfo(`Impersonate user "${this.flags.as}"`)
-          return this.sdk.impersonate(this.flags.as, async () => {
-            return this.runSafe()
-          })
-        }
-        else {
+      if (this.flags.as) {
+        this.logInfo(`Impersonate user "${this.flags.as}"`)
+        return this.sdk.impersonate(this.flags.as, async () => {
           return this.runSafe()
-        }
+        })
       }
-
-      await Promise.all([
-        this.analytics.track({ action: kommand.id, product: this.config.name, version: this.config.version }),
-        runCmd()
-      ]);
+      else {
+        return this.runSafe()
+      }
     }
     catch (error: any) {
       const stack = error.kuzzleStack || error.stack
@@ -143,8 +137,19 @@ export abstract class Kommand extends Command {
       for (const err of error.errors) {
         this.logKo(`${err.document._id} : ${err.reason}`)
       }
+      error = true;
     }
     finally {
+      await Promise.race([
+        this.telemetry.add({
+          action: kommand.id,
+          product: this.config.name,
+          version: this.config.version,
+          tags: { error }
+        }),
+        new Promise(resolve => setTimeout(resolve, 500)),
+      ]);
+
       this.sdk.disconnect()
       // eslint-disable-next-line
       process.exit(this.exitCode)
