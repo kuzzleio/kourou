@@ -103,7 +103,7 @@ export abstract class Kommand extends Command {
     // Lifecycle hook
     await this.beforeConnect()
 
-    let error = false;
+    let err;
     try {
       if (kommand.initSdk) {
         this.sdk = new KuzzleSDK({
@@ -134,10 +134,10 @@ export abstract class Kommand extends Command {
 
       this.logKo(`Error stack: \n${stack || error.message}\n\nError status: ${error.status}\n\nError id: ${error.id}${errorLink}`)
 
-      for (const err of error.errors) {
-        this.logKo(`${err.document._id} : ${err.reason}`)
+      for (const e of error.errors) {
+        this.logKo(`${e.document._id} : ${e.reason}`)
       }
-      error = true;
+      err = true;
     }
     finally {
       await Promise.race([
@@ -145,7 +145,7 @@ export abstract class Kommand extends Command {
           action: kommand.id,
           product: this.config.name,
           version: this.config.version,
-          tags: { error }
+          tags: { err }
         }),
         new Promise(resolve => setTimeout(resolve, 500)),
       ]);
