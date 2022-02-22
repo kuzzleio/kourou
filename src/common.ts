@@ -118,12 +118,10 @@ export abstract class Kommand extends Command {
 
       if (this.flags.as) {
         this.logInfo(`Impersonate user "${this.flags.as}"`)
-        return this.sdk.impersonate(this.flags.as, async () => {
-          return this.runSafe()
-        })
+        await this.sdk.impersonate(this.flags.as, async () => this.runSafe())
       }
       else {
-        return this.runSafe()
+        await this.runSafe()
       }
     }
     catch (error: any) {
@@ -137,6 +135,7 @@ export abstract class Kommand extends Command {
       for (const e of error.errors) {
         this.logKo(`${e.document._id} : ${e.reason}`)
       }
+
       err = true;
     }
     finally {
