@@ -137,6 +137,7 @@ export abstract class Kommand extends Command {
       for (const e of error.errors) {
         this.logKo(`${e.document._id} : ${e.reason}`)
       }
+
       err = true;
     }
     finally {
