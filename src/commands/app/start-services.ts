@@ -1,4 +1,5 @@
 import { writeFileSync } from 'fs'
+import path from 'path';
 
 import { flags } from '@oclif/command'
 import chalk from 'chalk'
@@ -41,7 +42,9 @@ export default class AppStartServices extends Kommand {
   };
 
   async runSafe() {
-    const docoFilename = '/tmp/kuzzle-services.yml'
+    this.createKourouDir()
+
+    const docoFilename = path.join(this.kourouDir, 'kuzzle-services.yml')
 
     const successfullCheck = this.flags.check ?
       await this.checkPrerequisites() :
