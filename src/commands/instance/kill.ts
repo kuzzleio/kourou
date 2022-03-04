@@ -1,3 +1,5 @@
+import path from 'path';
+
 import { flags } from '@oclif/command'
 import inquirer from 'inquirer'
 import cli from 'cli-ux'
@@ -26,6 +28,8 @@ export class InstanceLogs extends Kommand {
   }
 
   async runSafe() {
+    this.createKourouDir()
+
     let instance: string = this.flags.instance
     const all: boolean = this.flags.all
 
@@ -64,7 +68,7 @@ export class InstanceLogs extends Kommand {
   }
 
   private async killInstance(instanceName: string) {
-    const docoFilename = `/tmp/kuzzle-${instanceName}.yml`
+    const docoFilename = path.join(this.kourouDir, `kuzzle-${instanceName}.yml`)
     cli.action.start(
       `${emoji.get('boom')}  Killing Kuzzle instance ${instanceName}`,
       undefined,
