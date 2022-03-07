@@ -1,10 +1,14 @@
+import os from 'os';
+import fs from 'fs'
+import path from 'path'
+
 import { Command } from '@oclif/command'
 import chalk from 'chalk'
 import emoji from 'node-emoji'
-import fs from 'fs'
 import get from 'lodash/get'
 import isObject from 'lodash/isObject'
 import KeplerCompanion from 'kepler-companion';
+
 import { KuzzleSDK } from './support/kuzzle'
 import { Editor, EditorParams } from './support/editor'
 
@@ -28,6 +32,8 @@ export abstract class Kommand extends Command {
 
   public sdkOptions: any = {}
 
+  protected kourouDir = path.join(os.homedir(), '.kourou')
+
   constructor(argv: any, config: any) {
     super(argv, config)
 
@@ -35,6 +41,12 @@ export abstract class Kommand extends Command {
       && process.env.KOUROU_USAGE !== 'true'
     ) {
       this.telemetry.turnOff();
+    }
+  }
+
+  protected createKourouDir() {
+    if (!fs.existsSync(this.kourouDir)) {
+      fs.mkdirSync(this.kourouDir)
     }
   }
 
