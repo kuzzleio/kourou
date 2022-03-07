@@ -7,6 +7,8 @@ import { kuzzleFlags } from '../../support/kuzzle'
 import { restoreCollectionData, restoreCollectionMappings } from '../../support/restore-collection'
 
 export default class IndexImport extends Kommand {
+  static keepAuth = true;
+
   static description = 'Imports an index (JSONL format)'
 
   static examples = [

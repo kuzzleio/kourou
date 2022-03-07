@@ -1,9 +1,13 @@
+import os from 'os';
+import fs from 'fs'
+import path from 'path'
+
 import { Command } from '@oclif/command'
 import chalk from 'chalk'
 import emoji from 'node-emoji'
-import fs from 'fs'
 import get from 'lodash/get'
 import isObject from 'lodash/isObject'
+import KeplerCompanion from 'kepler-companion';
 
 import { KuzzleSDK } from './support/kuzzle'
 import { Editor, EditorParams } from './support/editor'
@@ -13,6 +17,8 @@ export abstract class Kommand extends Command {
   protected sdk: KuzzleSDK = new KuzzleSDK({ host: 'nowhere' })
 
   private exitCode = 0
+
+  private telemetry: KeplerCompanion = new KeplerCompanion();
 
   public args: any
 
@@ -24,12 +30,32 @@ export abstract class Kommand extends Command {
 
   public static readStdin = false
 
+  public static keepAuth = false
+
   public stdin: string | undefined = undefined
 
   public sdkOptions: any = {}
 
+  protected kourouDir = path.join(os.homedir(), '.kourou')
+
+  constructor(argv: any, config: any) {
+    super(argv, config)
+
+    if (process.env.KOUROU_USAGE
+      && process.env.KOUROU_USAGE !== 'true'
+    ) {
+      this.telemetry.turnOff();
+    }
+  }
+
   private get logSilent() {
     return this.flags['print-raw'] || (this.constructor as any).disableLog
+  }
+
+  protected createKourouDir() {
+    if (!fs.existsSync(this.kourouDir)) {
+      fs.mkdirSync(this.kourouDir)
+    }
   }
 
   public printCommand() {
@@ -97,13 +123,15 @@ export abstract class Kommand extends Command {
     // Lifecycle hook
     await this.beforeConnect()
 
+    let err;
     try {
       if (kommand.initSdk) {
         this.sdk = new KuzzleSDK({
           ...this.flags,
           ...this.sdkOptions,
           appName: this.config.name,
-          appVersion: this.config.version
+          appVersion: this.config.version,
+          keepAuth: kommand.keepAuth,
         })
 
         await this.sdk.init(this)
@@ -111,9 +139,7 @@ export abstract class Kommand extends Command {
 
       if (this.flags.as) {
         this.logInfo(`Impersonate user "${this.flags.as}"`)
-        await this.sdk.impersonate(this.flags.as, async () => {
-          await this.runSafe()
-        })
+        await this.sdk.impersonate(this.flags.as, async () => this.runSafe())
       }
       else {
         await this.runSafe()
@@ -127,14 +153,24 @@ export abstract class Kommand extends Command {
 
       this.logKo(`Error stack: \n${stack || error.message}\n\nError status: ${error.status}\n\nError id: ${error.id}${errorLink}`)
 
-      for (const err of error.errors) {
-        this.logKo(err)
+      for (const e of error.errors) {
+        this.logKo(`${e.document._id} : ${e.reason}`)
       }
+
+      err = true;
     }
     finally {
+      await Promise.race([
+        this.telemetry.add({
+          action: kommand.id,
+          product: this.config.name,
+          version: this.config.version,
+          tags: { err }
+        }),
+        new Promise(resolve => setTimeout(resolve, 500)),
+      ]);
+
       this.sdk.disconnect()
-      // eslint-disable-next-line
-      process.exit(this.exitCode)
     }
   }
 

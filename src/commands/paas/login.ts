@@ -1,52 +1,55 @@
-import path from 'path'
-import fs from 'fs'
+import fs from 'fs';
+import path from 'path';
 
 import { flags } from '@oclif/command'
+import cli from 'cli-ux'
+import { ApiKey } from 'kuzzle-sdk';
 
-import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
+import { PaasKommand } from '../../support/PaasKommand';
 
-class PaasLogin extends Kommand {
-  static disableLog = true;
-  static initSdk = false;
-
-  private host = 'api.console.paas.kuzzle.io';
-  private port = 443;
-  private ssl = true;
-
-  public static description = 'Login for the current project';
+class PaasLogin extends PaasKommand {
+  public static description = 'Login for a PaaS namespace';
 
   public static flags = {
     help: flags.help(),
-    ...kuzzleFlags,
+    namespace: flags.string({
+      description: 'Current PaaS namespace'
+    }),
+    username: flags.string({
+      description: 'PaaS username',
+    }),
   };
 
-  static args = [
-    { name: 'username', description: 'PaaS username', required: true },
-    { name: 'password', description: 'PaaS password', required: true },
-  ]
-
   async runSafe() {
-    const paas = new KuzzleSDK({
-      protocol: 'http',
-      host: this.host,
-      port: this.port,
-      ssl: this.ssl,
-      username: this.args.username,
-      password: this.args.password,
-      ttl: '1d'
-    })
+    this.createKourouDir();
 
-    try {
-      await paas.init(this);
+    const username = this.flags.username
+      ? this.flags.username
+      : await cli.prompt(`    Username`);
 
-      console.log('# Execute this to automatically export credentials: $(kourou auth:login <username> <password>)')
-      console.log('# or just copy the following line in your terminal:')
-      console.log(`export KUZZLE_PAAS_TOKEN=${paas.sdk.jwt}`)
-    }
-    catch (error: any) {
-      console.error(error.message);
-    }
+    const password = process.env.KUZZLE_PAAS_PASSWORD
+      ? process.env.KUZZLE_PAAS_PASSWORD
+      : await cli.prompt(`    Password`, { type: 'hide' });
+
+    await this.initPaasClient({ username, password });
+
+    const apiKey: ApiKey = await this.paas.auth.createApiKey('Kourou PaaS API Key');
+
+    this.createNamespaceCredentials(apiKey);
+  }
+
+  createNamespaceCredentials(apiKey: ApiKey) {
+    const namespace = this.getNamespace();
+    const namespaceFile = this.fileNamespaceCredentials(namespace);
+    const credentials = {
+      apiKey: apiKey._source.token,
+    };
+
+    this.logInfo(`Saving credentials for namespace "${namespace}" in "${namespaceFile}".`);
+
+    fs.writeFileSync(namespaceFile, JSON.stringify(credentials, null, 2));
+
+    fs.chmodSync(namespaceFile, 0o600);
   }
 }
 

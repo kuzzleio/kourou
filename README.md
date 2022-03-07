@@ -13,6 +13,7 @@ The CLI that helps you manage your Kuzzle instances.
 * [Commands](#commands)
 * [Where does this weird name come from?](#where-does-this-weird-name-come-from)
 * [Have fun with a quine](#have-fun-with-a-quine)
+* [Analytics](#analytics)
 <!-- tocstop -->
 
 :warning: This project is currently in beta and breaking changes may occur until the 1.0.0
@@ -25,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.20.0 linux-x64 node-v14.17.0
+kourou/0.20.5 linux-x64 node-v14.17.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -1549,3 +1550,9 @@ $ kourou sdk:execute --print-raw '(
 ```
 
 (Kuzzle must be accessible and running in local)
+
+# Analytics
+
+We use a custom Open Source analytics backend (you can check the code [here](https://gihtub.com/kuzzleio/kepler)) to record the use of Kourou by users. 
+Collected metrics will allow us to study the use of our products in order to improve them. We do not collect any personal data about users.
+You can disable usage metrics collection by setting the `KOUROU_USAGE` environment variable to `false`.

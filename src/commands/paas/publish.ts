@@ -1,19 +1,13 @@
-import path from 'path'
 import fs from 'fs'
 
 import { flags } from '@oclif/command'
+import cli from 'cli-ux'
 
-import { Kommand } from '../../common'
-import { kuzzleFlags, KuzzleSDK } from '../../support/kuzzle'
+import PaasLogin from './login'
+import { PaasKommand } from '../../support/PaasKommand'
 
-class PaasPublish extends Kommand {
-  static initSdk = false;
-
-  private host = 'api.console.paas.kuzzle.io';
-  private port = 443;
-  private ssl = true;
-
-  public static description = 'Deploy a new version of the application';
+class PaasPublish extends PaasKommand {
+  public static description = 'Deploy a new version of the application in the PaaS';
 
   public static flags = {
     help: flags.help(),
@@ -21,7 +15,9 @@ class PaasPublish extends Kommand {
       default: process.env.KUZZLE_PAAS_TOKEN,
       description: 'Authentication token'
     }),
-    ...kuzzleFlags,
+    namespace: flags.string({
+      description: 'Current PaaS namespace'
+    }),
   };
 
   static args = [
@@ -30,38 +26,50 @@ class PaasPublish extends Kommand {
   ]
 
   async runSafe() {
-    const paas = new KuzzleSDK({
-      protocol: 'ws',
-      host: this.host,
-      port: this.port,
-      ssl: this.ssl,
-      apiKey: this.flags.token,
-    })
+    const apiKey = await this.getCredentials();
 
-    try {
-      await paas.init(this);
+    await this.initPaasClient({ apiKey });
 
-      const user = await paas.auth.getCurrentUser();
-      this.logInfo(`Logged as "${user._id}" for project "${this.args.project}`);
+    const user = await this.paas.auth.getCurrentUser();
+    this.logInfo(`Logged as "${user._id}" for project "${this.args.project}"`);
 
-      const [image, tag] = this.args.image.split(':');
-      this.logInfo(`Deploy application with image "${image}:${tag}"`)
+    const [image, tag] = this.args.image.split(':');
+    this.logInfo(`Deploy application with image "${image}:${tag}"`)
 
-      await paas.query({
-        controller: 'github',
-        action: 'updateImage',
-        body: {
-          namespace: this.args.project,
-          image,
-          tag,
-        }
-      });
+    await this.paas.query({
+      controller: 'github',
+      action: 'updateImage',
+      body: {
+        namespace: this.args.project,
+        image,
+        tag,
+      }
+    });
 
-      this.logOk('Deployment in progress');
+    this.logOk('Deployment in progress');
+  }
+
+  async getCredentials() {
+    const namespace = this.getNamespace();
+    const namespaceFile = this.fileNamespaceCredentials(namespace);
+
+    if (!fs.existsSync(namespaceFile)) {
+      this.log('');
+      const nextStep = await cli.prompt('Cannot find credentials for this namespace. Do you want to login first? [Y/N]', { type: 'single' })
+      this.log('');
+
+      if (nextStep.toLowerCase().startsWith('y')) {
+        await PaasLogin.run(['--namespace', namespace]);
+      }
+      else {
+        this.logKo('Aborting.');
+        process.exit(1);
+      }
     }
-    catch (error: any) {
-      this.logKo(error.message)
-    }
+
+    const credentials = JSON.parse(fs.readFileSync(namespaceFile, 'utf8'));
+
+    return credentials.apiKey;
   }
 }
 
