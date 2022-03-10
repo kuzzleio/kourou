@@ -1,5 +1,4 @@
 import fs from 'fs';
-import path from 'path';
 
 import { flags } from '@oclif/command'
 import cli from 'cli-ux'
