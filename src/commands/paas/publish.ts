@@ -37,7 +37,7 @@ class PaasPublish extends PaasKommand {
     this.logInfo(`Deploy application with image "${image}:${tag}"`)
 
     await this.paas.query({
-      controller: 'github',
+      controller: 'config',
       action: 'updateImage',
       body: {
         namespace: this.args.project,
