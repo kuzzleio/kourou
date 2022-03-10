@@ -56,7 +56,8 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     }
   }
   else {
-    return SdkQuery.run([...commandArgs, ...args])
+    const exitCode = await SdkQuery.run([...commandArgs, ...args])
+    process.exit(exitCode);
   }
 
   // 2th positional argument (collection)
@@ -71,7 +72,8 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     args.splice(0, 1)
   }
   else {
-    return SdkQuery.run([...commandArgs, ...args])
+    const exitCode = await SdkQuery.run([...commandArgs, ...args])
+    process.exit(exitCode);
   }
 
   // 3th positional argument (_id or body)
@@ -90,7 +92,8 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     }
   }
   else {
-    return SdkQuery.run([...commandArgs, ...args])
+    const exitCode = await SdkQuery.run([...commandArgs, ...args])
+    process.exit(exitCode);
   }
 
   // 4th positional argument (body)
@@ -104,7 +107,8 @@ const hook: Hook<'command_not_found'> = async function (opts) {
     args.splice(0, 1)
   }
 
-  await SdkQuery.run([...commandArgs, ...args])
+  const exitCode = await SdkQuery.run([...commandArgs, ...args])
+  process.exit(exitCode);
 }
 
 export default hook
