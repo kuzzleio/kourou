@@ -171,6 +171,8 @@ export abstract class Kommand extends Command {
       ]);
 
       this.sdk.disconnect()
+
+      return this.exitCode
     }
   }
 
