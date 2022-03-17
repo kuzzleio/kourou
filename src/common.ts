@@ -151,15 +151,17 @@ export abstract class Kommand extends Command {
       err = true;
     }
     finally {
-      await Promise.race([
-        this.telemetry.add({
-          action: kommand.id,
-          product: this.config.name,
-          version: this.config.version,
-          tags: { err }
-        }),
-        new Promise(resolve => setTimeout(resolve, 500)),
-      ]);
+      if (kommand.id !== undefined) {
+        await Promise.race([
+          this.telemetry.add({
+            action: kommand.id,
+            product: this.config.name,
+            version: this.config.version,
+            tags: { err }
+          }),
+          new Promise(resolve => setTimeout(resolve, 500)),
+        ]);
+      }
 
       this.sdk.disconnect()
       // eslint-disable-next-line
