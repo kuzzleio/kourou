@@ -26,7 +26,11 @@ export abstract class Kommand extends Command {
 
   public static initSdk = true
 
+  public static disableLog = false
+
   public static readStdin = false
+
+  public static keepAuth = false
 
   public stdin: string | undefined = undefined
 
@@ -42,6 +46,10 @@ export abstract class Kommand extends Command {
     ) {
       this.telemetry.turnOff();
     }
+  }
+
+  private get logSilent() {
+    return this.flags['print-raw'] || (this.constructor as any).disableLog
   }
 
   protected createKourouDir() {
@@ -63,7 +71,7 @@ export abstract class Kommand extends Command {
   }
 
   public log(message?: string): void {
-    if (this.flags['print-raw']) {
+    if (this.logSilent) {
       return
     }
 
@@ -71,7 +79,7 @@ export abstract class Kommand extends Command {
   }
 
   public logOk(message: string): void {
-    if (this.flags['print-raw']) {
+    if (this.logSilent) {
       return
     }
 
@@ -79,7 +87,7 @@ export abstract class Kommand extends Command {
   }
 
   public logInfo(message: string): void {
-    if (this.flags['print-raw']) {
+    if (this.logSilent) {
       return
     }
 
@@ -87,7 +95,7 @@ export abstract class Kommand extends Command {
   }
 
   public logKo(message?: string): void {
-    if (this.flags['print-raw']) {
+    if (this.logSilent) {
       return
     }
 
@@ -122,7 +130,8 @@ export abstract class Kommand extends Command {
           ...this.flags,
           ...this.sdkOptions,
           appName: this.config.name,
-          appVersion: this.config.version
+          appVersion: this.config.version,
+          keepAuth: kommand.keepAuth,
         })
 
         await this.sdk.init(this)
@@ -164,9 +173,9 @@ export abstract class Kommand extends Command {
       }
 
       this.sdk.disconnect()
-      // eslint-disable-next-line
-      process.exit(this.exitCode)
     }
+
+    return this.exitCode
   }
 
   beforeConnect() {

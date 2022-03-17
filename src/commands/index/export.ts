@@ -8,6 +8,8 @@ import { kuzzleFlags } from '../../support/kuzzle'
 import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-collection'
 
 export default class IndexExport extends Kommand {
+  static keepAuth = true;
+
   static description = 'Exports an index (JSONL or Kuzzle format)'
 
   static flags = {
