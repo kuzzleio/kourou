@@ -64,7 +64,7 @@ export default class EsMigrate extends Kommand {
 
     const { body } = await src.search({
       index,
-      scroll: this.flags.s,
+      scroll: this.flags.scroll,
       size: batch_size,
       body: {
         query: {
