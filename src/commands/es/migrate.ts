@@ -56,7 +56,7 @@ export default class EsMigrate extends Kommand {
   private async migrateMappings(index: string, src: Client, dest: Client) {
     const { body } = await src.indices.getMapping({ index })
     const mappings = body[index]
-    await dest.indices.create({ index, body: { mappings: mappings.mappings, settings: { number_of_shards: 1, number_of_replicas: 0 } } })
+    await dest.indices.create({ index, body: { mappings: mappings.mappings } })
   }
 
   private async migrateData(index: string, batch_size: number, src: Client, dest: Client) {
