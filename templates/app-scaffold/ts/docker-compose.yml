@@ -32,5 +32,7 @@ services:
 
   elasticsearch:
     image: kuzzleio/elasticsearch:7
+    environment:
+      - ingest.geoip.downloader.enabled=false
     ulimits:
       nofile: 65536
