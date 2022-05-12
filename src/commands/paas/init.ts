@@ -1,10 +1,8 @@
 import path from 'path'
 import fs from 'fs'
 
-import { cli } from 'cli-ux'
 import { flags } from '@oclif/command'
 
-import PaasLogin from './login'
 import { PaasKommand } from '../../support/PaasKommand'
 
 class PaasInit extends PaasKommand {
@@ -15,8 +13,7 @@ class PaasInit extends PaasKommand {
   };
 
   static args = [
-    { name: 'username', description: 'Username', required: true },
-    { name: 'namespace', description: 'Namespace', required: true },
+    { name: 'project', description: 'Kuzzle PaaS project name', required: true },
   ]
 
   async runSafe() {
@@ -26,26 +23,17 @@ class PaasInit extends PaasKommand {
       throw new Error(`Cannot find package json in current directory. (${packageJsonPath})`)
     }
 
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
+    const packageJson = JSON.parse(await fs.promises.readFile(packageJsonPath, 'utf8'))
 
     this.logInfo('Add the "kuzzle" property inside project package.json.')
 
     packageJson.kuzzle = {
       paas: {
-        application: 'kuzzle',
-        namespace: this.args.namespace,
+        project: 'kuzzle',
       },
     };
 
-    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
-
-    this.log('');
-    const nextStep = await cli.prompt('Do you want to login to the namespace? [Y/N]', { type: 'single' })
-    this.log('');
-
-    if (nextStep.toLowerCase().startsWith('y')) {
-      await PaasLogin.run(['--username', this.args.username, '--namespace', this.args.namespace]);
-    }
+    await fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
   }
 }
 
