@@ -38,28 +38,28 @@ export class PaasKommand extends Kommand {
     }
   }
 
-  fileNamespaceCredentials(namespace: string) {
-    return path.join(this.kourouDir, `${namespace}.paas.json`);
+  fileProjectCredentials(project: string) {
+    return path.join(this.kourouDir, `${project}.paas.json`);
   }
 
   /**
    * Retrieve the current namespace name from the command line or current package.json
    */
-  getNamespace() {
+  getProject() {
     const packageJsonPath = path.join(process.cwd(), 'package.json')
 
     if (fs.existsSync(packageJsonPath)) {
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 
       if (packageJson.kuzzle && packageJson.kuzzle.paas) {
-        return packageJson.kuzzle.paas.namespace;
+        return packageJson.kuzzle.paas.project;
       }
     }
 
-    if (!this.flags.namespace) {
-      throw new Error('Cannot find PaaS namespace in package.json or command line');
+    if (!this.flags.project) {
+      throw new Error('Cannot find PaaS project in package.json or command line');
     }
 
-    return this.flags.namespace;
+    return this.flags.project;
   }
 }

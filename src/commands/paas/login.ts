@@ -7,12 +7,12 @@ import { ApiKey } from 'kuzzle-sdk';
 import { PaasKommand } from '../../support/PaasKommand';
 
 class PaasLogin extends PaasKommand {
-  public static description = 'Login for a PaaS namespace';
+  public static description = 'Login for a PaaS project';
 
   public static flags = {
     help: flags.help(),
-    namespace: flags.string({
-      description: 'Current PaaS namespace'
+    project: flags.string({
+      description: 'Current PaaS project'
     }),
     username: flags.string({
       description: 'PaaS username',
@@ -34,21 +34,21 @@ class PaasLogin extends PaasKommand {
 
     const apiKey: ApiKey = await this.paas.auth.createApiKey('Kourou PaaS API Key');
 
-    this.createNamespaceCredentials(apiKey);
+    this.createProjectCredentials(apiKey);
   }
 
-  createNamespaceCredentials(apiKey: ApiKey) {
-    const namespace = this.getNamespace();
-    const namespaceFile = this.fileNamespaceCredentials(namespace);
+  createProjectCredentials(apiKey: ApiKey) {
+    const project = this.getProject();
+    const projectFile = this.fileProjectCredentials(project);
     const credentials = {
       apiKey: apiKey._source.token,
     };
 
-    this.logInfo(`Saving credentials for namespace "${namespace}" in "${namespaceFile}".`);
+    this.logInfo(`Saving credentials for project "${project}" in "${projectFile}".`);
 
-    fs.writeFileSync(namespaceFile, JSON.stringify(credentials, null, 2));
+    fs.writeFileSync(projectFile, JSON.stringify(credentials, null, 2));
 
-    fs.chmodSync(namespaceFile, 0o600);
+    fs.chmodSync(projectFile, 0o600);
   }
 }
 

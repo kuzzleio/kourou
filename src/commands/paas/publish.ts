@@ -50,8 +50,8 @@ class PaasPublish extends PaasKommand {
   }
 
   async getCredentials() {
-    const namespace = this.getNamespace();
-    const namespaceFile = this.fileNamespaceCredentials(namespace);
+    const namespace = this.getProject();
+    const namespaceFile = this.fileProjectCredentials(namespace);
 
     if (!fs.existsSync(namespaceFile)) {
       this.log('');

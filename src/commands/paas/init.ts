@@ -6,7 +6,7 @@ import { flags } from '@oclif/command'
 import { PaasKommand } from '../../support/PaasKommand'
 
 class PaasInit extends PaasKommand {
-  public static description = 'Initialize a PaaS namespace in current directory';
+  public static description = 'Initialize a PaaS project in current directory';
 
   public static flags = {
     help: flags.help(),
@@ -29,7 +29,7 @@ class PaasInit extends PaasKommand {
 
     packageJson.kuzzle = {
       paas: {
-        project: 'kuzzle',
+        project: this.args.project,
       },
     };
 
