@@ -43,7 +43,7 @@ export class PaasKommand extends Kommand {
   }
 
   /**
-   * Retrieve the current namespace name from the command line or current package.json
+   * Retrieve the current project name from the command line or current package.json
    */
   getProject() {
     const packageJsonPath = path.join(process.cwd(), 'package.json')

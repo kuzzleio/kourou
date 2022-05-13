@@ -16,7 +16,7 @@ class PaasDeploy extends PaasKommand {
       description: 'Authentication token'
     }),
     project: flags.string({
-      description: 'Current PaaS project'
+      description: 'Current PaaS project',
     }),
   };
 
@@ -40,7 +40,7 @@ class PaasDeploy extends PaasKommand {
       controller: 'application',
       action: 'deploy',
       environmentId: this.args.environment,
-      projectName: this.flags.project,
+      projectName: this.flags.project || this.getProject(),
       applicationId: 'kuzzle',
       body: {
         image: {
