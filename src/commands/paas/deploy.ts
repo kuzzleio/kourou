@@ -6,7 +6,7 @@ import cli from 'cli-ux'
 import PaasLogin from './login'
 import { PaasKommand } from '../../support/PaasKommand'
 
-class PaasPublish extends PaasKommand {
+class PaasDeploy extends PaasKommand {
   public static description = 'Deploy a new version of the application in the PaaS';
 
   public static flags = {
@@ -15,14 +15,14 @@ class PaasPublish extends PaasKommand {
       default: process.env.KUZZLE_PAAS_TOKEN,
       description: 'Authentication token'
     }),
-    namespace: flags.string({
-      description: 'Current PaaS namespace'
+    project: flags.string({
+      description: 'Current PaaS project'
     }),
   };
 
   static args = [
-    { name: 'project', description: 'Project name', required: true },
-    { name: 'image', description: 'Image name and hash', required: true },
+    { name: 'environment', description: 'Project environment name', required: true },
+    { name: 'image', description: 'Image name and hash as myimage:mytag', required: true },
   ]
 
   async runSafe() {
@@ -37,12 +37,16 @@ class PaasPublish extends PaasKommand {
     this.logInfo(`Deploy application with image "${image}:${tag}"`)
 
     await this.paas.query({
-      controller: 'config',
-      action: 'updateImage',
+      controller: 'application',
+      action: 'deploy',
+      environmentId: this.args.environment,
+      projectName: this.flags.project,
+      applicationId: 'kuzzle',
       body: {
-        namespace: this.args.project,
-        image,
-        tag,
+        image: {
+          name: image,
+          tag,
+        },
       }
     });
 
@@ -50,16 +54,16 @@ class PaasPublish extends PaasKommand {
   }
 
   async getCredentials() {
-    const namespace = this.getProject();
-    const namespaceFile = this.fileProjectCredentials(namespace);
+    const project = this.getProject();
+    const projectFile = this.fileProjectCredentials(project);
 
-    if (!fs.existsSync(namespaceFile)) {
+    if (!fs.existsSync(projectFile)) {
       this.log('');
-      const nextStep = await cli.prompt('Cannot find credentials for this namespace. Do you want to login first? [Y/N]', { type: 'single' })
+      const nextStep = await cli.prompt('Cannot find credentials for this project. Do you want to login first? [Y/N]', { type: 'single' })
       this.log('');
 
       if (nextStep.toLowerCase().startsWith('y')) {
-        await PaasLogin.run(['--namespace', namespace]);
+        await PaasLogin.run(['--project', project]);
       }
       else {
         this.logKo('Aborting.');
@@ -67,10 +71,10 @@ class PaasPublish extends PaasKommand {
       }
     }
 
-    const credentials = JSON.parse(fs.readFileSync(namespaceFile, 'utf8'));
+    const credentials = JSON.parse(fs.readFileSync(projectFile, 'utf8'));
 
     return credentials.apiKey;
   }
 }
 
-export default PaasPublish
+export default PaasDeploy
