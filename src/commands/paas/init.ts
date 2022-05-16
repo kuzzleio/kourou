@@ -23,7 +23,7 @@ class PaasInit extends PaasKommand {
       throw new Error(`Cannot find package json in current directory. (${packageJsonPath})`)
     }
 
-    const packageJson = JSON.parse(await fs.promises.readFile(packageJsonPath, 'utf8'))
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
 
     this.logInfo('Add the "kuzzle" property inside project package.json.')
 
@@ -33,7 +33,7 @@ class PaasInit extends PaasKommand {
       },
     };
 
-    await fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
+    fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
   }
 }
 
