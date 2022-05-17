@@ -11,8 +11,6 @@
     "build": "tsc -b",
     "dev": "./bin/run",
     "postpack": "rm -f oclif.manifest.json",
-    "prepack": "tar czf templates.tgz templates/ && rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "postinstall": "scripts/postinstall.sh",
     "version": "oclif-dev readme && git add README.md",
     "test:lint": "eslint src/ test/ --ext .ts",
     "test:lint:fix": "eslint src/ test/ --ext .ts --fix",
