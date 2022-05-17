@@ -20,9 +20,5 @@ describe('app:scaffold', () => {
     should(fs.existsSync('blackmesa/README.md')).be.eql(true)
     should(fs.existsSync('blackmesa/tsconfig.json')).be.eql(true)
 
-    const packageJson = JSON.parse(fs.readFileSync('blackmesa/package.json', 'utf8'))
-    should(packageJson.name).be.eql('blackmesa')
-
-    should(packageJson.dependencies).have.property('kuzzle')
-  }).timeout(500 * 1000) // long timeout because of npm install which is slow af (and specially in Travis)
+  })
 })
