@@ -24,7 +24,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@v1.4.4
         with:
-          node-version: 12
+          node-version: 14
       - uses: ./.github/actions/es-lint
 
   build:
@@ -46,7 +46,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@v1.4.4
         with:
-          node-version: 12
+          node-version: 14
       - uses: ./.github/actions/build
       - name: Store build archive as artifact
         uses: actions/upload-artifact@v2
@@ -77,7 +77,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@v1.4.4
         with:
-          node-version: 12
+          node-version: 14
       - name: Recover previously built Kourou
         uses: actions/download-artifact@v2
         with:

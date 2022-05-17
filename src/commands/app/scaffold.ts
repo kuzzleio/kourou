@@ -46,11 +46,11 @@ export default class AppScaffold extends Kommand {
 
     await tasks.run();
 
-    this.logOk(`Scaffolding complete! Use ${chalk.grey(`cd ${destination} && npm run docker npm install`)} install dependencies and then ${chalk.grey(`npm run docker:dev`)} to run your application!`);
+    this.logOk(`\nScaffolding complete! Use ${chalk.grey(`cd ${destination} && npm run docker npm install`)} install dependencies and then ${chalk.grey(`npm run docker:dev`)} to run your application!`);
   }
 
   async cloneTemplate(flavor: string, destination: string) {
-    await execute('git', 'clone', '--depth=1', 'https://github.com/kuzzleio/project-scaffold', '--branch', flavor, '--single-branch', destination);
+    await execute('git', 'clone', '--depth=1', 'https://github.com/kuzzleio/project-templates', '--branch', flavor, '--single-branch', destination);
 
     await execute('rm', '-rf', `${destination}/.git`);
   }
