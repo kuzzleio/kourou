@@ -20,5 +20,5 @@ describe('app:scaffold', () => {
     should(fs.existsSync('blackmesa/README.md')).be.eql(true)
     should(fs.existsSync('blackmesa/tsconfig.json')).be.eql(true)
 
-  })
+  }).timeout('60s')
 })

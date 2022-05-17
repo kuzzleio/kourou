@@ -35,23 +35,21 @@ export default class AppScaffold extends Kommand {
 
     const tasks = new Listr([
       {
-        title: `Creating directory: ${chalk.gray(destination + path.sep)}`,
-        task: () => execute('mkdir', destination)
-      },
-      {
         title: 'Creating and rendering application files',
-        task: async () => this.cloneTemplate(this.flags.flavor, destination)
+        task: async () => this.cloneTemplate(flavor, destination)
       },
     ]);
 
     await tasks.run();
-
-    this.logOk(`\nScaffolding complete! Use ${chalk.grey(`cd ${destination} && npm run docker npm install`)} install dependencies and then ${chalk.grey(`npm run docker:dev`)} to run your application!`);
+    this.log('')
+    this.logOk(`Scaffolding complete! Use ${chalk.grey(`cd ${destination} && npm run docker npm install`)} install dependencies and then ${chalk.grey(`npm run docker:dev`)} to run your application!`);
   }
 
   async cloneTemplate(flavor: string, destination: string) {
-    await execute('git', 'clone', '--depth=1', 'https://github.com/kuzzleio/project-templates', '--branch', flavor, '--single-branch', destination);
+    await execute('git', 'clone', '--depth=1', 'https://github.com/kuzzleio/project-templates', '--branch', flavor, '--single-branch');
 
-    await execute('rm', '-rf', `${destination}/.git`);
+    await execute('mv', `project-templates/${flavor}`, `${destination}/`);
+
+    await execute('rm', '-rf', 'project-templates/');
   }
 }
