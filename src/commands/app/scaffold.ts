@@ -73,8 +73,10 @@ export default class AppScaffold extends Kommand {
       },
       {
         title: 'Installing dependencies (this can take some time)',
-        task: () =>
+        task: () => {
+          execute('docker-compose', 'pull')
           execute('npm', 'run', 'install:docker', { cwd: this.args.name })
+        }
       },
     ]);
 
