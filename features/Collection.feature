@@ -16,6 +16,7 @@ Feature: Collection Commands
       | arg  | nyc-open-data |                            |
       | arg  | yellow-taxi   |                            |
       | flag | --query       | { term: { city: "hcmc" } } |
+      | flag | --scrollTTL   | 3s                         |
     Then I successfully call the route "collection":"delete" with args:
       | index      | "nyc-open-data" |
       | collection | "yellow-taxi"   |
