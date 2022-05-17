@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.20.5 linux-x64 node-v14.17.0
+kourou/0.20.7 linux-x64 node-v16.13.2
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -425,6 +425,10 @@ OPTIONS
 
   --query=query
       [default: {}] Only dump documents matching the query (JS or JSON format)
+
+  --scrollTTL=scrollTTL
+      The scroll TTL option to pass to the dump operation (which performs a document.search under the hood),
+      expressed in ms format, e.g. '2s', '1m', '3h'.
 
   --ssl
       Use SSL to connect to Kuzzle
