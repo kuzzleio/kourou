@@ -9,9 +9,15 @@ type PaaSClientCredentials = { username: string, password: string } | { apiKey: 
 export class PaasKommand extends Kommand {
   static initSdk = false;
 
-  protected host = 'api.console.paas.kuzzle.io';
-  protected port = 443;
-  protected ssl = true;
+  protected host = process.env.KUZZLE_PAAS_HOST
+    ? process.env.KUZZLE_PAAS_HOST
+    : 'api.console.paas.kuzzle.io';
+  protected port = process.env.KUZZLE_PAAS_PORT
+    ? parseInt(process.env.KUZZLE_PAAS_PORT as string)
+    : 443;
+  protected ssl = process.env.KUZZLE_PAAS_SSL
+    ? JSON.parse(process.env.KUZZLE_PAAS_SSL as string)
+    : true;
 
   // Instantiate a dummy SDK to avoid the this.paas? notation everywhere -_-
   protected paas = new KuzzleSDK({});

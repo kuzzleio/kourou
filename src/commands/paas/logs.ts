@@ -1,28 +1,22 @@
-import fs from 'fs'
+import { flags } from "@oclif/command";
+import { PaasKommand } from "../../support/PaasKommand";
+import fs from 'fs';
+import PaasLogin from "./login";
+import { cli } from "cli-ux";
 
-import { flags } from '@oclif/command'
-import cli from 'cli-ux'
-
-import PaasLogin from './login'
-import { PaasKommand } from '../../support/PaasKommand'
-
-class PaasDeploy extends PaasKommand {
-  public static description = 'Deploy a new version of the application in the PaaS';
+class PaasLogs extends PaasKommand {
+  public static description = 'Show logs of the targeted application';
 
   public static flags = {
     help: flags.help(),
-    token: flags.string({
-      default: process.env.KUZZLE_PAAS_TOKEN,
-      description: 'Authentication token'
-    }),
     project: flags.string({
-      description: 'Current PaaS project',
+      description: 'Current PaaS project'
     }),
   };
 
   static args = [
-    { name: 'environment', description: 'Project environment name', required: true },
-    { name: 'image', description: 'Image name and hash as myimage:mytag', required: true },
+    { name: 'environment', description: 'Kuzzle PaaS environment', required: true },
+    { name: 'application', description: 'Kuzzle PaaS application', required: true },
   ]
 
   async runSafe() {
@@ -31,26 +25,17 @@ class PaasDeploy extends PaasKommand {
     await this.initPaasClient({ apiKey });
 
     const user = await this.paas.auth.getCurrentUser();
-    this.logInfo(`Logged as "${user._id}" for project "${this.args.project}"`);
+    this.logInfo(`Logged as "${user._id}" for project "${this.flags.project || this.getProject()}"`);
 
-    const [image, tag] = this.args.image.split(':');
-    this.logInfo(`Deploy application with image "${image}:${tag}"`)
-
-    await this.paas.query({
+    const logs = await this.paas.query({
       controller: 'application',
-      action: 'deploy',
+      action: 'logs',
       environmentId: this.args.environment,
       projectId: this.flags.project || this.getProject(),
-      applicationId: 'kuzzle',
-      body: {
-        image: {
-          name: image,
-          tag,
-        },
-      }
+      applicationId: this.args.application,
     });
 
-    this.logOk('Deployment in progress');
+    this.logOk(logs.result.join('\n '));
   }
 
   async getCredentials() {
@@ -77,4 +62,4 @@ class PaasDeploy extends PaasKommand {
   }
 }
 
-export default PaasDeploy
+export default PaasLogs;
