@@ -1,11 +1,6 @@
-import path from 'path'
-import fs from 'fs'
-
 import { flags } from '@oclif/command'
-import _ from 'lodash'
 import chalk from 'chalk'
 import Listr from 'listr'
-import inquirer from 'inquirer'
 
 
 import { Kommand } from '../../common'
