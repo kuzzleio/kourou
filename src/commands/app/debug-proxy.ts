@@ -15,7 +15,7 @@ function sendResponse(response: http.ServerResponse, bodyObject: JSONObject) {
   response.end(body);
 }
 
-export default class Debug extends Kommand {
+export default class DebugProxy extends Kommand {
   public static description = 'Create an HTTP Server that allows Chrome to debug Kuzzle remotely using the DebugController';
 
   public static flags = {
@@ -25,7 +25,7 @@ export default class Debug extends Kommand {
       default: 9222
     }),
     autoEnableDebugger: flags.boolean({
-      description: 'True if Kourou should enable and disable the Debugger before and after usage',
+      description: 'True if Kourou should automatically enable and disable the Debugger before and after usage',
       default: true
     }),
     showDebuggerEvents: flags.boolean({
@@ -75,6 +75,20 @@ export default class Debug extends Kommand {
       }
       response.writeHead(404);
     });
+
+    const closeServer = async () => {
+      this.logInfo('Connection closed.');
+
+      if (this.flags.autoEnableDebugger) {
+        await this.sdk.query({
+          controller: 'debug',
+          action: 'disable'
+        });
+      }
+
+      this.sdk.disconnect();
+      server.close();
+    }
 
     const wss = new WebSocket.Server({
       server
@@ -153,29 +167,19 @@ export default class Debug extends Kommand {
         }
       });
 
-      ws.on('close', async () => {
-        this.logInfo('Connection closed.');
-
-        if (this.flags.autoEnableDebugger) {
-          await this.sdk.query({
-            controller: 'debug',
-            action: 'disable'
-          });
-        }
-
-        this.sdk.disconnect();
-        server.close();
-      });
+      ws.on('close', closeServer);
     });
 
-    server.on('error', err => {
+    server.on('error', async err => {
       this.logKo(err.message);
       this.logKo(err.stack);
+
+      await closeServer();
     });
 
     server.listen(this.flags.forwardPort, () => {
       this.logOk(`Listening on port ${this.flags.forwardPort}, forwarding to Kuzzle at ${this.flags.host}:${this.flags.port}`);
-      this.logInfo(`Showing as "Kuzzle Debugger - ${this.flags.host}:${this.flags.port}"`)
+      this.logInfo(`Showing to Chrome Debugger as "Kuzzle Debugger - ${this.flags.host}:${this.flags.port}"`)
       this.logInfo('Waiting for Chrome Debugger to connect...');
     });
 
