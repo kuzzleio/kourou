@@ -13,7 +13,7 @@ The CLI that helps you manage your Kuzzle instances.
 * [Commands](#commands)
 * [Where does this weird name come from?](#where-does-this-weird-name-come-from)
 * [Have fun with a quine](#have-fun-with-a-quine)
-* [Analytics](#analytics)
+* [Telemetry](#telemetry)
 <!-- tocstop -->
 
 :warning: This project is currently in beta and breaking changes may occur until the 1.0.0
@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.20.7 linux-x64 node-v16.13.2
+kourou/0.21.0 linux-x64 node-v16.13.2
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -129,7 +129,7 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou api-key:create USER`](#kourou-api-keycreate-user)
 * [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
-* [`kourou app:scaffold NAME`](#kourou-appscaffold-name)
+* [`kourou app:scaffold DESTINATION`](#kourou-appscaffold-destination)
 * [`kourou app:start-services`](#kourou-appstart-services)
 * [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
@@ -155,6 +155,9 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou instance:list`](#kourou-instancelist)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
+* [`kourou paas:init USERNAME NAMESPACE`](#kourou-paasinit-username-namespace)
+* [`kourou paas:login`](#kourou-paaslogin)
+* [`kourou paas:publish PROJECT IMAGE`](#kourou-paaspublish-project-image)
 * [`kourou profile:export`](#kourou-profileexport)
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
 * [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
@@ -284,19 +287,20 @@ OPTIONS
 
 _See code: [src/commands/api-key/search.ts](src/commands/api-key/search.ts)_
 
-## `kourou app:scaffold NAME`
+## `kourou app:scaffold DESTINATION`
 
 Scaffolds a new Kuzzle application
 
 ```
 USAGE
-  $ kourou app:scaffold NAME
+  $ kourou app:scaffold DESTINATION
 
 ARGUMENTS
-  NAME  Application name
+  DESTINATION  Directory to scaffold the app
 
 OPTIONS
-  --help  show CLI help
+  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-platform")
+  --help           show CLI help
 ```
 
 _See code: [src/commands/app/scaffold.ts](src/commands/app/scaffold.ts)_
@@ -337,7 +341,7 @@ EXAMPLES
   $ kourou autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.3.0/src/commands/autocomplete/index.ts)_
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.2.0/src/commands/autocomplete/index.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
@@ -910,6 +914,60 @@ OPTIONS
 ```
 
 _See code: [src/commands/instance/spawn.ts](src/commands/instance/spawn.ts)_
+
+## `kourou paas:init USERNAME NAMESPACE`
+
+Initialize a PaaS namespace in current directory
+
+```
+USAGE
+  $ kourou paas:init USERNAME NAMESPACE
+
+ARGUMENTS
+  USERNAME   Username
+  NAMESPACE  Namespace
+
+OPTIONS
+  --help  show CLI help
+```
+
+_See code: [src/commands/paas/init.ts](src/commands/paas/init.ts)_
+
+## `kourou paas:login`
+
+Login for a PaaS namespace
+
+```
+USAGE
+  $ kourou paas:login
+
+OPTIONS
+  --help                 show CLI help
+  --namespace=namespace  Current PaaS namespace
+  --username=username    PaaS username
+```
+
+_See code: [src/commands/paas/login.ts](src/commands/paas/login.ts)_
+
+## `kourou paas:publish PROJECT IMAGE`
+
+Deploy a new version of the application in the PaaS
+
+```
+USAGE
+  $ kourou paas:publish PROJECT IMAGE
+
+ARGUMENTS
+  PROJECT  Project name
+  IMAGE    Image name and hash
+
+OPTIONS
+  --help                 show CLI help
+  --namespace=namespace  Current PaaS namespace
+  --token=token          Authentication token
+```
+
+_See code: [src/commands/paas/publish.ts](src/commands/paas/publish.ts)_
 
 ## `kourou profile:export`
 
@@ -1555,8 +1613,10 @@ $ kourou sdk:execute --print-raw '(
 
 (Kuzzle must be accessible and running in local)
 
-# Analytics
+# Telemetry
 
-We use a custom Open Source analytics backend (you can check the code [here](https://gihtub.com/kuzzleio/kepler)) to record the use of Kourou by users. 
+We use a custom Open Source analytics backend (you can check the code [here](https://gihtub.com/kuzzleio/kepler)) to record the use of Kourou by users.
+
 Collected metrics will allow us to study the use of our products in order to improve them. We do not collect any personal data about users.
+
 You can disable usage metrics collection by setting the `KOUROU_USAGE` environment variable to `false`.

@@ -7,6 +7,8 @@ import { kuzzleFlags } from '../../support/kuzzle'
 import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-collection'
 
 export default class CollectionExport extends Kommand {
+  static keepAuth = true;
+
   static description = 'Exports a collection (JSONL format)'
 
   static flags = {

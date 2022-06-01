@@ -7,5 +7,5 @@ runs:
       run: npm ci
       shell: bash
     - name: Build and package the application
-      run: npm pack
+      run: npm run build && npm pack
       shell: bash
