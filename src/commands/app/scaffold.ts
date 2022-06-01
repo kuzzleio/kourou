@@ -16,7 +16,7 @@ export default class AppScaffold extends Kommand {
     help: flags.help(),
     flavor: flags.string({
       default: 'generic',
-      description: 'Template flavor'
+      description: 'Template flavor ("generic", "iot-platform")'
     })
   }
 
