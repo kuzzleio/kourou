@@ -24,7 +24,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@v1.4.4
         with:
-          node-version: 12
+          node-version: 14
       - uses: ./.github/actions/es-lint
 
   build:
@@ -46,7 +46,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@v1.4.4
         with:
-          node-version: 12
+          node-version: 14
       - uses: ./.github/actions/build
       - name: Store build archive as artifact
         uses: actions/upload-artifact@v2
@@ -77,7 +77,7 @@ jobs:
             ${{ runner.os }}-
       - uses: actions/setup-node@v1.4.4
         with:
-          node-version: 12
+          node-version: 14
       - name: Recover previously built Kourou
         uses: actions/download-artifact@v2
         with:
@@ -85,7 +85,7 @@ jobs:
       - name: Unpack and prepare artifact for tests
         run: |
           tar xfz ./kourou-*.tgz
-          cp -fr .mocharc.json .nycrc tsconfig.json features test scripts package/
+          cp -fr .mocharc.json .nycrc tsconfig.json features test package/
       - uses: ./.github/actions/functional-test
         with:
           test-set: ${{ matrix.test-set }}
@@ -98,7 +98,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 14
           registry-url: "https://registry.npmjs.org"
       - run: npm install
       - run: npm publish
