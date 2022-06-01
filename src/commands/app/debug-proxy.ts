@@ -68,7 +68,6 @@ export default class DebugProxy extends Kommand {
           id: 'kuzzle-debugger',
           title: `Kuzzle Debugger - ${this.flags.host}:${this.flags.port}`,
           type: 'node',
-          url: 'file:///var/app/docker/scripts/start-kuzzle-dev.js',
           webSocketDebuggerUrl: `ws://${request.headers.host}/kuzzle-debugger`
         }]);
         return;
