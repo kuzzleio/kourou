@@ -39,7 +39,7 @@ class PaasLogin extends PaasKommand {
     this.createProjectCredentials(apiKey);
     await this.authenticateNPM(username, password);
 
-    this.logOk(`Successfully logged in as ${username}. You're Kuzzle Enterprise license is enabled on this host.`);
+    this.logOk(`Successfully logged in as ${username}. Your Kuzzle Enterprise license is now enabled on this host.`);
   }
 
   createProjectCredentials(apiKey: ApiKey) {
