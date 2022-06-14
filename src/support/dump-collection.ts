@@ -66,10 +66,11 @@ abstract class AbstractDumper {
     protected readonly batchSize: number,
     protected readonly destPath: string,
     protected readonly query: any = {},
+    protected readonly scrollTTL: string = '2s'
   ) {
     this.collectionDir = path.join(this.destPath, this.collection)
     this.options = {
-      scroll: '2s',
+      scroll: scrollTTL,
       size: batchSize
     }
   }
@@ -227,9 +228,11 @@ class CSVDumper extends AbstractDumper {
     destPath: string,
     query: any = {},
     protected fields: string[],
-    protected readonly separator = ','
+    protected readonly separator = ',',
+    protected readonly scrollTTL: string = '2s'
+
   ) {
-    super(sdk, index, collection, batchSize, destPath, query)
+    super(sdk, index, collection, batchSize, destPath, query, scrollTTL)
   }
 
   protected get fileExtension(): string {
@@ -268,19 +271,29 @@ class CSVDumper extends AbstractDumper {
   }
 }
 
-export async function dumpCollectionData(sdk: any, index: string, collection: string, batchSize: number, destPath: string, query: any = {}, format = 'jsonl', fields: string[] = []) {
+export async function dumpCollectionData(
+  sdk: any,
+  index: string,
+  collection: string,
+  batchSize: number,
+  destPath: string,
+  query: any = {},
+  format = 'jsonl',
+  fields: string[] = [],
+  scrollTTL?: string
+) {
   let dumper: AbstractDumper
   switch (format.toLowerCase()) {
     case 'jsonl':
-      dumper = new JSONLDumper(sdk, index, collection, batchSize, destPath, query)
+      dumper = new JSONLDumper(sdk, index, collection, batchSize, destPath, query, scrollTTL)
       return dumper.dump();
 
     case 'csv':
-      dumper = new CSVDumper(sdk, index, collection, batchSize, destPath, query, fields)
+      dumper = new CSVDumper(sdk, index, collection, batchSize, destPath, query, fields, ',', scrollTTL)
       return dumper.dump();
 
     default:
-      dumper = new KuzzleDumper(sdk, index, collection, batchSize, destPath, query)
+      dumper = new KuzzleDumper(sdk, index, collection, batchSize, destPath, query, scrollTTL)
       return dumper.dump();
   }
 }
