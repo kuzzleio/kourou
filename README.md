@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.21.1 linux-x64 node-v16.13.2
+kourou/0.22.0 linux-x64 node-v16.15.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -155,9 +155,10 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou instance:list`](#kourou-instancelist)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
-* [`kourou paas:init USERNAME NAMESPACE`](#kourou-paasinit-username-namespace)
+* [`kourou paas:deploy ENVIRONMENT IMAGE`](#kourou-paasdeploy-environment-image)
+* [`kourou paas:init PROJECT`](#kourou-paasinit-project)
 * [`kourou paas:login`](#kourou-paaslogin)
-* [`kourou paas:publish PROJECT IMAGE`](#kourou-paaspublish-project-image)
+* [`kourou paas:logs ENVIRONMENT APPLICATION`](#kourou-paaslogs-environment-application)
 * [`kourou profile:export`](#kourou-profileexport)
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
 * [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
@@ -602,9 +603,12 @@ USAGE
 OPTIONS
   --batch-size=batch-size  [default: 1000] How many documents to move in batch per operation
   --dest=dest              (required) Destination Elasticsearch server URL
+  --dry-run                Print witch collections will be migrated
   --help                   show CLI help
   --no-interactive         Skip confirmation interactive prompts (perfect for scripting)
+  --pattern=pattern        Pattern to match indices to migrate
   --reset                  Reset destination Elasticsearch server
+  --scroll=scroll          [default: 30s] Scroll duration for Elasticsearch scrolling
   --src=src                (required) Source Elasticsearch server URL
 
 EXAMPLES
@@ -915,17 +919,36 @@ OPTIONS
 
 _See code: [src/commands/instance/spawn.ts](src/commands/instance/spawn.ts)_
 
-## `kourou paas:init USERNAME NAMESPACE`
+## `kourou paas:deploy ENVIRONMENT IMAGE`
 
-Initialize a PaaS namespace in current directory
+Deploy a new version of the application in the PaaS
 
 ```
 USAGE
-  $ kourou paas:init USERNAME NAMESPACE
+  $ kourou paas:deploy ENVIRONMENT IMAGE
 
 ARGUMENTS
-  USERNAME   Username
-  NAMESPACE  Namespace
+  ENVIRONMENT  Project environment name
+  IMAGE        Image name and hash as myimage:mytag
+
+OPTIONS
+  --help             show CLI help
+  --project=project  Current PaaS project
+  --token=token      Authentication token
+```
+
+_See code: [src/commands/paas/deploy.ts](src/commands/paas/deploy.ts)_
+
+## `kourou paas:init PROJECT`
+
+Initialize a PaaS project in current directory
+
+```
+USAGE
+  $ kourou paas:init PROJECT
+
+ARGUMENTS
+  PROJECT  Kuzzle PaaS project name
 
 OPTIONS
   --help  show CLI help
@@ -935,39 +958,38 @@ _See code: [src/commands/paas/init.ts](src/commands/paas/init.ts)_
 
 ## `kourou paas:login`
 
-Login for a PaaS namespace
+Login for a PaaS project
 
 ```
 USAGE
   $ kourou paas:login
 
 OPTIONS
-  --help                 show CLI help
-  --namespace=namespace  Current PaaS namespace
-  --username=username    PaaS username
+  --help               show CLI help
+  --project=project    Current PaaS project
+  --username=username  PaaS username
 ```
 
 _See code: [src/commands/paas/login.ts](src/commands/paas/login.ts)_
 
-## `kourou paas:publish PROJECT IMAGE`
+## `kourou paas:logs ENVIRONMENT APPLICATION`
 
-Deploy a new version of the application in the PaaS
+Show logs of the targeted application
 
 ```
 USAGE
-  $ kourou paas:publish PROJECT IMAGE
+  $ kourou paas:logs ENVIRONMENT APPLICATION
 
 ARGUMENTS
-  PROJECT  Project name
-  IMAGE    Image name and hash
+  ENVIRONMENT  Kuzzle PaaS environment
+  APPLICATION  Kuzzle PaaS application
 
 OPTIONS
-  --help                 show CLI help
-  --namespace=namespace  Current PaaS namespace
-  --token=token          Authentication token
+  --help             show CLI help
+  --project=project  Current PaaS project
 ```
 
-_See code: [src/commands/paas/publish.ts](src/commands/paas/publish.ts)_
+_See code: [src/commands/paas/logs.ts](src/commands/paas/logs.ts)_
 
 ## `kourou profile:export`
 
