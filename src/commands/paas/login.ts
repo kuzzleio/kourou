@@ -70,11 +70,11 @@ class PaasLogin extends PaasKommand {
       })
     };
 
-    const response = await fetch(`https://packages.paas-local.kuzzle.io/-/user/org.couchdb.user:${username}`, options);
+    const response = await fetch(`https://packages.paas.kuzzle.io/-/user/org.couchdb.user:${username}`, options);
     const { token } = await response.json();
 
-    spawnSync('npm', ['config', 'set', '@kuzzleio:registry', 'https://packages.paas-local.kuzzle.io'], { stdio: 'inherit' });
-    spawnSync('npm', ['set', '//packages.paas-local.kuzzle.io/:_authToken', token], { stdio: 'inherit' });
+    spawnSync('npm', ['config', 'set', '@kuzzleio:registry', 'https://packages.paas.kuzzle.io'], { stdio: 'inherit' });
+    spawnSync('npm', ['set', '//packages.paas.kuzzle.io/:_authToken', token], { stdio: 'inherit' });
   }
 }
 
