@@ -31,7 +31,7 @@ class PaasDeploy extends PaasKommand {
     await this.initPaasClient({ apiKey });
 
     const user = await this.paas.auth.getCurrentUser();
-    this.logInfo(`Logged as "${user._id}" for project "${this.args.project}"`);
+    this.logInfo(`Logged as "${user._id}" for project "${this.flags.project || this.getProject()}"`);
 
     const [image, tag] = this.args.image.split(':');
     this.logInfo(`Deploy application with image "${image}:${tag}"`)
