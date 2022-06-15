@@ -7,6 +7,9 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: update npm
+      run: npm install -g npm
+      shell: bash
     - name: Run functional test
       shell: bash
       run: |

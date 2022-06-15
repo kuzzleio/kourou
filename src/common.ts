@@ -153,8 +153,12 @@ export abstract class Kommand extends Command {
 
       this.logKo(`Error stack: \n${stack || error.message}\n\nError status: ${error.status}\n\nError id: ${error.id}${errorLink}`)
 
-      for (const e of error.errors) {
-        this.logKo(`${e.document._id} : ${e.reason}`)
+      if (Array.isArray(error.errors)) {
+        for (const e of error.errors) {
+          this.logKo(`${e.document._id} : ${e.reason}`)
+        }
+      } else {
+        this.logKo(JSON.stringify(error.reason))
       }
 
       err = true;
