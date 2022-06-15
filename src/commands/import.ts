@@ -8,6 +8,8 @@ import { restoreCollectionData, restoreCollectionMappings } from '../support/res
 import { restoreProfiles, restoreRoles, restoreUsers } from '../support/restore-securities'
 
 export default class Import extends Kommand {
+  static keepAuth = true;
+
   static description = 'Recursively imports dump files from a root directory'
 
   static flags = {

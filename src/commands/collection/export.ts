@@ -7,6 +7,8 @@ import { kuzzleFlags } from '../../support/kuzzle'
 import { dumpCollectionData, dumpCollectionMappings } from '../../support/dump-collection'
 
 export default class CollectionExport extends Kommand {
+  static keepAuth = true;
+
   static description = 'Exports a collection (JSONL format)'
 
   static flags = {
@@ -40,6 +42,10 @@ Example:
 
 Note that the '_id' field is always included in the CSV export. Leaving this option empty implies that all
 exportable fields in the mapping will be exported.`
+    }),
+    scrollTTL: flags.string({
+      description: `The scroll TTL option to pass to the dump operation (which performs a document.search under the hood),
+expressed in ms format, e.g. '2s', '1m', '3h'.`
     }),
     ...kuzzleFlags,
     protocol: flags.string({
@@ -99,7 +105,8 @@ exportable fields in the mapping will be exported.`
       exportPath,
       query,
       this.flags.format,
-      fields)
+      fields,
+      this.flags.scrollTTL)
 
     this.logOk(`Collection ${this.args.index}:${this.args.collection} dumped`)
   }

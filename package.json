@@ -1,7 +1,7 @@
 {
   "name": "kourou",
   "description": "The CLI that helps you manage your Kuzzle instances",
-  "version": "0.20.5",
+  "version": "0.20.7",
   "author": "The Kuzzle Team <support@kuzzle.io>",
   "bin": {
     "kourou": "./bin/run"
@@ -11,8 +11,6 @@
     "build": "tsc -b",
     "dev": "./bin/run",
     "postpack": "rm -f oclif.manifest.json",
-    "prepack": "tar czf templates.tgz templates/ && rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "postinstall": "scripts/postinstall.sh",
     "version": "oclif-dev readme && git add README.md",
     "test:lint": "eslint src/ test/ --ext .ts",
     "test:lint:fix": "eslint src/ test/ --ext .ts --fix",
@@ -22,9 +20,9 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.12.0",
-    "@oclif/command": "^1.8.0",
-    "@oclif/config": "^1.17.0",
-    "@oclif/plugin-autocomplete": "^0.3.0",
+    "@oclif/command": "^1.8.16",
+    "@oclif/config": "^1.18.3",
+    "@oclif/plugin-autocomplete": "^1.2.0",
     "@oclif/plugin-help": "3.2.2",
     "@types/bluebird": "^3.5.33",
     "@types/inquirer": "^7.3.1",
@@ -41,6 +39,7 @@
     "lodash": "^4.17.21",
     "ndjson": "^2.0.0",
     "node-emoji": "^1.10.0",
+    "node-fetch": "^2.6.7",
     "strip-json-comments": "^3.1.1",
     "tmp": "^0.2.1",
     "tslib": "^2.3.1"
@@ -55,6 +54,7 @@
     "@types/mocha": "^8.2.2",
     "@types/node": "^14.14.41",
     "@types/node-emoji": "^1.8.1",
+    "@types/node-fetch": "^2.6.1",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "chai": "^4.3.4",
@@ -68,8 +68,8 @@
     "prettier-eslint": "^12.0.0",
     "should": "^13.2.3",
     "source-map-support": "^0.5.19",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.5.5"
+    "ts-node": "^10.8.0",
+    "typescript": "^4.7.2"
   },
   "engines": {
     "node": ">=10.0.0"
@@ -78,9 +78,7 @@
     "/bin",
     "/lib",
     "/npm-shrinkwrap.json",
-    "/oclif.manifest.json",
-    "/templates.tgz",
-    "/scripts"
+    "/oclif.manifest.json"
   ],
   "homepage": "https://github.com/kuzzleio/kourou",
   "keywords": [
