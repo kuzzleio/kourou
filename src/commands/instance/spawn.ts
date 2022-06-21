@@ -1,10 +1,12 @@
+import path from 'path';
+import { writeFileSync } from 'fs'
+import net from 'net'
+
 import { flags } from '@oclif/command'
 import chalk from 'chalk'
 import { ChildProcess, spawn } from 'child_process'
 import cli from 'cli-ux'
-import { writeFileSync } from 'fs'
 import Listr from 'listr'
-import net from 'net'
 import emoji from 'node-emoji'
 
 import { Kommand } from '../../common'
@@ -104,7 +106,7 @@ export default class InstanceSpawn extends Kommand {
 
   async runSafe() {
     const portIndex = await this.findAvailablePort()
-    const docoFilename = `/tmp/kuzzle-stack-${portIndex}.yml`
+    const docoFilename = path.join(this.kourouDir, `kuzzle-stack-${portIndex}.yml`)
 
     const successfullCheck = this.flags.check ?
       await this.checkPrerequisites() :

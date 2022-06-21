@@ -1,10 +1,14 @@
+import os from 'os';
+import fs from 'fs'
+import path from 'path'
+
 import { Command } from '@oclif/command'
 import chalk from 'chalk'
 import emoji from 'node-emoji'
-import fs from 'fs'
 import get from 'lodash/get'
 import isObject from 'lodash/isObject'
 import KeplerCompanion from 'kepler-companion';
+
 import { KuzzleSDK } from './support/kuzzle'
 import { Editor, EditorParams } from './support/editor'
 
@@ -22,11 +26,17 @@ export abstract class Kommand extends Command {
 
   public static initSdk = true
 
+  public static disableLog = false
+
   public static readStdin = false
+
+  public static keepAuth = false
 
   public stdin: string | undefined = undefined
 
   public sdkOptions: any = {}
+
+  protected kourouDir = path.join(os.homedir(), '.kourou')
 
   constructor(argv: any, config: any) {
     super(argv, config)
@@ -35,6 +45,16 @@ export abstract class Kommand extends Command {
       && process.env.KOUROU_USAGE !== 'true'
     ) {
       this.telemetry.turnOff();
+    }
+  }
+
+  private get logSilent() {
+    return this.flags['print-raw'] || (this.constructor as any).disableLog
+  }
+
+  protected createKourouDir() {
+    if (!fs.existsSync(this.kourouDir)) {
+      fs.mkdirSync(this.kourouDir)
     }
   }
 
@@ -51,7 +71,7 @@ export abstract class Kommand extends Command {
   }
 
   public log(message?: string): void {
-    if (this.flags['print-raw']) {
+    if (this.logSilent) {
       return
     }
 
@@ -59,7 +79,7 @@ export abstract class Kommand extends Command {
   }
 
   public logOk(message: string): void {
-    if (this.flags['print-raw']) {
+    if (this.logSilent) {
       return
     }
 
@@ -67,7 +87,7 @@ export abstract class Kommand extends Command {
   }
 
   public logInfo(message: string): void {
-    if (this.flags['print-raw']) {
+    if (this.logSilent) {
       return
     }
 
@@ -75,7 +95,7 @@ export abstract class Kommand extends Command {
   }
 
   public logKo(message?: string): void {
-    if (this.flags['print-raw']) {
+    if (this.logSilent) {
       return
     }
 
@@ -110,7 +130,8 @@ export abstract class Kommand extends Command {
           ...this.flags,
           ...this.sdkOptions,
           appName: this.config.name,
-          appVersion: this.config.version
+          appVersion: this.config.version,
+          keepAuth: kommand.keepAuth,
         })
 
         await this.sdk.init(this)
@@ -132,8 +153,12 @@ export abstract class Kommand extends Command {
 
       this.logKo(`Error stack: \n${stack || error.message}\n\nError status: ${error.status}\n\nError id: ${error.id}${errorLink}`)
 
-      for (const e of error.errors) {
-        this.logKo(`${e.document._id} : ${e.reason}`)
+      if (Array.isArray(error.errors)) {
+        for (const e of error.errors) {
+          this.logKo(`${e.document._id} : ${e.reason}`)
+        }
+      } else {
+        this.logKo(JSON.stringify(error.reason))
       }
 
       err = true;
@@ -152,9 +177,9 @@ export abstract class Kommand extends Command {
       }
 
       this.sdk.disconnect()
-      // eslint-disable-next-line
-      process.exit(this.exitCode)
     }
+
+    return this.exitCode
   }
 
   beforeConnect() {

@@ -1,5 +1,5 @@
-import  path from 'path'
-import  fs from 'fs'
+import path from 'path'
+import fs from 'fs'
 
 import { flags } from '@oclif/command'
 import { Kommand } from '../../common'
@@ -7,6 +7,8 @@ import { kuzzleFlags } from '../../support/kuzzle'
 import { restoreCollectionData, restoreCollectionMappings } from '../../support/restore-collection'
 
 export default class CollectionImport extends Kommand {
+  static keepAuth = true;
+
   static description = 'Imports a collection'
 
   static flags = {

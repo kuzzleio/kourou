@@ -13,7 +13,7 @@ The CLI that helps you manage your Kuzzle instances.
 * [Commands](#commands)
 * [Where does this weird name come from?](#where-does-this-weird-name-come-from)
 * [Have fun with a quine](#have-fun-with-a-quine)
-* [Analytics](#analytics)
+* [Telemetry](#telemetry)
 <!-- tocstop -->
 
 :warning: This project is currently in beta and breaking changes may occur until the 1.0.0
@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.20.7 linux-x64 node-v16.13.2
+kourou/0.22.0 linux-x64 node-v16.15.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -129,7 +129,7 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou api-key:create USER`](#kourou-api-keycreate-user)
 * [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
-* [`kourou app:scaffold NAME`](#kourou-appscaffold-name)
+* [`kourou app:scaffold DESTINATION`](#kourou-appscaffold-destination)
 * [`kourou app:start-services`](#kourou-appstart-services)
 * [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
@@ -155,6 +155,10 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou instance:list`](#kourou-instancelist)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
+* [`kourou paas:deploy ENVIRONMENT IMAGE`](#kourou-paasdeploy-environment-image)
+* [`kourou paas:init PROJECT`](#kourou-paasinit-project)
+* [`kourou paas:login`](#kourou-paaslogin)
+* [`kourou paas:logs ENVIRONMENT APPLICATION`](#kourou-paaslogs-environment-application)
 * [`kourou profile:export`](#kourou-profileexport)
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
 * [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
@@ -284,19 +288,20 @@ OPTIONS
 
 _See code: [src/commands/api-key/search.ts](src/commands/api-key/search.ts)_
 
-## `kourou app:scaffold NAME`
+## `kourou app:scaffold DESTINATION`
 
 Scaffolds a new Kuzzle application
 
 ```
 USAGE
-  $ kourou app:scaffold NAME
+  $ kourou app:scaffold DESTINATION
 
 ARGUMENTS
-  NAME  Application name
+  DESTINATION  Directory to scaffold the app
 
 OPTIONS
-  --help  show CLI help
+  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-platform")
+  --help           show CLI help
 ```
 
 _See code: [src/commands/app/scaffold.ts](src/commands/app/scaffold.ts)_
@@ -337,7 +342,7 @@ EXAMPLES
   $ kourou autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.3.0/src/commands/autocomplete/index.ts)_
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.2.0/src/commands/autocomplete/index.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
@@ -598,9 +603,12 @@ USAGE
 OPTIONS
   --batch-size=batch-size  [default: 1000] How many documents to move in batch per operation
   --dest=dest              (required) Destination Elasticsearch server URL
+  --dry-run                Print witch collections will be migrated
   --help                   show CLI help
   --no-interactive         Skip confirmation interactive prompts (perfect for scripting)
+  --pattern=pattern        Pattern to match indices to migrate
   --reset                  Reset destination Elasticsearch server
+  --scroll=scroll          [default: 30s] Scroll duration for Elasticsearch scrolling
   --src=src                (required) Source Elasticsearch server URL
 
 EXAMPLES
@@ -910,6 +918,78 @@ OPTIONS
 ```
 
 _See code: [src/commands/instance/spawn.ts](src/commands/instance/spawn.ts)_
+
+## `kourou paas:deploy ENVIRONMENT IMAGE`
+
+Deploy a new version of the application in the PaaS
+
+```
+USAGE
+  $ kourou paas:deploy ENVIRONMENT IMAGE
+
+ARGUMENTS
+  ENVIRONMENT  Project environment name
+  IMAGE        Image name and hash as myimage:mytag
+
+OPTIONS
+  --help             show CLI help
+  --project=project  Current PaaS project
+  --token=token      Authentication token
+```
+
+_See code: [src/commands/paas/deploy.ts](src/commands/paas/deploy.ts)_
+
+## `kourou paas:init PROJECT`
+
+Initialize a PaaS project in current directory
+
+```
+USAGE
+  $ kourou paas:init PROJECT
+
+ARGUMENTS
+  PROJECT  Kuzzle PaaS project name
+
+OPTIONS
+  --help  show CLI help
+```
+
+_See code: [src/commands/paas/init.ts](src/commands/paas/init.ts)_
+
+## `kourou paas:login`
+
+Login for a PaaS project
+
+```
+USAGE
+  $ kourou paas:login
+
+OPTIONS
+  --help               show CLI help
+  --project=project    Current PaaS project
+  --username=username  PaaS username
+```
+
+_See code: [src/commands/paas/login.ts](src/commands/paas/login.ts)_
+
+## `kourou paas:logs ENVIRONMENT APPLICATION`
+
+Show logs of the targeted application
+
+```
+USAGE
+  $ kourou paas:logs ENVIRONMENT APPLICATION
+
+ARGUMENTS
+  ENVIRONMENT  Kuzzle PaaS environment
+  APPLICATION  Kuzzle PaaS application
+
+OPTIONS
+  --help             show CLI help
+  --project=project  Current PaaS project
+```
+
+_See code: [src/commands/paas/logs.ts](src/commands/paas/logs.ts)_
 
 ## `kourou profile:export`
 
@@ -1555,8 +1635,10 @@ $ kourou sdk:execute --print-raw '(
 
 (Kuzzle must be accessible and running in local)
 
-# Analytics
+# Telemetry
 
-We use a custom Open Source analytics backend (you can check the code [here](https://gihtub.com/kuzzleio/kepler)) to record the use of Kourou by users. 
+We use a custom Open Source analytics backend (you can check the code [here](https://gihtub.com/kuzzleio/kepler)) to record the use of Kourou by users.
+
 Collected metrics will allow us to study the use of our products in order to improve them. We do not collect any personal data about users.
+
 You can disable usage metrics collection by setting the `KOUROU_USAGE` environment variable to `false`.
