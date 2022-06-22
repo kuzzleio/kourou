@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.22.0 linux-x64 node-v16.15.0
+kourou/0.23.0 linux-x64 node-v14.18.2
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -129,6 +129,7 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou api-key:create USER`](#kourou-api-keycreate-user)
 * [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
+* [`kourou app:debug-proxy`](#kourou-appdebug-proxy)
 * [`kourou app:scaffold DESTINATION`](#kourou-appscaffold-destination)
 * [`kourou app:start-services`](#kourou-appstart-services)
 * [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
@@ -288,6 +289,41 @@ OPTIONS
 
 _See code: [src/commands/api-key/search.ts](src/commands/api-key/search.ts)_
 
+## `kourou app:debug-proxy`
+
+Create a Proxy Server that allows Chrome to debug Kuzzle remotely using the DebugController
+
+```
+USAGE
+  $ kourou app:debug-proxy
+
+OPTIONS
+  --api-key=api-key          Kuzzle user api-key
+  --as=as                    Impersonate a user
+  --forwardPort=forwardPort  [default: 9222] Port of the forwarding server
+  --help                     show CLI help
+  --host=host                [default: localhost] Kuzzle server host
+
+  --nonoAutoEnableDebugger   True if Kourou should not enable and disable the Debugger automatically before and after
+                             usage
+
+  --password=password        Kuzzle user password
+
+  --port=port                [default: 7512] Kuzzle server port
+
+  --protocol=protocol        [default: ws] Kuzzle protocol (http or ws)
+
+  --showDebuggerEvents       Verbose mode to display events sent to the Chrome Debugger
+
+  --showDebuggerPayloads     Verbose mode to display payloads sent by and to the Chrome Debugger
+
+  --ssl                      Use SSL to connect to Kuzzle
+
+  --username=username        [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/app/debug-proxy.ts](src/commands/app/debug-proxy.ts)_
+
 ## `kourou app:scaffold DESTINATION`
 
 Scaffolds a new Kuzzle application
@@ -342,7 +378,7 @@ EXAMPLES
   $ kourou autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.2.0/src/commands/autocomplete/index.ts)_
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.3.0/src/commands/autocomplete/index.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
