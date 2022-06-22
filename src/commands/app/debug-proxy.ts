@@ -6,6 +6,7 @@ import http from 'http';
 import { JSONObject } from 'kuzzle-sdk';
 import WebSocket from 'ws';
 
+// Add the proper headers and send the body in the response
 function sendResponse(response: http.ServerResponse, bodyObject: JSONObject) {
   response.setHeader('Content-Type', 'application/json; charset=UTF-8');
   response.setHeader('Cache-Control', 'no-cache');
@@ -16,7 +17,7 @@ function sendResponse(response: http.ServerResponse, bodyObject: JSONObject) {
 }
 
 export default class DebugProxy extends Kommand {
-  public static description = 'Create an HTTP Server that allows Chrome to debug Kuzzle remotely using the DebugController';
+  public static description = 'Create a Proxy Server that allows Chrome to debug Kuzzle remotely using the DebugController';
 
   public static flags = {
     help: flags.help(),
@@ -24,8 +25,8 @@ export default class DebugProxy extends Kommand {
       description: 'Port of the forwarding server',
       default: 9222
     }),
-    autoEnableDebugger: flags.boolean({
-      description: 'True if Kourou should automatically enable and disable the Debugger before and after usage',
+    nonoAutoEnableDebugger: flags.boolean({
+      description: 'True if Kourou should not enable and disable the Debugger automatically before and after usage',
       default: true
     }),
     showDebuggerEvents: flags.boolean({
@@ -39,6 +40,7 @@ export default class DebugProxy extends Kommand {
     ...kuzzleFlags,
   };
 
+  // Force the usage of Websocket otherwise each request might end up executed on a different Kuzzle Node
   public static sdkOptions = {
     protocol: 'ws'
   };
@@ -52,6 +54,11 @@ export default class DebugProxy extends Kommand {
 
     this.logInfo(`Connected to Kuzzle node: ${nodeVersionResponse.node}`);
 
+    /**
+     * To allow the Chrome Debugger to see the proxy server we must implement the following routes:
+     * - /json/version
+     * - /json
+     */
     const server = http.createServer((request, response) => {
       if (request.url === '/json/version') {
         sendResponse(response, {
@@ -60,6 +67,9 @@ export default class DebugProxy extends Kommand {
         });
         return;
       } else if (request.url === '/json') {
+        // Here we send a bunch of information about the Remote Target to the Chrome Debugger
+        // Those are the informations that the Chrome Debugger uses to know how to connect to Remote Target
+        // We give the Chrome Inspector our own Websocket endpoint so that it can connect to our proxy server
         sendResponse(response, [{
           description: 'node.js instance',
           devtoolsFrontendUrl: `devtools://devtools/bundled/js_app.html?experiments=true&v8only=true&ws=${request.headers.host}/kuzzle-debugger`,
@@ -78,7 +88,7 @@ export default class DebugProxy extends Kommand {
     const closeServer = async () => {
       this.logInfo('Connection closed.');
 
-      if (this.flags.autoEnableDebugger) {
+      if (!this.flags.noAutoEnableDebugger) {
         await this.sdk.query({
           controller: 'debug',
           action: 'disable'
@@ -93,13 +103,14 @@ export default class DebugProxy extends Kommand {
       server
     });
 
-    if (this.flags.autoEnableDebugger) {
+    if (!this.flags.noAutoEnableDebugger) {
       await this.sdk.query({
         controller: 'debug',
         action: 'enable'
       });
     }
 
+    // Listen to all events emitted by the Debug Controller
     await this.sdk.query({
       controller: 'debug',
       action: 'addListener',
@@ -113,7 +124,7 @@ export default class DebugProxy extends Kommand {
 
       /**
        * Listen to the room were events from the DebugController are sent
-       * and only forward events from the debugger
+       * and only forward events from the Chrome  Devtools Protocol
        */
       this.sdk.sdk.protocol.on('kuzzle-debugger-event', (payload: JSONObject) => {
         if (!payload.event || payload.event.startsWith('Kuzzle')) {
@@ -125,6 +136,7 @@ export default class DebugProxy extends Kommand {
         ws.send(JSON.stringify(payload.result));
       });
 
+      // When receiving message from Chrome Devtools Protocol, we forward it to the DebugController
       ws.on('message', async message => {
         try {
           const json = JSON.parse(message.toString());
@@ -157,6 +169,7 @@ export default class DebugProxy extends Kommand {
             }, null, 2));
           }
 
+          // Send back the response using the same ID received
           ws.send(JSON.stringify({
             id: json.id,
             result: response.result
