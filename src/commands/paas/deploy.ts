@@ -22,6 +22,7 @@ class PaasDeploy extends PaasKommand {
 
   static args = [
     { name: 'environment', description: 'Project environment name', required: true },
+    { name: 'applicationId', description: 'Application Identifier', required: true },
     { name: 'image', description: 'Image name and hash as myimage:mytag', required: true },
   ]
 
@@ -41,7 +42,7 @@ class PaasDeploy extends PaasKommand {
       action: 'deploy',
       environmentId: this.args.environment,
       projectId: this.flags.project || this.getProject(),
-      applicationId: 'kuzzle',
+      applicationId: this.args.applicationId,
       body: {
         image: {
           name: image,
