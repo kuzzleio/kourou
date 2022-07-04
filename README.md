@@ -409,7 +409,7 @@ _See code: [src/commands/collection/create.ts](src/commands/collection/create.ts
 
 ## `kourou collection:export INDEX COLLECTION`
 
-Exports a collection (JSONL format)
+Exports a collection (JSONL, Kuzzle, CSV format)
 
 ```
 USAGE
