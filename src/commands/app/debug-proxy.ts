@@ -25,9 +25,17 @@ export default class DebugProxy extends Kommand {
       description: 'Port of the forwarding server',
       default: 9222
     }),
-    nonoAutoEnableDebugger: flags.boolean({
+    ttl: flags.string({
+      description: 'Kuzzle login TTL',
+      default: '1h',
+    }),
+    keepAuth: flags.boolean({
+      description: 'Keep the user authenticated',
+      default: false,
+    }),
+    noAutoEnableDebugger: flags.boolean({
       description: 'True if Kourou should not enable and disable the Debugger automatically before and after usage',
-      default: true
+      default: false
     }),
     showDebuggerEvents: flags.boolean({
       description: 'Verbose mode to display events sent to the Chrome Debugger',
