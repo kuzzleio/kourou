@@ -162,6 +162,8 @@ export abstract class Kommand extends Command {
       }
 
       err = true;
+
+      this.exitCode = 1;
     }
     finally {
       if (kommand.id !== undefined) {
@@ -176,7 +178,9 @@ export abstract class Kommand extends Command {
         ]);
       }
 
-      this.sdk.disconnect()
+      this.sdk.disconnect();
+
+      process.exit(this.exitCode);
     }
 
     return this.exitCode
