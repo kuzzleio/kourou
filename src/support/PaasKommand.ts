@@ -11,7 +11,7 @@ export class PaasKommand extends Kommand {
 
   protected host = process.env.KUZZLE_PAAS_HOST
     ? process.env.KUZZLE_PAAS_HOST
-    : 'api.console.paas.kuzzle.io';
+    : 'console.paas.kuzzle.io';
   protected port = process.env.KUZZLE_PAAS_PORT
     ? parseInt(process.env.KUZZLE_PAAS_PORT as string)
     : 443;
