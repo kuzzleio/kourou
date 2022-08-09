@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.23.0 linux-x64 node-v14.18.2
+kourou/0.23.1 linux-x64 node-v14.20.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -198,6 +198,7 @@ OPTIONS
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLE
@@ -229,6 +230,7 @@ OPTIONS
   --port=port                    [default: 7512] Kuzzle server port
   --protocol=protocol            [default: ws] Kuzzle protocol (http or ws)
   --ssl                          Use SSL to connect to Kuzzle
+  --ttl=ttl                      [default: 90] Kuzzle login TTL (in seconds)
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -255,6 +257,7 @@ OPTIONS
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLE
@@ -284,6 +287,7 @@ OPTIONS
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -318,6 +322,8 @@ OPTIONS
   --showDebuggerPayloads     Verbose mode to display payloads sent by and to the Chrome Debugger
 
   --ssl                      Use SSL to connect to Kuzzle
+
+  --ttl=ttl                  [default: 90] Kuzzle login TTL (in seconds)
 
   --username=username        [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -378,7 +384,7 @@ EXAMPLES
   $ kourou autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.3.0/src/commands/autocomplete/index.ts)_
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.2.0/src/commands/autocomplete/index.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
@@ -402,6 +408,7 @@ OPTIONS
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -409,7 +416,7 @@ _See code: [src/commands/collection/create.ts](src/commands/collection/create.ts
 
 ## `kourou collection:export INDEX COLLECTION`
 
-Exports a collection (JSONL, Kuzzle, CSV format)
+Exports a collection (JSONL format)
 
 ```
 USAGE
@@ -474,6 +481,9 @@ OPTIONS
   --ssl
       Use SSL to connect to Kuzzle
 
+  --ttl=ttl
+      [default: 90] Kuzzle login TTL (in seconds)
+
   --username=username
       [default: anonymous] Kuzzle username (local strategy)
 
@@ -508,6 +518,7 @@ OPTIONS
   --port=port              [default: 7512] Kuzzle server port
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
+  --ttl=ttl                [default: 90] Kuzzle login TTL (in seconds)
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -563,6 +574,7 @@ OPTIONS
   --size=size          Optional page size
   --sort=sort          [default: {}] Sort in JS or JSON format.
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
@@ -817,6 +829,7 @@ OPTIONS
   --preserve-anonymous     Preserve anonymous rights
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
+  --ttl=ttl                [default: 90] Kuzzle login TTL (in seconds)
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -857,6 +870,8 @@ OPTIONS
 
   --ssl                    Use SSL to connect to Kuzzle
 
+  --ttl=ttl                [default: 90] Kuzzle login TTL (in seconds)
+
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
@@ -889,6 +904,7 @@ OPTIONS
   --port=port              [default: 7512] Kuzzle server port
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                    Use SSL to connect to Kuzzle
+  --ttl=ttl                [default: 90] Kuzzle login TTL (in seconds)
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
@@ -1045,6 +1061,7 @@ OPTIONS
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -1070,6 +1087,7 @@ OPTIONS
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -1111,6 +1129,8 @@ OPTIONS
 
   --ssl                Use SSL to connect to Kuzzle
 
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
+
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
   --users=users        [default: all] Subscribe to users entering or leaving the room (all, in, out, none)
@@ -1150,6 +1170,7 @@ OPTIONS
   --remove             Remove matching keys
   --size=size          [default: 100] Page size
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
@@ -1177,6 +1198,7 @@ OPTIONS
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -1203,6 +1225,7 @@ OPTIONS
   --preserve-anonymous  Preserve anonymous rights
   --protocol=protocol   [default: ws] Kuzzle protocol (http or websocket)
   --ssl                 Use SSL to connect to Kuzzle
+  --ttl=ttl             [default: 90] Kuzzle login TTL (in seconds)
   --username=username   [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -1232,6 +1255,7 @@ OPTIONS
   --print-raw          Print only the script result to stdout
   --protocol=protocol  [default: ws] Kuzzle protocol (http or ws)
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
 DESCRIPTION
@@ -1304,6 +1328,8 @@ OPTIONS
   --protocol=protocol          [default: ws] Kuzzle protocol (http or ws)
 
   --ssl                        Use SSL to connect to Kuzzle
+
+  --ttl=ttl                    [default: 90] Kuzzle login TTL (in seconds)
 
   --username=username          [default: anonymous] Kuzzle username (local strategy)
 
@@ -1387,6 +1413,7 @@ OPTIONS
   --port=port                              [default: 7512] Kuzzle server port
   --protocol=protocol                      [default: ws] Kuzzle protocol (http or websocket)
   --ssl                                    Use SSL to connect to Kuzzle
+  --ttl=ttl                                [default: 90] Kuzzle login TTL (in seconds)
   --username=username                      [default: anonymous] Kuzzle username (local strategy)
 
 DESCRIPTION
@@ -1435,6 +1462,7 @@ OPTIONS
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -1460,6 +1488,7 @@ OPTIONS
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
@@ -1485,6 +1514,7 @@ OPTIONS
   --port=port          [default: 7512] Kuzzle server port
   --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
   --ssl                Use SSL to connect to Kuzzle
+  --ttl=ttl            [default: 90] Kuzzle login TTL (in seconds)
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
