@@ -5,10 +5,6 @@ import { Http, WebSocket, Kuzzle } from 'kuzzle-sdk'
 const SECOND = 1000
 
 export const kuzzleFlags = {
-  ttl: flags.string({
-    description: 'Kuzzle login TTL (in seconds)',
-    default: '90',
-  }),
   host: flags.string({
     description: 'Kuzzle server host',
     default: process.env.KUZZLE_HOST || 'localhost',
@@ -65,7 +61,7 @@ export class KuzzleSDK {
 
   private appName: string
 
-  private ttl: number;
+  private ttl: string;
 
   private keepAuth: boolean;
 
@@ -79,12 +75,8 @@ export class KuzzleSDK {
     this.apikey = options['api-key'] || options.apiKey
     this.appVersion = options.appVersion
     this.appName = options.appName
-    this.ttl = Number(options.ttl || '90')
+    this.ttl = options.ttl || '90s'
     this.keepAuth = options.keepAuth || false
-
-    if (isNaN(this.ttl)) {
-      throw new Error(`Incorrect value for flag --ttl ("${this.ttl}"). Expect a valid number`)
-    }
 
     // Instantiate a fake SDK in the constructor to please TS
     this.sdk = new Kuzzle(new WebSocket('nowhere'))
@@ -133,7 +125,7 @@ export class KuzzleSDK {
         password: this.password,
       }
 
-      await this.sdk.auth.login('local', credentials, `${this.ttl}s`)
+      await this.sdk.auth.login('local', credentials, this.ttl)
 
       if (this.keepAuth) {
         this.refreshTimer = setInterval(async () => {
@@ -143,7 +135,7 @@ export class KuzzleSDK {
           catch (error: any) {
             logger.logKo(`Cannot refresh token: ${error.message}`)
           }
-        }, this.ttl - 30 * SECOND)
+        }, 80 * SECOND)
       }
 
       logger.logInfo(`Loggued as ${this.username}.`)

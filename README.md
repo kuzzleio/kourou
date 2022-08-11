@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.23.1 linux-x64 node-v14.20.0
+kourou/0.24.0 darwin-x64 node-v14.18.2
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -156,7 +156,7 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou instance:list`](#kourou-instancelist)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
-* [`kourou paas:deploy ENVIRONMENT IMAGE`](#kourou-paasdeploy-environment-image)
+* [`kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE`](#kourou-paasdeploy-environment-applicationid-image)
 * [`kourou paas:init PROJECT`](#kourou-paasinit-project)
 * [`kourou paas:login`](#kourou-paaslogin)
 * [`kourou paas:logs ENVIRONMENT APPLICATION`](#kourou-paaslogs-environment-application)
@@ -307,8 +307,9 @@ OPTIONS
   --forwardPort=forwardPort  [default: 9222] Port of the forwarding server
   --help                     show CLI help
   --host=host                [default: localhost] Kuzzle server host
+  --keepAuth                 Keep the user authenticated
 
-  --nonoAutoEnableDebugger   True if Kourou should not enable and disable the Debugger automatically before and after
+  --noAutoEnableDebugger     True if Kourou should not enable and disable the Debugger automatically before and after
                              usage
 
   --password=password        Kuzzle user password
@@ -323,7 +324,7 @@ OPTIONS
 
   --ssl                      Use SSL to connect to Kuzzle
 
-  --ttl=ttl                  [default: 90] Kuzzle login TTL (in seconds)
+  --ttl=ttl                  [default: 1h] Kuzzle login TTL
 
   --username=username        [default: anonymous] Kuzzle username (local strategy)
 ```
@@ -384,7 +385,7 @@ EXAMPLES
   $ kourou autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.2.0/src/commands/autocomplete/index.ts)_
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.3.0/src/commands/autocomplete/index.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
@@ -971,17 +972,18 @@ OPTIONS
 
 _See code: [src/commands/instance/spawn.ts](src/commands/instance/spawn.ts)_
 
-## `kourou paas:deploy ENVIRONMENT IMAGE`
+## `kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE`
 
 Deploy a new version of the application in the PaaS
 
 ```
 USAGE
-  $ kourou paas:deploy ENVIRONMENT IMAGE
+  $ kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE
 
 ARGUMENTS
-  ENVIRONMENT  Project environment name
-  IMAGE        Image name and hash as myimage:mytag
+  ENVIRONMENT    Project environment name
+  APPLICATIONID  Application Identifier
+  IMAGE          Image name and hash as myimage:mytag
 
 OPTIONS
   --help             show CLI help
