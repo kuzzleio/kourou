@@ -63,7 +63,7 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
     }
 
     const { name, ext } = path.parse(this.args.file);
-    let outputFile = `${name}.enc.${ext}`
+    let outputFile = `${name}.enc${ext}`
 
     if (this.flags['output-file']) {
       outputFile = this.flags['output-file']
