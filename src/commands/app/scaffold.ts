@@ -41,10 +41,14 @@ export default class AppScaffold extends Kommand {
   }
 
   async cloneTemplate(flavor: string, destination: string) {
-    await execute('git', 'clone', '--depth=1', 'https://github.com/kuzzleio/project-templates', '--branch', flavor, '--single-branch');
+    const templatesDir = '/tmp/project-templates';
 
-    await execute('mv', `project-templates/${flavor}`, `${destination}/`);
+    await execute('rm', '-rf', templatesDir);
 
-    await execute('rm', '-rf', 'project-templates/');
+    await execute('git', 'clone', '--depth=1', 'https://github.com/kuzzleio/project-templates', '--branch', flavor, '--single-branch', templatesDir);
+
+    await execute('cp', '-r', `${templatesDir}/${flavor}`, `${destination}/`);
+
+    await execute('rm', '-rf', templatesDir);
   }
 }

@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 import _ from 'lodash'
 import { flags } from '@oclif/command'
@@ -61,8 +62,9 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
       throw new Error('A secrets file must be provided')
     }
 
-    const [filename, ext] = this.args.file.split('.')
-    let outputFile = `${filename}.enc.${ext}`
+    const { name, ext } = path.parse(this.args.file);
+    let outputFile = `${name}.enc.${ext}`
+
     if (this.flags['output-file']) {
       outputFile = this.flags['output-file']
     }
