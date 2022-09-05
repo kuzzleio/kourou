@@ -45,6 +45,10 @@ export default class DebugProxy extends Kommand {
       description: 'Verbose mode to display payloads sent by and to the Chrome Debugger',
       default: false,
     }),
+    dontPreventNodeEviction: flags.boolean({
+      description: 'False if the node currently debugged should not be prevented from being evicted from the cluster',
+      default: false,
+    }),
     ...kuzzleFlags,
   };
 
@@ -54,6 +58,8 @@ export default class DebugProxy extends Kommand {
   };
 
   async runSafe() {
+    // @ts-ignore Disable ping pong since when debugging Kuzzle might not be responding
+    clearInterval(this.sdk.sdk.protocol.pingIntervalId);
 
     const nodeVersionResponse = await this.sdk.query({
       controller: 'debug',
@@ -116,6 +122,23 @@ export default class DebugProxy extends Kommand {
         controller: 'debug',
         action: 'enable'
       });
+    }
+
+    if (!this.flags.dontPreventNodeEviction) {
+      try {
+        await this.sdk.query({
+          controller: 'debug',
+          action: 'post',
+          body: {
+            method: 'Kuzzle.Cluster.preventNodeEviction',
+            params: { evictionPrevented: true }
+          }
+        });
+        this.logOk('Node eviction prevented while debugging.');
+      }
+      catch (e) {
+        this.logKo('Unable to prevent node eviction. The node might be evicted from the cluster if too slow while debugging.');
+      }
     }
 
     // Listen to all events emitted by the Debug Controller
