@@ -41,8 +41,10 @@ export default class AppScaffold extends Kommand {
       await tasks.run();
 
       this.log('')
-      this.logOk(`Scaffolding complete! To run your application, use:
-        ${chalk.grey(`cd ${destination} && npm run docker npm install && npm run docker:dev`)}`);
+      this.logOk(`Scaffolding complete! Install dependencies with :To run your application, use:
+        ${chalk.grey(`cd ${destination} && npm run docker npm install`)}
+        and run your application with:
+        ${chalk.grey('npm run docker:dev')}`)
     }
     catch (error: any) { }
   }
@@ -58,7 +60,7 @@ export default class AppScaffold extends Kommand {
     catch (error) {
       directoryExist = false;
     }
-    
+
     if (directoryExist) {
       throw new Error(`Directory "${destination}" already exist`);
     }
@@ -68,8 +70,7 @@ export default class AppScaffold extends Kommand {
     try {
       await execute(
         'curl', '--output-dir', templatesDir, '-L', '-O', '--fail-with-body', '--silent',
-        `https://github.com/ChillPC/multi-release-test/releases/latest/download/${assetName}`);
-      // `https://github.com/kuzzleio/project-templates/releases/latest/download/${assetName}`);
+        `https://github.com/kuzzleio/project-templates/releases/latest/download/${assetName}`);
     }
     catch (error) {
       const executionError = error as ExecutionError;
