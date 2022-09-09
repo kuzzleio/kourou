@@ -67,7 +67,8 @@ export default class AppScaffold extends Kommand {
       throw new Error(`Directory "${destination}" already exist`);
     }
 
-    await execute('mkdir', '-p', templatesDir);
+    await fsp.mkdir(templatesDir)
+    // await execute('mkdir', '-p', templatesDir);
 
     https.get(link, (res: any) => {
       function httpsGetToFileCallback (response: any) {
