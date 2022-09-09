@@ -5,10 +5,8 @@ import * as fs from 'fs'
 import * as fsp from 'fs/promises'
 import * as https from 'https'
 
-
 import { Kommand } from '../../common'
-import { execute, ExecutionError } from '../../support/execute'
-import { get } from 'http'
+import { execute } from '../../support/execute'
 
 
 export default class AppScaffold extends Kommand {
@@ -71,7 +69,7 @@ export default class AppScaffold extends Kommand {
 
     await execute('mkdir', '-p', templatesDir);
 
-    https.get(link, (response: any) => {
+    https.get(link, (res: any) => {
       function httpsGetToFileCallback (response: any) {
         if ( 300 <= response.statusCode && response.statusCode < 400 && response.headers.location) {
           https.get(response.headers.location, httpsGetToFileCallback);
@@ -87,7 +85,7 @@ export default class AppScaffold extends Kommand {
         }
       }
 
-      httpsGetToFileCallback(response);
+      httpsGetToFileCallback(res);
     });
 
     await execute('tar', '-zxf', `${templatesDir}/${assetName}`, '--directory', templatesDir);
