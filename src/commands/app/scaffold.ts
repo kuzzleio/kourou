@@ -1,11 +1,14 @@
 import { flags } from '@oclif/command'
 import chalk from 'chalk'
 import Listr from 'listr'
-import * as fs from 'fs/promises'
+import * as fs from 'fs'
+import * as fsp from 'fs/promises'
+import * as https from 'https'
 
 
 import { Kommand } from '../../common'
 import { execute, ExecutionError } from '../../support/execute'
+import { get } from 'http'
 
 
 export default class AppScaffold extends Kommand {
@@ -41,7 +44,7 @@ export default class AppScaffold extends Kommand {
       await tasks.run();
 
       this.log('')
-      this.logOk(`Scaffolding complete! Install dependencies with :To run your application, use:
+      this.logOk(`Scaffolding complete! Install dependencies with :
         ${chalk.grey(`cd ${destination} && npm run docker npm install`)}
         and run your application with:
         ${chalk.grey('npm run docker:dev')}`)
@@ -51,11 +54,12 @@ export default class AppScaffold extends Kommand {
 
   async cloneTemplate(flavor: string, destination: string) {
     const templatesDir = '/tmp/kourou-template';
-    const assetName = `${flavor}.tar.gz`
+    const assetName = `${flavor}.tar.gz`;
+    const link = `https://github.com/kuzzleio/project-templates/releases/latest/download/${assetName}`;
 
     let directoryExist = true;
     try {
-      await fs.access(destination);
+      await fsp.access(destination);
     }
     catch (error) {
       directoryExist = false;
@@ -67,17 +71,24 @@ export default class AppScaffold extends Kommand {
 
     await execute('mkdir', '-p', templatesDir);
 
-    try {
-      await execute(
-        'curl', '--output-dir', templatesDir, '-L', '-O', '--fail-with-body', '--silent',
-        `https://github.com/kuzzleio/project-templates/releases/latest/download/${assetName}`);
-    }
-    catch (error) {
-      const executionError = error as ExecutionError;
-      if (executionError.result.exitCode === 22) {
-        throw new Error(`Scaffold for the flavor "${flavor}" does not exist`);
+    https.get(link, (response: any) => {
+      function httpsGetToFileCallback (response: any) {
+        if ( 300 <= response.statusCode && response.statusCode < 400 && response.headers.location) {
+          https.get(response.headers.location, httpsGetToFileCallback);
+        }
+        else if (400 <= response.statusCode) {
+          throw new Error(`Scaffold for the flavor "\${flavor}" does not exist`);
+        }
+        else {
+          const file = fs.createWriteStream(destination);
+
+          response.pipe(file);
+          file.on('finish', () => file.close());
+        }
       }
-    }
+
+      httpsGetToFileCallback(response);
+    });
 
     await execute('tar', '-zxf', `${templatesDir}/${assetName}`, '--directory', templatesDir);
 
