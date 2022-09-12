@@ -66,7 +66,7 @@ export default class DebugProxy extends Kommand {
       action: 'nodeVersion'
     }) as JSONObject;
 
-    this.logInfo(`Connected to Kuzzle node: ${nodeVersionResponse.node}`);
+    this.logInfo(`Connected to Kuzzle node: ${nodeVersionResponse.node}.`);
 
     /**
      * To allow the Chrome Debugger to see the proxy server we must implement the following routes:
@@ -100,18 +100,42 @@ export default class DebugProxy extends Kommand {
     });
 
     const closeServer = async () => {
-      this.logInfo('Connection closed.');
+      if (!this.flags.dontPreventNodeEviction) {
+        try {
+          await this.sdk.query({
+            controller: 'debug',
+            action: 'post',
+            body: {
+              method: 'Kuzzle.Cluster.preventNodeEviction',
+              params: { evictionPrevented: false }
+            }
+          });
+          this.logOk('Node eviction prevention disabled.');
+        }
+        catch (e) {
+          this.logKo('Failed to disable the node eviction prevention.');
+        }
+      }
 
       if (!this.flags.noAutoEnableDebugger) {
-        await this.sdk.query({
-          controller: 'debug',
-          action: 'disable'
-        });
+        try {
+          await this.sdk.query({
+            controller: 'debug',
+            action: 'disable'
+          });
+          this.logOk('Debugger disabled.');
+        }
+        catch (e) {
+          this.logKo('Failed to disable the debugger.');
+        }
       }
 
       this.sdk.disconnect();
       server.close();
+      this.logOk('Connection closed.');
     }
+
+    process.on('SIGINT', closeServer);
 
     const wss = new WebSocket.Server({
       server
@@ -134,7 +158,7 @@ export default class DebugProxy extends Kommand {
             params: { evictionPrevented: true }
           }
         });
-        this.logOk('Node eviction prevented while debugging.');
+        this.logOk('Node eviction prevention enabled while debugging.');
       }
       catch (e) {
         this.logKo('Unable to prevent node eviction. The node might be evicted from the cluster if too slow while debugging.');
@@ -221,8 +245,8 @@ export default class DebugProxy extends Kommand {
     });
 
     server.listen(this.flags.forwardPort, () => {
-      this.logOk(`Listening on port ${this.flags.forwardPort}, forwarding to Kuzzle at ${this.flags.host}:${this.flags.port}`);
-      this.logInfo(`Showing to Chrome Debugger as "Kuzzle Debugger - ${this.flags.host}:${this.flags.port}"`)
+      this.logOk(`Listening on port ${this.flags.forwardPort}, forwarding to Kuzzle at ${this.flags.host}:${this.flags.port}.`);
+      this.logInfo(`Showing to Chrome Debugger as "Kuzzle Debugger - ${this.flags.host}:${this.flags.port}".`)
       this.logInfo('Waiting for Chrome Debugger to connect...');
     });
 
