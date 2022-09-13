@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.24.1 linux-x64 node-v16.13.2
+kourou/0.24.2 darwin-x64 node-v16.17.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -1006,6 +1006,7 @@ USAGE
 
 OPTIONS
   --help               show CLI help
+  --only_npm           Only perform the login on the private NPM registry
   --project=project    Current PaaS project
   --username=username  PaaS username
 ```
