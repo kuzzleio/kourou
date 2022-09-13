@@ -22,7 +22,8 @@ class PaasLogin extends PaasKommand {
     }),
     only_npm: flags.boolean({
       description: 'Only perform the login on the private NPM registry',
-      required: false
+      required: false,
+      default: false
     })
   };
 
