@@ -23,7 +23,7 @@ import { JSONObject, CollectionController } from 'kuzzle-sdk'
  * @param {Object} target the object we have to flatten
  * @returns {Object} the flattened object
  */
- function flattenObject(target: JSONObject): JSONObject {
+function flattenObject(target: JSONObject): JSONObject {
   const output = {};
 
   flattenStep(output, target);
@@ -37,7 +37,7 @@ function flattenStep(
   prev: string | null = null): void {
   const keys = Object.keys(object);
 
-  for(let i = 0; i < keys.length; i++) {
+  for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
     const value = object[key];
     const newKey = prev ? prev + '.' + key : key;
@@ -55,7 +55,7 @@ abstract class AbstractDumper {
   protected collectionDir: string
   protected filename?: string
   protected writeStream?: fs.WriteStream
-  protected options: {scroll: string, size: number}
+  protected options: { scroll: string, size: number }
 
   protected abstract get fileExtension(): string
 
@@ -66,7 +66,7 @@ abstract class AbstractDumper {
     protected readonly batchSize: number,
     protected readonly destPath: string,
     protected readonly query: any = {},
-    protected readonly scrollTTL: string = '2s'
+    protected readonly scrollTTL: string = '20s'
   ) {
     this.collectionDir = path.join(this.destPath, this.collection)
     this.options = {
@@ -82,14 +82,14 @@ abstract class AbstractDumper {
    * @returns void
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public async setup() {}
+  public async setup() { }
 
   /**
    * One-shot call before iterating over the data. Can be
    * used to write the header of the dumped output.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public async writeHeader() {}
+  public async writeHeader() { }
 
   /**
    * You can put here the logic to write into the dump.
@@ -107,10 +107,10 @@ abstract class AbstractDumper {
    *
    * @param document The document to be written in a line of the dump.
    */
-  abstract onResult(document: {_id: string, _source: any}): Promise<void>
+  abstract onResult(document: { _id: string, _source: any }): Promise<void>
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public async tearDown() {}
+  public async tearDown() { }
 
   /**
    * The loop that iterates over the documents of the collection and
@@ -188,8 +188,8 @@ class JSONLDumper extends AbstractDumper {
       }
     })
   }
-  onResult(document: {_id: string, _source: any}): Promise<void> {
-    return this.writeLine({_id: document._id, body: document._source})
+  onResult(document: { _id: string, _source: any }): Promise<void> {
+    return this.writeLine({ _id: document._id, body: document._source })
   }
   protected get fileExtension() {
     return 'jsonl'
@@ -205,7 +205,7 @@ class KuzzleDumper extends JSONLDumper {
   protected get fileExtension() {
     return 'json'
   }
-  async onResult(document: {_id: string, _source: any}) {
+  async onResult(document: { _id: string, _source: any }) {
     this.rawDocuments[this.index][this.collection].push({
       index: {
         _id: document._id
