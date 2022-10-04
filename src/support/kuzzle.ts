@@ -103,7 +103,7 @@ export class KuzzleSDK {
     this.sdk = new Kuzzle(new ProtocolClass(this.host, {
       port: this.port,
       sslConnection: this.ssl,
-      pingInterval: 5000,
+      pingInterval: 20 * 1000,
     }))
 
     this.sdk.volatile = {
