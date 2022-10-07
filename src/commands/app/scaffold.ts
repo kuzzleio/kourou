@@ -1,11 +1,11 @@
 import { flags } from '@oclif/command'
 import chalk from 'chalk'
 import Listr from 'listr'
-import * as fs from 'fs/promises'
-
+import * as fsp from 'fs/promises'
+import fetch from 'node-fetch';
 
 import { Kommand } from '../../common'
-import { execute, ExecutionError } from '../../support/execute'
+import { execute } from '../../support/execute'
 
 
 export default class AppScaffold extends Kommand {
@@ -41,7 +41,7 @@ export default class AppScaffold extends Kommand {
       await tasks.run();
 
       this.log('')
-      this.logOk(`Scaffolding complete! Install dependencies with :To run your application, use:
+      this.logOk(`Scaffolding complete! Install dependencies with :
         ${chalk.grey(`cd ${destination} && npm run docker npm install`)}
         and run your application with:
         ${chalk.grey('npm run docker:dev')}`)
@@ -51,11 +51,12 @@ export default class AppScaffold extends Kommand {
 
   async cloneTemplate(flavor: string, destination: string) {
     const templatesDir = '/tmp/kourou-template';
-    const assetName = `${flavor}.tar.gz`
+    const assetName = `${flavor}.tar.gz`;
+    const link = `https://github.com/kuzzleio/project-templates/releases/latest/download/${assetName}`;
 
     let directoryExist = true;
     try {
-      await fs.access(destination);
+      await fsp.access(destination);
     }
     catch (error) {
       directoryExist = false;
@@ -65,22 +66,21 @@ export default class AppScaffold extends Kommand {
       throw new Error(`Directory "${destination}" already exist`);
     }
 
-    await execute('mkdir', '-p', templatesDir);
+    await fsp.mkdir(templatesDir, { recursive: true })
 
     try {
-      await execute(
-        'curl', '--output-dir', templatesDir, '-L', '-O', '--fail-with-body', '--silent',
-        `https://github.com/kuzzleio/project-templates/releases/latest/download/${assetName}`);
+      const response = await fetch(link);
+
+      await fsp.writeFile(`${templatesDir}/${assetName}`, response.body as any as Uint8Array);
     }
     catch (error) {
-      const executionError = error as ExecutionError;
-      if (executionError.result.exitCode === 22) {
-        throw new Error(`Scaffold for the flavor "${flavor}" does not exist`);
-      }
+      throw new Error(`Scaffold for the flavor "\${flavor}" does not exist`);
     }
 
     await execute('tar', '-zxf', `${templatesDir}/${assetName}`, '--directory', templatesDir);
 
-    await execute('cp', '-r', `${templatesDir}/${flavor}`, `${destination}/`);
+    await fsp.rename( `${templatesDir}/${flavor}`, `${destination}`);
+
   }
 }
+
