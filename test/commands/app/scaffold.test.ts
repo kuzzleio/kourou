@@ -11,10 +11,6 @@ describe('app:scaffold', () => {
 
     kourou('app:scaffold blackmesa')
 
-    console.log('. :', fs.readdirSync('.'))
-    console.log("");
-    console.log('./blackmesa : ', fs.readdirSync('./blackmesa'))
-
     should(fs.existsSync('./blackmesa/.eslintignore')).be.eql(true)
     should(fs.existsSync('./blackmesa/.eslintrc.json')).be.eql(true)
     should(fs.existsSync('./blackmesa/.gitignore')).be.eql(true)
