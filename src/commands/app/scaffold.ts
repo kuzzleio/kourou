@@ -71,7 +71,7 @@ export default class AppScaffold extends Kommand {
     try {
       const response = await fetch(link);
 
-      await fsp.writeFile(`${templatesDir}/${assetName}`, response.body as any as Uint8Array);
+      await fsp.writeFile(`${templatesDir}/${assetName}`, response.body as any);
     }
     catch (error) {
       throw new Error(`Scaffold for the flavor "\${flavor}" does not exist`);
