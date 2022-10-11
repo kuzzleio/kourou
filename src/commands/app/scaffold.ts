@@ -1,11 +1,12 @@
-import { flags } from '@oclif/command'
-import chalk from 'chalk'
-import Listr from 'listr'
-import * as fsp from 'fs/promises'
+import { flags } from '@oclif/command';
+import chalk from 'chalk';
+import * as fsp from 'fs/promises';
+import Listr from 'listr';
 import fetch from 'node-fetch';
+import tar from 'tar';
 
-import { Kommand } from '../../common'
-import { execute } from '../../support/execute'
+import { Kommand } from '../../common';
+import { execute } from '../../support/execute';
 
 
 export default class AppScaffold extends Kommand {
@@ -68,19 +69,23 @@ export default class AppScaffold extends Kommand {
 
     await fsp.mkdir(templatesDir, { recursive: true })
 
-    try {
-      const response = await fetch(link);
+    const response = await fetch(link);
 
-      await fsp.writeFile(`${templatesDir}/${assetName}`, response.body as any);
-    }
-    catch (error) {
-      throw new Error(`Scaffold for the flavor "\${flavor}" does not exist`);
+    if (! response.ok) {
+      throw new Error(`Scaffold for the flavor "${flavor}" does not exist`);
     }
 
-    await execute('tar', '-zxf', `${templatesDir}/${assetName}`, '--directory', templatesDir);
+    await fsp.writeFile(`${templatesDir}/${assetName}`, response.body as any);
+
+    tar.extract({
+      cwd: templatesDir,
+      file: `${templatesDir}/${assetName}`,
+      keep: true,
+      strict: true,
+      sync: true,
+    });
 
     await fsp.rename( `${templatesDir}/${flavor}`, `${destination}`);
 
   }
 }
-
