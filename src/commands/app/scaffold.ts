@@ -6,7 +6,6 @@ import fetch from 'node-fetch';
 import tar from 'tar';
 
 import { Kommand } from '../../common';
-import { execute } from '../../support/execute';
 
 
 export default class AppScaffold extends Kommand {
