@@ -105,7 +105,7 @@
         "description": "create, manage and run applications"
       },
       "collection": {
-        "description": "dump or restore an entire data collection"
+        "description": "create an entire data collection"
       },
       "document": {
         "description": "push or retrieve documents from the data storage"
@@ -113,17 +113,8 @@
       "es": {
         "description": "low-level access to Elasticsearch"
       },
-      "index": {
-        "description": "dump or restore an entire data index"
-      },
-      "instance": {
-        "description": "manage Kuzzle instances"
-      },
-      "profile": {
-        "description": "manage user profiles"
-      },
-      "role": {
-        "description": "manage user roles"
+      "export": {
+        "description": "export many data from Kuzzle"
       },
       "vault": {
         "description": "manage then encrypted vault"

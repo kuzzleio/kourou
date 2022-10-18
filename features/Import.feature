@@ -27,7 +27,7 @@ Feature: Generic Import
       | default | [{ "index": "nyc-open-data" }] |
     And I create a profile "student" with the following policies:
       | admin | [{ "index": "mtp-open-data" }] |
-    And I run the command "profile:export" with:
+    And I run the command "export:profile" with:
       | flag | --path | ./dump |
     And I delete the profile "teacher"
     And I delete the profile "student"
@@ -37,7 +37,7 @@ Feature: Generic Import
       | document | { "actions": { "create": true } } |
     And I create a role "student" with the following API rights:
       | document | { "actions": { "update": true } } |
-    When I run the command "role:export" with:
+    When I run the command "export:role" with:
       | flag | --path | ./dump |
     And I delete the role "teacher"
     And I delete the role "student"
@@ -49,7 +49,7 @@ Feature: Generic Import
     And I create a user "alyx" with content:
       | profileIds | ["admin"]           |
       | email      | "alyx@blackmesa.us" |
-    When I run the command "user:export" with:
+    When I run the command "export:user" with:
       | flag | --path    | ./dump     |
       | flag | --exclude | gordon     |
       | flag | --exclude | test-admin |

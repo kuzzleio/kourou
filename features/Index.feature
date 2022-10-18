@@ -1,7 +1,7 @@
 Feature: Index Commands
 
   @mappings
-  Scenario: Export and import an index
+  Scenario: Export an index
     Given an existing collection "nyc-open-data":"yellow-taxi"
     And I "create" the following documents:
       | _id               | body                              |
@@ -19,26 +19,3 @@ Feature: Index Commands
       | "nyc-open-data" |
     And I successfully call the route "index":"delete" with args:
       | index | "nyc-open-data" |
-    # index:import
-    And I run the command "index:import" with args:
-      | "nyc-open-data" |
-    Then The document "chuon-chuon-kim2" content match:
-      | city     | "hcmc" |
-      | district | 1      |
-    And The document "the-hive2" content match:
-      | city     | "hcmc" |
-      | district | 2      |
-    And an existing collection "nyc-open-data":"yellow-taxi"
-    Then The document "chuon-chuon-kim" content match:
-      | city     | "hcmc" |
-      | district | 1      |
-    And The document "the-hive" content match:
-      | city     | "hcmc" |
-      | district | 2      |
-    Then I successfully call the route "collection":"getMapping" with args:
-      | index      | "nyc-open-data" |
-      | collection | "yellow-taxi"   |
-    And The property "properties" of the result should match:
-      | city | { "type": "keyword" } |
-      | name | { "type": "keyword" } |
-

@@ -131,10 +131,9 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
 * [`kourou app:debug-proxy`](#kourou-appdebug-proxy)
 * [`kourou app:scaffold DESTINATION`](#kourou-appscaffold-destination)
-* [`kourou app:start-services`](#kourou-appstart-services)
+* [`kourou app:services:start`](#kourou-appservicesstart)
 * [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
-* [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
 * [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
 * [`kourou document:search INDEX COLLECTION [QUERY]`](#kourou-documentsearch-index-collection-query)
@@ -145,6 +144,11 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou es:snapshot:create REPOSITORY NAME`](#kourou-essnapshotcreate-repository-name)
 * [`kourou es:snapshot:create-repository REPOSITORY LOCATION`](#kourou-essnapshotcreate-repository-repository-location)
 * [`kourou es:snapshot:list REPOSITORY`](#kourou-essnapshotlist-repository)
+* [`kourou export:collection INDEX COLLECTION`](#kourou-collectionexport-index-collection)
+* [`kourou export:index INDEX`](#kourou-indexexport-index)
+* [`kourou export:profile`](#kourou-profileexport)
+* [`kourou export:role`](#kourou-roleexport)
+* [`kourou export:user`](#kourou-userexport)
 * [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
 * [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
 * [`kourou file:test FILE`](#kourou-filetest-file)
@@ -152,10 +156,6 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou import PATH`](#kourou-import-path)
 * [`kourou index:export INDEX`](#kourou-indexexport-index)
 * [`kourou index:import PATH`](#kourou-indeximport-path)
-* [`kourou instance:kill`](#kourou-instancekill)
-* [`kourou instance:list`](#kourou-instancelist)
-* [`kourou instance:logs`](#kourou-instancelogs)
-* [`kourou instance:spawn`](#kourou-instancespawn)
 * [`kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE`](#kourou-paasdeploy-environment-applicationid-image)
 * [`kourou paas:init PROJECT`](#kourou-paasinit-project)
 * [`kourou paas:login`](#kourou-paaslogin)
@@ -164,13 +164,7 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
 * [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
 * [`kourou redis:list-keys [MATCH]`](#kourou-redislist-keys-match)
-* [`kourou role:export`](#kourou-roleexport)
-* [`kourou role:import PATH`](#kourou-roleimport-path)
-* [`kourou sdk:execute [CODE]`](#kourou-sdkexecute-code)
 * [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
-* [`kourou user:export`](#kourou-userexport)
-* [`kourou user:export-mappings`](#kourou-userexport-mappings)
-* [`kourou user:import PATH`](#kourou-userimport-path)
 * [`kourou user:import-mappings PATH`](#kourou-userimport-mappings-path)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
@@ -212,13 +206,13 @@ Creates a new API Key for a user
 
 ```
 USAGE
-  $ kourou api-key:create USER
+  $ kourou api-key:create USER DESCRIPTION
 
 ARGUMENTS
   USER  User kuid
+  DESCRIPTION API Key description
 
 OPTIONS
-  -d, --description=description  (required) API Key description
   --api-key=api-key              Kuzzle user api-key
   --as=as                        Impersonate a user
   --expire=expire                [default: -1] API Key validity
@@ -345,20 +339,20 @@ OPTIONS
 
 _See code: [src/commands/app/scaffold.ts](src/commands/app/scaffold.ts)_
 
-## `kourou app:start-services`
+## `kourou app:services:start`
 
 Starts Kuzzle services (Elasticsearch and Redis)
 
 ```
 USAGE
-  $ kourou app:start-services
+  $ kourou app:services:start
 
 OPTIONS
   --check  Check prerequisite before running services
   --help   show CLI help
 ```
 
-_See code: [src/commands/app/start-services.ts](src/commands/app/start-services.ts)_
+_See code: [src/commands/app/start.ts](src/commands/app/services/start.ts)_
 
 ## `kourou autocomplete [SHELL]`
 
@@ -410,112 +404,6 @@ OPTIONS
 
 _See code: [src/commands/collection/create.ts](src/commands/collection/create.ts)_
 
-## `kourou collection:export INDEX COLLECTION`
-
-Exports a collection (JSONL format)
-
-```
-USAGE
-  $ kourou collection:export INDEX COLLECTION
-
-ARGUMENTS
-  INDEX       Index name
-  COLLECTION  Collection name
-
-OPTIONS
-  --api-key=api-key
-      Kuzzle user api-key
-
-  --as=as
-      Impersonate a user
-
-  --batch-size=batch-size
-      [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-
-  --editor
-      Open an editor (EDITOR env variable) to edit the query before sending
-
-  --fields=fields
-      [CSV format only] The list of fields to be included in the CSV export in dot-path format.
-
-      Example:
-      --fields oneField,anotherField,yetAnotherOne.nested.moarNested
-
-      Note that the '_id' field is always included in the CSV export. Leaving this option empty implies that all
-      exportable fields in the mapping will be exported.
-
-  --format=jsonl|kuzzle|csv
-      [default: jsonl] "kuzzle" will export in Kuzzle format usable for internal fixtures,
-      "jsonl" allows to import that data back with kourou,
-      "csv" allows to import data into Excel (please, specify the fields to export using the --fields option).
-
-  --help
-      show CLI help
-
-  --host=host
-      [default: localhost] Kuzzle server host
-
-  --password=password
-      Kuzzle user password
-
-  --path=path
-      Dump root directory
-
-  --port=port
-      [default: 7512] Kuzzle server port
-
-  --protocol=protocol
-      [default: ws] Kuzzle protocol (http or websocket)
-
-  --query=query
-      [default: {}] Only dump documents matching the query (JS or JSON format)
-
-  --scrollTTL=scrollTTL
-      The scroll TTL option to pass to the dump operation (which performs a document.search under the hood),
-      expressed in ms format, e.g. '2s', '1m', '3h'.
-
-  --ssl
-      Use SSL to connect to Kuzzle
-
-  --username=username
-      [default: anonymous] Kuzzle username (local strategy)
-
-EXAMPLES
-  kourou collection:export nyc-open-data yellow-taxi
-  kourou collection:export nyc-open-data yellow-taxi --query '{ term: { city: "Saigon" } }'
-```
-
-_See code: [src/commands/collection/export.ts](src/commands/collection/export.ts)_
-
-## `kourou collection:import PATH`
-
-Imports a collection
-
-```
-USAGE
-  $ kourou collection:import PATH
-
-ARGUMENTS
-  PATH  Dump directory path
-
-OPTIONS
-  --api-key=api-key        Kuzzle user api-key
-  --as=as                  Impersonate a user
-  --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
-  --collection=collection  If set, override the collection destination name
-  --help                   show CLI help
-  --host=host              [default: localhost] Kuzzle server host
-  --index=index            If set, override the index destination name
-  --no-mappings            Skip collection mappings
-  --password=password      Kuzzle user password
-  --port=port              [default: 7512] Kuzzle server port
-  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                    Use SSL to connect to Kuzzle
-  --username=username      [default: anonymous] Kuzzle username (local strategy)
-```
-
-_See code: [src/commands/collection/import.ts](src/commands/collection/import.ts)_
-
 ## `kourou config:diff FIRST SECOND`
 
 Returns differences between two Kuzzle configuration files (kuzzlerc)
@@ -565,6 +453,7 @@ OPTIONS
   --scroll=scroll      Optional scroll TTL
   --size=size          Optional page size
   --sort=sort          [default: {}] Sort in JS or JSON format.
+  --aggs=aggs          [default: {}] Aggregations in JS or JSON format.
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 
@@ -715,6 +604,229 @@ OPTIONS
 
 _See code: [src/commands/es/snapshot/list.ts](src/commands/es/snapshot/list.ts)_
 
+
+## `kourou export:collection INDEX COLLECTION`
+
+Exports a collection (JSONL format)
+
+```
+USAGE
+  $ kourou export:collection INDEX COLLECTION
+
+ARGUMENTS
+  INDEX       Index name
+  COLLECTION  Collection name
+
+OPTIONS
+  --api-key=api-key
+      Kuzzle user api-key
+
+  --as=as
+      Impersonate a user
+
+  --batch-size=batch-size
+      [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+
+  --editor
+      Open an editor (EDITOR env variable) to edit the query before sending
+
+  --fields=fields
+      [CSV format only] The list of fields to be included in the CSV export in dot-path format.
+
+      Example:
+      --fields oneField,anotherField,yetAnotherOne.nested.moarNested
+
+      Note that the '_id' field is always included in the CSV export. Leaving this option empty implies that all
+      exportable fields in the mapping will be exported.
+
+  --format=jsonl|kuzzle|csv
+      [default: jsonl] "kuzzle" will export in Kuzzle format usable for internal fixtures,
+      "jsonl" allows to import that data back with kourou,
+      "csv" allows to import data into Excel (please, specify the fields to export using the --fields option).
+
+  --help
+      show CLI help
+
+  --host=host
+      [default: localhost] Kuzzle server host
+
+  --password=password
+      Kuzzle user password
+
+  --path=path
+      Dump root directory
+
+  --port=port
+      [default: 7512] Kuzzle server port
+
+  --protocol=protocol
+      [default: ws] Kuzzle protocol (http or websocket)
+
+  --query=query
+      [default: {}] Only dump documents matching the query (JS or JSON format)
+      
+  --scrollTTL=scrollTTL
+      The scroll TTL option to pass to the dump operation (which performs a document.search under the hood),
+      expressed in ms format, e.g. '2s', '1m', '3h'.
+
+  --ssl
+      Use SSL to connect to Kuzzle
+
+  --username=username
+      [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLES
+  kourou export:collection nyc-open-data yellow-taxi
+  kourou export:collection nyc-open-data yellow-taxi --query '{ term: { city: "Saigon" } }'
+```
+
+_See code: [src/commands/export/collection.ts](src/commands/export/collection.ts)_
+
+## `kourou export:index INDEX`
+
+Exports an index (JSONL or Kuzzle format)
+
+```
+USAGE
+  $ kourou export:index INDEX
+
+ARGUMENTS
+  INDEX  Index name
+
+OPTIONS
+  --api-key=api-key        Kuzzle user api-key
+  --as=as                  Impersonate a user
+  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+
+  --format=format          [default: jsonl] "jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal
+                           fixtures and jsonl allows to import that data back with kourou
+
+  --help                   show CLI help
+
+  --host=host              [default: localhost] Kuzzle server host
+
+  --password=password      Kuzzle user password
+
+  --path=path              Dump root directory
+
+  --port=port              [default: 7512] Kuzzle server port
+
+  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
+
+  --query=query            [default: {}] Only dump documents in collections matching the query (JS or JSON format)
+
+  --ssl                    Use SSL to connect to Kuzzle
+
+  --username=username      [default: anonymous] Kuzzle username (local strategy)
+
+EXAMPLES
+  kourou export:index nyc-open-data
+  kourou export:index nyc-open-data --query '{"range":{"_kuzzle_info.createdAt":{"gt":1632935638866}}}'
+```
+
+_See code: [src/commands/export/index.ts](src/commands/export/index.ts)_
+
+## `kourou export:profile`
+
+Exports profiles
+
+```
+USAGE
+  $ kourou export:profile
+
+OPTIONS
+  --api-key=api-key    Kuzzle user api-key
+  --as=as              Impersonate a user
+  --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
+  --password=password  Kuzzle user password
+  --path=path          [default: profiles] Dump directory
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/export/profile.ts](src/commands/export/profile.ts)_
+
+## `kourou export:role`
+
+Exports roles
+
+```
+USAGE
+  $ kourou export:role
+
+OPTIONS
+  --api-key=api-key    Kuzzle user api-key
+  --as=as              Impersonate a user
+  --help               show CLI help
+  --host=host          [default: localhost] Kuzzle server host
+  --password=password  Kuzzle user password
+  --path=path          [default: roles] Dump directory
+  --port=port          [default: 7512] Kuzzle server port
+  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                Use SSL to connect to Kuzzle
+  --username=username  [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/export/role.ts](src/commands/export/role.ts)_
+
+
+## `kourou export:user`
+
+Exports users to JSON.
+
+```
+USAGE
+  $ kourou export:user
+
+OPTIONS
+  --api-key=api-key                        Kuzzle user api-key
+  --as=as                                  Impersonate a user
+  --batch-size=batch-size                  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
+  --exclude=exclude                        Exclude users by matching their IDs with a regexp
+  --generate-credentials                   Generate credentials with a random password for users
+  --mappings                               [default: false] Export user mappings
+  --generated-username=generated-username  [default: _id] User content property used as a username for local credentials
+  --help                                   show CLI help
+  --host=host                              [default: localhost] Kuzzle server host
+  --password=password                      Kuzzle user password
+  --path=path                              [default: users] Dump directory
+  --port=port                              [default: 7512] Kuzzle server port
+  --protocol=protocol                      [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                                    Use SSL to connect to Kuzzle
+  --username=username                      [default: anonymous] Kuzzle username (local strategy)
+
+DESCRIPTION
+  Exports users to JSON.
+
+  The users will be exported WITHOUT their credentials since Kuzzzle can't access them.
+
+  You can either:
+    - Manually re-create credentials for your users
+    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
+  https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
+    - Use the "--generate-credentials" flag to auto-generate credentials for your users
+
+  Auto-generation of credentials
+
+    With the "--generate-credentials" flag, Kourou will add credentials for the "local" strategy.
+    By default, the username will be the user ID.
+    Use the "generated-username" flag to use an other property than the user ID for the generated username
+    The password will be a strong random 40 characters string
+
+  Examples:
+
+    - kourou export:user
+    - kourou export:user --mappings
+    - kourou export:user --exclude '.*admin.*' --exclude 'supervisor.*'
+    - kourou export:user --generate-credentials
+    - kourou export:user --generate-credentials --generated-username content.email
+```
+
+_See code: [src/commands/export/user.ts](src/commands/export/user.ts)_
+
 ## `kourou file:decrypt FILE`
 
 Decrypts an encrypted file.
@@ -824,139 +936,6 @@ OPTIONS
 ```
 
 _See code: [src/commands/import.ts](src/commands/import.ts)_
-
-## `kourou index:export INDEX`
-
-Exports an index (JSONL or Kuzzle format)
-
-```
-USAGE
-  $ kourou index:export INDEX
-
-ARGUMENTS
-  INDEX  Index name
-
-OPTIONS
-  --api-key=api-key        Kuzzle user api-key
-  --as=as                  Impersonate a user
-  --batch-size=batch-size  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-
-  --format=format          [default: jsonl] "jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal
-                           fixtures and jsonl allows to import that data back with kourou
-
-  --help                   show CLI help
-
-  --host=host              [default: localhost] Kuzzle server host
-
-  --password=password      Kuzzle user password
-
-  --path=path              Dump root directory
-
-  --port=port              [default: 7512] Kuzzle server port
-
-  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
-
-  --query=query            [default: {}] Only dump documents in collections matching the query (JS or JSON format)
-
-  --ssl                    Use SSL to connect to Kuzzle
-
-  --username=username      [default: anonymous] Kuzzle username (local strategy)
-
-EXAMPLES
-  kourou index:export nyc-open-data
-  kourou index:export nyc-open-data --query '{"range":{"_kuzzle_info.createdAt":{"gt":1632935638866}}}'
-```
-
-_See code: [src/commands/index/export.ts](src/commands/index/export.ts)_
-
-## `kourou index:import PATH`
-
-Imports an index (JSONL format)
-
-```
-USAGE
-  $ kourou index:import PATH
-
-ARGUMENTS
-  PATH  Dump directory or file
-
-OPTIONS
-  --api-key=api-key        Kuzzle user api-key
-  --as=as                  Impersonate a user
-  --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
-  --help                   show CLI help
-  --host=host              [default: localhost] Kuzzle server host
-  --index=index            If set, override the index destination name
-  --no-mappings            Skip collections mappings
-  --password=password      Kuzzle user password
-  --port=port              [default: 7512] Kuzzle server port
-  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                    Use SSL to connect to Kuzzle
-  --username=username      [default: anonymous] Kuzzle username (local strategy)
-
-EXAMPLES
-  kourou index:import ./dump/iot-data
-  kourou index:import ./dump/iot-data --index iot-data-production --no-mappings
-```
-
-_See code: [src/commands/index/import.ts](src/commands/index/import.ts)_
-
-## `kourou instance:kill`
-
-Stop and remove all the containers of a running kuzzle instance
-
-```
-USAGE
-  $ kourou instance:kill
-
-OPTIONS
-  -a, --all                Kill all instances
-  -i, --instance=instance  Kuzzle instance name [ex: stack-0]
-```
-
-_See code: [src/commands/instance/kill.ts](src/commands/instance/kill.ts)_
-
-## `kourou instance:list`
-
-Lists the Kuzzle running instances
-
-```
-USAGE
-  $ kourou instance:list
-```
-
-_See code: [src/commands/instance/list.ts](src/commands/instance/list.ts)_
-
-## `kourou instance:logs`
-
-Displays the logs of a running Kuzzle
-
-```
-USAGE
-  $ kourou instance:logs
-
-OPTIONS
-  -f, --follow             Follow log output
-  -i, --instance=instance  Kuzzle instance name
-```
-
-_See code: [src/commands/instance/logs.ts](src/commands/instance/logs.ts)_
-
-## `kourou instance:spawn`
-
-Spawn a new Kuzzle instance
-
-```
-USAGE
-  $ kourou instance:spawn
-
-OPTIONS
-  -v, --version=version  [default: 2] Core-version of the instance to spawn
-  --check                Check prerequisite before running Kuzzle
-  --help                 show CLI help
-```
-
-_See code: [src/commands/instance/spawn.ts](src/commands/instance/spawn.ts)_
 
 ## `kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE`
 
@@ -1164,62 +1143,13 @@ EXAMPLES
 
 _See code: [src/commands/redis/list-keys.ts](src/commands/redis/list-keys.ts)_
 
-## `kourou role:export`
-
-Exports roles
-
-```
-USAGE
-  $ kourou role:export
-
-OPTIONS
-  --api-key=api-key    Kuzzle user api-key
-  --as=as              Impersonate a user
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --password=password  Kuzzle user password
-  --path=path          [default: roles] Dump directory
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
-```
-
-_See code: [src/commands/role/export.ts](src/commands/role/export.ts)_
-
-## `kourou role:import PATH`
-
-Import roles
-
-```
-USAGE
-  $ kourou role:import PATH
-
-ARGUMENTS
-  PATH  Dump file
-
-OPTIONS
-  --api-key=api-key     Kuzzle user api-key
-  --as=as               Impersonate a user
-  --help                show CLI help
-  --host=host           [default: localhost] Kuzzle server host
-  --password=password   Kuzzle user password
-  --port=port           [default: 7512] Kuzzle server port
-  --preserve-anonymous  Preserve anonymous rights
-  --protocol=protocol   [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                 Use SSL to connect to Kuzzle
-  --username=username   [default: anonymous] Kuzzle username (local strategy)
-```
-
-_See code: [src/commands/role/import.ts](src/commands/role/import.ts)_
-
-## `kourou sdk:execute [CODE]`
+## `kourou execute [CODE]`
 
 Executes arbitrary code.
 
 ```
 USAGE
-  $ kourou sdk:execute [CODE]
+  $ kourou execute [CODE]
 
 ARGUMENTS
   CODE  Code to execute. Will be read from STDIN if available.
@@ -1256,28 +1186,28 @@ DESCRIPTION
     code will be read from STDIN if available
 
     Examples:
-      - kourou sdk:execute 'return await sdk.server.now()'
-      - kourou sdk:execute 'return await sdk.index.exists(index)' --var 'index="iot-data"'
-      - kourou sdk:execute < snippet.js
-      - echo 'return await sdk.server.now()' | kourou sdk:execute
+      - kourou execute 'return await sdk.server.now()'
+      - kourou execute 'return await sdk.index.exists(index)' --var 'index="iot-data"'
+      - kourou execute < snippet.js
+      - echo 'return await sdk.server.now()' | kourou execute
 
   Other
 
     use the --editor flag to modify the code before executing it
 
     Examples:
-      - kourou sdk:execute 'return await sdk.server.now()' --editor
+      - kourou execute 'return await sdk.server.now()' --editor
 ```
 
-_See code: [src/commands/sdk/execute.ts](src/commands/sdk/execute.ts)_
+_See code: [src/commands/execute.ts](src/commands/execute.ts)_
 
-## `kourou sdk:query CONTROLLER:ACTION`
+## `kourou api CONTROLLER:ACTION`
 
 Executes an API query.
 
 ```
 USAGE
-  $ kourou sdk:query CONTROLLER:ACTION
+  $ kourou api CONTROLLER:ACTION
 
 ARGUMENTS
   CONTROLLER:ACTION  Controller and action (eg: "server:now")
@@ -1322,7 +1252,7 @@ DESCRIPTION
     ID can be passed with the --id flag.
 
     Examples:
-      - kourou sdk:query document:delete -i iot -c sensors -a refresh=wait_for
+      - kourou api document:delete -i iot -c sensors -a refresh=wait_for
 
   Query body
 
@@ -1330,9 +1260,9 @@ DESCRIPTION
     Body will be read from STDIN if available
 
     Examples:
-      - kourou sdk:query document:create -i iot -c sensors --body '{creation: Date.now())}'
-      - kourou sdk:query admin:loadMappings < mappings.json
-      - echo '{dynamic: "strict"}' | kourou sdk:query collection:create -i iot -c sensors
+      - kourou api document:create -i iot -c sensors --body '{creation: Date.now())}'
+      - kourou api admin:loadMappings < mappings.json
+      - echo '{dynamic: "strict"}' | kourou api collection:create -i iot -c sensors
 
   Other
 
@@ -1340,135 +1270,11 @@ DESCRIPTION
     Use the --display flag to display a specific property of the response
 
     Examples:
-      - kourou sdk:query document:create -i iot -c sensors --editor
-      - kourou sdk:query server:now --display 'result.now'
-
-  Default fallback to API action
-
-    It's possible to use the "sdk:query" command by only specifying the corresponding controller
-    and action as first argument.
-
-    Kourou will try to infer the first arguments to one the following pattern:
-      - <command> <index>
-      - <command> <body>
-      - <command> <index> <collection>
-      - <command> <index> <collection> <id>
-      - <command> <index> <collection> <body>
-      - <command> <index> <collection> <id> <body>
-
-    If a flag is given (-i, -c, --body or --id), then the flag value has priority over
-    argument infering.
-
-    Examples:
-      - kourou collection:list iot
-      - kourou security:createUser '{ "content": { "profileIds": ["default"] } }' --id yagmur
-      - kourou collection:delete iot sensors
-      - kourou document:createOrReplace iot sensors sigfox-1 '{}'
-      - kourou bulk:import iot sensors '{ bulkData: [...] }'
-      - kourou admin:loadMappings < mappings.json
+      - kourou api document:create -i iot -c sensors --editor
+      - kourou api server:now --display 'result.now'
 ```
 
-_See code: [src/commands/sdk/query.ts](src/commands/sdk/query.ts)_
-
-## `kourou user:export`
-
-Exports users to JSON.
-
-```
-USAGE
-  $ kourou user:export
-
-OPTIONS
-  --api-key=api-key                        Kuzzle user api-key
-  --as=as                                  Impersonate a user
-  --batch-size=batch-size                  [default: 2000] Maximum batch size (see limits.documentsFetchCount config)
-  --exclude=exclude                        Exclude users by matching their IDs with a regexp
-  --generate-credentials                   Generate credentials with a random password for users
-  --generated-username=generated-username  [default: _id] User content property used as a username for local credentials
-  --help                                   show CLI help
-  --host=host                              [default: localhost] Kuzzle server host
-  --password=password                      Kuzzle user password
-  --path=path                              [default: users] Dump directory
-  --port=port                              [default: 7512] Kuzzle server port
-  --protocol=protocol                      [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                                    Use SSL to connect to Kuzzle
-  --username=username                      [default: anonymous] Kuzzle username (local strategy)
-
-DESCRIPTION
-  Exports users to JSON.
-
-  The users will be exported WITHOUT their credentials since Kuzzzle can't access them.
-
-  You can either:
-    - Manually re-create credentials for your users
-    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
-  https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
-    - Use the "--generate-credentials" flag to auto-generate credentials for your users
-
-  Auto-generation of credentials
-
-    With the "--generate-credentials" flag, Kourou will add credentials for the "local" strategy.
-    By default, the username will be the user ID.
-    Use the "generated-username" flag to use an other property than the user ID for the generated username
-    The password will be a strong random 40 characters string
-
-  Examples:
-
-    - kourou user:export
-    - kourou user:export --exclude '.*admin.*' --exclude 'supervisor.*'
-    - kourou user:export --generate-credentials
-    - kourou user:export --generate-credentials --generated-username content.email
-```
-
-_See code: [src/commands/user/export.ts](src/commands/user/export.ts)_
-
-## `kourou user:export-mappings`
-
-Exports users collection mappings to JSON.
-
-```
-USAGE
-  $ kourou user:export-mappings
-
-OPTIONS
-  --api-key=api-key    Kuzzle user api-key
-  --as=as              Impersonate a user
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --password=password  Kuzzle user password
-  --path=path          [default: users] Dump directory
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
-```
-
-_See code: [src/commands/user/export-mappings.ts](src/commands/user/export-mappings.ts)_
-
-## `kourou user:import PATH`
-
-Imports users
-
-```
-USAGE
-  $ kourou user:import PATH
-
-ARGUMENTS
-  PATH  Dump file
-
-OPTIONS
-  --api-key=api-key    Kuzzle user api-key
-  --as=as              Impersonate a user
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --password=password  Kuzzle user password
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
-```
-
-_See code: [src/commands/user/import.ts](src/commands/user/import.ts)_
+_See code: [src/commands/api.ts](src/commands/api.ts)_
 
 ## `kourou user:import-mappings PATH`
 
@@ -1663,13 +1469,13 @@ We liked the idea that this CLI is like a launchpad for the Kuzzle rocket. The p
 [Quine](https://en.wikipedia.org/wiki/Quine_(computing)) are programs able to print their own source code.
 
 ```bash
-$ kourou sdk:execute --print-raw '(
+$ kourou execute --print-raw '(
   function quine() {
     const quote = String.fromCharCode(39);
     const lparen = String.fromCharCode(40);
     const rparen = String.fromCharCode(41);
 
-    console.log("kourou sdk:execute --print-raw " + quote + lparen + quine.toString() + rparen + lparen + rparen + ";" + quote)
+    console.log("kourou execute --print-raw " + quote + lparen + quine.toString() + rparen + lparen + rparen + ";" + quote)
   }
 )()'
 ```
