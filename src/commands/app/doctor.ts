@@ -30,7 +30,7 @@ export default class AppDoctor extends Kommand {
       controller: "debug",
       action: "nodeVersion",
     });
-    const adminExists = await this.sdk.server.adminExists();
+    const adminExists = await this.sdk.server.adminExists({})
 
     this.log(`----------------- Doctor begin his job ! -----------------`);
     this.log(`General checks`);
@@ -43,7 +43,7 @@ export default class AppDoctor extends Kommand {
       );
     }
 
-    const config = await this.sdk.server.getConfig();
+    const config = await this.sdk.server.getConfig({});
     if (config) {
       if (config.cluster.enabled) {
         this.logOk(`Cluster is enabled`);
