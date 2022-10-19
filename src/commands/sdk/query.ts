@@ -1,8 +1,8 @@
-import { flags } from '@oclif/command'
-import _ from 'lodash'
+import { flags } from "@oclif/command";
+import _ from "lodash";
 
-import { Kommand } from '../../common'
-import { kuzzleFlags } from '../../support/kuzzle'
+import { Kommand } from "../../common";
+import { kuzzleFlags } from "../../support/kuzzle";
 
 class SdkQuery extends Kommand {
   public static description = `
@@ -64,90 +64,100 @@ Default fallback to API action
   public static flags = {
     help: flags.help(),
     arg: flags.string({
-      char: 'a',
-      description: 'Additional argument. Repeatable. (e.g. "-a refresh=wait_for")',
-      multiple: true
+      char: "a",
+      description:
+        'Additional argument. Repeatable. (e.g. "-a refresh=wait_for")',
+      multiple: true,
     }),
     body: flags.string({
-      description: 'Request body in JS or JSON format. Will be read from STDIN if available.',
-      default: '{}'
+      description:
+        "Request body in JS or JSON format. Will be read from STDIN if available.",
+      default: "{}",
     }),
     editor: flags.boolean({
-      description: 'Open an editor (EDITOR env variable) to edit the request before sending.'
+      description:
+        "Open an editor (EDITOR env variable) to edit the request before sending.",
     }),
-    'body-editor': flags.boolean({
-      description: 'Open an editor (EDITOR env variable) to edit the body before sending.'
+    "body-editor": flags.boolean({
+      description:
+        "Open an editor (EDITOR env variable) to edit the body before sending.",
     }),
     index: flags.string({
-      char: 'i',
-      description: 'Index argument'
+      char: "i",
+      description: "Index argument",
     }),
     collection: flags.string({
-      char: 'c',
-      description: 'Collection argument'
+      char: "c",
+      description: "Collection argument",
     }),
     id: flags.string({
-      description: 'ID argument (_id)'
+      description: "ID argument (_id)",
     }),
     display: flags.string({
-      description: 'Path of the property to display from the response (empty string to display the result)',
-      default: 'result'
+      description:
+        "Path of the property to display from the response (empty string to display the result)",
+      default: "result",
     }),
     ...kuzzleFlags,
   };
 
   static args = [
-    { name: 'controller:action', description: 'Controller and action (eg: "server:now")', required: true },
-  ]
+    {
+      name: "controller:action",
+      description: 'Controller and action (eg: "server:now")',
+      required: true,
+    },
+  ];
 
-  static readStdin = true
+  static readStdin = true;
 
   async runSafe() {
-    const [controller, action] = this.args['controller:action'].split(':')
+    const [controller, action] = this.args["controller:action"].split(":");
 
-    const requestArgs: any = {}
+    const requestArgs: any = {};
 
-    requestArgs.index = this.flags.index
-    requestArgs.collection = this.flags.collection
-    requestArgs._id = this.flags.id
+    requestArgs.index = this.flags.index;
+    requestArgs.collection = this.flags.collection;
+    requestArgs._id = this.flags.id;
 
     for (const keyValue of this.flags.arg || []) {
-      const key = keyValue.substr(0, keyValue.indexOf('='))
-      const value = keyValue.substr(keyValue.indexOf('=') + 1)
+      const key = keyValue.substr(0, keyValue.indexOf("="));
+      const value = keyValue.substr(keyValue.indexOf("=") + 1);
 
-      requestArgs[key] = value
+      requestArgs[key] = value;
     }
 
-    const body = this.stdin ? this.stdin : this.flags.body
+    const body = this.stdin ? this.stdin : this.flags.body;
 
     let request = {
       controller,
       action,
       ...requestArgs,
       body: this.parseJs(body),
-    }
+    };
 
     // content from user editor
-    if (this.flags.editor && this.flags['body-editor']) {
-      throw new Error('You cannot specify --editor and --body-editor at the same time')
+    if (this.flags.editor && this.flags["body-editor"]) {
+      throw new Error(
+        "You cannot specify --editor and --body-editor at the same time"
+      );
+    } else if (this.flags.editor) {
+      request = this.fromEditor(request, { json: true });
+    } else if (this.flags["body-editor"]) {
+      request.body = this.fromEditor(request.body, { json: true });
     }
-    else if (this.flags.editor) {
-      request = this.fromEditor(request, { json: true })
-    }
-    else if (this.flags['body-editor']) {
-      request.body = this.fromEditor(request.body, { json: true })
-    }
 
-    const response = await this.sdk.query(request)
+    const response = await this.sdk.query(request);
 
-    const display = this.flags.display === ''
-      ? response
-      : _.get(response, this.flags.display)
+    const display =
+      this.flags.display === ""
+        ? response
+        : _.get(response, this.flags.display);
 
-    this.log(JSON.stringify(display, null, 2))
+    this.log(JSON.stringify(display, null, 2));
 
-    this.logOk(`Successfully executed "${controller}:${action}"`)
+    this.logOk(`Successfully executed "${controller}:${action}"`);
   }
 }
 
-export default SdkQuery
+export default SdkQuery;

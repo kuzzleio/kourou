@@ -1,17 +1,16 @@
-const
-  { Kuzzle, WebSocket, Http } = require('kuzzle-sdk'),
-  { setWorldConstructor } = require('cucumber');
+const { Kuzzle, WebSocket, Http } = require("kuzzle-sdk"),
+  { setWorldConstructor } = require("cucumber");
 
-require('./assertions');
+require("./assertions");
 
 class KuzzleWorld {
   constructor(attach, parameters) {
     this.attach = attach.attach;
     this.parameters = parameters;
 
-    this._host = process.env.KUZZLE_HOST || 'localhost';
-    this._port = process.env.KUZZLE_PORT || '7512';
-    this._protocol = process.env.KUZZLE_PROTOCOL || 'websocket';
+    this._host = process.env.KUZZLE_HOST || "localhost";
+    this._port = process.env.KUZZLE_PORT || "7512";
+    this._protocol = process.env.KUZZLE_PROTOCOL || "websocket";
 
     // Intermediate steps should store values inside this object
     this.props = {};
@@ -46,17 +45,15 @@ class KuzzleWorld {
   }
 
   parseObjectArray(dataTable) {
-    const
-      objectArray = [],
+    const objectArray = [],
       keys = dataTable.rawTable[0];
 
     for (let i = 1; i < dataTable.rawTable.length; i++) {
-      const
-        object = {},
+      const object = {},
         rawObject = dataTable.rawTable[i];
 
       for (let j = 0; j < keys.length; j++) {
-        if (rawObject[j] !== '-') {
+        if (rawObject[j] !== "-") {
           object[keys[j]] = JSON.parse(rawObject[j]);
         }
       }
@@ -71,10 +68,10 @@ class KuzzleWorld {
     let protocol;
 
     switch (this.protocol) {
-      case 'http':
+      case "http":
         protocol = new Http(this.host, { port: this.port });
         break;
-      case 'websocket':
+      case "websocket":
         protocol = new WebSocket(this.host, { port: this.port });
         break;
       default:

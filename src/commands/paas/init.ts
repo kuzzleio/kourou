@@ -1,31 +1,37 @@
-import path from 'path'
-import fs from 'fs'
+import path from "path";
+import fs from "fs";
 
-import { flags } from '@oclif/command'
+import { flags } from "@oclif/command";
 
-import { PaasKommand } from '../../support/PaasKommand'
+import { PaasKommand } from "../../support/PaasKommand";
 
 class PaasInit extends PaasKommand {
-  public static description = 'Initialize a PaaS project in current directory';
+  public static description = "Initialize a PaaS project in current directory";
 
   public static flags = {
     help: flags.help(),
   };
 
   static args = [
-    { name: 'project', description: 'Kuzzle PaaS project name', required: true },
-  ]
+    {
+      name: "project",
+      description: "Kuzzle PaaS project name",
+      required: true,
+    },
+  ];
 
   async runSafe() {
-    const packageJsonPath = path.join(process.cwd(), 'package.json')
+    const packageJsonPath = path.join(process.cwd(), "package.json");
 
     if (!fs.existsSync(packageJsonPath)) {
-      throw new Error(`Cannot find package json in current directory. (${packageJsonPath})`)
+      throw new Error(
+        `Cannot find package json in current directory. (${packageJsonPath})`
+      );
     }
 
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
 
-    this.logInfo('Add the "kuzzle" property inside project package.json.')
+    this.logInfo('Add the "kuzzle" property inside project package.json.');
 
     packageJson.kuzzle = {
       paas: {
@@ -37,4 +43,4 @@ class PaasInit extends PaasKommand {
   }
 }
 
-export default PaasInit
+export default PaasInit;

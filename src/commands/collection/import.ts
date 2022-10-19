@@ -1,64 +1,71 @@
-import path from 'path'
-import fs from 'fs'
+import path from "path";
+import fs from "fs";
 
-import { flags } from '@oclif/command'
-import { Kommand } from '../../common'
-import { kuzzleFlags } from '../../support/kuzzle'
-import { restoreCollectionData, restoreCollectionMappings } from '../../support/restore-collection'
+import { flags } from "@oclif/command";
+import { Kommand } from "../../common";
+import { kuzzleFlags } from "../../support/kuzzle";
+import {
+  restoreCollectionData,
+  restoreCollectionMappings,
+} from "../../support/restore-collection";
 
 export default class CollectionImport extends Kommand {
   static keepAuth = true;
 
-  static description = 'Imports a collection'
+  static description = "Imports a collection";
 
   static flags = {
     help: flags.help({}),
-    'batch-size': flags.string({
-      description: 'Maximum batch size (see limits.documentsWriteCount config)',
-      default: '200'
+    "batch-size": flags.string({
+      description: "Maximum batch size (see limits.documentsWriteCount config)",
+      default: "200",
     }),
     index: flags.string({
-      description: 'If set, override the index destination name',
+      description: "If set, override the index destination name",
     }),
     collection: flags.string({
-      description: 'If set, override the collection destination name',
+      description: "If set, override the collection destination name",
     }),
-    'no-mappings': flags.boolean({
-      description: 'Skip collection mappings'
+    "no-mappings": flags.boolean({
+      description: "Skip collection mappings",
     }),
     ...kuzzleFlags,
     protocol: flags.string({
-      description: 'Kuzzle protocol (http or websocket)',
-      default: 'ws',
+      description: "Kuzzle protocol (http or websocket)",
+      default: "ws",
     }),
-  }
+  };
 
   static args = [
-    { name: 'path', description: 'Dump directory path', required: true },
-  ]
+    { name: "path", description: "Dump directory path", required: true },
+  ];
 
   async runSafe() {
-    this.logInfo(`Start importing dump from ${this.args.path}`)
+    this.logInfo(`Start importing dump from ${this.args.path}`);
 
-    if (!this.flags['no-mappings']) {
-      const mappingsPath = path.join(this.args.path, 'mappings.json')
-      const dump = JSON.parse(fs.readFileSync(mappingsPath, 'utf8'))
+    if (!this.flags["no-mappings"]) {
+      const mappingsPath = path.join(this.args.path, "mappings.json");
+      const dump = JSON.parse(fs.readFileSync(mappingsPath, "utf8"));
 
       await restoreCollectionMappings(
         this.sdk,
         dump,
         this.flags.index,
-        this.flags.collection)
+        this.flags.collection
+      );
     }
 
     const { index, collection, total } = await restoreCollectionData(
       this.sdk,
       this.log.bind(this),
-      Number(this.flags['batch-size']),
-      path.join(this.args.path, 'documents.jsonl'),
+      Number(this.flags["batch-size"]),
+      path.join(this.args.path, "documents.jsonl"),
       this.flags.index,
-      this.flags.collection)
+      this.flags.collection
+    );
 
-    this.logOk(`Successfully imported ${total} documents from "${this.args.path}" in "${index}:${collection}"`)
+    this.logOk(
+      `Successfully imported ${total} documents from "${this.args.path}" in "${index}:${collection}"`
+    );
   }
 }
