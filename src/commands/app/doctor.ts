@@ -4,6 +4,7 @@ import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
 import { Client } from "@elastic/elasticsearch";
 import { execute } from "../../support/execute";
+import _ from "lodash";
 
 export default class AppDoctor extends Kommand {
   static description = "Analyze a Kuzzle application";
@@ -30,19 +31,56 @@ export default class AppDoctor extends Kommand {
       controller: "debug",
       action: "nodeVersion",
     });
-    const adminExists = await this.sdk.server.adminExists({})
 
     this.log(`----------------- Doctor begin his job ! -----------------`);
     this.log(`General checks`);
+
+    const adminExists = await this.sdk.server.adminExists({});
+    const anonymous = await this.sdk.security.getRole("anonymous");
+    const anonymousNotRestricted = _.isEqual(anonymous.controllers, { '*': { actions: { '*': true } } });
+
     if (adminExists) {
       this.logOk(`An admin user exists`);
     } else {
       this.logKo("No admin user exists");
       suggestions.push(
-        `Create an admin user with "kourou security:createUser '{"content":{"profileIds":["admin"]}}' --id admin"`
+        `Create an admin user ${anonymousNotRestricted ? 'and restrict anonymous role ' : ''}with
+           kourou security:createFirstAdmin '{
+              credentials: {
+                local: {
+                  username: "admin",
+                  password: "password"
+                }
+              }
+            }' ${anonymousNotRestricted ? '-a reset=true' : ''}`
       );
     }
 
+  if(anonymousNotRestricted && adminExists) {
+      this.logKo(`Anonymous role does not restrict access to any controller`);
+      suggestions.push(
+        `Restrict anonymous role controllers with
+           kourou security:updateRole '{
+            "controllers": {
+              "auth": {
+                "actions": {
+                  "checkToken": true,
+                  "getCurrentUser": true,
+                  "getMyRights": true,
+                  "login": true
+                }
+              },
+              "server": {
+                "actions": {
+                  "publicApi": true,
+                  "openapi": true
+                }
+              }
+            }
+          }' --id=anonymous
+          // or make your own restrictions (see: https://docs.kuzzle.io/core/2/guides/main-concepts/permissions/#roles)`
+      );
+    }
     const config = await this.sdk.server.getConfig({});
     if (config) {
       if (config.cluster.enabled) {
