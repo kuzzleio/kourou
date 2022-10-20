@@ -37,14 +37,18 @@ export default class AppDoctor extends Kommand {
 
     const adminExists = await this.sdk.server.adminExists({});
     const anonymous = await this.sdk.security.getRole("anonymous");
-    const anonymousNotRestricted = _.isEqual(anonymous.controllers, { '*': { actions: { '*': true } } });
+    const anonymousNotRestricted = _.isEqual(anonymous.controllers, {
+      "*": { actions: { "*": true } },
+    });
 
     if (adminExists) {
       this.logOk(`An admin user exists`);
     } else {
       this.logKo("No admin user exists");
       suggestions.push(
-        `Create an admin user ${anonymousNotRestricted ? 'and restrict anonymous role ' : ''}with
+        `Create an admin user ${
+          anonymousNotRestricted ? "and restrict anonymous role " : ""
+        }with
            kourou security:createFirstAdmin '{
               credentials: {
                 local: {
@@ -52,11 +56,11 @@ export default class AppDoctor extends Kommand {
                   password: "password"
                 }
               }
-            }' ${anonymousNotRestricted ? '-a reset=true' : ''}`
+            }' ${anonymousNotRestricted ? "-a reset=true" : ""}`
       );
     }
 
-  if(anonymousNotRestricted && adminExists) {
+    if (anonymousNotRestricted && adminExists) {
       this.logKo(`Anonymous role does not restrict access to any controller`);
       suggestions.push(
         `Restrict anonymous role controllers with
