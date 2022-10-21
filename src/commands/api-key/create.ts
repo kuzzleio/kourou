@@ -1,27 +1,27 @@
-import { flags } from '@oclif/command'
+import { flags } from "@oclif/command";
 
-import { Kommand } from '../../common'
-import { kuzzleFlags } from '../../support/kuzzle'
+import { Kommand } from "../../common";
+import { kuzzleFlags } from "../../support/kuzzle";
 
 class ApiKeyCreate extends Kommand {
-  public static description = 'Creates a new API Key for a user';
+  public static description = "Creates a new API Key for a user";
 
   public static flags = {
     help: flags.help(),
     id: flags.string({
-      description: 'API Key unique ID',
+      description: "API Key unique ID",
     }),
     expire: flags.string({
-      description: 'API Key validity',
-      default: '-1',
+      description: "API Key validity",
+      default: "-1",
     }),
     ...kuzzleFlags,
   };
 
   static args = [
-    { name: 'user', description: 'User kuid', required: true },
-    { name: 'description', description: 'API Key description', required: true },
-  ]
+    { name: "user", description: "User kuid", required: true },
+    { name: "description", description: "API Key description", required: true },
+  ];
 
   async runSafe() {
     const apiKey = await this.sdk.security.createApiKey(
@@ -29,12 +29,15 @@ class ApiKeyCreate extends Kommand {
       this.args.description,
       {
         _id: this.flags.id,
-        expiresIn: this.flags.expire
-      })
+        expiresIn: this.flags.expire,
+      }
+    );
 
-    this.logOk(`Successfully created API Key "${apiKey._id}" for user "${this.args.user}"`)
-    this.log(apiKey._source.token)
+    this.logOk(
+      `Successfully created API Key "${apiKey._id}" for user "${this.args.user}"`
+    );
+    this.log(apiKey._source.token);
   }
 }
 
-export default ApiKeyCreate
+export default ApiKeyCreate;
