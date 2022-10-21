@@ -47,16 +47,16 @@ export default class AppDoctor extends Kommand {
 
   async runSafe() {
     const suggestions = [];
-    const nodeVersion = await this.sdk.query({
-      controller: "debug",
-      action: "nodeVersion",
-    });
 
-    this.log(`----------------- Doctor begin his job ! -----------------`);
+    const [nodeVersion, adminExists, anonymous] = await Promise.all([
+      await this.sdk.query({ controller: "debug",  action: "nodeVersion", }),
+      await this.sdk.server.adminExists({}),
+      await this.sdk.security.getRole("anonymous")
+    ]);
+
+    this.log(`----------------- DoKtor begin his job ! -----------------`);
     this.log(`General checks`);
 
-    const adminExists = await this.sdk.server.adminExists({});
-    const anonymous = await this.sdk.security.getRole("anonymous");
     const anonymousNotRestricted = _.isEqual(anonymous.controllers, {
       "*": { actions: { "*": true } },
     });
@@ -124,17 +124,15 @@ export default class AppDoctor extends Kommand {
       suggestions.push("Check Redis instance dedicated to memory storage");
     }
 
-    this.logOk("Kuzzle Version: " + config.version);
-    this.logOk("Kuzzle NodeJS version: " + nodeVersion.result);
+    this.logOk(`Kuzzle Version: ${config.version}`);
+    this.logOk(`Kuzzle NodeJS version: ${nodeVersion.result}`);
     if (nodeVersion.result > this.NODEJS_MAX_VERSION) {
       this.logKo(
-        "=> Kuzzle NodeJS version is not compatible with Kuzzle (max version is " +
-          this.NODEJS_MAX_VERSION +
-          ")"
+        `=> Kuzzle NodeJS version is not compatible with Kuzzle (max version is ${this.NODEJS_MAX_VERSION})`
       );
     }
-    this.logOk("NodeJS Building version: " + process.version);
-    if (nodeVersion.result != process.version) {
+    this.logOk(`NodeJS Building version: ${process.version}`);
+    if (nodeVersion.result !== process.version) {
       this.logKo(
         "=> Kuzzle node version is different from the build node version"
       );
@@ -202,17 +200,16 @@ export default class AppDoctor extends Kommand {
       try {
         const result = await execute(command, lib);
         if (result.stdout) {
-          this.logOk("   " + lib + " is installed");
+          this.logOk(` ${lib} is installed`);
         }
       } catch (e) {
-        this.logKo("  => " + lib + " is not installed");
+        this.logKo(`  => ${lib} is not installed`);
         notInstalled.push(lib);
       }
     }
     if (notInstalled.length) {
       suggestions.push(
-        "Install missing libraries: sudo apt-get install " +
-          notInstalled.join(" ")
+        `Install missing libraries: sudo apt-get install ${notInstalled.join(" ")}`
       );
     }
 
@@ -223,14 +220,14 @@ export default class AppDoctor extends Kommand {
       if (matches === null || matches.length === 0) {
         this.logKo("Docker Version cannot be found");
       } else {
-        this.logOk("Docker Compose Version: " + matches[1]);
+        this.logOk(`Docker Compose Version: ${matches[1]}`);
       }
     } catch (error: any) {
       this.logKo("Docker Compose cannot be found");
       suggestions.push("Install Docker Compose with 'npm run install:docker'");
     }
 
-    this.log(`----------------- Doctor finish his job ! -----------------`);
+    this.log(`----------------- DoKtor finish his job ! -----------------`);
     this.log(`He suggest you to check the following points:`);
     for (const suggestion of suggestions) {
       this.logInfo(" => " + suggestion);
