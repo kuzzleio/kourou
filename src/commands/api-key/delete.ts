@@ -1,10 +1,10 @@
-import { flags } from '@oclif/command'
+import { flags } from "@oclif/command";
 
-import { Kommand } from '../../common'
-import { kuzzleFlags } from '../../support/kuzzle'
+import { Kommand } from "../../common";
+import { kuzzleFlags } from "../../support/kuzzle";
 
 class ApiKeyDelete extends Kommand {
-  public static description = 'Deletes an API key.';
+  public static description = "Deletes an API key.";
 
   public static flags = {
     help: flags.help(),
@@ -12,19 +12,19 @@ class ApiKeyDelete extends Kommand {
   };
 
   static args = [
-    { name: 'user', description: 'User kuid', required: true },
-    { name: 'id', description: 'API Key unique ID', required: true },
-  ]
-
-  static examples = [
-    'kourou vault:delete sigfox-gateway 1k-BF3EBjsXdvA2PR8x'
+    { name: "user", description: "User kuid", required: true },
+    { name: "id", description: "API Key unique ID", required: true },
   ];
 
-  async runSafe() {
-    await this.sdk.security.deleteApiKey(this.args.user, this.args.id)
+  static examples = ["kourou vault:delete sigfox-gateway 1k-BF3EBjsXdvA2PR8x"];
 
-    this.logOk(`Successfully deleted API Key "${this.args.id}" of user "${this.args.user}"`)
+  async runSafe() {
+    await this.sdk.security.deleteApiKey(this.args.user, this.args.id);
+
+    this.logOk(
+      `Successfully deleted API Key "${this.args.id}" of user "${this.args.user}"`
+    );
   }
 }
 
-export default ApiKeyDelete
+export default ApiKeyDelete;
