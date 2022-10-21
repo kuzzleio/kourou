@@ -25,6 +25,26 @@ export default class AppDoctor extends Kommand {
   ELK_MAX_VERSION = "7.17";
   NODEJS_MAX_VERSION = "14";
 
+  COMMANDS_PLATFORMS: {[key: string] : string} = {
+    "linux" : "which"
+  };
+
+  LIBRARIES_PLATFORMS : {[key: string] : string[]} = {
+    "linux" : [
+      "curl",
+      "gdb",
+      "git",
+      "gnupg",
+      "make",
+      "python3",
+      "libfontconfig",
+      "libzmq3-dev",
+      "wget",
+      "procps",
+      "libunwind-dev",
+    ]
+  };
+
   async runSafe() {
     const suggestions = [];
     const nodeVersion = await this.sdk.query({
@@ -168,22 +188,10 @@ export default class AppDoctor extends Kommand {
 
     let librairies: string[] = [];
     let command = "";
-    // TODO : other platforms
-    if (process.platform === "linux") {
-      librairies = [
-        "curl",
-        "gdb",
-        "git",
-        "gnupg",
-        "make",
-        "python3",
-        "libfontconfig",
-        "libzmq3-dev",
-        "wget",
-        "procps",
-        "libunwind-dev",
-      ];
-      command = "which";
+    const platform = process.platform.toLowerCase();
+    if (platform in this.LIBRARIES_PLATFORMS && platform in this.COMMANDS_PLATFORMS) {
+      librairies = this.LIBRARIES_PLATFORMS[platform];
+      command = this.COMMANDS_PLATFORMS[platform];
     }
     this.log("Kuzzle related libraries installed");
     const notInstalled: string[] = [];
