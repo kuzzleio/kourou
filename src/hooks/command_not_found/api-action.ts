@@ -1,6 +1,6 @@
-import chalk from 'chalk'
-import { Hook } from '@oclif/config'
-import SdkQuery from '../../commands/sdk/query'
+import chalk from "chalk";
+import { Hook } from "@oclif/config";
+import SdkQuery from "../../commands/sdk/query";
 
 /**
  * Hooks that run the corresponding API action with sdk:query.
@@ -28,87 +28,82 @@ import SdkQuery from '../../commands/sdk/query'
  *  - kourou bulk:import index collection '{bulkData: []}'
  */
 
-const hook: Hook<'command_not_found'> = async function (opts) {
-  const [controller, action] = opts.id.split(':')
+const hook: Hook<"command_not_found"> = async function (opts) {
+  const [controller, action] = opts.id.split(":");
 
   if (!controller || !action) {
-    return
+    return;
   }
 
-  this.log(chalk.yellow(`[ℹ] Unknown command "${opts.id}", fallback to API action`))
+  this.log(
+    chalk.yellow(`[ℹ] Unknown command "${opts.id}", fallback to API action`)
+  );
 
-  const args = process.argv.slice(3)
-  const commandArgs = [opts.id]
+  const args = process.argv.slice(3);
+  const commandArgs = [opts.id];
 
   // first positional argument (index or body)
-  if (args[0] && args[0].charAt(0) !== '-') {
-    if (args[0].includes('{') && !args.includes('--body')) {
-      commandArgs.push('--body')
-      commandArgs.push(args[0])
+  if (args[0] && args[0].charAt(0) !== "-") {
+    if (args[0].includes("{") && !args.includes("--body")) {
+      commandArgs.push("--body");
+      commandArgs.push(args[0]);
 
-      args.splice(0, 1)
-    }
-    else if (!args.includes('--index') && !args.includes('-i')) {
-      commandArgs.push('-i')
-      commandArgs.push(args[0])
+      args.splice(0, 1);
+    } else if (!args.includes("--index") && !args.includes("-i")) {
+      commandArgs.push("-i");
+      commandArgs.push(args[0]);
 
-      args.splice(0, 1)
+      args.splice(0, 1);
     }
-  }
-  else {
-    const exitCode = await SdkQuery.run([...commandArgs, ...args])
+  } else {
+    const exitCode = await SdkQuery.run([...commandArgs, ...args]);
     process.exit(exitCode);
   }
 
   // 2th positional argument (collection)
-  if (args[0]
-    && args[0].charAt(0) !== '-'
-    && !args.includes('-c')
-    && !args.includes('--collection')
+  if (
+    args[0] &&
+    args[0].charAt(0) !== "-" &&
+    !args.includes("-c") &&
+    !args.includes("--collection")
   ) {
-    commandArgs.push('-c')
-    commandArgs.push(args[0])
+    commandArgs.push("-c");
+    commandArgs.push(args[0]);
 
-    args.splice(0, 1)
-  }
-  else {
-    const exitCode = await SdkQuery.run([...commandArgs, ...args])
+    args.splice(0, 1);
+  } else {
+    const exitCode = await SdkQuery.run([...commandArgs, ...args]);
     process.exit(exitCode);
   }
 
   // 3th positional argument (_id or body)
-  if (args[0] && args[0].charAt(0) !== '-') {
-    if (args[0].includes('{') && !args.includes('--body')) {
-      commandArgs.push('--body')
-      commandArgs.push(args[0])
+  if (args[0] && args[0].charAt(0) !== "-") {
+    if (args[0].includes("{") && !args.includes("--body")) {
+      commandArgs.push("--body");
+      commandArgs.push(args[0]);
 
-      args.splice(0, 1)
-    }
-    else if (!args.includes('--id')) {
-      commandArgs.push('--id')
-      commandArgs.push(args[0])
+      args.splice(0, 1);
+    } else if (!args.includes("--id")) {
+      commandArgs.push("--id");
+      commandArgs.push(args[0]);
 
-      args.splice(0, 1)
+      args.splice(0, 1);
     }
-  }
-  else {
-    const exitCode = await SdkQuery.run([...commandArgs, ...args])
+  } else {
+    const exitCode = await SdkQuery.run([...commandArgs, ...args]);
     process.exit(exitCode);
   }
 
   // 4th positional argument (body)
-  if (args[0]
-    && args[0].charAt(0) !== '-'
-    && !commandArgs.includes('--body')
-  ) {
-    commandArgs.push('--body')
-    commandArgs.push(args[0])
+  if (args[0] && args[0].charAt(0) !== "-" && !commandArgs.includes("--body")) {
+    commandArgs.push("--body");
+    commandArgs.push(args[0]);
 
-    args.splice(0, 1)
+    args.splice(0, 1);
   }
 
-  const exitCode = await SdkQuery.run([...commandArgs, ...args])
+  const exitCode = await SdkQuery.run([...commandArgs, ...args]);
   process.exit(exitCode);
-}
+};
 
-export default hook
+export default hook;
