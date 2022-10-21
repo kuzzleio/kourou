@@ -25,12 +25,12 @@ export default class AppDoctor extends Kommand {
   ELK_MAX_VERSION = "7.17";
   NODEJS_MAX_VERSION = "14";
 
-  COMMANDS_PLATFORMS: {[key: string] : string} = {
-    "linux" : "which"
+  COMMANDS_PLATFORMS: { [key: string]: string } = {
+    linux: "which",
   };
 
-  LIBRARIES_PLATFORMS : {[key: string] : string[]} = {
-    "linux" : [
+  LIBRARIES_PLATFORMS: { [key: string]: string[] } = {
+    linux: [
       "curl",
       "gdb",
       "git",
@@ -42,7 +42,7 @@ export default class AppDoctor extends Kommand {
       "wget",
       "procps",
       "libunwind-dev",
-    ]
+    ],
   };
 
   async runSafe() {
@@ -189,7 +189,10 @@ export default class AppDoctor extends Kommand {
     let librairies: string[] = [];
     let command = "";
     const platform = process.platform.toLowerCase();
-    if (platform in this.LIBRARIES_PLATFORMS && platform in this.COMMANDS_PLATFORMS) {
+    if (
+      platform in this.LIBRARIES_PLATFORMS &&
+      platform in this.COMMANDS_PLATFORMS
+    ) {
       librairies = this.LIBRARIES_PLATFORMS[platform];
       command = this.COMMANDS_PLATFORMS[platform];
     }
