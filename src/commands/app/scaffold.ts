@@ -88,5 +88,6 @@ export default class AppScaffold extends Kommand {
 
     await fsp.rename(path.join(tmpDir.name, flavor), destination);
 
+    tmp.setGracefulCleanup();
   }
 }
