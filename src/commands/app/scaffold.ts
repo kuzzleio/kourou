@@ -3,7 +3,9 @@ import chalk from 'chalk';
 import * as fsp from 'fs/promises';
 import Listr from 'listr';
 import fetch from 'node-fetch';
+import path from 'path';
 import tar from 'tar';
+import tmp from 'tmp';
 
 import { Kommand } from '../../common';
 
@@ -41,6 +43,7 @@ export default class AppScaffold extends Kommand {
       await tasks.run();
 
       this.log('')
+
       this.logOk(`Scaffolding complete! Install dependencies with :
         ${chalk.grey(`cd ${destination} && npm run docker npm install`)}
         and run your application with:
@@ -50,7 +53,8 @@ export default class AppScaffold extends Kommand {
   }
 
   async cloneTemplate(flavor: string, destination: string) {
-    const templatesDir = '/tmp/kourou-template';
+    const tmpDir = tmp.dirSync();
+
     const assetName = `${flavor}.tar.gz`;
     const link = `https://github.com/kuzzleio/project-templates/releases/latest/download/${assetName}`;
 
@@ -66,25 +70,23 @@ export default class AppScaffold extends Kommand {
       throw new Error(`Directory "${destination}" already exist`);
     }
 
-    await fsp.mkdir(templatesDir, { recursive: true })
-
     const response = await fetch(link);
 
     if (! response.ok) {
       throw new Error(`Scaffold for the flavor "${flavor}" does not exist`);
     }
 
-    await fsp.writeFile(`${templatesDir}/${assetName}`, response.body as any);
+    await fsp.writeFile(path.join(tmpDir.name, assetName), response.body as any);
 
     tar.extract({
-      cwd: templatesDir,
-      file: `${templatesDir}/${assetName}`,
+      cwd: tmpDir.name,
+      file: path.join(tmpDir.name, assetName),
       keep: true,
       strict: true,
       sync: true,
     });
 
-    await fsp.rename( `${templatesDir}/${flavor}`, `${destination}`);
+    await fsp.rename(path.join(tmpDir.name, flavor), destination);
 
   }
 }
