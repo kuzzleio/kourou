@@ -10,7 +10,7 @@ type ExecutionResult = {
   exitCode: number;
 };
 
-class ExecutionError extends Error {
+export class ExecutionError extends Error {
   public command: string;
 
   public result: ExecutionResult;
