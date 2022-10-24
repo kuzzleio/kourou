@@ -27,7 +27,7 @@ class PaasLogs extends PaasKommand {
     const user = await this.paas.auth.getCurrentUser();
     this.logInfo(`Logged as "${user._id}" for project "${this.flags.project || this.getProject()}"`);
 
-    const logs = await this.paas.query({
+    const logs: any = await this.paas.query({
       controller: 'application',
       action: 'logs',
       environmentId: this.args.environment,

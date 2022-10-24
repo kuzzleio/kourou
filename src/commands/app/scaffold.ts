@@ -72,7 +72,7 @@ export default class AppScaffold extends Kommand {
 
     const response = await fetch(link);
 
-    if (! response.ok) {
+    if (!response.ok) {
       throw new Error(`Scaffold for the flavor "${flavor}" does not exist`);
     }
 

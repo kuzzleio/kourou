@@ -14,11 +14,17 @@ class PaasLogin extends PaasKommand {
   public static flags = {
     help: flags.help(),
     project: flags.string({
-      description: 'Current PaaS project'
+      description: 'Current PaaS project',
+      required: false
     }),
     username: flags.string({
       description: 'PaaS username',
     }),
+    only_npm: flags.boolean({
+      description: 'Only perform the login on the private NPM registry',
+      required: false,
+      default: false
+    })
   };
 
   async runSafe() {
@@ -31,6 +37,11 @@ class PaasLogin extends PaasKommand {
     const password = process.env.KUZZLE_PAAS_PASSWORD
       ? process.env.KUZZLE_PAAS_PASSWORD
       : await cli.prompt(`    Password`, { type: 'hide' });
+
+    if (this.flags.only_npm) {
+      await this.authenticateNPM(username, password);
+      return;
+    }
 
     await this.initPaasClient({ username, password });
 
