@@ -1,10 +1,13 @@
-import { flags } from '@oclif/command'
-import chalk from 'chalk'
-import Listr from 'listr'
+import { flags } from '@oclif/command';
+import chalk from 'chalk';
+import * as fsp from 'fs/promises';
+import Listr from 'listr';
+import fetch from 'node-fetch';
+import path from 'path';
+import tar from 'tar';
+import tmp from 'tmp';
 
-
-import { Kommand } from '../../common'
-import { execute } from '../../support/execute'
+import { Kommand } from '../../common';
 
 
 export default class AppScaffold extends Kommand {
@@ -16,13 +19,14 @@ export default class AppScaffold extends Kommand {
     help: flags.help(),
     flavor: flags.string({
       default: 'generic',
-      description: 'Template flavor ("generic", "iot-platform")'
+      description: `Template flavor ("generic", "iot-platform", "iot-console", "iot-platform").
+    Those can be found here: https://github.com/kuzzleio/project-templates`
     })
-  }
+  };
 
   static args = [
     { name: 'destination', description: 'Directory to scaffold the app', required: true },
-  ]
+  ];
 
   async runSafe() {
     const destination = this.args.destination
@@ -35,16 +39,55 @@ export default class AppScaffold extends Kommand {
       },
     ]);
 
-    await tasks.run();
-    this.log('')
-    this.logOk(`Scaffolding complete! Use ${chalk.grey(`cd ${destination} && npm run docker npm install`)} install dependencies and then ${chalk.grey(`npm run docker:dev`)} to run your application!`);
+    try {
+      await tasks.run();
+
+      this.log('')
+
+      this.logOk(`Scaffolding complete! Install dependencies with :
+        ${chalk.grey(`cd ${destination} && npm run docker npm install`)}
+        and run your application with:
+        ${chalk.grey('npm run docker:dev')}`)
+    }
+    catch (error: any) { }
   }
 
   async cloneTemplate(flavor: string, destination: string) {
-    await execute('git', 'clone', '--depth=1', 'https://github.com/kuzzleio/project-templates', '--branch', flavor, '--single-branch');
+    const tmpDir = tmp.dirSync();
 
-    await execute('mv', `project-templates/${flavor}`, `${destination}/`);
+    const assetName = `${flavor}.tar.gz`;
+    const link = `https://github.com/kuzzleio/project-templates/releases/latest/download/${assetName}`;
 
-    await execute('rm', '-rf', 'project-templates/');
+    let directoryExist = true;
+    try {
+      await fsp.access(destination);
+    }
+    catch (error) {
+      directoryExist = false;
+    }
+
+    if (directoryExist) {
+      throw new Error(`Directory "${destination}" already exist`);
+    }
+
+    const response = await fetch(link);
+
+    if (! response.ok) {
+      throw new Error(`Scaffold for the flavor "${flavor}" does not exist`);
+    }
+
+    await fsp.writeFile(path.join(tmpDir.name, assetName), response.body as any);
+
+    tar.extract({
+      cwd: tmpDir.name,
+      file: path.join(tmpDir.name, assetName),
+      keep: true,
+      strict: true,
+      sync: true,
+    });
+
+    await fsp.rename(path.join(tmpDir.name, flavor), destination);
+
+    tmp.setGracefulCleanup();
   }
 }
