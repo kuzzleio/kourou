@@ -1,31 +1,29 @@
-import { flags } from '@oclif/command'
+import { flags } from "@oclif/command";
 
-import { Kommand } from '../../common'
-import { kuzzleFlags } from '../../support/kuzzle'
+import { Kommand } from "../../common";
+import { kuzzleFlags } from "../../support/kuzzle";
 
 class ApiKeySearch extends Kommand {
-  public static description = 'Lists a user\'s API Keys.';
+  public static description = "Lists a user's API Keys.";
 
   public static flags = {
     help: flags.help(),
     filter: flags.string({
-      description: 'Filter to match the API Key descriptions',
+      description: "Filter to match the API Key descriptions",
     }),
     ...kuzzleFlags,
   };
 
-  static args = [
-    { name: 'user', description: 'User kuid', required: true },
-  ]
+  static args = [{ name: "user", description: "User kuid", required: true }];
 
   async runSafe() {
-    let query = {}
+    let query = {};
     if (this.flags.filter) {
       query = {
         match: {
           description: this.flags.filter,
         },
-      }
+      };
     }
 
     const result = await this.sdk.security.searchApiKeys(
@@ -33,21 +31,22 @@ class ApiKeySearch extends Kommand {
       query,
       {
         from: 0,
-        size: 100
-      })
+        size: 100,
+      }
+    );
 
-    this.logOk(`${result.total} API Keys found for user ${this.args.user}`)
+    this.logOk(`${result.total} API Keys found for user ${this.args.user}`);
 
     if (result.total !== 0) {
-      this.log('')
+      this.log("");
       for (const { _id, _source } of result.hits) {
-        this.log(` - Key "${_id}"`)
-        this.log(`    Description: ${_source.description}`)
-        this.log(`    Fingerprint: ${_source.fingerprint}`)
-        this.log(`    Expires at: ${_source.expiresAt}`)
+        this.log(` - Key "${_id}"`);
+        this.log(`    Description: ${_source.description}`);
+        this.log(`    Fingerprint: ${_source.fingerprint}`);
+        this.log(`    Expires at: ${_source.expiresAt}`);
       }
     }
   }
 }
 
-export default ApiKeySearch
+export default ApiKeySearch;

@@ -1,42 +1,42 @@
-import { flags } from '@oclif/command'
+import { flags } from "@oclif/command";
 
-import { Http, WebSocket, Kuzzle } from 'kuzzle-sdk'
+import { Http, WebSocket, Kuzzle } from "kuzzle-sdk";
 
-const SECOND = 1000
+const SECOND = 1000;
 
 export const kuzzleFlags = {
   host: flags.string({
-    description: 'Kuzzle server host',
-    default: process.env.KUZZLE_HOST || 'localhost',
+    description: "Kuzzle server host",
+    default: process.env.KUZZLE_HOST || "localhost",
   }),
   port: flags.string({
-    description: 'Kuzzle server port',
-    default: process.env.KUZZLE_PORT || '7512',
+    description: "Kuzzle server port",
+    default: process.env.KUZZLE_PORT || "7512",
   }),
   ssl: flags.boolean({
-    description: 'Use SSL to connect to Kuzzle',
+    description: "Use SSL to connect to Kuzzle",
     default: Boolean(process.env.KUZZLE_SSL) || undefined,
   }),
   username: flags.string({
-    description: 'Kuzzle username (local strategy)',
-    default: process.env.KUZZLE_USERNAME || 'anonymous',
+    description: "Kuzzle username (local strategy)",
+    default: process.env.KUZZLE_USERNAME || "anonymous",
   }),
   password: flags.string({
-    description: 'Kuzzle user password',
+    description: "Kuzzle user password",
     default: process.env.KUZZLE_PASSWORD || undefined,
   }),
   protocol: flags.string({
-    description: 'Kuzzle protocol (http or ws)',
-    default: process.env.KUZZLE_PROTOCOL || 'ws',
+    description: "Kuzzle protocol (http or ws)",
+    default: process.env.KUZZLE_PROTOCOL || "ws",
   }),
   as: flags.string({
-    description: 'Impersonate a user',
+    description: "Impersonate a user",
   }),
-  'api-key': flags.string({
-    description: 'Kuzzle user api-key',
+  "api-key": flags.string({
+    description: "Kuzzle user api-key",
     default: process.env.KUZZLE_API_KEY || undefined,
-  })
-}
+  }),
+};
 
 export class KuzzleSDK {
   public sdk: Kuzzle;
@@ -57,88 +57,90 @@ export class KuzzleSDK {
 
   private refreshTimer?: NodeJS.Timeout;
 
-  private appVersion: string
+  private appVersion: string;
 
-  private appName: string
+  private appName: string;
 
   private ttl: string;
 
   private keepAuth: boolean;
 
   constructor(options: any) {
-    this.host = options.host
-    this.port = parseInt(options.port, 10)
-    this.ssl = options.ssl || this.port === 443
-    this.username = options.username
-    this.password = options.password
-    this.protocol = options.protocol
-    this.apikey = options['api-key'] || options.apiKey
-    this.appVersion = options.appVersion
-    this.appName = options.appName
-    this.ttl = options.ttl || '90s'
-    this.keepAuth = options.keepAuth || false
+    this.host = options.host;
+    this.port = parseInt(options.port, 10);
+    this.ssl = options.ssl || this.port === 443;
+    this.username = options.username;
+    this.password = options.password;
+    this.protocol = options.protocol;
+    this.apikey = options["api-key"] || options.apiKey;
+    this.appVersion = options.appVersion;
+    this.appName = options.appName;
+    this.ttl = options.ttl || "90s";
+    this.keepAuth = options.keepAuth || false;
 
     // Instantiate a fake SDK in the constructor to please TS
-    this.sdk = new Kuzzle(new WebSocket('nowhere'))
+    this.sdk = new Kuzzle(new WebSocket("nowhere"));
   }
 
   public async init(logger: any) {
-    let ProtocolClass
+    let ProtocolClass;
 
     // Avoid common mistake
-    if (this.protocol === 'websocket') {
-      this.protocol = 'ws'
+    if (this.protocol === "websocket") {
+      this.protocol = "ws";
     }
 
-    if (this.protocol === 'ws') {
-      ProtocolClass = WebSocket
-    }
-    else if (this.protocol === 'http') {
-      ProtocolClass = Http
-    }
-    else {
-      throw new TypeError(`Unknown protocol "${this.protocol}"`)
+    if (this.protocol === "ws") {
+      ProtocolClass = WebSocket;
+    } else if (this.protocol === "http") {
+      ProtocolClass = Http;
+    } else {
+      throw new TypeError(`Unknown protocol "${this.protocol}"`);
     }
 
-    this.sdk = new Kuzzle(new ProtocolClass(this.host, {
-      port: this.port,
-      sslConnection: this.ssl,
-      pingInterval: 20 * 1000,
-    }))
+    this.sdk = new Kuzzle(
+      new ProtocolClass(this.host, {
+        port: this.port,
+        sslConnection: this.ssl,
+        pingInterval: 20 * 1000,
+      })
+    );
 
     this.sdk.volatile = {
-      client: `${this.appName}@${this.appVersion}`
-    }
+      client: `${this.appName}@${this.appVersion}`,
+    };
 
-    this.sdk.on('networkError', (error: any) => logger.logKo(error.message))
+    this.sdk.on("networkError", (error: any) => logger.logKo(error.message));
 
-    logger.logInfo(`Connecting to ${this.protocol}${this.ssl ? 's' : ''}://${this.host}:${this.port} ...`)
+    logger.logInfo(
+      `Connecting to ${this.protocol}${this.ssl ? "s" : ""}://${this.host}:${
+        this.port
+      } ...`
+    );
 
-    await this.sdk.connect()
+    await this.sdk.connect();
 
     if (this.apikey) {
-      this.sdk.jwt = this.apikey
-    }
-    else if (this.username !== 'anonymous') {
+      this.sdk.jwt = this.apikey;
+    } else if (this.username !== "anonymous") {
       const credentials = {
         username: this.username,
         password: this.password,
-      }
+      };
 
-      await this.sdk.auth.login('local', credentials, this.ttl)
+      await this.sdk.auth.login("local", credentials, this.ttl);
 
       if (this.keepAuth) {
         this.refreshTimer = setInterval(async () => {
           try {
-            await this.sdk.auth.refreshToken()
+            await this.sdk.auth.refreshToken();
+          } catch (error: any) {
+            logger.logKo(`Cannot refresh token: ${error.message}`);
           }
-          catch (error: any) {
-            logger.logKo(`Cannot refresh token: ${error.message}`)
-          }
-        }, 80 * SECOND)
+        }, 80 * SECOND);
       }
 
-      logger.logInfo(`Loggued as ${this.username}.`)
+      logger.logInfo(`Loggued as ${this.username}.`);
     }
   }
 
@@ -151,82 +153,81 @@ export class KuzzleSDK {
    * @returns {void}
    */
   public async impersonate(userKuid: string, callback: { (): Promise<void> }) {
-    const currentToken = this.sdk.jwt
+    const currentToken = this.sdk.jwt;
 
-    let apiKey: any
+    let apiKey: any;
 
     try {
       apiKey = await this.security.createApiKey(
         userKuid,
-        'Kourou impersonation token',
-        { expiresIn: '2h', refresh: false } as any)
+        "Kourou impersonation token",
+        { expiresIn: "2h", refresh: false } as any
+      );
 
-      this.sdk.jwt = apiKey._source.token
+      this.sdk.jwt = apiKey._source.token;
 
-      await callback()
-    }
-    finally {
-      this.sdk.jwt = currentToken
+      await callback();
+    } finally {
+      this.sdk.jwt = currentToken;
 
       if (apiKey?._id) {
-        await this.security.deleteApiKey(userKuid, apiKey._id)
+        await this.security.deleteApiKey(userKuid, apiKey._id);
       }
     }
   }
 
   disconnect() {
-    this.sdk.disconnect()
+    this.sdk.disconnect();
 
     if (this.refreshTimer) {
-      clearInterval(this.refreshTimer)
+      clearInterval(this.refreshTimer);
     }
   }
 
   public query(request: any) {
     // Convert string to boolean when protocol is WebSocket
-    if (this.protocol === 'ws') {
+    if (this.protocol === "ws") {
       for (const [key, value] of Object.entries(request)) {
-        if (value === 'true') {
-          request[key] = true
-        }
-        else if (value === 'false') {
-          request[key] = false
+        if (value === "true") {
+          request[key] = true;
+        } else if (value === "false") {
+          request[key] = false;
         }
       }
     }
 
-    return this.sdk.query(request)
+    return this.sdk.query(request);
   }
 
   get document() {
-    return this.sdk.document
+    return this.sdk.document;
   }
 
   get collection() {
-    return this.sdk.collection
+    return this.sdk.collection;
   }
 
   get index() {
-    return this.sdk.index
+    return this.sdk.index;
   }
 
   get security() {
-    return this.sdk.security
+    return this.sdk.security;
   }
 
   get auth() {
-    return this.sdk.auth
+    return this.sdk.auth;
   }
 
   get server() {
-    return this.sdk.server
+    return this.sdk.server;
   }
 
   get realtime() {
-    return this.sdk.realtime
+    return this.sdk.realtime;
   }
 
   get ms() {
-    return this.sdk.ms
+    return this.sdk.ms;
   }
 }

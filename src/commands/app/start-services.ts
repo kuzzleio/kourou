@@ -1,15 +1,15 @@
-import { writeFileSync } from 'fs'
-import path from 'path';
+import { writeFileSync } from "fs";
+import path from "path";
 
-import { flags } from '@oclif/command'
-import chalk from 'chalk'
-import Listr from 'listr'
-import emoji from 'node-emoji'
+import { flags } from "@oclif/command";
+import chalk from "chalk";
+import Listr from "listr";
+import emoji from "node-emoji";
 
-import { Kommand } from '../../common'
-import { execute } from '../../support/execute'
+import { Kommand } from "../../common";
+import { execute } from "../../support/execute";
 
-const MIN_DOCO_VERSION = '1.12.0'
+const MIN_DOCO_VERSION = "1.12.0";
 
 const kuzzleServicesFile = `
 version: '3'
@@ -26,110 +26,120 @@ services:
       - "9200:9200"
     ulimits:
       nofile: 65536
-`
+`;
 
 export default class AppStartServices extends Kommand {
-  static initSdk = false
+  static initSdk = false;
 
-  public static description = 'Starts Kuzzle services (Elasticsearch and Redis)';
+  public static description =
+    "Starts Kuzzle services (Elasticsearch and Redis)";
 
   public static flags = {
     help: flags.help(),
     check: flags.boolean({
-      description: 'Check prerequisite before running services',
+      description: "Check prerequisite before running services",
       default: false,
     }),
   };
 
   async runSafe() {
-    this.createKourouDir()
+    this.createKourouDir();
 
-    const docoFilename = path.join(this.kourouDir, 'kuzzle-services.yml')
+    const docoFilename = path.join(this.kourouDir, "kuzzle-services.yml");
 
-    const successfullCheck = this.flags.check ?
-      await this.checkPrerequisites() :
-      true
+    const successfullCheck = this.flags.check
+      ? await this.checkPrerequisites()
+      : true;
 
     if (this.flags.check && successfullCheck) {
-      this.log(`\n${emoji.get('ok_hand')} Prerequisites are ${chalk.green.bold('OK')}!`)
-    }
-    else if (this.flags.check && !successfullCheck) {
-      throw new Error(`${emoji.get('shrug')} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle services.`)
+      this.log(
+        `\n${emoji.get("ok_hand")} Prerequisites are ${chalk.green.bold("OK")}!`
+      );
+    } else if (this.flags.check && !successfullCheck) {
+      throw new Error(
+        `${emoji.get(
+          "shrug"
+        )} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle services.`
+      );
     }
 
-    this.log(chalk.grey(`\nWriting docker-compose file to ${docoFilename}...\n`))
+    this.log(
+      chalk.grey(`\nWriting docker-compose file to ${docoFilename}...\n`)
+    );
 
-    writeFileSync(docoFilename, kuzzleServicesFile)
+    writeFileSync(docoFilename, kuzzleServicesFile);
 
     // clean up
-    await execute('docker-compose', '-f', docoFilename, 'down')
+    await execute("docker-compose", "-f", docoFilename, "down");
 
     try {
-      await execute('docker-compose', '-f', docoFilename, 'up', '-d')
+      await execute("docker-compose", "-f", docoFilename, "up", "-d");
 
-      this.logOk('Elasticsearch and Redis are booting in the background right now.')
-      this.log(chalk.grey('\nTo watch the logs, run'))
-      this.log(chalk.grey(`  docker-compose -f ${docoFilename} logs -f\n`))
-      this.log('  Elasticsearch port: 9200')
-      this.log('  Redis port: 6379')
-    }
-    catch (error: any) {
-      this.logKo(` Something went wrong: ${error.message}`)
-      this.log(chalk.grey('If you want to investigate the problem, try running'))
+      this.logOk(
+        "Elasticsearch and Redis are booting in the background right now."
+      );
+      this.log(chalk.grey("\nTo watch the logs, run"));
+      this.log(chalk.grey(`  docker-compose -f ${docoFilename} logs -f\n`));
+      this.log("  Elasticsearch port: 9200");
+      this.log("  Redis port: 6379");
+    } catch (error: any) {
+      this.logKo(` Something went wrong: ${error.message}`);
+      this.log(
+        chalk.grey("If you want to investigate the problem, try running")
+      );
 
-      this.log(chalk.grey(`  docker-compose -f ${docoFilename} up\n`))
+      this.log(chalk.grey(`  docker-compose -f ${docoFilename} up\n`));
     }
   }
 
   public async checkPrerequisites(): Promise<boolean> {
-    this.log(chalk.grey('Checking prerequisites...'))
+    this.log(chalk.grey("Checking prerequisites..."));
 
     const checks: Listr = new Listr([
       {
         title: `docker-compose exists and the version is at least ${MIN_DOCO_VERSION}`,
         task: async () => {
           try {
-            const docov = await execute('docker-compose', '-v')
-            const matches = docov.stdout.match(/[^0-9.]*([0-9.]*).*/)
+            const docov = await execute("docker-compose", "-v");
+            const matches = docov.stdout.match(/[^0-9.]*([0-9.]*).*/);
             if (matches === null) {
               throw new Error(
-                'Unable to read docker-compose verson. This is weird.',
-              )
+                "Unable to read docker-compose verson. This is weird."
+              );
             }
-            const docoVersion = matches.length > 0 ? matches[1] : null
+            const docoVersion = matches.length > 0 ? matches[1] : null;
 
             if (docoVersion === null) {
               throw new Error(
-                'Unable to read docker-compose version. This is weird.',
-              )
+                "Unable to read docker-compose version. This is weird."
+              );
             }
             try {
               if (docoVersion < MIN_DOCO_VERSION) {
                 throw new Error(
-                  `The detected version of docker-compose (${docoVersion}) is not recent enough (${MIN_DOCO_VERSION})`,
-                )
+                  `The detected version of docker-compose (${docoVersion}) is not recent enough (${MIN_DOCO_VERSION})`
+                );
               }
             } catch (error: any) {
-              throw new Error(error)
+              throw new Error(error);
             }
           } catch (error: any) {
             throw new Error(
-              'No docker-compose found. Are you sure docker-compose is installed?',
-            )
+              "No docker-compose found. Are you sure docker-compose is installed?"
+            );
           }
         },
-      }
-    ])
+      },
+    ]);
 
     try {
-      await checks.run()
+      await checks.run();
 
-      return true
-    }
-    catch (error: any) {
-      this.logKo(error.message)
+      return true;
+    } catch (error: any) {
+      this.logKo(error.message);
 
-      return false
+      return false;
     }
   }
 }

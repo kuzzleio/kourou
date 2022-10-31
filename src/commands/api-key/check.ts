@@ -1,10 +1,10 @@
-import { flags } from '@oclif/command'
+import { flags } from "@oclif/command";
 
-import { Kommand } from '../../common'
-import { kuzzleFlags } from '../../support/kuzzle'
+import { Kommand } from "../../common";
+import { kuzzleFlags } from "../../support/kuzzle";
 
 class ApiKeyCheck extends Kommand {
-  public static description = 'Checks an API key validity';
+  public static description = "Checks an API key validity";
 
   public static flags = {
     help: flags.help(),
@@ -12,23 +12,20 @@ class ApiKeyCheck extends Kommand {
   };
 
   static args = [
-    { name: 'token', description: 'API key token', required: true },
-  ]
+    { name: "token", description: "API key token", required: true },
+  ];
 
-  static examples = [
-    'kourou api-key:check eyJhbG...QxfQrc'
-  ]
+  static examples = ["kourou api-key:check eyJhbG...QxfQrc"];
 
   async runSafe() {
-    const { valid } = await this.sdk.auth.checkToken(this.args.token)
+    const { valid } = await this.sdk.auth.checkToken(this.args.token);
 
     if (valid) {
-      this.logOk('API key is still valid')
-    }
-    else {
-      this.logKo('API key is not valid')
+      this.logOk("API key is still valid");
+    } else {
+      this.logKo("API key is not valid");
     }
   }
 }
 
-export default ApiKeyCheck
+export default ApiKeyCheck;

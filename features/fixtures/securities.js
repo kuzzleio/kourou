@@ -4,19 +4,19 @@ module.exports = {
   users: {
     gordon: {
       content: {
-        profileIds: ['default']
-      }
+        profileIds: ["default"],
+      },
     },
-    'test-admin': {
+    "test-admin": {
       content: {
-        profileIds: ['admin']
+        profileIds: ["admin"],
       },
       credentials: {
         local: {
-          username: 'test-admin',
-          password: 'password'
-        }
-      }
-    }
-  }
+          username: "test-admin",
+          password: "password",
+        },
+      },
+    },
+  },
 };
