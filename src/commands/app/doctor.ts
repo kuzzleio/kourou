@@ -22,14 +22,15 @@ export default class AppDoctor extends Kommand {
 
   static readStdin = true;
 
-  ELK_MAX_VERSION = "7.17";
-  NODEJS_MAX_VERSION = "14";
+  ELK_MAX_VERSION = 7.17;
+  NODEJS_MAX_VERSION = 14;
 
-  COMMANDS_PLATFORMS: { [key: string]: string } = {
+  // because ocliff we can't use 'as const' inference for object keys and values
+  COMMANDS_PLATFORMS: Record<string, string> = {
     linux: "which",
   };
 
-  LIBRARIES_PLATFORMS: { [key: string]: string[] } = {
+  LIBRARIES_PLATFORMS: Record<string, string[]> = {
     linux: [
       "curl",
       "gdb",
@@ -49,9 +50,9 @@ export default class AppDoctor extends Kommand {
     const suggestions = [];
 
     const [nodeVersion, adminExists, anonymous] = await Promise.all([
-      await this.sdk.query({ controller: "debug",  action: "nodeVersion", }),
-      await this.sdk.server.adminExists({}),
-      await this.sdk.security.getRole("anonymous")
+      this.sdk.query({ controller: "debug",  action: "nodeVersion", }),
+      this.sdk.server.adminExists({}),
+      this.sdk.security.getRole("anonymous")
     ]);
 
     this.log(`----------------- DoKtor begin his job ! -----------------`);
@@ -126,7 +127,7 @@ export default class AppDoctor extends Kommand {
 
     this.logOk(`Kuzzle Version: ${config.version}`);
     this.logOk(`Kuzzle NodeJS version: ${nodeVersion.result}`);
-    if (nodeVersion.result > this.NODEJS_MAX_VERSION) {
+    if (nodeVersion.result as any > this.NODEJS_MAX_VERSION) {
       this.logKo(
         `=> Kuzzle NodeJS version is not compatible with Kuzzle (max version is ${this.NODEJS_MAX_VERSION})`
       );
@@ -143,13 +144,8 @@ export default class AppDoctor extends Kommand {
 
     let elkVersion;
     try {
-      const client = new Client({ node: this.flags.elasticsearch });
-      const info = await client.info();
-
-      this.log(`ElasticSearch checks`);
-      this.logOk(`Elasticsearch Cluster name: ${info.body.cluster_name}`);
-      this.logOk(`ElasticSearch Status: ${info.meta.connection.status}`);
-      elkVersion = info.body.version.number;
+      const serverInfo = await this.sdk.server.info({});
+      elkVersion = parseFloat(serverInfo.serverInfo.services.publicStorage.version);
       if (elkVersion < this.ELK_MAX_VERSION) {
         this.logOk(
           `ElasticSearch Version: ${elkVersion} which is compatible with Kuzzle (max version is ${this.ELK_MAX_VERSION})`
@@ -162,6 +158,12 @@ export default class AppDoctor extends Kommand {
           `Downgrade ElasticSearch to a compatible version (max: ${this.ELK_MAX_VERSION})`
         );
       }
+
+      const client = new Client({ node: this.flags.elasticsearch });
+      const info = await client.info();
+      this.log(`ElasticSearch checks`);
+      this.logOk(`Elasticsearch Cluster name: ${info.body.cluster_name}`);
+      this.logOk(`ElasticSearch Status: ${info.meta.connection.status}`);
 
       const nodes = await client.cat.nodes({ format: "json" });
 
@@ -181,7 +183,7 @@ export default class AppDoctor extends Kommand {
         }))
       );
     } catch (e) {
-      this.logKo("=> ElasticSearch is not reachable");
+      this.logKo("=> Cannot show more information about ElasticSearch (cluster name, nodes, indices) because it's not accessible");
     }
 
     let librairies: string[] = [];
