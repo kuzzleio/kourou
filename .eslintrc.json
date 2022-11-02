@@ -3,19 +3,10 @@
     "oclif",
     "oclif-typescript"
   ],
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "plugins": ["kuzzle"],
   "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
-  "rules": {
-    "@typescript-eslint/explicit-module-boundary-types": 0,
-    "@typescript-eslint/no-explicit-any": 0,
-    "@typescript-eslint/no-shadow": "error",
-    "no-empty": ["error", { "allowEmptyCatch": true }],
-    "no-shadow": "off"
-  }
+    "plugin:kuzzle/default",
+    "plugin:kuzzle/node",
+    "plugin:kuzzle/typescript"
+  ]
 }
