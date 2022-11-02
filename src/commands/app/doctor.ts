@@ -23,7 +23,7 @@ export default class AppDoctor extends Kommand {
   static readStdin = true;
 
   ELK_MAX_VERSION = 7.17;
-  NODEJS_MAX_VERSION = 14;
+  NODEJS_MAX_VERSION = 16;
 
   // because ocliff we can't use 'as const' inference for object keys and values
   COMMANDS_PLATFORMS: Record<string, string> = {
