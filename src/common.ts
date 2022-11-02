@@ -1,127 +1,129 @@
-import os from 'os';
-import fs from 'fs'
-import path from 'path'
+import os from "os";
+import fs from "fs";
+import path from "path";
 
-import { Command } from '@oclif/command'
-import chalk from 'chalk'
-import emoji from 'node-emoji'
-import get from 'lodash/get'
-import isObject from 'lodash/isObject'
-import KeplerCompanion from 'kepler-companion';
+import { Command } from "@oclif/command";
+import chalk from "chalk";
+import emoji from "node-emoji";
+import get from "lodash/get";
+import isObject from "lodash/isObject";
+import KeplerCompanion from "kepler-companion";
 
-import { KuzzleSDK } from './support/kuzzle'
-import { Editor, EditorParams } from './support/editor'
+import { KuzzleSDK } from "./support/kuzzle";
+import { Editor, EditorParams } from "./support/editor";
 
 export abstract class Kommand extends Command {
   // Instantiate a dummy SDK to avoid the this.sdk notation everywhere -_-
-  protected sdk: KuzzleSDK = new KuzzleSDK({ host: 'nowhere' })
+  protected sdk: KuzzleSDK = new KuzzleSDK({ host: "nowhere" });
 
-  private exitCode = 0
+  private exitCode = 0;
 
   private telemetry: KeplerCompanion = new KeplerCompanion();
 
-  public args: any
+  public args: any;
 
-  public flags: any
+  public flags: any;
 
-  public static initSdk = true
+  public static initSdk = true;
 
-  public static disableLog = false
+  public static disableLog = false;
 
-  public static readStdin = false
+  public static readStdin = false;
 
-  public static keepAuth = false
+  public static keepAuth = false;
 
-  public stdin: string | undefined = undefined
+  public stdin: string | undefined = undefined;
 
-  public sdkOptions: any = {}
+  public sdkOptions: any = {};
 
-  protected kourouDir = path.join(os.homedir(), '.kourou')
+  protected kourouDir = path.join(os.homedir(), ".kourou");
 
   constructor(argv: any, config: any) {
-    super(argv, config)
+    super(argv, config);
 
-    if (process.env.KOUROU_USAGE
-      && process.env.KOUROU_USAGE !== 'true'
-    ) {
+    if (process.env.KOUROU_USAGE && process.env.KOUROU_USAGE !== "true") {
       this.telemetry.turnOff();
     }
   }
 
   private get logSilent() {
-    return this.flags['print-raw'] || (this.constructor as any).disableLog
+    return this.flags["print-raw"] || (this.constructor as any).disableLog;
   }
 
   protected createKourouDir() {
     if (!fs.existsSync(this.kourouDir)) {
-      fs.mkdirSync(this.kourouDir)
+      fs.mkdirSync(this.kourouDir);
     }
   }
 
   public printCommand() {
-    const klass: any = this.constructor
+    const klass: any = this.constructor;
 
     const shortDescription = klass.description
-      .split('\n')
-      .filter((line: string) => line.length > 0)[0]
+      .split("\n")
+      .filter((line: string) => line.length > 0)[0];
 
-    this.log('')
-    this.log(`${chalk.blue.bold(`${emoji.get('rocket')} Kourou`)} - ${shortDescription}`)
-    this.log('')
+    this.log("");
+    this.log(
+      `${chalk.blue.bold(
+        `${emoji.get("rocket")} Kourou`
+      )} - ${shortDescription}`
+    );
+    this.log("");
   }
 
   public log(message?: string): void {
     if (this.logSilent) {
-      return
+      return;
     }
 
-    super.log(` ${message}`)
+    super.log(` ${message}`);
   }
 
   public logOk(message: string): void {
     if (this.logSilent) {
-      return
+      return;
     }
 
-    this.log(chalk.green(`[✔] ${message}`))
+    this.log(chalk.green(`[✔] ${message}`));
   }
 
   public logInfo(message: string): void {
     if (this.logSilent) {
-      return
+      return;
     }
 
-    this.log(chalk.yellow(`[ℹ] ${message}`))
+    this.log(chalk.yellow(`[ℹ] ${message}`));
   }
 
   public logKo(message?: string): void {
     if (this.logSilent) {
-      return
+      return;
     }
 
-    this.exitCode = 1
-    this.log(chalk.red(`[X] ${message}`))
+    this.exitCode = 1;
+    this.log(chalk.red(`[X] ${message}`));
   }
 
   async run() {
-    const kommand = (this.constructor as unknown) as any
+    const kommand = this.constructor as unknown as any;
 
-    const result = this.parse(kommand)
-    this.args = result.args
-    this.flags = result.flags
+    const result = this.parse(kommand);
+    this.args = result.args;
+    this.flags = result.flags;
 
-    this.printCommand()
+    this.printCommand();
 
     if (kommand.readStdin) {
-      this.stdin = this.fromStdin()
+      this.stdin = this.fromStdin();
 
       if (this.stdin && this.flags.editor) {
-        throw new Error('Unable to use flag --editor when reading from STDIN')
+        throw new Error("Unable to use flag --editor when reading from STDIN");
       }
     }
 
     // Lifecycle hook
-    await this.beforeConnect()
+    await this.beforeConnect();
 
     let err;
     try {
@@ -132,49 +134,53 @@ export abstract class Kommand extends Command {
           appName: this.config.name,
           appVersion: this.config.version,
           keepAuth: kommand.keepAuth,
-        })
+        });
 
-        await this.sdk.init(this)
+        await this.sdk.init(this);
       }
 
       if (this.flags.as) {
-        this.logInfo(`Impersonate user "${this.flags.as}"`)
-        await this.sdk.impersonate(this.flags.as, async () => this.runSafe())
+        this.logInfo(`Impersonate user "${this.flags.as}"`);
+        await this.sdk.impersonate(this.flags.as, async () => this.runSafe());
+      } else {
+        await this.runSafe();
       }
-      else {
-        await this.runSafe()
-      }
-    }
-    catch (error: any) {
-      const stack = error.kuzzleStack || error.stack
-      const errorLink = typeof error.id === 'string' && error.id.split('.').length === 3
-        ? ` (https://docs.kuzzle.io/core/2/api/errors/error-codes/${error.id.split('.')[0]})`
-        : ''
+    } catch (error: any) {
+      const stack = error.kuzzleStack || error.stack;
+      const errorLink =
+        typeof error.id === "string" && error.id.split(".").length === 3
+          ? ` (https://docs.kuzzle.io/core/2/api/errors/error-codes/${
+              error.id.split(".")[0]
+            })`
+          : "";
 
-      this.logKo(`Error stack: \n${stack || error.message}\n\nError status: ${error.status}\n\nError id: ${error.id}${errorLink}`)
+      this.logKo(
+        `Error stack: \n${stack || error.message}\n\nError status: ${
+          error.status
+        }\n\nError id: ${error.id}${errorLink}`
+      );
 
       if (Array.isArray(error.errors)) {
         for (const e of error.errors) {
-          this.logKo(`${e.document._id} : ${e.reason}`)
+          this.logKo(`${e.document._id} : ${e.reason}`);
         }
       } else {
-        this.logKo(JSON.stringify(error.reason))
+        this.logKo(JSON.stringify(error.reason));
       }
 
       err = true;
 
       this.exitCode = 1;
-    }
-    finally {
+    } finally {
       if (kommand.id !== undefined) {
         await Promise.race([
           this.telemetry.add({
             action: kommand.id,
             product: this.config.name,
             version: this.config.version,
-            tags: { err }
+            tags: { err },
           }),
-          new Promise(resolve => setTimeout(resolve, 500)),
+          new Promise((resolve) => setTimeout(resolve, 500)),
         ]);
       }
 
@@ -183,7 +189,7 @@ export abstract class Kommand extends Command {
       process.exit(this.exitCode);
     }
 
-    return this.exitCode
+    return this.exitCode;
   }
 
   beforeConnect() {
@@ -191,7 +197,7 @@ export abstract class Kommand extends Command {
   }
 
   async runSafe() {
-    throw new Error('You must implement runSafe() method')
+    throw new Error("You must implement runSafe() method");
   }
 
   /**
@@ -201,36 +207,36 @@ export abstract class Kommand extends Command {
    */
   fromStdin(): string | undefined {
     // cucumber mess with stdin so I have to do this trick
-    if (process.env.NODE_ENV === 'test' || process.stdin.isTTY) {
-      return
+    if (process.env.NODE_ENV === "test" || process.stdin.isTTY) {
+      return;
     }
 
-    return fs.readFileSync(0, 'utf8')
+    return fs.readFileSync(0, "utf8");
   }
 
   fromEditor(
     defaultContent: Record<string, unknown> | string,
     options?: EditorParams
   ): Record<string, unknown> {
-    let content = defaultContent
+    let content = defaultContent;
 
-    if (typeof content !== 'string') {
-      content = JSON.stringify(content)
+    if (typeof content !== "string") {
+      content = JSON.stringify(content);
     }
-    const editor = new Editor(content, options)
+    const editor = new Editor(content, options);
 
-    editor.run()
+    editor.run();
 
-    return this.parseJs(editor.content)
+    return this.parseJs(editor.content);
   }
 
   public parseJs(input?: string) {
     if (!input) {
-      return {}
+      return {};
     }
 
     // eslint-disable-next-line no-eval
-    return eval(`var o = ${input}; o`)
+    return eval(`var o = ${input}; o`);
   }
 }
 
@@ -243,7 +249,7 @@ export abstract class Kommand extends Command {
  * @see https://lodash.com/docs/4.17.15#values
  */
 export function pickValues(object: any, fields: string[]): any[] {
-  return fields.map(f => formatValueForCSV(get(object, f)))
+  return fields.map((f) => formatValueForCSV(get(object, f)));
 }
 
 /**
@@ -255,8 +261,8 @@ export function pickValues(object: any, fields: string[]): any[] {
  */
 export function formatValueForCSV(value: any) {
   if (isObject(value)) {
-    return '[NOT_SCALAR]'
+    return "[NOT_SCALAR]";
   }
 
-  return value
+  return value;
 }

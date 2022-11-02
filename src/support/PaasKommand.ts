@@ -1,17 +1,19 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
-import { Kommand } from '../common';
-import { KuzzleSDK } from './kuzzle';
+import { Kommand } from "../common";
+import { KuzzleSDK } from "./kuzzle";
 
-type PaaSClientCredentials = { username: string, password: string } | { apiKey: string };
+type PaaSClientCredentials =
+  | { username: string; password: string }
+  | { apiKey: string };
 
 export class PaasKommand extends Kommand {
   static initSdk = false;
 
   protected host = process.env.KUZZLE_PAAS_HOST
     ? process.env.KUZZLE_PAAS_HOST
-    : 'console.paas.kuzzle.io';
+    : "console.paas.kuzzle.io";
   protected port = process.env.KUZZLE_PAAS_PORT
     ? parseInt(process.env.KUZZLE_PAAS_PORT as string)
     : 443;
@@ -24,19 +26,18 @@ export class PaasKommand extends Kommand {
 
   async initPaasClient(credentials: PaaSClientCredentials) {
     this.paas = new KuzzleSDK({
-      protocol: 'http',
+      protocol: "http",
       host: this.host,
       port: this.port,
       ssl: this.ssl,
-      ...credentials
+      ...credentials,
     });
 
     try {
       await this.paas.init(this);
-    }
-    catch (error: any) {
-      if (error.id === 'plugin.strategy.missing_user') {
-        this.logKo('Incorrect username or password.');
+    } catch (error: any) {
+      if (error.id === "plugin.strategy.missing_user") {
+        this.logKo("Incorrect username or password.");
         process.exit(1);
       }
 
@@ -52,10 +53,10 @@ export class PaasKommand extends Kommand {
    * Retrieve the current project name from the command line or current package.json
    */
   getProject() {
-    const packageJsonPath = path.join(process.cwd(), 'package.json')
+    const packageJsonPath = path.join(process.cwd(), "package.json");
 
     if (fs.existsSync(packageJsonPath)) {
-      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+      const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
 
       if (packageJson.kuzzle && packageJson.kuzzle.paas) {
         return packageJson.kuzzle.paas.project;
@@ -63,7 +64,9 @@ export class PaasKommand extends Kommand {
     }
 
     if (!this.flags.project) {
-      throw new Error('Cannot find PaaS project in package.json or command line');
+      throw new Error(
+        "Cannot find PaaS project in package.json or command line"
+      );
     }
 
     return this.flags.project;
