@@ -23,7 +23,7 @@ Query body
   Examples:
     - kourou api document:create -i iot -c sensors --body '{creation: Date.now())}'
     - kourou api admin:loadMappings < mappings.json
-    - echo '{dynamic: "strict"}' | kourou sdk:query collection:create -i iot -c sensors
+    - echo '{dynamic: "strict"}' | kourou api collection:create -i iot -c sensors
 
 Other
 
@@ -36,7 +36,7 @@ Other
 
 Default fallback to API action
 
-  It's possible to use the "sdk:query" command by only specifying the corresponding controller
+  It's possible to use the "api" command by only specifying the corresponding controller
   and action as first argument.
 
   Kourou will try to infer the first arguments to one the following pattern:

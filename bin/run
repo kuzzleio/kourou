@@ -17,8 +17,8 @@ function showHelp(...args) {
     error.message += `
 
 If you tried to execute and API action you can see
-available options by displaying the "sdk:query" command help:
-  - kourou sdk:query --help`;
+available options by displaying the "api" command help:
+  - kourou api --help`;
 
     throw error;
   }

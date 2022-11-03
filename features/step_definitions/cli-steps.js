@@ -179,7 +179,7 @@ Then(
   async function () {
     try {
       const { stdout } = await kourou(
-        "sdk:query",
+        "api",
         "auth:getCurrentUser",
         "--api-key",
         this.props.result._source.token
