@@ -132,6 +132,7 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou app:debug-proxy`](#kourou-appdebug-proxy)
 * [`kourou app:scaffold DESTINATION`](#kourou-appscaffold-destination)
 * [`kourou app:start-services`](#kourou-appstart-services)
+* [`kourou app:doctor`](#kourou-appdoctor)
 * [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
@@ -359,6 +360,21 @@ OPTIONS
 ```
 
 _See code: [src/commands/app/start-services.ts](src/commands/app/start-services.ts)_
+
+## `kourou app:doctor`
+
+Analyzes your Kuzzle installation which some configuration and version checks and outputs some suggestions
+to fix problems.
+
+```
+USAGE
+  $ kourou app:doctor
+
+OPTIONS
+  --elasticsearch ElasticSearch URL (default: http://localhost:9200)
+```
+
+_See code: [src/commands/app/doctor.ts](src/commands/app/doctor.ts)_
 
 ## `kourou autocomplete [SHELL]`
 
