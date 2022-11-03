@@ -101,7 +101,7 @@ export class KuzzleSDK {
       new ProtocolClass(this.host, {
         port: this.port,
         sslConnection: this.ssl,
-        pingInterval: 5000,
+        pingInterval: 20 * 1000,
       })
     );
 

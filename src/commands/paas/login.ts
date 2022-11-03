@@ -43,6 +43,11 @@ class PaasLogin extends PaasKommand {
       return;
     }
 
+    if (this.flags.only_npm) {
+      await this.authenticateNPM(username, password);
+      return;
+    }
+
     await this.initPaasClient({ username, password });
 
     const apiKey: ApiKey = await this.paas.auth.createApiKey(

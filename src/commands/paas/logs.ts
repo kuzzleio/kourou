@@ -39,7 +39,7 @@ class PaasLogs extends PaasKommand {
       }"`
     );
 
-    const logs = await this.paas.query({
+    const logs: any = await this.paas.query({
       controller: "application",
       action: "logs",
       environmentId: this.args.environment,
