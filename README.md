@@ -536,7 +536,7 @@ OPTIONS
 
 EXAMPLES
   kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
   --no-interactive
 ```
 
@@ -1211,6 +1211,8 @@ OPTIONS
   --ssl                        Use SSL to connect to Kuzzle
 
   --username=username          [default: anonymous] Kuzzle username (local strategy)
+
+  --print-raw                  Print only the query result to stdout
 
 DESCRIPTION
   Executes an API query.

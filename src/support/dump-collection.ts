@@ -67,7 +67,7 @@ abstract class AbstractDumper {
     protected readonly batchSize: number,
     protected readonly destPath: string,
     protected readonly query: any = {},
-    protected readonly scrollTTL: string = "2s"
+    protected readonly scrollTTL: string = "20s"
   ) {
     this.collectionDir = path.join(this.destPath, this.collection);
     this.options = {

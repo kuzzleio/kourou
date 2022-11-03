@@ -49,6 +49,7 @@ exportable fields in the mapping will be exported.`,
     scrollTTL: flags.string({
       description: `The scroll TTL option to pass to the dump operation (which performs a document.search under the hood),
 expressed in ms format, e.g. '2s', '1m', '3h'.`,
+      default: "20s",
     }),
     ...kuzzleFlags,
     protocol: flags.string({
