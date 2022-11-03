@@ -125,7 +125,7 @@ All other arguments and options will be passed as-is to the `api` method.
 # Commands
 
 <!-- commands -->
-* [`kourou api CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
+* [`kourou api CONTROLLER:ACTION`](#kourou-api-controlleraction)
 * [`kourou api-key:check TOKEN`](#kourou-api-keycheck-token)
 * [`kourou api-key:create USER`](#kourou-api-keycreate-user)
 * [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
