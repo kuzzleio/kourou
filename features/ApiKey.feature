@@ -2,9 +2,10 @@ Feature: Api Key Management
 
   @security
   Scenario: Create an API Key
-    When I run the command "api-key:create gordon" with flags:
-      | --description | "Test api key" |
-      | --id          | "gordon-key"   |
+    When I run the command "api-key:create" with:
+      | arg  | gordon       |            |
+      | arg  | Test api key |            |
+      | flag | --id         |gordon-key  |
     Then I successfully call the route "security":"searchApiKeys" with args:
       | userId | "gordon" |
     And I should receive a "hits" array of objects matching:
