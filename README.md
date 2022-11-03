@@ -70,7 +70,7 @@ You can impersonate a user before executing a command with the `--as` flag and a
 
 User impersonation require the following rights for the authenticated user: `security:createApiKey` , `security:deleteApiKey`
 ```bash
-$ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password admin
+$ kourou api auth:getCurrentUser --as gordon --username admin --password admin
 
  🚀 Kourou - Executes an API query.
 
@@ -82,7 +82,7 @@ $ kourou sdk:query auth:getCurrentUser --as gordon --username admin --password a
 
 ## Automatic command infering for API actions
 
-When no command is found, Kourou will try to execute the given command with the `sdk:query` command.
+When no command is found, Kourou will try to execute the given command with the `api` command.
 
 The first argument has to be the name of the controller and the action separated by a semicolon (eg `document:create` )
 
@@ -117,7 +117,7 @@ It will automatically infer and accept the following lists of arguments:
  - `<command> <index> <collection> <id> <body>`
     - _eg: `kourou document:create iot sensors sigfox-123 '{temperature: 42}'` _
 
-All other arguments and options will be passed as-is to the `sdk:query` method.
+All other arguments and options will be passed as-is to the `api` method.
 
 > Note: you can pass arguments to the API actions with the `--arg` or `-a` option in your command, e.g.
 > `kourou security:createFirstAdmin '{ ...credentials here... }' -a reset=true`
@@ -125,16 +125,15 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 # Commands
 
 <!-- commands -->
+* [`kourou api CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
 * [`kourou api-key:check TOKEN`](#kourou-api-keycheck-token)
 * [`kourou api-key:create USER`](#kourou-api-keycreate-user)
 * [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
 * [`kourou app:debug-proxy`](#kourou-appdebug-proxy)
 * [`kourou app:scaffold DESTINATION`](#kourou-appscaffold-destination)
-* [`kourou app:services:start`](#kourou-appservicesstart)
 * [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
-* [`kourou collection:import PATH`](#kourou-collectionimport-path)
 * [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
 * [`kourou document:search INDEX COLLECTION [QUERY]`](#kourou-documentsearch-index-collection-query)
 * [`kourou es:indices:cat`](#kourou-esindicescat)
@@ -155,17 +154,14 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou help [COMMAND]`](#kourou-help-command)
 * [`kourou import PATH`](#kourou-import-path)
 * [`kourou index:export INDEX`](#kourou-indexexport-index)
-* [`kourou index:import PATH`](#kourou-indeximport-path)
 * [`kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE`](#kourou-paasdeploy-environment-applicationid-image)
 * [`kourou paas:init PROJECT`](#kourou-paasinit-project)
 * [`kourou paas:login`](#kourou-paaslogin)
 * [`kourou paas:logs ENVIRONMENT APPLICATION`](#kourou-paaslogs-environment-application)
 * [`kourou profile:export`](#kourou-profileexport)
-* [`kourou profile:import PATH`](#kourou-profileimport-path)
 * [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
 * [`kourou redis:list-keys [MATCH]`](#kourou-redislist-keys-match)
-* [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
-* [`kourou user:import-mappings PATH`](#kourou-userimport-mappings-path)
+* [`kourou services:start`](#kourou-appservicesstart)
 * [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
 * [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
 * [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
@@ -1034,31 +1030,6 @@ OPTIONS
 
 _See code: [src/commands/profile/export.ts](src/commands/profile/export.ts)_
 
-## `kourou profile:import PATH`
-
-Imports profiles
-
-```
-USAGE
-  $ kourou profile:import PATH
-
-ARGUMENTS
-  PATH  Dump file
-
-OPTIONS
-  --api-key=api-key    Kuzzle user api-key
-  --as=as              Impersonate a user
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --password=password  Kuzzle user password
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
-```
-
-_See code: [src/commands/profile/import.ts](src/commands/profile/import.ts)_
-
 ## `kourou realtime:subscribe INDEX COLLECTION [FILTERS]`
 
 Subscribes to realtime notifications
@@ -1275,31 +1246,6 @@ DESCRIPTION
 ```
 
 _See code: [src/commands/api.ts](src/commands/api.ts)_
-
-## `kourou user:import-mappings PATH`
-
-Imports users collection mappings
-
-```
-USAGE
-  $ kourou user:import-mappings PATH
-
-ARGUMENTS
-  PATH  Dump file
-
-OPTIONS
-  --api-key=api-key    Kuzzle user api-key
-  --as=as              Impersonate a user
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --password=password  Kuzzle user password
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
-```
-
-_See code: [src/commands/user/import-mappings.ts](src/commands/user/import-mappings.ts)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
