@@ -156,8 +156,13 @@ Examples:
   }
 
   async _dumpUserMappings() {
+    const argPath = this.flags.path;
+
+    if (! fs.existsSync(argPath)) {
+      await fs.mkdirSync(argPath, { recursive: true });
+    }
     const filename = path.join(
-      this.flags.path,
+      argPath,
       "users-collection-mappings.json"
     );
 
