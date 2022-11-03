@@ -4,11 +4,11 @@ import { execSync } from "child_process";
 const SECOND = 1000;
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-xdescribe("app:services:start", () => {
+xdescribe("services:start", () => {
   test
     .timeout(50 * SECOND)
     .stdout({ print: false })
-    .command(["app:services:start"])
+    .command(["services:start"])
     .finally(() => {
       execSync("docker stop $(docker ps -aq)");
     })

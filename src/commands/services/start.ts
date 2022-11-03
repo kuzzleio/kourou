@@ -5,8 +5,8 @@ import { flags } from "@oclif/command";
 import chalk from "chalk";
 import Listr from "listr";
 import emoji from "node-emoji";
-import { Kommand } from "../../../common";
-import { execute } from "../../../support/execute";
+import {Kommand} from "../../common";
+import {execute} from "../../support/execute";
 
 const MIN_DOCO_VERSION = "1.12.0";
 
@@ -27,7 +27,7 @@ services:
       nofile: 65536
 `;
 
-export default class AppStartServices extends Kommand {
+export default class StartServices extends Kommand {
   static initSdk = false;
 
   public static description =
