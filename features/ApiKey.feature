@@ -36,7 +36,7 @@ Feature: Api Key Management
       | body.description | "Other api key" |
     When I run the command "api-key:search" with:
       | arg  | gordon   |        |
-      | flag | --filter | "Test" |
+      | flag | --query | "Test" |
     Then I should match stdout with "gordon-key"
     And I should not match stdout with "gordon-key-2"
 
