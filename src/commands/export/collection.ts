@@ -64,8 +64,8 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
   ];
 
   static examples = [
-    "kourou collection:export nyc-open-data yellow-taxi",
-    "kourou collection:export nyc-open-data yellow-taxi --query '{ term: { city: \"Saigon\" } }'",
+    "kourou export:collection nyc-open-data yellow-taxi",
+    "kourou export:collection nyc-open-data yellow-taxi --query '{ term: { city: \"Saigon\" } }'",
   ];
 
   async runSafe() {

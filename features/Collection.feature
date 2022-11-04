@@ -11,7 +11,7 @@ Feature: Collection Commands
       | "the-hive-vn"     | { "city": "hcmc", "district": 2 }     |
       | "the-hive-th"     | { "city": "changmai", "district": 7 } |
     And I refresh the collection
-    # collection:export
+    # export:collection
     When I run the command "export:collection" with:
       | arg  | nyc-open-data |                            |
       | arg  | yellow-taxi   |                            |

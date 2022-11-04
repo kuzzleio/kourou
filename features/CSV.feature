@@ -12,8 +12,8 @@ Feature: CSV Export
       | "toto"            | { "city": "changmai", "district": 11, "object": {"field": "this is an object"} } |
 
     And I refresh the collection
-    # collection:export
-    When I run the command "collection:export" with:
+    # export:collection
+    When I run the command "export:collection" with:
       | arg  | nyc-open-data |                                   |
       | arg  | yellow-taxi   |                                   |
       | flag | --format      | csv                               |
@@ -38,8 +38,8 @@ Feature: CSV Export
       | "luca"            | { "city": "changmai", "district": [7, 8, 9] }              |
       | "chuon-chuon-kim" | { "city": "hcmc", "district": 1, "nested": {"field": 1} }  |
     And I refresh the collection
-    # collection:export
-    When I run the command "collection:export" with:
+    # export:collection
+    When I run the command "export:collection" with:
       | arg  | nyc-open-data |     |
       | arg  | yellow-taxi   |     |
       | flag | --format      | csv |
