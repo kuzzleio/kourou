@@ -22,14 +22,14 @@ Feature: Collection Commands
       | collection | "yellow-taxi"   |
     # collection:import
     And I run the command "import" with:
-      | arg | ./dump   |  |
+      | arg | ./nyc-open-data |  |
     And I successfully call the route "collection":"getMapping" with args:
       | index      | "nyc-open-data" |
       | collection | "yellow-taxi"   |
     Then The document "chuon-chuon-kim" content match:
       | city     | "hcmc" |
       | district | 1      |
-    And The document "the-hive" content match:
+    And The document "the-hive-vn" content match:
       | city     | "hcmc" |
       | district | 2      |
     And The document "the-hive-th" should not exists
