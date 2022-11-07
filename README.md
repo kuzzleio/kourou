@@ -1144,7 +1144,6 @@ OPTIONS
   -v, --var=var        Additional arguments injected into the code. (eg: --var 'index="iot-data"'
   --api-key=api-key    Kuzzle user api-key
   --as=as              Impersonate a user
-  --editor             Open an editor (EDITOR env variable) to edit the code before executing it.
   --help               show CLI help
   --host=host          [default: localhost] Kuzzle server host
   --keep-alive         Keep the connection running (websocket only)
@@ -1176,13 +1175,6 @@ DESCRIPTION
       - kourou execute 'return await sdk.index.exists(index)' --var 'index="iot-data"'
       - kourou execute < snippet.js
       - echo 'return await sdk.server.now()' | kourou execute
-
-  Other
-
-    use the --editor flag to modify the code before executing it
-
-    Examples:
-      - kourou execute 'return await sdk.server.now()' --editor
 ```
 
 _See code: [src/commands/execute.ts](src/commands/execute.ts)_
@@ -1205,12 +1197,9 @@ OPTIONS
   --api-key=api-key            Kuzzle user api-key
   --as=as                      Impersonate a user
   --body=body                  [default: {}] Request body in JS or JSON format. Will be read from STDIN if available.
-  --body-editor                Open an editor (EDITOR env variable) to edit the body before sending.
 
   --display=display            [default: result] Path of the property to display from the response (empty string to
                                display the result)
-
-  --editor                     Open an editor (EDITOR env variable) to edit the request before sending.
 
   --help                       show CLI help
 
@@ -1254,11 +1243,9 @@ DESCRIPTION
 
   Other
 
-    Use the --editor flag to modify the query before sending it to Kuzzle
     Use the --display flag to display a specific property of the response
 
     Examples:
-      - kourou api document:create -i iot -c sensors --editor
       - kourou api server:now --display 'result.now'
 ```
 

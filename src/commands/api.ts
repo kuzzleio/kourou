@@ -27,11 +27,10 @@ Query body
 
 Other
 
-  Use the --editor flag to modify the query before sending it to Kuzzle
   Use the --display flag to display a specific property of the response
 
   Examples:
-    - kourou api document:create -i iot -c sensors --editor
+    - kourou api document:create -i iot -c sensors
     - kourou api server:now --display 'result.now'
 
 Default fallback to API action
@@ -71,14 +70,6 @@ Default fallback to API action
       description:
         "Request body in JS or JSON format. Will be read from STDIN if available.",
       default: "{}",
-    }),
-    editor: flags.boolean({
-      description:
-        "Open an editor (EDITOR env variable) to edit the request before sending.",
-    }),
-    "body-editor": flags.boolean({
-      description:
-        "Open an editor (EDITOR env variable) to edit the body before sending.",
     }),
     index: flags.string({
       char: "i",
@@ -134,17 +125,6 @@ Default fallback to API action
       ...requestArgs,
       body: this.parseJs(body),
     };
-
-    // content from user editor
-    if (this.flags.editor && this.flags["body-editor"]) {
-      throw new Error(
-        "You cannot specify --editor and --body-editor at the same time"
-      );
-    } else if (this.flags.editor) {
-      request = this.fromEditor(request, { json: true });
-    } else if (this.flags["body-editor"]) {
-      request.body = this.fromEditor(request.body, { json: true });
-    }
 
     const response = await this.sdk.query(request);
 

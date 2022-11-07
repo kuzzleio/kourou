@@ -26,13 +26,6 @@ Provide code
     - kourou execute 'return await sdk.index.exists(index)' --var 'index="iot-data"'
     - kourou execute < snippet.js
     - echo 'return await sdk.server.now()' | kourou execute
-
-Other
-
-  use the --editor flag to modify the code before executing it
-
-  Examples:
-    - kourou execute 'return await sdk.server.now()' --editor
 `;
 
   public static flags = {
@@ -42,10 +35,6 @@ Other
       description:
         "Additional arguments injected into the code. (eg: --var 'index=\"iot-data\"'",
       multiple: true,
-    }),
-    editor: flags.boolean({
-      description:
-        "Open an editor (EDITOR env variable) to edit the code before executing it.",
     }),
     "keep-alive": flags.boolean({
       description: "Keep the connection running (websocket only)",
@@ -92,22 +81,16 @@ Other
       .join("\n");
 
     this.code = `
-(async () => {
-  try {
-${variables}
-    ${this.code}
-  }
-  catch (error) {
-    userError = error
-  }
-})();
-`;
-    // content from user editor
-    if (this.flags.editor) {
-      const editor = new Editor(this.code);
-      editor.run();
-      this.code = editor.content;
-    }
+      (async () => {
+        try {
+      ${variables}
+          ${this.code}
+        }
+        catch (error) {
+          userError = error
+        }
+      })();
+      `;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const sdk: any = this.sdk.sdk;
