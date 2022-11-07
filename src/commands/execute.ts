@@ -2,7 +2,6 @@ import { flags } from "@oclif/command";
 import { isEmpty } from "lodash";
 import { Kommand } from "../common";
 import { kuzzleFlags } from "../support/kuzzle";
-import { Editor } from "../support/editor";
 
 class Execute extends Kommand {
   public static description = `

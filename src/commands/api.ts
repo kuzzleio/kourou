@@ -119,7 +119,7 @@ Default fallback to API action
 
     const body = this.stdin ? this.stdin : this.flags.body;
 
-    let request = {
+    const request = {
       controller,
       action,
       ...requestArgs,
