@@ -16,7 +16,7 @@ Feature: Generic Import
       | "chuon-chuon-kim2" | { "city": "hcmc", "district": 1 } |
       | "the-hive2"        | { "city": "hcmc", "district": 2 } |
     And I refresh the collection
-    And I run the command "index:export" with:
+    And I run the command "export:index" with:
       | arg  | nyc-open-data |        |
       | flag | --path        | ./dump |
     And I successfully call the route "index":"delete" with args:

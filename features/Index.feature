@@ -15,7 +15,7 @@ Feature: Index Commands
       | "the-hive2"        | { "city": "hcmc", "district": 2 } |
     And I refresh the collection
     # index:export
-    When I run the command "index:export" with args:
+    When I run the command "export:index" with args:
       | "nyc-open-data" |
     And I successfully call the route "index":"delete" with args:
       | index | "nyc-open-data" |

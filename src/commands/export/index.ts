@@ -43,8 +43,8 @@ export default class ExportIndex extends Kommand {
   static args = [{ name: "index", description: "Index name", required: true }];
 
   static examples = [
-    "kourou index:export nyc-open-data",
-    'kourou index:export nyc-open-data --query \'{"range":{"_kuzzle_info.createdAt":{"gt":1632935638866}}}\'',
+    "kourou export:index nyc-open-data",
+    'kourou export:index nyc-open-data --query \'{"range":{"_kuzzle_info.createdAt":{"gt":1632935638866}}}\'',
   ];
 
   async runSafe() {
