@@ -98,7 +98,7 @@ class PaasLogin extends PaasKommand {
       `https://packages.paas.kuzzle.io/-/user/org.couchdb.user:${username}`,
       options
     );
-    const { token } = await response.json();
+    const { token } = (await response.json()) as any;
 
     spawnSync(
       "npm",
