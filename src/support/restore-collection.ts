@@ -1,6 +1,8 @@
-import chalk from "chalk";
 import fs from "fs";
+
+import chalk from "chalk";
 import ndjson from "ndjson";
+import { JSONObject } from "kuzzle-sdk";
 
 function handleError(log: any, dumpFile: string, error: any) {
   if (error.status === 206) {
@@ -34,7 +36,8 @@ export async function restoreCollectionData(
   batchSize: number,
   dumpFile: string,
   index?: string,
-  collection?: string
+  collection?: string,
+  migrateDocument?: (document: JSONObject) => JSONObject
 ) {
   const mWriteRequest = {
     controller: "bulk",
@@ -57,7 +60,14 @@ export async function restoreCollectionData(
       .pipe(ndjson.parse())
       .on("data", (obj: any) => {
         if (headerSkipped) {
-          documents.push(obj);
+          const document = migrateDocument ? migrateDocument(obj) : obj;
+          if (!document._id) {
+            throw new Error(`Document does not have an "_id" property: ${JSON.stringify(document)}`);
+          }
+          if (!document.body) {
+            throw new Error(`Document does not have an "body" property: ${JSON.stringify(document)}`);
+          }
+          documents.push(document);
 
           if (documents.length === batchSize) {
             mWriteRequest.body.documents = documents;
