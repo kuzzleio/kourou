@@ -132,12 +132,14 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou app:debug-proxy`](#kourou-appdebug-proxy)
 * [`kourou app:scaffold DESTINATION`](#kourou-appscaffold-destination)
 * [`kourou app:start-services`](#kourou-appstart-services)
+* [`kourou app:doctor`](#kourou-appdoctor)
 * [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
 * [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
 * [`kourou document:search INDEX COLLECTION [QUERY]`](#kourou-documentsearch-index-collection-query)
+* [`kourou es:aliases:cat`](#kourou-esaliasescat)
 * [`kourou es:indices:cat`](#kourou-esindicescat)
 * [`kourou es:indices:get INDEX ID`](#kourou-esindicesget-index-id)
 * [`kourou es:indices:insert INDEX`](#kourou-esindicesinsert-index)
@@ -360,6 +362,21 @@ OPTIONS
 
 _See code: [src/commands/app/start-services.ts](src/commands/app/start-services.ts)_
 
+## `kourou app:doctor`
+
+Analyzes your Kuzzle installation which some configuration and version checks and outputs some suggestions
+to fix problems.
+
+```
+USAGE
+  $ kourou app:doctor
+
+OPTIONS
+  --elasticsearch ElasticSearch URL (default: http://localhost:9200)
+```
+
+_See code: [src/commands/app/doctor.ts](src/commands/app/doctor.ts)_
+
 ## `kourou autocomplete [SHELL]`
 
 display autocomplete installation instructions
@@ -576,6 +593,22 @@ EXAMPLES
 
 _See code: [src/commands/document/search.ts](src/commands/document/search.ts)_
 
+## `kourou es:aliases:cat`
+
+Lists available ES aliases and their indexes
+
+```
+USAGE
+  $ kourou es:aliases:cat
+
+OPTIONS
+  -g, --grep=grep  Match output with pattern
+  -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/aliases/cat.ts](src/commands/es/aliases/cat.ts)_
+
 ## `kourou es:indices:cat`
 
 Lists available ES indexes
@@ -652,7 +685,7 @@ OPTIONS
 
 EXAMPLES
   kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
   --no-interactive
 ```
 
@@ -1312,6 +1345,8 @@ OPTIONS
 
   --username=username          [default: anonymous] Kuzzle username (local strategy)
 
+  --print-raw                  Print only the query result to stdout
+
 DESCRIPTION
   Executes an API query.
 
@@ -1401,7 +1436,7 @@ DESCRIPTION
 
   You can either:
     - Manually re-create credentials for your users
-    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
+    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
