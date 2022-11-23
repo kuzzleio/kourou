@@ -1,6 +1,6 @@
 import { cli } from "cli-ux";
 import { flags } from "@oclif/command";
-import chalk, { Chalk, ChalkFunction } from "chalk";
+import chalk from "chalk";
 import fs from "fs";
 
 import PaasLogin from "./login";
