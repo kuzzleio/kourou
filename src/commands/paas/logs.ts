@@ -1,8 +1,10 @@
-import { flags } from "@oclif/command";
-import { PaasKommand } from "../../support/PaasKommand";
-import fs from "fs";
-import PaasLogin from "./login";
 import { cli } from "cli-ux";
+import { flags } from "@oclif/command";
+import chalk, { Chalk, ChalkFunction } from "chalk";
+import fs from "fs";
+
+import PaasLogin from "./login";
+import { PaasKommand } from "../../support/PaasKommand";
 
 class PaasLogs extends PaasKommand {
   public static description = "Show logs of the targeted application";
@@ -34,8 +36,7 @@ class PaasLogs extends PaasKommand {
 
     const user = await this.paas.auth.getCurrentUser();
     this.logInfo(
-      `Logged as "${user._id}" for project "${
-        this.flags.project || this.getProject()
+      `Logged as "${user._id}" for project "${this.flags.project || this.getProject()
       }"`
     );
 
@@ -47,7 +48,19 @@ class PaasLogs extends PaasKommand {
       applicationId: this.args.application,
     });
 
-    this.logOk(logs.result.join("\n "));
+    const separator = " ";
+    const podNames = Object.keys(logs.result);
+
+    for (const podName of podNames) {
+      const log = logs.result[podName];
+      const chalkColor = this.getRandomChalkColor();
+
+      for (const line of log) {
+        const spaces = this.getNumberOfSpaces(podNames, podName);
+        const name = chalkColor(`${line.podName}${separator.repeat(spaces)}`);
+        this.log(`${name}| ${line.content}`);
+      }
+    }
   }
 
   async getCredentials() {
@@ -73,6 +86,39 @@ class PaasLogs extends PaasKommand {
     const credentials = JSON.parse(fs.readFileSync(projectFile, "utf8"));
 
     return credentials.apiKey;
+  }
+
+  getNumberOfSpaces(names: string[], currentName: string) {
+    const end = 10;
+    let max = { name: '', length: 0 };
+
+    for (const name of names) {
+      if (max.length < name.length) {
+        max = { name: name, length: name.length };
+      }
+    }
+
+    return currentName === max.name ? end : end + (max.length - currentName.length);
+  }
+
+  getRandomChalkColor() {
+    // Create an array of possible colors
+    const color = ['green', 'blue', 'yellow', 'cyan'];
+    const random = Math.floor(Math.random() * color.length);
+    const key = color[random];
+
+    switch (key) {
+      case 'green':
+        return chalk.green;
+      case 'blue':
+        return chalk.blue;
+      case 'yellow':
+        return chalk.yellow;
+      case 'cyan':
+        return chalk.cyan;
+      default:
+        return chalk.green;
+    }
   }
 }
 
