@@ -8,7 +8,7 @@
   },
   "bugs": "https://github.com/kuzzleio/kourou/issues",
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc --build tsconfig.json",
     "dev": "./bin/run",
     "postpack": "rm -f oclif.manifest.json",
     "version": "oclif-dev readme && git add README.md",
@@ -71,7 +71,7 @@
     "should": "^13.2.3",
     "source-map-support": "^0.5.19",
     "ts-node": "^10.8.0",
-    "typescript": "^4.7.2"
+    "typescript": "4.5.2"
   },
   "engines": {
     "node": ">=10.0.0"
