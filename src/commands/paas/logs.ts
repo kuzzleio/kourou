@@ -1,10 +1,37 @@
+import fs from "fs";
+import * as readline from "readline";
+
 import { cli } from "cli-ux";
 import { flags } from "@oclif/command";
 import chalk from "chalk";
-import fs from "fs";
 
 import PaasLogin from "./login";
 import { PaasKommand } from "../../support/PaasKommand";
+
+/**
+ * Data contained a PaaS log, as given by the API.
+ */
+type PaasLogData = {
+  /**
+   * Contents of the log.
+   */
+  content: string;
+
+  /**
+   * Timestamp of the log.
+   */
+  timeStamp: string;
+
+  /**
+   * Whether this is the last log of the stream.
+   */
+  last: boolean;
+
+  /**
+   * Name of the pod that generated the log.
+   */
+  podName: string;
+};
 
 class PaasLogs extends PaasKommand {
   public static description = "Show logs of the targeted application";
@@ -40,7 +67,10 @@ class PaasLogs extends PaasKommand {
       }"`
     );
 
-    const logs: any = await this.paas.query({
+    const separator = "\t";
+
+    // Perform the streamed request
+    const incomingMessage = await this.paas.queryHttpStream({
       controller: "application",
       action: "logs",
       environmentId: this.args.environment,
@@ -48,18 +78,37 @@ class PaasLogs extends PaasKommand {
       applicationId: this.args.application,
     });
 
-    const separator = " ";
-    const podNames = Object.keys(logs.result);
+    // Read the response line by line
+    const lineStream = readline.createInterface({
+      input: incomingMessage,
+      crlfDelay: Infinity,
+      terminal: false,
+    });
 
-    for (const podName of podNames) {
-      const log = logs.result[podName];
-      const chalkColor = this.getRandomChalkColor();
+    // Remember the pods color
+    const podsColor = new Map<string, any>();
 
-      for (const line of log) {
-        const spaces = this.getNumberOfSpaces(podNames, podName);
-        const name = chalkColor(`${line.podName}${separator.repeat(spaces)}`);
-        this.log(`${name}| ${line.content}`);
+    // Display the response
+    for await (const line of lineStream) {
+      // Parse the data
+      const data: PaasLogData = JSON.parse(line);
+
+      // Exclude logs that are empty or that are not from a pod
+      if (!data.content || !data.podName) {
+        continue;
       }
+
+      // Get the pod name and color
+      let podColor = podsColor.get(data.podName);
+
+      if (!podColor) {
+        podColor = this.getRandomChalkColor();
+        podsColor.set(data.podName, podColor);
+      }
+
+      // Display the log
+      const name = podColor(`${data.podName}${separator}`);
+      this.log(`${name}| ${data.content}`);
     }
   }
 
