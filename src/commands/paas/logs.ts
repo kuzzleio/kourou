@@ -60,6 +60,22 @@ class PaasLogs extends PaasKommand {
     },
   ];
 
+  /**
+   * Allowed colors for pod names.
+   */
+  private readonly allColors = [chalk.red, chalk.green, chalk.yellow, chalk.blue, chalk.magenta, chalk.cyan, chalk.gray];
+
+  /**
+   * Available colors for pod names.
+   */
+  private availableColors = [...this.allColors];
+
+  /**
+   * The color to use for pod names.
+   * @private
+   */
+  private podsColor = new Map<string, chalk.Chalk>();
+
   async runSafe() {
     const apiKey = await this.getCredentials();
 
@@ -90,9 +106,6 @@ class PaasLogs extends PaasKommand {
       terminal: false,
     });
 
-    // Remember the pods color
-    const podsColor = new Map<string, any>();
-
     // Display the response
     for await (const line of lineStream) {
       // Parse the data
@@ -103,13 +116,8 @@ class PaasLogs extends PaasKommand {
         continue;
       }
 
-      // Get the pod name and color
-      let podColor = podsColor.get(data.podName);
-
-      if (!podColor) {
-        podColor = this.getRandomChalkColor();
-        podsColor.set(data.podName, podColor);
-      }
+      // Get the pod color
+      const podColor = this.getPodColor(data.podName);
 
       // Display the log
       const name = podColor(`${data.podName}${separator}`);
@@ -155,24 +163,29 @@ class PaasLogs extends PaasKommand {
     return currentName === max.name ? end : end + (max.length - currentName.length);
   }
 
-  getRandomChalkColor() {
-    // Create an array of possible colors
-    const color = ['green', 'blue', 'yellow', 'cyan'];
-    const random = Math.floor(Math.random() * color.length);
-    const key = color[random];
+  /**
+   * Returns the color to use for a pod name.
+   * @param podName Name of the pod.
+   * @returns The color to use.
+   */
+  getPodColor(podName: string): chalk.Chalk {
+    // Attempt to get the color from the list
+    let podColor = this.podsColor.get(podName);
 
-    switch (key) {
-      case 'green':
-        return chalk.green;
-      case 'blue':
-        return chalk.blue;
-      case 'yellow':
-        return chalk.yellow;
-      case 'cyan':
-        return chalk.cyan;
-      default:
-        return chalk.green;
+    if (!podColor) {
+      // Get a random color
+      const index = Math.floor(Math.random() * this.availableColors.length);
+      [podColor] = this.availableColors.splice(index, 1);
+
+      this.podsColor.set(podName, podColor);
+
+      // If all colors are used, reset the available colors
+      if (this.availableColors.length === 0) {
+        this.availableColors = [...this.allColors];
+      }
     }
+
+    return podColor;
   }
 }
 
