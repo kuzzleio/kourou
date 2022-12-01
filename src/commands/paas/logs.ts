@@ -37,6 +37,10 @@ class PaasLogs extends PaasKommand {
   public static description = "Show logs of the targeted application";
 
   public static flags = {
+    follow: flags.boolean({
+      char: "f",
+      description: "Follow log output",
+    }),
     help: flags.help(),
     project: flags.string({
       description: "Current PaaS project",
@@ -76,6 +80,7 @@ class PaasLogs extends PaasKommand {
       environmentId: this.args.environment,
       projectId: this.flags.project || this.getProject(),
       applicationId: this.args.application,
+      follow: this.flags.follow,
     });
 
     // Read the response line by line
