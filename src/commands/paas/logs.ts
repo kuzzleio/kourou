@@ -49,6 +49,10 @@ class PaasLogs extends PaasKommand {
     project: flags.string({
       description: "Current PaaS project",
     }),
+    tail: flags.integer({
+      char: "n",
+      description: "Number of lines to show from the end of the logs",
+    }),
   };
 
   static args = [
@@ -101,6 +105,7 @@ class PaasLogs extends PaasKommand {
       projectId: this.flags.project || this.getProject(),
       applicationId: this.args.application,
       follow: this.flags.follow,
+      tailLines: this.flags.tail,
     });
 
     // Read the response line by line
