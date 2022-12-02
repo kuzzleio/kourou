@@ -53,6 +53,9 @@ class PaasLogs extends PaasKommand {
       char: "n",
       description: "Number of lines to show from the end of the logs",
     }),
+    podName: flags.string({
+      description: "Name of the pod to show logs from",
+    }),
   };
 
   static args = [
@@ -106,6 +109,7 @@ class PaasLogs extends PaasKommand {
       applicationId: this.args.application,
       follow: this.flags.follow,
       tailLines: this.flags.tail,
+      podName: this.flags.podName,
     });
 
     // Read the response line by line
