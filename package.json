@@ -31,6 +31,7 @@
     "@types/tmp": "^0.2.0",
     "bluebird": "^3.7.2",
     "chalk": "^4.1.0",
+    "chrono-node": "^2.4.2",
     "cli-ux": "^5.5.1",
     "inquirer": "^8.0.0",
     "kepler-companion": "^1.1.3",
