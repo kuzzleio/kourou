@@ -41,6 +41,10 @@ class PaasLogs extends PaasKommand {
       char: "f",
       description: "Follow log output",
     }),
+    timestamp: flags.boolean({
+      char: "t",
+      description: "Show timestamp",
+    }),
     help: flags.help(),
     project: flags.string({
       description: "Current PaaS project",
@@ -120,8 +124,10 @@ class PaasLogs extends PaasKommand {
       const podColor = this.getPodColor(data.podName);
 
       // Display the log
+      const timestamp = this.flags.timestamp ? `[${new Date(data.timeStamp).toLocaleString()}] ` : "";
       const name = podColor(`${data.podName}${separator}`);
-      this.log(`${name}| ${data.content}`);
+
+      this.log(`${timestamp}${name}| ${data.content}`);
     }
   }
 
