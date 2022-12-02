@@ -60,6 +60,9 @@ class PaasLogs extends PaasKommand {
     since: flags.string({
       description: "Display logs from a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time",
     }),
+    until: flags.string({
+      description: "Display logs until a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time",
+    }),
   };
 
   static args = [
@@ -106,6 +109,7 @@ class PaasLogs extends PaasKommand {
 
     // Parse the time arguments
     const since = this.flags.since ? chrono.parseDate(this.flags.since).toISOString() : undefined;
+    const until = this.flags.until ? chrono.parseDate(this.flags.until).toISOString() : undefined;
 
     // Perform the streamed request
     const incomingMessage = await this.paas.queryHttpStream({
@@ -118,6 +122,7 @@ class PaasLogs extends PaasKommand {
       tailLines: this.flags.tail,
       podName: this.flags.podName,
       since,
+      until,
     });
 
     // Read the response line by line
