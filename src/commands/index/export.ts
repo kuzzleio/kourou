@@ -34,6 +34,11 @@ export default class IndexExport extends Kommand {
         '"jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal fixtures and jsonl allows to import that data back with kourou',
       default: "jsonl",
     }),
+    scrollTTL: flags.string({
+      description: `The scroll TTL option to pass to the dump operation (which performs a document.search under the hood),
+expressed in ms format, e.g. '2s', '1m', '3h'.`,
+      default: "20s",
+    }),
     ...kuzzleFlags,
     protocol: flags.string({
       description: "Kuzzle protocol (http or websocket)",
@@ -81,7 +86,8 @@ export default class IndexExport extends Kommand {
             Number(this.flags["batch-size"]),
             exportPath,
             query,
-            this.flags.format
+            this.flags.format,
+            this.flags.scrollTTL,
           );
 
           cli.action.stop();
