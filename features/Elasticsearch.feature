@@ -20,6 +20,14 @@ Feature: Elasticsearch commands
     And I should match stdout with "green-taxi"
 
   @mappings
+  Scenario: Cat ES aliases
+    Given a collection "nyc-open-data":"green-taxi"
+    When I run the command "es:aliases:cat" with flags:
+      | --grep | "users" |
+    Then I should match stdout with "{"index": "%plugin-kuzzle-plugin-auth-passport-local.users", "alias": "@%plugin-kuzzle-plugin-auth-passport-local.users"}"
+    Then I should match stdout with "{"index": "%kuzzle.users", "alias": "@%kuzzle.users"}"
+
+  @mappings
   Scenario: Insert ES document
     Given a collection "nyc-open-data":"green-taxi"
     When I run the command "es:indices:insert" with:

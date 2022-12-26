@@ -137,6 +137,7 @@ All other arguments and options will be passed as-is to the `api` method.
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
 * [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
 * [`kourou document:search INDEX COLLECTION [QUERY]`](#kourou-documentsearch-index-collection-query)
+* [`kourou es:aliases:cat`](#kourou-esaliasescat)
 * [`kourou es:indices:cat`](#kourou-esindicescat)
 * [`kourou es:indices:get INDEX ID`](#kourou-esindicesget-index-id)
 * [`kourou es:indices:insert INDEX`](#kourou-esindicesinsert-index)
@@ -475,6 +476,22 @@ EXAMPLES
 ```
 
 _See code: [src/commands/document/search.ts](src/commands/document/search.ts)_
+
+## `kourou es:aliases:cat`
+
+Lists available ES aliases and their indexes
+
+```
+USAGE
+  $ kourou es:aliases:cat
+
+OPTIONS
+  -g, --grep=grep  Match output with pattern
+  -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
+  --help           show CLI help
+```
+
+_See code: [src/commands/es/aliases/cat.ts](src/commands/es/aliases/cat.ts)_
 
 ## `kourou es:indices:cat`
 
