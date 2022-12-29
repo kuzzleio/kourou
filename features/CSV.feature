@@ -45,7 +45,7 @@ Feature: CSV Export
       | flag | --format      | csv |
     Then I get the file in "nyc-open-data/yellow-taxi/documents.csv" containing
       """
-      _id,city,city.type,name,name.type
+      _id,city,firstName,lastName,name
       the-hive-th,changmai,,,
       luca,changmai,,,
       chuon-chuon-kim,hcmc,,,
