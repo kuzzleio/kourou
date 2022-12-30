@@ -1059,8 +1059,14 @@ ARGUMENTS
   APPLICATION  Kuzzle PaaS application
 
 OPTIONS
+  -f, --follow       Follow log output
+  -n, --tail=tail    Number of lines to show from the end of the logs
+  -t, --timestamp    Show timestamp
   --help             show CLI help
+  --podName=podName  Name of the pod to show logs from
   --project=project  Current PaaS project
+  --since=since      Display logs from a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time
+  --until=until      Display logs until a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time
 ```
 
 _See code: [src/commands/paas/logs.ts](src/commands/paas/logs.ts)_
