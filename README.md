@@ -1678,7 +1678,7 @@ $ kourou sdk:execute --print-raw '(
 
 # Telemetry
 
-We use a custom Open Source analytics backend (you can check the code [here](https://gihtub.com/kuzzleio/kepler)) to record the use of Kourou by users.
+We use a custom Open Source analytics backend (you can check the code [here](https://github.com/kuzzleio/kepler)) to record the use of Kourou by users.
 
 Collected metrics will allow us to study the use of our products in order to improve them. We do not collect any personal data about users.
 
