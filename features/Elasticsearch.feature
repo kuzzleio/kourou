@@ -56,3 +56,29 @@ Feature: Elasticsearch commands
     When I run the command "es:snapshot:list" with:
       | arg | backup |  |
     Then I should match stdout with "test-snapshot"
+
+  Scenario: Dump and restore ES data to a dump folder using the pattern option
+    Given an index "nyc-open-data"
+    Given a collection "nyc-open-data":"yellow-taxi"
+    Then I create the following document:
+      | _id  | "chuon-chuon-kim"                 |
+      | body | { "city": "hcmc", "district": 1 } |
+    Then I create the following document:
+      | _id  | "the-hive-vn"                     |
+      | body | { "city": "hcmc", "district": 2 } |
+    Then I create the following document:
+      | _id  | "the-hive-th"                         |
+      | body | { "city": "changmai", "district": 7 } |
+    Then I count 3 documents
+    Then I run the command "es:migrate" with:
+      | flag | --src  | http://localhost:9200 |
+      | flag | --dest | ./kourou-dump         |
+    Then I should have 3 lines in file "./kourou-dump/&nyc-open-data.yellow-taxi.json"
+    Then I run the command "es:migrate" with:
+      | flag | --src            | ./kourou-dump         |
+      | flag | --dest           | http://localhost:9200 |
+      | flag | --reset          |                       |
+      | flag | --no-interactive |                       |
+    Given an existing collection "nyc-open-data":"yellow-taxi"
+    Then I refresh the collection
+    And I count 3 documents
