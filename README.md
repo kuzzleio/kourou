@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.24.2 darwin-x64 node-v16.17.0
+kourou/0.25.0 linux-x64 node-v14.19.3
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -130,9 +130,9 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
 * [`kourou app:debug-proxy`](#kourou-appdebug-proxy)
+* [`kourou app:doctor`](#kourou-appdoctor)
 * [`kourou app:scaffold DESTINATION`](#kourou-appscaffold-destination)
 * [`kourou app:start-services`](#kourou-appstart-services)
-* [`kourou app:doctor`](#kourou-appdoctor)
 * [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
@@ -329,6 +329,29 @@ OPTIONS
 
 _See code: [src/commands/app/debug-proxy.ts](src/commands/app/debug-proxy.ts)_
 
+## `kourou app:doctor`
+
+Analyze a Kuzzle application
+
+```
+USAGE
+  $ kourou app:doctor
+
+OPTIONS
+  --api-key=api-key              Kuzzle user api-key
+  --as=as                        Impersonate a user
+  --elasticsearch=elasticsearch  [default: http://localhost:9200] Elasticsearch server URL
+  --help                         show CLI help
+  --host=host                    [default: localhost] Kuzzle server host
+  --password=password            Kuzzle user password
+  --port=port                    [default: 7512] Kuzzle server port
+  --protocol=protocol            [default: ws] Kuzzle protocol (http or ws)
+  --ssl                          Use SSL to connect to Kuzzle
+  --username=username            [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/app/doctor.ts](src/commands/app/doctor.ts)_
+
 ## `kourou app:scaffold DESTINATION`
 
 Scaffolds a new Kuzzle application
@@ -362,21 +385,6 @@ OPTIONS
 
 _See code: [src/commands/app/start-services.ts](src/commands/app/start-services.ts)_
 
-## `kourou app:doctor`
-
-Analyzes your Kuzzle installation which some configuration and version checks and outputs some suggestions
-to fix problems.
-
-```
-USAGE
-  $ kourou app:doctor
-
-OPTIONS
-  --elasticsearch ElasticSearch URL (default: http://localhost:9200)
-```
-
-_See code: [src/commands/app/doctor.ts](src/commands/app/doctor.ts)_
-
 ## `kourou autocomplete [SHELL]`
 
 display autocomplete installation instructions
@@ -398,7 +406,7 @@ EXAMPLES
   $ kourou autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.2.0/src/commands/autocomplete/index.ts)_
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.3.0/src/commands/autocomplete/index.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
@@ -488,7 +496,8 @@ OPTIONS
       [default: {}] Only dump documents matching the query (JS or JSON format)
 
   --scrollTTL=scrollTTL
-      The scroll TTL option to pass to the dump operation (which performs a document.search under the hood),
+      [default: 20s] The scroll TTL option to pass to the dump operation (which performs a document.search under the
+      hood),
       expressed in ms format, e.g. '2s', '1m', '3h'.
 
   --ssl
@@ -595,7 +604,7 @@ _See code: [src/commands/document/search.ts](src/commands/document/search.ts)_
 
 ## `kourou es:aliases:cat`
 
-Lists available ES aliases and their indexes
+Lists available ES aliases
 
 ```
 USAGE
@@ -685,7 +694,7 @@ OPTIONS
 
 EXAMPLES
   kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
+  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
   --no-interactive
 ```
 
@@ -829,7 +838,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.18/src/commands/help.ts)_
 
 ## `kourou import PATH`
 
@@ -890,6 +899,10 @@ OPTIONS
   --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
 
   --query=query            [default: {}] Only dump documents in collections matching the query (JS or JSON format)
+
+  --scrollTTL=scrollTTL    [default: 20s] The scroll TTL option to pass to the dump operation (which performs a
+                           document.search under the hood),
+                           expressed in ms format, e.g. '2s', '1m', '3h'.
 
   --ssl                    Use SSL to connect to Kuzzle
 
@@ -1345,13 +1358,13 @@ OPTIONS
 
   --port=port                  [default: 7512] Kuzzle server port
 
+  --print-raw                  Print only the query result to stdout
+
   --protocol=protocol          [default: ws] Kuzzle protocol (http or ws)
 
   --ssl                        Use SSL to connect to Kuzzle
 
   --username=username          [default: anonymous] Kuzzle username (local strategy)
-
-  --print-raw                  Print only the query result to stdout
 
 DESCRIPTION
   Executes an API query.
@@ -1442,7 +1455,7 @@ DESCRIPTION
 
   You can either:
     - Manually re-create credentials for your users
-    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
+    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
