@@ -107,9 +107,8 @@ export default class EsMigrate extends Kommand {
     queue.push(documents);
     let count = 0;
     while (queue.length && total !== count) {
-      count += await this.dest.writeData(index, documents);
       documents = queue.pop();
-
+      count += await this.dest.writeData(index, documents);
       progressBar.update(count);
       queue.push(await this.src.readData(index, { scrollId }));
     }
