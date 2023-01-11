@@ -14,7 +14,8 @@ export default class AppScaffold extends Kommand {
     help: flags.help(),
     flavor: flags.string({
       default: "generic",
-      description: 'Template flavor ("generic", "iot-platform")',
+      description: `Template flavor ("generic", "iot-platform", "iot-console", "iot-platform").
+    Those can be found here: https://github.com/kuzzleio/project-templates`,
     }),
   };
 
