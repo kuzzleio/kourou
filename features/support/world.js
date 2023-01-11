@@ -1,4 +1,5 @@
 const { Kuzzle, WebSocket, Http } = require("kuzzle-sdk"),
+  { Client } = require("@elastic/elasticsearch"),
   { setWorldConstructor } = require("cucumber");
 
 require("./assertions");
@@ -16,6 +17,11 @@ class KuzzleWorld {
     this.props = {};
 
     this._sdk = this._getSdk();
+    this._esClient = new Client({ node: process.env.ELASTICSEARCH_URL || "http://localhost:9200" });
+  }
+
+  get esClient() {
+    return this._esClient;
   }
 
   get sdk() {
