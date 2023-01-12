@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.25.0 linux-x64 node-v14.19.3
+kourou/0.24.2 linux-x64 node-v16.15.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -137,6 +137,7 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
 * [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
 * [`kourou collection:import PATH`](#kourou-collectionimport-path)
+* [`kourou collection:migrate SCRIPT PATH`](#kourou-collectionmigrate-script-path)
 * [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
 * [`kourou document:search INDEX COLLECTION [QUERY]`](#kourou-documentsearch-index-collection-query)
 * [`kourou es:aliases:cat`](#kourou-esaliasescat)
@@ -364,7 +365,9 @@ ARGUMENTS
   DESTINATION  Directory to scaffold the app
 
 OPTIONS
-  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-platform")
+  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-platform", "iot-console", "iot-platform").
+                   Those can be found here: https://github.com/kuzzleio/project-templates
+
   --help           show CLI help
 ```
 
@@ -406,7 +409,7 @@ EXAMPLES
   $ kourou autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.3.0/src/commands/autocomplete/index.ts)_
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.3.10/src/commands/autocomplete/index.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
@@ -542,6 +545,35 @@ OPTIONS
 
 _See code: [src/commands/collection/import.ts](src/commands/collection/import.ts)_
 
+## `kourou collection:migrate SCRIPT PATH`
+
+Migrate a collection
+
+```
+USAGE
+  $ kourou collection:migrate SCRIPT PATH
+
+ARGUMENTS
+  SCRIPT  Migration script path
+  PATH    Collection dump path
+
+OPTIONS
+  --api-key=api-key        Kuzzle user api-key
+  --as=as                  Impersonate a user
+  --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
+  --collection=collection  If set, override the collection destination name
+  --help                   show CLI help
+  --host=host              [default: localhost] Kuzzle server host
+  --index=index            If set, override the index destination name
+  --password=password      Kuzzle user password
+  --port=port              [default: 7512] Kuzzle server port
+  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/collection/migrate.ts](src/commands/collection/migrate.ts)_
+
 ## `kourou config:diff FIRST SECOND`
 
 Returns differences between two Kuzzle configuration files (kuzzlerc)
@@ -675,7 +707,7 @@ _See code: [src/commands/es/indices/insert.ts](src/commands/es/indices/insert.ts
 
 ## `kourou es:migrate`
 
-Migrate all the index from one Elasticsearch server to another
+Migrate all the index from an Elasticsearch (or a file) to another Elasticsearch
 
 ```
 USAGE
@@ -683,19 +715,19 @@ USAGE
 
 OPTIONS
   --batch-size=batch-size  [default: 1000] How many documents to move in batch per operation
-  --dest=dest              (required) Destination Elasticsearch server URL
+  --dest=dest              (required) Migration destination provider
   --dry-run                Print witch collections will be migrated
   --help                   show CLI help
   --no-interactive         Skip confirmation interactive prompts (perfect for scripting)
   --pattern=pattern        Pattern to match indices to migrate
   --reset                  Reset destination Elasticsearch server
   --scroll=scroll          [default: 30s] Scroll duration for Elasticsearch scrolling
-  --src=src                (required) Source Elasticsearch server URL
+  --src=src                (required) Migration source provider
 
 EXAMPLES
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 
-  --no-interactive
+  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern 
+  '&myindexes.collection-*'
+  kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive
 ```
 
 _See code: [src/commands/es/migrate.ts](src/commands/es/migrate.ts)_
