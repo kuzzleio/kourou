@@ -1,6 +1,7 @@
-import { flags } from "@oclif/command";
+import http from "http";
 
-import { Http, WebSocket, Kuzzle } from "kuzzle-sdk";
+import { flags } from "@oclif/command";
+import { Http, WebSocket, Kuzzle, JSONObject } from "kuzzle-sdk";
 
 const SECOND = 1000;
 
@@ -84,7 +85,6 @@ export class KuzzleSDK {
 
   public async init(logger: any) {
     let ProtocolClass;
-
     // Avoid common mistake
     if (this.protocol === "websocket") {
       this.protocol = "ws";
@@ -102,7 +102,7 @@ export class KuzzleSDK {
       new ProtocolClass(this.host, {
         port: this.port,
         sslConnection: this.ssl,
-        pingInterval: 5000,
+        pingInterval: 20 * 1000,
       })
     );
 
@@ -197,6 +197,45 @@ export class KuzzleSDK {
     }
 
     return this.sdk.query(request);
+  }
+
+  /**
+   * Query the Kuzzle API and return a streamed response.
+   * @param request The request to send to Kuzzle
+   * @returns The response stream
+   */
+  public queryHttpStream(request: JSONObject): Promise<http.IncomingMessage> {
+    // Ensure the protocol is HTTP
+    if (this.protocol !== "http") {
+      throw new TypeError("HTTP streaming is only available with the HTTP protocol");
+    }
+
+    // Construct the URL
+    const url = `${this.ssl ? "https" : "http"}://${this.host}:${this.port}/_query`;
+
+    // Construct the request
+    const body = JSON.stringify(request);
+
+    const options = {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${this.sdk.jwt}`,
+        "Content-Length": Buffer.byteLength(body),
+        "Content-Type": "application/json",
+      },
+    };
+
+    // Send the request
+    return new Promise((resolve, reject) => {
+      const req = http.request(url, options, (res) => {
+        resolve(res);
+      });
+
+      req.on("error", reject);
+
+      req.write(body);
+      req.end();
+    });
   }
 
   get document() {

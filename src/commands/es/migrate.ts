@@ -1,27 +1,29 @@
 import { flags } from "@oclif/command";
-import { Client } from "@elastic/elasticsearch";
+import path from "path";
 import cli from "cli-ux";
 import chalk from "chalk";
 import emoji from "node-emoji";
+import { promises as fs } from "fs";
 
 import { Kommand } from "../../common";
+import { Elasticsearch, File, Provider, isURL, fileExists } from "../../support/migrate/providers";
 
 export default class EsMigrate extends Kommand {
   static initSdk = false;
 
   static description =
-    "Migrate all the index from one Elasticsearch server to another";
+    "Migrate all the index from an Elasticsearch (or a file) to another Elasticsearch";
 
   static flags = {
     help: flags.help(),
     src: flags.string({
-      description: "Source Elasticsearch server URL",
-      env: "KUZZLE_ES_SRC",
+      description: "Migration source provider",
+      env: "KUZZLE_MIGRATION_SRC",
       required: true,
     }),
     dest: flags.string({
-      description: "Destination Elasticsearch server URL",
-      env: "KUZZLE_ES_DEST",
+      description: "Migration destination provider",
+      env: "KUZZLE_MIGRATION_DEST",
       required: true,
     }),
     reset: flags.boolean({
@@ -51,70 +53,64 @@ export default class EsMigrate extends Kommand {
   };
 
   static examples = [
-    "kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000",
-    "kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000 --no-interactive",
+    "kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern '&myindexes.collection-*'",
+    "kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive",
   ];
 
-  private async migrateMappings(index: string, src: Client, dest: Client) {
-    const { body } = await src.indices.getMapping({ index });
-    const mappings = body[index];
-    await dest.indices.create({ index, body: { mappings: mappings.mappings } });
+  private src: Provider = undefined as any;
+  private dest: Provider = undefined as any;
+
+  private async detectProviderType(provider: string) {
+    if (isURL(provider)) {
+      return new Elasticsearch(provider, {
+        batchSize: this.flags["batch-size"],
+        scrollDuration: this.flags.scroll,
+      });
+    } else if (path.basename(provider)) {
+      if (!fileExists(provider)) {
+        await fs.mkdir(provider, { recursive: true });
+      }
+
+      return new File(provider);
+    } else {
+      throw new Error(
+        `Unknown provider type: ${provider}. You should provide either an Elasticsearch URL or a file path.`
+      );
+    }
   }
 
-  private async migrateData(
-    index: string,
-    batch_size: number,
-    src: Client,
-    dest: Client
-  ) {
+  private async migrateIndex(index: string) {
+    const indexDefinition = await this.src.getIndex(index);
+    await this.dest.createIndex(index, indexDefinition);
+    return;
+  }
+
+  private async migrateData(index: string) {
     const queue = [];
+    let documents;
 
-    const { body } = await src.search({
-      index,
-      scroll: this.flags.scroll,
-      size: batch_size,
-      body: {
-        query: {
-          match_all: {},
-        },
-      },
-    });
-    const scrollId = body._scroll_id;
-    const total = body.hits.total.value;
-
-    if (total === 0) {
-      return 0;
-    }
+    const data = await this.src.readData(index);
+    const scrollId = data.scrollId;
+    const total = data.total;
+    documents = data.documents;
 
     const progressBar = cli.progress({
       format: chalk.blue(
         " [*] Importing |{bar}| {percentage}% || {value}/{total} documents"
       ),
     });
-    progressBar.start(total, 0);
 
+    if (total) {
+      progressBar.start(total, 0);
+    }
+
+    queue.push(documents);
     let count = 0;
-    queue.push(body.hits);
     while (queue.length && total !== count) {
-      const { hits: docs } = queue.pop();
-      const bulk = [];
-      for (const doc of docs) {
-        bulk.push({ index: { _index: index, _id: doc._id } });
-        bulk.push(doc._source);
-        count++;
-      }
-
-      await dest.bulk({ body: bulk });
-
+      documents = queue.pop();
+      count += await this.dest.writeData(index, documents);
       progressBar.update(count);
-
-      const {
-        body: { hits },
-      } = await src.scroll({
-        scroll_id: scrollId,
-        scroll: this.flags.scroll,
-      });
-      queue.push(hits);
+      queue.push(await this.src.readData(index, { scrollId }));
     }
 
     progressBar.stop();
@@ -122,20 +118,15 @@ export default class EsMigrate extends Kommand {
     return total;
   }
 
-  async runMigrate(index: string, src: Client, dest: Client) {
+  async runMigrate(index: string) {
     this.logInfo(
       `Importing ${chalk.bold(index)} to ${chalk.bold(this.flags.dest)}`
     );
 
-    await this.migrateMappings(index, src, dest);
+    await this.migrateIndex(index);
     this.logOk("Mappings successfully imported!");
 
-    const count = await this.migrateData(
-      index,
-      this.flags["batch-size"],
-      src,
-      dest
-    );
+    const count = await this.migrateData(index);
 
     if (count === 0) {
       this.logInfo("No documents to import\n");
@@ -145,52 +136,47 @@ export default class EsMigrate extends Kommand {
   }
 
   async runSafe() {
-    const src = new Client({ node: this.flags.src });
-    const dest = new Client({ node: this.flags.dest });
+    this.src = await this.detectProviderType(this.flags.src);
+    this.dest = await this.detectProviderType(this.flags.dest);
 
-    if (this.flags.reset && !this.flags["no-interactive"]) {
-      this.log(
-        chalk.red(
-          `${emoji.get("fire")} Are you sure you want to reset ${chalk.bold(
-            this.flags.dest
-          )}?`
-        )
-      );
-      await cli.confirm(
-        chalk.redBright(
-          ` ${emoji.get(
-            "fire"
-          )} You will lose all the data stored in it (Type "yes" to confirm)`
-        )
-      );
-      await dest.indices.delete({ index: "_all" });
+    if (this.flags.reset) {
+      if (!this.flags["no-interactive"]) {
+        this.log(
+          chalk.red(
+            `${emoji.get("fire")} Are you sure you want to reset ${chalk.bold(
+              this.flags.dest
+            )}?`
+          )
+        );
+        await cli.confirm(
+          chalk.redBright(
+            ` ${emoji.get(
+              "fire"
+            )} You will lose all the data stored in it (Type "yes" to confirm)`
+          )
+        );
+      }
+      await this.dest.clear();
     }
 
     this.logInfo(`Fetching indices list from ${chalk.bold(this.flags.src)}`);
-    const srcBody = await src.cat.indices({ format: "json" });
-    const srcIndices = srcBody.body
-      .map(({ index }: { index: string }) => index)
-      .filter((index: string) => index.match(this.flags.pattern))
-      .sort();
-
-    this.logOk(
-      `Found ${chalk.bold(
-        srcIndices.length
-      )} indices in the source Elasticsearch server\n`
-    );
+    const srcIndices = await this.src.listIndices(this.flags.pattern);
 
     if (this.flags["dry-run"]) {
       this.log(`${chalk.bold(srcIndices)}`);
       this.logInfo(`${chalk.bold(srcIndices.length)} indices will be migrated`);
-    } else {
-      this.logInfo(
-        `Starting indices migration from ${chalk.bold(
-          this.flags.src
-        )} to ${chalk.bold(this.flags.dest)}`
-      );
-      for (const index of srcIndices) {
-        await this.runMigrate(index, src, dest);
-      }
+
+      return;
+    }
+
+    this.logInfo(
+      `Starting indices migration from ${chalk.bold(
+        this.flags.src
+      )} to ${chalk.bold(this.flags.dest)}`
+    );
+
+    for (const index of srcIndices) {
+      await this.runMigrate(index);
     }
   }
 }

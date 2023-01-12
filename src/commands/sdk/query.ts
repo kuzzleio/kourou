@@ -98,6 +98,9 @@ Default fallback to API action
         "Path of the property to display from the response (empty string to display the result)",
       default: "result",
     }),
+    "print-raw": flags.boolean({
+      description: "Print only the query result to stdout",
+    }),
     ...kuzzleFlags,
   };
 
@@ -154,7 +157,7 @@ Default fallback to API action
         ? response
         : _.get(response, this.flags.display);
 
-    this.log(JSON.stringify(display, null, 2));
+    console.log(JSON.stringify(display, null, 2))
 
     this.logOk(`Successfully executed "${controller}:${action}"`);
   }
