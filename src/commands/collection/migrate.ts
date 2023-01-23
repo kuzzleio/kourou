@@ -11,7 +11,7 @@ import { JSONObject } from "kuzzle-sdk";
 export default class CollectionMigrate extends Kommand {
   static keepAuth = true;
 
-  static description = "Migrate a collection";
+  static description = "Migrate a collection by transforming documents from a dump file and importing them into Kuzzle";
 
   static flags = {
     help: flags.help({}),
