@@ -114,8 +114,7 @@ export class KuzzleSDK {
     this.sdk.on("networkError", (error: any) => logger.logKo(error.message));
 
     logger.logInfo(
-      `Connecting to ${this.protocol}${this.ssl ? "s" : ""}://${this.host}:${this.port
-      } ...`
+      `Connecting to ${this.protocol}${this.ssl ? "s" : ""}://${this.host}:${this.port} ...`
     );
 
     await this.sdk.connect();
