@@ -1,4 +1,5 @@
 import http from "http";
+import https from "https";
 
 import { flags } from "@oclif/command";
 import { Http, WebSocket, Kuzzle, JSONObject } from "kuzzle-sdk";
@@ -113,8 +114,7 @@ export class KuzzleSDK {
     this.sdk.on("networkError", (error: any) => logger.logKo(error.message));
 
     logger.logInfo(
-      `Connecting to ${this.protocol}${this.ssl ? "s" : ""}://${this.host}:${
-        this.port
+      `Connecting to ${this.protocol}${this.ssl ? "s" : ""}://${this.host}:${this.port
       } ...`
     );
 
@@ -227,9 +227,12 @@ export class KuzzleSDK {
 
     // Send the request
     return new Promise((resolve, reject) => {
-      const req = http.request(url, options, (res) => {
-        resolve(res);
-      });
+      const req = this.ssl ?
+        https.request(url, options, (res) => {
+          resolve(res);
+        }) : http.request(url, options, (res) => {
+          resolve(res);
+        });
 
       req.on("error", reject);
 

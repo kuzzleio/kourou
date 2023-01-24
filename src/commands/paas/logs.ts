@@ -134,11 +134,16 @@ class PaasLogs extends PaasKommand {
 
     // Display the response
     for await (const line of lineStream) {
-      // Parse the data
-      const data: PaasLogData = JSON.parse(line);
+      let data: PaasLogData;
+      try {
+        data = JSON.parse(line);
+      } catch (error) {
+        throw new Error(`Unable to parse the following line: ${line}`);
+      }
 
       // Exclude logs that are empty or that are not from a pod
       if (!data.content || !data.podName) {
+        this.logKo(line);
         continue;
       }
 
