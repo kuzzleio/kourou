@@ -227,8 +227,8 @@ export class KuzzleSDK {
 
     // Send the request
     return new Promise((resolve, reject) => {
-      const module = this.ssl ? https : http;
-      const req = module.request(url, options, (res) => {
+      const httpModule = this.ssl ? https : http;
+      const req = httpModule.request(url, options, (res) => {
         resolve(res);
       })
 
