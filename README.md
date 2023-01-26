@@ -161,7 +161,6 @@ All other arguments and options will be passed as-is to the `api` method.
 * [`kourou paas:init PROJECT`](#kourou-paasinit-project)
 * [`kourou paas:login`](#kourou-paaslogin)
 * [`kourou paas:logs ENVIRONMENT APPLICATION`](#kourou-paaslogs-environment-application)
-* [`kourou profile:export`](#kourou-profileexport)
 * [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
 * [`kourou redis:list-keys [MATCH]`](#kourou-redislist-keys-match)
 * [`kourou services:start`](#kourou-appservicesstart)
@@ -1085,29 +1084,6 @@ OPTIONS
 ```
 
 _See code: [src/commands/paas/logs.ts](src/commands/paas/logs.ts)_
-
-## `kourou profile:export`
-
-Exports profiles
-
-```
-USAGE
-  $ kourou profile:export
-
-OPTIONS
-  --api-key=api-key    Kuzzle user api-key
-  --as=as              Impersonate a user
-  --help               show CLI help
-  --host=host          [default: localhost] Kuzzle server host
-  --password=password  Kuzzle user password
-  --path=path          [default: profiles] Dump directory
-  --port=port          [default: 7512] Kuzzle server port
-  --protocol=protocol  [default: ws] Kuzzle protocol (http or websocket)
-  --ssl                Use SSL to connect to Kuzzle
-  --username=username  [default: anonymous] Kuzzle username (local strategy)
-```
-
-_See code: [src/commands/profile/export.ts](src/commands/profile/export.ts)_
 
 ## `kourou realtime:subscribe INDEX COLLECTION [FILTERS]`
 
