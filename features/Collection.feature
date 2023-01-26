@@ -63,7 +63,7 @@ Feature: Collection Commands
       | "antoine" | { "name": "Antoine Ducuroy" }    |
       | "karina"  | { "name": "Karina Tsimashenka" } |
     Given I refresh the collection
-    Given I run the command "collection:export" with:
+    Given I run the command "export:collection" with:
       | arg | nyc-open-data |  |
       | arg | yellow-taxi   |  |
     Given I successfully call the route "collection":"truncate" with args:
