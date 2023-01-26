@@ -547,7 +547,7 @@ _See code: [src/commands/collection/import.ts](src/commands/collection/import.ts
 
 ## `kourou collection:migrate SCRIPT PATH`
 
-Migrate a collection
+Migrate a collection by transforming documents from a dump file and importing them into Kuzzle
 
 ```
 USAGE
@@ -725,7 +725,7 @@ OPTIONS
   --src=src                (required) Migration source provider
 
 EXAMPLES
-  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern 
+  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern
   '&myindexes.collection-*'
   kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive
 ```
@@ -1487,7 +1487,7 @@ DESCRIPTION
 
   You can either:
     - Manually re-create credentials for your users
-    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
+    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
