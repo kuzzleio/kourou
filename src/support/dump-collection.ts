@@ -83,14 +83,14 @@ abstract class AbstractDumper {
    * @returns void
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public async setup() {}
+  public async setup() { }
 
   /**
    * One-shot call before iterating over the data. Can be
    * used to write the header of the dumped output.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public async writeHeader() {}
+  public async writeHeader() { }
 
   /**
    * You can put here the logic to write into the dump.
@@ -111,7 +111,7 @@ abstract class AbstractDumper {
   abstract onResult(document: { _id: string; _source: any }): Promise<void>;
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public async tearDown() {}
+  public async tearDown() { }
 
   /**
    * The loop that iterates over the documents of the collection and
@@ -254,6 +254,11 @@ class CSVDumper extends AbstractDumper {
         return;
       }
       this.fields = Object.keys(flattenObject(mappings.properties));
+      for (const field of this.fields) {
+        if (field.endsWith(".type")) {
+          this.fields.splice(this.fields.indexOf(field), 1);
+        }
+      }
     } else {
       // Delete '_id' from the selected fields, since IDs are
       // _always_ exported.

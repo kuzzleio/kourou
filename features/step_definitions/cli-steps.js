@@ -194,3 +194,33 @@ Then(
     }
   }
 );
+
+Then("I delete index {string} using the Elasticsearch API", async function (index) {
+  await this.esClient.indices.delete({ index });
+});
+
+Then("I restart and wait for Kuzzle", async function () {
+  const { exec } = require('child_process');
+
+  exec('docker restart kuzzle', (error) => {
+    if (error) {
+      console.error(`Error: ${error}`);
+      return;
+    }
+  });
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    try {
+      await this.sdk.server.now();
+      break;
+    } catch (error) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+});
+
+Then("I should have {int} lines in file {string}", function (count, filename) {
+  const lines = fs.readFileSync(filename, "utf8").split("\n");
+  should(lines.filter((line) => line !== "").length).be.eql(count);
+});

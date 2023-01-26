@@ -5,6 +5,8 @@ module.exports = {
       properties: {
         name: { type: "keyword" },
         city: { type: "keyword" },
+        firstName: { type: "keyword" },
+        lastName: { type: "keyword" }
       },
     },
   },

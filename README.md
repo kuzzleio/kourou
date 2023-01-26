@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.24.2 darwin-x64 node-v16.17.0
+kourou/0.25.0 linux-x64 node-v16.15.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -131,10 +131,12 @@ All other arguments and options will be passed as-is to the `api` method.
 * [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
 * [`kourou api-key:search USER`](#kourou-api-keysearch-user)
 * [`kourou app:debug-proxy`](#kourou-appdebug-proxy)
+* [`kourou app:doctor`](#kourou-appdoctor)
 * [`kourou app:scaffold DESTINATION`](#kourou-appscaffold-destination)
 * [`kourou app:doctor`](#kourou-appdoctor)
 * [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
 * [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
+* [`kourou collection:migrate SCRIPT PATH`](#kourou-collectionmigrate-script-path)
 * [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
 * [`kourou document:search INDEX COLLECTION [QUERY]`](#kourou-documentsearch-index-collection-query)
 * [`kourou es:aliases:cat`](#kourou-esaliasescat)
@@ -318,6 +320,29 @@ OPTIONS
 
 _See code: [src/commands/app/debug-proxy.ts](src/commands/app/debug-proxy.ts)_
 
+## `kourou app:doctor`
+
+Analyze a Kuzzle application
+
+```
+USAGE
+  $ kourou app:doctor
+
+OPTIONS
+  --api-key=api-key              Kuzzle user api-key
+  --as=as                        Impersonate a user
+  --elasticsearch=elasticsearch  [default: http://localhost:9200] Elasticsearch server URL
+  --help                         show CLI help
+  --host=host                    [default: localhost] Kuzzle server host
+  --password=password            Kuzzle user password
+  --port=port                    [default: 7512] Kuzzle server port
+  --protocol=protocol            [default: ws] Kuzzle protocol (http or ws)
+  --ssl                          Use SSL to connect to Kuzzle
+  --username=username            [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/app/doctor.ts](src/commands/app/doctor.ts)_
+
 ## `kourou app:scaffold DESTINATION`
 
 Scaffolds a new Kuzzle application
@@ -330,7 +355,9 @@ ARGUMENTS
   DESTINATION  Directory to scaffold the app
 
 OPTIONS
-  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-platform")
+  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-platform", "iot-console", "iot-platform").
+                   Those can be found here: https://github.com/kuzzleio/project-templates
+
   --help           show CLI help
 ```
 
@@ -350,21 +377,6 @@ OPTIONS
 ```
 
 _See code: [src/commands/app/start.ts](src/commands/app/services/start.ts)_
-
-## `kourou app:doctor`
-
-Analyzes your Kuzzle installation which some configuration and version checks and outputs some suggestions
-to fix problems.
-
-```
-USAGE
-  $ kourou app:doctor
-
-OPTIONS
-  --elasticsearch ElasticSearch URL (default: http://localhost:9200)
-```
-
-_See code: [src/commands/app/doctor.ts](src/commands/app/doctor.ts)_
 
 ## `kourou autocomplete [SHELL]`
 
@@ -387,7 +399,7 @@ EXAMPLES
   $ kourou autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.2.0/src/commands/autocomplete/index.ts)_
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.3.10/src/commands/autocomplete/index.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
@@ -415,6 +427,35 @@ OPTIONS
 ```
 
 _See code: [src/commands/collection/create.ts](src/commands/collection/create.ts)_
+
+## `kourou collection:migrate SCRIPT PATH`
+
+Migrate a collection by transforming documents from a dump file and importing them into Kuzzle
+
+```
+USAGE
+  $ kourou collection:migrate SCRIPT PATH
+
+ARGUMENTS
+  SCRIPT  Migration script path
+  PATH    Collection dump path
+
+OPTIONS
+  --api-key=api-key        Kuzzle user api-key
+  --as=as                  Impersonate a user
+  --batch-size=batch-size  [default: 200] Maximum batch size (see limits.documentsWriteCount config)
+  --collection=collection  If set, override the collection destination name
+  --help                   show CLI help
+  --host=host              [default: localhost] Kuzzle server host
+  --index=index            If set, override the index destination name
+  --password=password      Kuzzle user password
+  --port=port              [default: 7512] Kuzzle server port
+  --protocol=protocol      [default: ws] Kuzzle protocol (http or websocket)
+  --ssl                    Use SSL to connect to Kuzzle
+  --username=username      [default: anonymous] Kuzzle username (local strategy)
+```
+
+_See code: [src/commands/collection/migrate.ts](src/commands/collection/migrate.ts)_
 
 ## `kourou config:diff FIRST SECOND`
 
@@ -479,7 +520,7 @@ _See code: [src/commands/document/search.ts](src/commands/document/search.ts)_
 
 ## `kourou es:aliases:cat`
 
-Lists available ES aliases and their indexes
+Lists available ES aliases
 
 ```
 USAGE
@@ -550,7 +591,7 @@ _See code: [src/commands/es/indices/insert.ts](src/commands/es/indices/insert.ts
 
 ## `kourou es:migrate`
 
-Migrate all the index from one Elasticsearch server to another
+Migrate all the index from an Elasticsearch (or a file) to another Elasticsearch
 
 ```
 USAGE
@@ -558,19 +599,19 @@ USAGE
 
 OPTIONS
   --batch-size=batch-size  [default: 1000] How many documents to move in batch per operation
-  --dest=dest              (required) Destination Elasticsearch server URL
+  --dest=dest              (required) Migration destination provider
   --dry-run                Print witch collections will be migrated
   --help                   show CLI help
   --no-interactive         Skip confirmation interactive prompts (perfect for scripting)
   --pattern=pattern        Pattern to match indices to migrate
   --reset                  Reset destination Elasticsearch server
   --scroll=scroll          [default: 30s] Scroll duration for Elasticsearch scrolling
-  --src=src                (required) Source Elasticsearch server URL
+  --src=src                (required) Migration source provider
 
 EXAMPLES
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  kourou es:migrate --src http://elasticsearch:9200 --dest http://otherElasticsearch:9200 --reset --batch-size 2000
-  --no-interactive
+  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern
+  '&myindexes.collection-*'
+  kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive
 ```
 
 _See code: [src/commands/es/migrate.ts](src/commands/es/migrate.ts)_
@@ -936,7 +977,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.18/src/commands/help.ts)_
 
 ## `kourou import PATH`
 
@@ -1033,8 +1074,14 @@ ARGUMENTS
   APPLICATION  Kuzzle PaaS application
 
 OPTIONS
+  -f, --follow       Follow log output
+  -n, --tail=tail    Number of lines to show from the end of the logs
+  -t, --timestamp    Show timestamp
   --help             show CLI help
+  --podName=podName  Name of the pod to show logs from
   --project=project  Current PaaS project
+  --since=since      Display logs from a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time
+  --until=until      Display logs until a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time
 ```
 
 _See code: [src/commands/paas/logs.ts](src/commands/paas/logs.ts)_
@@ -1228,13 +1275,13 @@ OPTIONS
 
   --port=port                  [default: 7512] Kuzzle server port
 
+  --print-raw                  Print only the query result to stdout
+
   --protocol=protocol          [default: ws] Kuzzle protocol (http or ws)
 
   --ssl                        Use SSL to connect to Kuzzle
 
   --username=username          [default: anonymous] Kuzzle username (local strategy)
-
-  --print-raw                  Print only the query result to stdout
 
 DESCRIPTION
   Executes an API query.
@@ -1451,7 +1498,7 @@ $ kourou execute --print-raw '(
 
 # Telemetry
 
-We use a custom Open Source analytics backend (you can check the code [here](https://gihtub.com/kuzzleio/kepler)) to record the use of Kourou by users.
+We use a custom Open Source analytics backend (you can check the code [here](https://github.com/kuzzleio/kepler)) to record the use of Kourou by users.
 
 Collected metrics will allow us to study the use of our products in order to improve them. We do not collect any personal data about users.
 

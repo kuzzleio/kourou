@@ -8,7 +8,7 @@
   },
   "bugs": "https://github.com/kuzzleio/kourou/issues",
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc --build tsconfig.json",
     "dev": "./bin/run",
     "postpack": "rm -f oclif.manifest.json",
     "version": "oclif-dev readme && git add README.md",
@@ -27,6 +27,7 @@
     "bluebird": "^3.7.2",
     "chalk": "^4.1.2",
     "chai": "^4.3.6",
+    "chrono-node": "^2.4.2",
     "cli-ux": "^5.6.7",
     "kepler-companion": "^1.1.5",
     "kuzzle-sdk": "^7.10.3",

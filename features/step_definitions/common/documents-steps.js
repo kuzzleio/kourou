@@ -12,7 +12,8 @@ Given("I create the following document:", async function (dataTable) {
     index,
     collection,
     document.body,
-    document._id
+    document._id,
+    { refresh: "wait_for" }
   );
 
   this.props.documentId = this.props.result._id;
