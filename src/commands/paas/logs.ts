@@ -134,22 +134,27 @@ class PaasLogs extends PaasKommand {
 
     // Display the response
     for await (const line of lineStream) {
-      // Parse the data
-      const data: PaasLogData = JSON.parse(line);
+      try {
+        const data: PaasLogData = JSON.parse(line);
 
-      // Exclude logs that are empty or that are not from a pod
-      if (!data.content || !data.podName) {
-        continue;
+
+        // Exclude logs that are empty or that are not from a pod
+        if (!data.content || !data.podName) {
+          this.logKo(line);
+          continue;
+        }
+
+        // Get the pod color
+        const podColor = this.getPodColor(data.podName);
+
+        // Display the log
+        const timestamp = this.flags.timestamp ? `[${new Date(data.timeStamp).toLocaleString()}] ` : "";
+        const name = podColor(`${data.podName}${separator}`);
+
+        this.log(`${timestamp}${name}| ${data.content}`);
+      } catch (error) {
+        this.logKo(`Unable to parse the following line: ${line}`);
       }
-
-      // Get the pod color
-      const podColor = this.getPodColor(data.podName);
-
-      // Display the log
-      const timestamp = this.flags.timestamp ? `[${new Date(data.timeStamp).toLocaleString()}] ` : "";
-      const name = podColor(`${data.podName}${separator}`);
-
-      this.log(`${timestamp}${name}| ${data.content}`);
     }
   }
 
