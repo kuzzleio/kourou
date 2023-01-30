@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.25.0 linux-x64 node-v16.15.0
+kourou/0.25.1 linux-x64 node-v16.15.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -365,7 +365,7 @@ ARGUMENTS
   DESTINATION  Directory to scaffold the app
 
 OPTIONS
-  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-platform", "iot-console", "iot-platform").
+  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-backend", "iot-console").
                    Those can be found here: https://github.com/kuzzleio/project-templates
 
   --help           show CLI help
@@ -725,7 +725,7 @@ OPTIONS
   --src=src                (required) Migration source provider
 
 EXAMPLES
-  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern
+  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern 
   '&myindexes.collection-*'
   kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive
 ```
@@ -1487,7 +1487,7 @@ DESCRIPTION
 
   You can either:
     - Manually re-create credentials for your users
-    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
+    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
