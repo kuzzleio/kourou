@@ -1,7 +1,6 @@
 import { execSync } from "child_process";
 import fs from "fs";
-
-import { kourou } from "../../support";
+import {kourou} from "../../support";
 
 describe("app:scaffold", () => {
   it("creates desired files and install packages", () => {
