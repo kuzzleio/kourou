@@ -1,20 +1,25 @@
 import { execSync } from "child_process";
-import fs from "fs";
 import {kourou} from "../../support";
+import {expectFilesExists} from "../../expect";
 
 describe("app:scaffold", () => {
-  it("creates desired files and install packages", () => {
-    execSync("rm -rf blackmesa/");
 
+  afterEach(() => {
+    execSync("rm -rf blackmesa/");
+  });
+
+  it("creates desired files and install packages", async () => {
     kourou("app:scaffold blackmesa");
 
-    expect(fs.existsSync("./blackmesa/.eslintignore")).toBeTruthy();
-    expect(fs.existsSync("./blackmesa/.eslintrc.json")).toBeTruthy();
-    expect(fs.existsSync("./blackmesa/.gitignore")).toBeTruthy();
-    expect(fs.existsSync("./blackmesa/.mocharc.json")).toBeTruthy();
-    expect(fs.existsSync("./blackmesa/app.ts")).toBeTruthy();
-    expect(fs.existsSync("./blackmesa/package.json")).toBeTruthy();
-    expect(fs.existsSync("./blackmesa/README.md")).toBeTruthy();
-    expect(fs.existsSync("./blackmesa/tsconfig.json")).toBeTruthy();
+    expectFilesExists([
+      "./blackmesa/.eslintignore",
+      "./blackmesa/.eslintrc.json",
+      "./blackmesa/.gitignore",
+      "./blackmesa/.mocharc.json",
+      "./blackmesa/app.ts",
+      "./blackmesa/package.json",
+      "./blackmesa/README.md",
+      "./blackmesa/tsconfig.json"
+    ]);
   })
 });

@@ -4,6 +4,9 @@ const { Kuzzle, WebSocket, Http } = require("kuzzle-sdk"),
 
 require("./assertions");
 
+/**
+ * @deprecated remove when Cucumber is totally removed
+ */
 class KuzzleWorld {
   constructor(attach, parameters) {
     this.attach = attach.attach;

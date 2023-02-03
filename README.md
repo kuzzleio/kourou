@@ -196,7 +196,7 @@ EXAMPLE
   kourou api-key:check eyJhbG...QxfQrc
 ```
 
-_See code: [src/commands/api-key/check.ts](src/commands/api-key/check.ts)_
+_See code: [src/commands/api-key/check.test.ts](src/commands/api-key/check.ts)_
 
 ## `kourou api-key:create USER`
 
@@ -224,7 +224,7 @@ OPTIONS
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/api-key/create.ts](src/commands/api-key/create.ts)_
+_See code: [src/commands/api-key/create.test.ts](src/commands/api-key/create.ts)_
 
 ## `kourou api-key:delete USER ID`
 
@@ -253,7 +253,7 @@ EXAMPLE
   kourou vault:delete sigfox-gateway 1k-BF3EBjsXdvA2PR8x
 ```
 
-_See code: [src/commands/api-key/delete.ts](src/commands/api-key/delete.ts)_
+_See code: [src/commands/api-key/delete.test.ts](src/commands/api-key/delete.ts)_
 
 ## `kourou api-key:search USER`
 
@@ -425,7 +425,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/collection/create.ts](src/commands/collection/create.ts)_
+_See code: [src/commands/collection/create.test.ts](src/commands/collection/create.ts)_
 
 ## `kourou collection:migrate SCRIPT PATH`
 
@@ -632,7 +632,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/snapshot/create.ts](src/commands/es/snapshot/create.ts)_
+_See code: [src/commands/es/snapshot/create.test.ts](src/commands/es/snapshot/create.ts)_
 
 ## `kourou es:snapshot:create-repository REPOSITORY LOCATION`
 
