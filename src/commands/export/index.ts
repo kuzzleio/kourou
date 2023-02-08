@@ -14,6 +14,10 @@ export default class ExportIndex extends Kommand {
   static keepAuth = true;
   static description = "Exports an index (JSONL or Kuzzle format)";
 
+  // Without alias, we only have "export" command because of oclif convention (which check by
+  // default commands in index.ts).
+  static aliases = ["export:index"];
+
   static flags = {
     help: flags.help({}),
     path: flags.string({
