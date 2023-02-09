@@ -14,7 +14,7 @@
     "version": "oclif-dev readme && git add README.md",
     "test:lint": "eslint src/ tests/ --ext .ts",
     "test:lint:fix": "eslint src/ tests/ --ext .ts --fix",
-    "test:functional": "npm run build && npm run test:functional:stdout && npm run test:functional:cucumber",
+    "test:functional": "npm run build && npm run test:functional:stdout && npm run test:functional:cucumber && test:functional:jest",
     "test:functional:stdout": "nyc --extension .ts mocha --forbid-only \\\"tests/**/*.test.ts\\\"",
     "test:functional:cucumber": "./node_modules/.bin/cucumber-js --fail-fast",
     "test:functional:jest": "jest --runInBand"

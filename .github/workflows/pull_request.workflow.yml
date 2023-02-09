@@ -57,7 +57,7 @@ jobs:
     needs: [build]
     strategy:
       matrix:
-        test-set: [stdout, cucumber]
+        test-set: [stdout, cucumber, jest]
     steps:
       - uses: actions/checkout@v2
       - name: Cache node modules
