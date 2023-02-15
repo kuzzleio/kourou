@@ -1,12 +1,9 @@
-import fs from "fs";
 import * as readline from "readline";
 
 import { flags } from "@oclif/command";
 import chalk from "chalk";
 import * as chrono from "chrono-node";
-import { cli } from "cli-ux";
 
-import PaasLogin from "./login";
 import { PaasKommand } from "../../support/PaasKommand";
 
 /**
@@ -156,44 +153,6 @@ class PaasLogs extends PaasKommand {
         this.logKo(`Unable to parse the following line: ${line}`);
       }
     }
-  }
-
-  async getCredentials() {
-    const project = this.getProject();
-    const projectFile = this.fileProjectCredentials(project);
-
-    if (!fs.existsSync(projectFile)) {
-      this.log("");
-      const nextStep = await cli.prompt(
-        "Cannot find credentials for this project. Do you want to login first? [Y/N]",
-        { type: "single" }
-      );
-      this.log("");
-
-      if (nextStep.toLowerCase().startsWith("y")) {
-        await PaasLogin.run(["--project", project]);
-      } else {
-        this.logKo("Aborting.");
-        process.exit(1);
-      }
-    }
-
-    const credentials = JSON.parse(fs.readFileSync(projectFile, "utf8"));
-
-    return credentials.apiKey;
-  }
-
-  getNumberOfSpaces(names: string[], currentName: string) {
-    const end = 10;
-    let max = { name: '', length: 0 };
-
-    for (const name of names) {
-      if (max.length < name.length) {
-        max = { name: name, length: name.length };
-      }
-    }
-
-    return currentName === max.name ? end : end + (max.length - currentName.length);
   }
 
   /**
