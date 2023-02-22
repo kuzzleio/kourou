@@ -43,11 +43,6 @@ class PaasLogin extends PaasKommand {
       return;
     }
 
-    if (this.flags.only_npm) {
-      await this.authenticateNPM(username, password);
-      return;
-    }
-
     await this.initPaasClient({ username, password });
 
     const apiKey: ApiKey = await this.paas.auth.createApiKey(
@@ -95,10 +90,16 @@ class PaasLogin extends PaasKommand {
     };
 
     const response = await fetch(
-      `https://packages.paas.kuzzle.io/-/user/org.couchdb.user:${username}`,
+      `https://${this.packagesHost}/-/user/org.couchdb.user:${username}`,
       options
     );
-    const { token } = await response.json();
+    const json = await response.json();
+
+    if (response.status !== 201) {
+      throw new Error(json.error);
+    }
+
+    const { token } = json;
 
     spawnSync(
       "npm",
@@ -106,11 +107,11 @@ class PaasLogin extends PaasKommand {
         "config",
         "set",
         "@kuzzleio:registry",
-        "https://packages.paas.kuzzle.io",
+        `https://${this.packagesHost}`,
       ],
       { stdio: "inherit" }
     );
-    spawnSync("npm", ["set", "//packages.paas.kuzzle.io/:_authToken", token], {
+    spawnSync("npm", ["set", `//${this.packagesHost}/:_authToken`, token], {
       stdio: "inherit",
     });
   }

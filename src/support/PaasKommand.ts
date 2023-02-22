@@ -20,6 +20,9 @@ export class PaasKommand extends Kommand {
   protected ssl = process.env.KUZZLE_PAAS_SSL
     ? JSON.parse(process.env.KUZZLE_PAAS_SSL as string)
     : true;
+  protected packagesHost = process.env.KUZZLE_PAAS_PACKAGES_HOST
+    ? process.env.KUZZLE_PAAS_PACKAGES_HOST
+    : "packages.paas.kuzzle.io";
 
   // Instantiate a dummy SDK to avoid the this.paas? notation everywhere -_-
   protected paas = new KuzzleSDK({});

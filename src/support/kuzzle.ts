@@ -114,7 +114,9 @@ export class KuzzleSDK {
     this.sdk.on("networkError", (error: any) => logger.logKo(error.message));
 
     logger.logInfo(
-      `Connecting to ${this.protocol}${this.ssl ? "s" : ""}://${this.host}:${this.port} ...`
+      `Connecting to ${this.protocol}${this.ssl ? "s" : ""}://${this.host}:${
+        this.port
+      } ...`
     );
 
     await this.sdk.connect();
@@ -206,11 +208,15 @@ export class KuzzleSDK {
   public queryHttpStream(request: JSONObject): Promise<http.IncomingMessage> {
     // Ensure the protocol is HTTP
     if (this.protocol !== "http") {
-      throw new TypeError("HTTP streaming is only available with the HTTP protocol");
+      throw new TypeError(
+        "HTTP streaming is only available with the HTTP protocol"
+      );
     }
 
     // Construct the URL
-    const url = `${this.ssl ? "https" : "http"}://${this.host}:${this.port}/_query`;
+    const url = `${this.ssl ? "https" : "http"}://${this.host}:${
+      this.port
+    }/_query`;
 
     // Construct the request
     const body = JSON.stringify(request);
@@ -218,7 +224,7 @@ export class KuzzleSDK {
     const options = {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${this.sdk.jwt}`,
+        Authorization: `Bearer ${this.sdk.jwt}`,
         "Content-Length": Buffer.byteLength(body),
         "Content-Type": "application/json",
       },
@@ -227,7 +233,6 @@ export class KuzzleSDK {
     // Send the request
     return new Promise((resolve, reject) => {
       const httpModule = this.ssl ? https : http;
-
       const req = httpModule.request(url, options, (res) => {
         resolve(res);
       });
