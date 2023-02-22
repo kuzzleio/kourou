@@ -103,13 +103,13 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
     );
 
     this.logInfo(
-      `Dumping ${count} of ${countAll} documents from collection "${this.args.index}:${this.args.collection}" in ${exportPath} ...`
+      `Dumping collection "${this.args.index}:${this.args.collection}" in ${exportPath} ...`
     );
 
     fs.mkdirSync(exportPath, { recursive: true });
 
     if (this.flags.type === "all" || this.flags.type === "mappings") {
-      this.logInfo(`Dumping collection "${this.args.collection}" mappings ...`);
+      this.logInfo(`Dumping collection mappings ...`);
       await dumpCollectionMappings(
         this.sdk,
         this.args.index,
@@ -119,9 +119,7 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
       );
     }
     if (this.flags.type === "all" || this.flags.type === "data") {
-      this.logInfo(
-        `Dumping collection "${this.args.collection}" documents ...`
-      );
+      this.logInfo(`Dumping collection ${count} of ${countAll} documents ...`);
       await dumpCollectionData(
         this.sdk,
         this.args.index,
