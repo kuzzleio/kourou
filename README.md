@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.25.1 linux-x64 node-v16.15.0
+kourou/0.25.2 linux-x64 node-v14.20.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -506,6 +506,9 @@ OPTIONS
   --ssl
       Use SSL to connect to Kuzzle
 
+  --type=type
+      [default: all] Type of the export: all, mappings, data
+
   --username=username
       [default: anonymous] Kuzzle username (local strategy)
 
@@ -937,6 +940,8 @@ OPTIONS
                            expressed in ms format, e.g. '2s', '1m', '3h'.
 
   --ssl                    Use SSL to connect to Kuzzle
+
+  --type=type              [default: all] Type of the export: all, mappings, data
 
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 
