@@ -44,6 +44,10 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
       description: "Kuzzle protocol (http or websocket)",
       default: "ws",
     }),
+    type: flags.string({
+      description: "Type of the export: all, mappings, data",
+      default: "all",
+    }),
   };
 
   static args = [{ name: "index", description: "Index name", required: true }];
@@ -70,7 +74,12 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
 
     for (const collection of collections) {
       try {
-        if (collection.type !== "realtime") {
+        if (collection.type === "realtime") {
+          continue;
+        }
+
+        if (this.flags.type === "all" || this.flags.type === "mappings") {
+          this.logInfo(`Dumping collection "${collection.name}" mappings ...`);
           await dumpCollectionMappings(
             this.sdk,
             this.args.index,
@@ -78,7 +87,10 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
             exportPath,
             this.flags.format
           );
+        }
 
+        if (this.flags.type === "all" || this.flags.type === "data") {
+          this.logInfo(`Dumping collection "${collection.name}" documents ...`);
           await dumpCollectionData(
             this.sdk,
             this.args.index,
@@ -87,11 +99,11 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
             exportPath,
             query,
             this.flags.format,
-            this.flags.scrollTTL,
+            this.flags.scrollTTL
           );
-
-          cli.action.stop();
         }
+
+        cli.action.stop();
       } catch (error: any) {
         this.logKo(
           `Error when exporting collection "${collection.name}": ${error}`
