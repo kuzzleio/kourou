@@ -2,6 +2,7 @@
 
 The CLI that helps you manage your Kuzzle instances.
 
+
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/kourou.svg)](https://npmjs.org/package/kourou)
 [![Downloads/week](https://img.shields.io/npm/dw/kourou.svg)](https://npmjs.org/package/kourou)
