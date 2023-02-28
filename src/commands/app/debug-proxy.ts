@@ -57,6 +57,9 @@ export default class DebugProxy extends Kommand {
   };
 
   async runSafe() {
+    // @ts-ignore Disable ping pong since when debugging Kuzzle might not be responding
+    clearInterval(this.sdk.sdk.protocol.pingIntervalId);
+
     const nodeVersionResponse = (await this.sdk.query({
       controller: "debug",
       action: "nodeVersion",
