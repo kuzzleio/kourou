@@ -35,6 +35,7 @@ export class Elasticsearch implements Provider {
     delete specifications.settings.index.uuid;
     delete specifications.settings.index.version;
     delete specifications.settings.index.routing;
+    delete specifications.settings.index.history;
 
     return specifications;
   }
