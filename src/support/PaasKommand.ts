@@ -74,4 +74,18 @@ export class PaasKommand extends Kommand {
 
     return this.flags.project;
   }
+
+  async getCredentials() {
+    const project = this.getProject();
+    const projectFile = this.fileProjectCredentials(project);
+
+    if (!fs.existsSync(projectFile)) {
+      this.logKo("You are not logged in. You should run paas:login first. Aborting.");
+      process.exit(1);
+    }
+
+    const credentials = JSON.parse(fs.readFileSync(projectFile, "utf8"));
+
+    return credentials.apiKey;
+  }
 }

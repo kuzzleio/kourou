@@ -1,10 +1,10 @@
 import { flags } from "@oclif/command";
 
-import { PaasKommand } from "../../support/PaasKommand";
+import { PaasKommand } from "../../../support/PaasKommand";
 
-class PaasDeploy extends PaasKommand {
+class PaasSnapshotsDump extends PaasKommand {
   public static description =
-    "Deploy a new version of the application in the PaaS";
+    "List all snapshots for a given kuzzle application in a environment";
 
   public static flags = {
     help: flags.help(),
@@ -27,12 +27,7 @@ class PaasDeploy extends PaasKommand {
       name: "applicationId",
       description: "Application Identifier",
       required: true,
-    },
-    {
-      name: "image",
-      description: "Image name and hash as myimage:mytag",
-      required: true,
-    },
+    }
   ];
 
   async runSafe() {
@@ -42,30 +37,22 @@ class PaasDeploy extends PaasKommand {
 
     const user = await this.paas.auth.getCurrentUser();
     this.logInfo(
-      `Logged as "${user._id}" for project "${
-        this.flags.project || this.getProject()
+      `Logged as "${user._id}" for project "${this.flags.project || this.getProject()
       }"`
     );
 
-    const [image, tag] = this.args.image.split(":");
-    this.logInfo(`Deploy application with image "${image}:${tag}"`);
 
-    await this.paas.query({
+    const { result }: any = await this.paas.query({
       controller: "application",
-      action: "deploy",
+      action: "dump",
       environmentId: this.args.environment,
       projectId: this.flags.project || this.getProject(),
       applicationId: this.args.applicationId,
-      body: {
-        image: {
-          name: image,
-          tag,
-        },
-      },
+      body: {},
     });
 
-    this.logOk("Deployment in progress");
+    this.logOk(result.body);
   }
 }
 
-export default PaasDeploy;
+export default PaasSnapshotsDump;
