@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.25.0 linux-x64 node-v16.15.0
+kourou/0.26.0 linux-x64 node-v14.21.2
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -162,7 +162,9 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE`](#kourou-paasdeploy-environment-applicationid-image)
 * [`kourou paas:init PROJECT`](#kourou-paasinit-project)
 * [`kourou paas:login`](#kourou-paaslogin)
-* [`kourou paas:logs ENVIRONMENT APPLICATION`](#kourou-paaslogs-environment-application)
+* [`kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID`](#kourou-paassnapshotscat-environment-applicationid)
+* [`kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID`](#kourou-paassnapshotsdump-environment-applicationid)
+* [`kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID`](#kourou-paassnapshotsrestore-environment-applicationid-snapshotid)
 * [`kourou profile:export`](#kourou-profileexport)
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
 * [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
@@ -365,7 +367,7 @@ ARGUMENTS
   DESTINATION  Directory to scaffold the app
 
 OPTIONS
-  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-platform", "iot-console", "iot-platform").
+  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-backend", "iot-console").
                    Those can be found here: https://github.com/kuzzleio/project-templates
 
   --help           show CLI help
@@ -409,7 +411,7 @@ EXAMPLES
   $ kourou autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.3.10/src/commands/autocomplete/index.ts)_
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.3.0/src/commands/autocomplete/index.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
@@ -725,7 +727,7 @@ OPTIONS
   --src=src                (required) Migration source provider
 
 EXAMPLES
-  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern
+  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern 
   '&myindexes.collection-*'
   kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive
 ```
@@ -870,7 +872,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.18/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
 
 ## `kourou import PATH`
 
@@ -1091,30 +1093,66 @@ OPTIONS
 
 _See code: [src/commands/paas/login.ts](src/commands/paas/login.ts)_
 
-## `kourou paas:logs ENVIRONMENT APPLICATION`
+## `kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID`
 
-Show logs of the targeted application
+List all snapshots for a given kuzzle application in a environment
 
 ```
 USAGE
-  $ kourou paas:logs ENVIRONMENT APPLICATION
+  $ kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID
 
 ARGUMENTS
-  ENVIRONMENT  Kuzzle PaaS environment
-  APPLICATION  Kuzzle PaaS application
+  ENVIRONMENT    Project environment name
+  APPLICATIONID  Application Identifier
 
 OPTIONS
-  -f, --follow       Follow log output
-  -n, --tail=tail    Number of lines to show from the end of the logs
-  -t, --timestamp    Show timestamp
   --help             show CLI help
-  --podName=podName  Name of the pod to show logs from
   --project=project  Current PaaS project
-  --since=since      Display logs from a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time
-  --until=until      Display logs until a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time
+  --token=token      Authentication token
 ```
 
-_See code: [src/commands/paas/logs.ts](src/commands/paas/logs.ts)_
+_See code: [src/commands/paas/snapshots/cat.ts](src/commands/paas/snapshots/cat.ts)_
+
+## `kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID`
+
+List all snapshots for a given kuzzle application in a environment
+
+```
+USAGE
+  $ kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID
+
+ARGUMENTS
+  ENVIRONMENT    Project environment name
+  APPLICATIONID  Application Identifier
+
+OPTIONS
+  --help             show CLI help
+  --project=project  Current PaaS project
+  --token=token      Authentication token
+```
+
+_See code: [src/commands/paas/snapshots/dump.ts](src/commands/paas/snapshots/dump.ts)_
+
+## `kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID`
+
+List all snapshots for a given kuzzle application in a environment
+
+```
+USAGE
+  $ kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID
+
+ARGUMENTS
+  ENVIRONMENT    Project environment name
+  APPLICATIONID  Application Identifier
+  SNAPSHOTID     Snapshot Identifier
+
+OPTIONS
+  --help             show CLI help
+  --project=project  Current PaaS project
+  --token=token      Authentication token
+```
+
+_See code: [src/commands/paas/snapshots/restore.ts](src/commands/paas/snapshots/restore.ts)_
 
 ## `kourou profile:export`
 
@@ -1487,7 +1525,7 @@ DESCRIPTION
 
   You can either:
     - Manually re-create credentials for your users
-    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
+    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
