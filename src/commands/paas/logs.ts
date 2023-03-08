@@ -1,12 +1,9 @@
-import fs from "fs";
 import * as readline from "readline";
 
 import { flags } from "@oclif/command";
 import chalk from "chalk";
 import * as chrono from "chrono-node";
-import { cli } from "cli-ux";
 
-import PaasLogin from "./login";
 import { PaasKommand } from "../../support/PaasKommand";
 
 /**
@@ -134,61 +131,28 @@ class PaasLogs extends PaasKommand {
 
     // Display the response
     for await (const line of lineStream) {
-      // Parse the data
-      const data: PaasLogData = JSON.parse(line);
+      try {
+        const data: PaasLogData = JSON.parse(line);
 
-      // Exclude logs that are empty or that are not from a pod
-      if (!data.content || !data.podName) {
-        continue;
-      }
 
-      // Get the pod color
-      const podColor = this.getPodColor(data.podName);
+        // Exclude logs that are empty or that are not from a pod
+        if (!data.content || !data.podName) {
+          this.logKo(line);
+          continue;
+        }
 
-      // Display the log
-      const timestamp = this.flags.timestamp ? `[${new Date(data.timeStamp).toLocaleString()}] ` : "";
-      const name = podColor(`${data.podName}${separator}`);
+        // Get the pod color
+        const podColor = this.getPodColor(data.podName);
 
-      this.log(`${timestamp}${name}| ${data.content}`);
-    }
-  }
+        // Display the log
+        const timestamp = this.flags.timestamp ? `[${new Date(data.timeStamp).toLocaleString()}] ` : "";
+        const name = podColor(`${data.podName}${separator}`);
 
-  async getCredentials() {
-    const project = this.getProject();
-    const projectFile = this.fileProjectCredentials(project);
-
-    if (!fs.existsSync(projectFile)) {
-      this.log("");
-      const nextStep = await cli.prompt(
-        "Cannot find credentials for this project. Do you want to login first? [Y/N]",
-        { type: "single" }
-      );
-      this.log("");
-
-      if (nextStep.toLowerCase().startsWith("y")) {
-        await PaasLogin.run(["--project", project]);
-      } else {
-        this.logKo("Aborting.");
-        process.exit(1);
+        this.log(`${timestamp}${name}| ${data.content}`);
+      } catch (error) {
+        this.logKo(`Unable to parse the following line: ${line}`);
       }
     }
-
-    const credentials = JSON.parse(fs.readFileSync(projectFile, "utf8"));
-
-    return credentials.apiKey;
-  }
-
-  getNumberOfSpaces(names: string[], currentName: string) {
-    const end = 10;
-    let max = { name: '', length: 0 };
-
-    for (const name of names) {
-      if (max.length < name.length) {
-        max = { name: name, length: name.length };
-      }
-    }
-
-    return currentName === max.name ? end : end + (max.length - currentName.length);
   }
 
   /**

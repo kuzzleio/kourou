@@ -45,12 +45,13 @@ class PaasLogin extends PaasKommand {
 
     await this.initPaasClient({ username, password });
 
+    await this.authenticateNPM(username, password);
+
     const apiKey: ApiKey = await this.paas.auth.createApiKey(
       "Kourou PaaS API Key"
     );
 
     this.createProjectCredentials(apiKey);
-    await this.authenticateNPM(username, password);
 
     this.logOk(
       `Successfully logged in as ${username}. Your Kuzzle Enterprise license is now enabled on this host.`
@@ -89,10 +90,8 @@ class PaasLogin extends PaasKommand {
       }),
     };
 
-    const response = await fetch(
-      `https://${this.packagesHost}/-/user/org.couchdb.user:${username}`,
-      options
-    );
+    const targetUrl = `https://${this.packagesHost}/-/user/org.couchdb.user:${username}`;
+    const response = await fetch(targetUrl, options);
     const json = (await response.json()) as any;
 
     if (response.status !== 201) {
