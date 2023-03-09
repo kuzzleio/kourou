@@ -6,7 +6,7 @@ export const testMappings = {
         name: { type: "keyword" },
         city: { type: "keyword" },
         firstName: { type: "keyword" },
-        lastName: { type: "keyword" }
+        lastName: { type: "keyword" },
       },
     },
   },

@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import {KuzzleTestContext} from "./KuzzleTestContext";
+import { KuzzleTestContext } from "./KuzzleTestContext";
 
 /* eslint-disable no-console */
 export function kourou(command: string) {
@@ -26,7 +26,7 @@ export function kourou(command: string) {
  * environnement after each test.
  *
  */
-export function initContext() : KuzzleTestContext {
+export function initContext(): KuzzleTestContext {
   process.env.NODE_ENV = "test";
   const context = new KuzzleTestContext();
   beforeAll(async () => {

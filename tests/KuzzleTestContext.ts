@@ -1,7 +1,7 @@
-import {Http, Kuzzle, WebSocket} from "kuzzle-sdk";
-import {testMappings} from "./fixtures/mappings";
-import {testFixtures} from "./fixtures/fixtures";
-import {testSecurities} from "./fixtures/securities";
+import { Http, Kuzzle, WebSocket } from "kuzzle-sdk";
+import { testMappings } from "./fixtures/mappings";
+import { testFixtures } from "./fixtures/fixtures";
+import { testSecurities } from "./fixtures/securities";
 
 type KuzzleTestOptions = {
   host: string;
@@ -31,12 +31,14 @@ export class KuzzleTestContext {
 
   private ssl: boolean;
 
-  constructor(opts: KuzzleTestOptions = {
-    host: "localhost",
-    port: 7512,
-    protocol: "websocket",
-    ssl: false,
-  }) {
+  constructor(
+    opts: KuzzleTestOptions = {
+      host: "localhost",
+      port: 7512,
+      protocol: "websocket",
+      ssl: false,
+    }
+  ) {
     this.host = opts.host;
     this.port = opts.port;
     this.protocol = opts.protocol;
@@ -101,7 +103,7 @@ export class KuzzleTestContext {
     await this.login({
       username: "test-admin",
       password: "password",
-    })
+    });
 
     await this.sdk.query({
       controller: "admin",

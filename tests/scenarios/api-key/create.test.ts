@@ -1,7 +1,6 @@
-import {initContext, kourou} from "../../support";
+import { initContext, kourou } from "../../support";
 
 describe("api-key:create", () => {
-
   const context = initContext();
 
   afterEach(async () => {
@@ -10,7 +9,7 @@ describe("api-key:create", () => {
 
   it("should create an api key when call api-key:create command", async () => {
     // WHEN
-    kourou("api-key:create gordon \"Test api key\" --id gordon-key ");
+    kourou('api-key:create gordon "Test api key" --id gordon-key ');
 
     // THEN
     const apiKeys = await context.security.searchApiKeys("gordon");

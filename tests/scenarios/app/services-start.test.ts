@@ -15,8 +15,10 @@ xdescribe("services:start", () => {
     })
     .it("Spawns Kuzzle v2 services", async (ctx, done) => {
       await wait(10 * SECOND);
-      expect(ctx.stdout).toContain("Elasticsearch and Redis are launching")
-      expect(ctx.stdout).toContain("Elasticsearch and Redis are booting in the background right now")
+      expect(ctx.stdout).toContain("Elasticsearch and Redis are launching");
+      expect(ctx.stdout).toContain(
+        "Elasticsearch and Redis are booting in the background right now"
+      );
       done();
     });
 });

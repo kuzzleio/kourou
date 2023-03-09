@@ -1,9 +1,8 @@
 import { execSync } from "child_process";
-import {kourou} from "../../support";
-import {expectFilesExists} from "../../expect";
+import { kourou } from "../../support";
+import { expectFilesExists } from "../../expect";
 
 describe("app:scaffold", () => {
-
   afterEach(() => {
     execSync("rm -rf blackmesa/");
   });
@@ -19,7 +18,7 @@ describe("app:scaffold", () => {
       "./blackmesa/app.ts",
       "./blackmesa/package.json",
       "./blackmesa/README.md",
-      "./blackmesa/tsconfig.json"
+      "./blackmesa/tsconfig.json",
     ]);
-  })
+  });
 });
