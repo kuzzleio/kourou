@@ -52,13 +52,9 @@ describe("File", () => {
     let document;
     let response;
 
-    fs.writeFileSync(test - secrets.json, {
-      aws: {
-        s3: "foobar",
-      },
-      my: {
-        huong: "hcmc",
-      },
+    fs.writeFileSync("test-secrets.json", {
+      aws: { s3: "foobar" },
+      my: { huong: "hcmc" },
     });
 
     try {
@@ -98,13 +94,9 @@ describe("File", () => {
     let document;
     let response;
 
-    fs.writeFileSync(test - secrets.json, {
-      aws: {
-        s3: "foobar",
-      },
-      my: {
-        huong: "hcmc",
-      },
+    fs.writeFileSync("test-secrets.json", {
+      aws: { s3: "foobar" },
+      my: { huong: "hcmc" },
     });
 
     try {

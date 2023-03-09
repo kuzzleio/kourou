@@ -62,12 +62,7 @@ describe("RealtimeSubscribe", () => {
 
     executor = kourou("realtime:subscribe", "nyc-open-data", "yellow-taxi");
 
-    await sdk.document.create(
-      index,
-      collection,
-      { body: {} },
-      "chuon-chuon-kim"
-    );
+    await sdk.document.create(index, collection, {}, "chuon-chuon-kim");
 
     executor.process.kill();
     try {

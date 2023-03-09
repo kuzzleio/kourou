@@ -60,12 +60,7 @@ describe("Elasticsearch", () => {
     ).resolves.toBe(true);
     collection = "yellow-taxi";
 
-    await sdk.document.create(
-      index,
-      collection,
-      { body: {} },
-      "chuon-chuon-kim"
-    );
+    await sdk.document.create(index, collection, {}, "chuon-chuon-kim");
 
     try {
       const { stdout } = await kourou(
@@ -267,21 +262,21 @@ describe("Elasticsearch", () => {
     await sdk.document.create(
       index,
       collection,
-      { body: { city: "hcmc", district: 1 } },
+      { city: "hcmc", district: 1 },
       "chuon-chuon-kim"
     );
 
     await sdk.document.create(
       index,
       collection,
-      { body: { city: "hcmc", district: 2 } },
+      { city: "hcmc", district: 2 },
       "the-hive-vn"
     );
 
     await sdk.document.create(
       index,
       collection,
-      { body: { city: "changmai", district: 7 } },
+      { city: "changmai", district: 7 },
       "the-hive-th"
     );
 

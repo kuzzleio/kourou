@@ -95,7 +95,10 @@ describe("ApiKey", () => {
     response = await sdk.security.createApiKey("gordon", "Test API key");
 
     try {
-      const { stdout } = await kourou("api-key:check", result._source.token);
+      const { stdout } = await kourou(
+        "api-key:check",
+        response.result._source.token
+      );
       response = stdout;
     } catch (error) {
       console.error(error);

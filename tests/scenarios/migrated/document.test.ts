@@ -61,11 +61,13 @@ describe("Document", () => {
     collection = "yellow-taxi";
 
     await sdk.document.create(index, collection, {
-      body: { name: "Adrien", city: "Saigon" },
+      name: "Adrien",
+      city: "Saigon",
     });
 
     await sdk.document.create(index, collection, {
-      body: { name: "Sebastien", city: "Cassis" },
+      name: "Sebastien",
+      city: "Cassis",
     });
 
     await sdk.collection.refresh(index, collection);

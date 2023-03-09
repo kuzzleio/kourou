@@ -78,11 +78,11 @@ Then('I create the following document:', async function (dataTable) {
     const id = document._id;
     document._id = undefined;
     global.converter.write(`
-      await sdk.document.create(index, collection, ${JSON.stringify(document)}, "${id}");
+      await sdk.document.create(index, collection, ${JSON.stringify(document.body)}, "${id}");
     `);
   } else {
     global.converter.write(`
-      await sdk.document.create(index, collection, ${JSON.stringify(document)});
+      await sdk.document.create(index, collection, ${JSON.stringify(document.body)});
     `);
   }
 });
@@ -466,7 +466,7 @@ Then("a JSON file {string} containing:", function (filename, dataTable) {
   }
 
   global.converter.write(`
-       fs.writeFileSync(${filename}, ${JSON.stringify(content, null, 2)});
+       fs.writeFileSync("${filename}", ${JSON.stringify(content)});
   `);
 });
 
@@ -520,7 +520,7 @@ Then("I check the API key validity", async function () {
       try {
        const { stdout } = await kourou(
           "api-key:check",
-          result._source.token
+          response.result._source.token
         );
         response = stdout;
       } catch (error) {
@@ -594,8 +594,8 @@ Then("I get the file in {string} containing", function (path, contents) {
 Then("I should receive a {string} array matching:", function (name, dataTable) {
   const expected = _.flatten(dataTable.rawTable).map(JSON.parse);
   global.converter.write(`
-    expect(result[name].length).toBe(${expected.length});
-    expect(result[name].sort()).toBe(expected.sort());
+    expect(response.result["${name}"].length).toBe(${expected.length});
+    expect(response.result["${name}"].sort()).toBe(${JSON.stringify(expected)}.sort());
   `);
 });
 

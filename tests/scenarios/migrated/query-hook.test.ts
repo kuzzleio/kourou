@@ -62,8 +62,8 @@ describe("QueryHook", () => {
 
     response = await sdk.query({ controller: "index", action: "list" });
 
-    expect(result[name].length).toBe(1);
-    expect(result[name].sort()).toBe(expected.sort());
+    expect(response.result["indexes"].length).toBe(1);
+    expect(response.result["indexes"].sort()).toBe(["nyc-open-data"].sort());
   });
 
   it("Infer <command> <body>", async () => {
