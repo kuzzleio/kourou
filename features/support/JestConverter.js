@@ -46,6 +46,7 @@ class JestConverter {
   writeFileBeginning () {
     this.file.write(`import { useSdk } from "../../helpers/sdk";
     import { beforeEachTruncateCollections } from "../../hooks/collections";
+    import { beforeEachLoadFixtures } from "../../hooks/fixtures";
     import { resetSecurityDefault} from "../../hooks/securities";
 
     import {Client} from "@elastic/elasticsearch";
@@ -72,6 +73,7 @@ class JestConverter {
 
       beforeEach(async () => {
             await beforeEachTruncateCollections(sdk);
+            await beforeEachLoadFixtures(sdk);
       });
 
       afterEach(async () => {
