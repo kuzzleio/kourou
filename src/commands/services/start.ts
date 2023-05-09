@@ -93,9 +93,9 @@ export default class StartServices extends Kommand {
         "Elasticsearch and Redis are booting in the background right now."
       );
       this.log(chalk.grey("\nTo watch the logs, run"));
-      this.log(chalk.grey(`  docker-compose -f ${docoFilename} logs -f\n`));
-      this.log("  Elasticsearch port: 9200");
-      this.log("  Redis port: 6379");
+      this.log(chalk.blue.bold(`  docker-compose -f ${docoFilename} logs -f\n`));
+      this.log(`  Elasticsearch port: ${chalk.bold("9200")}`);
+      this.log(`          Redis port: ${chalk.bold("6379")}`);
     } catch (error: any) {
       this.logKo(` Something went wrong: ${error.message}`);
       this.log(
