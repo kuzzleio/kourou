@@ -41,9 +41,9 @@ export default class AppScaffold extends Kommand {
     await tasks.run();
     this.log("");
     this.logOk(
-      `Scaffolding complete! Use ${chalk.grey(
+      `Scaffolding complete! Use ${chalk.blue.bold(
         `cd ${destination} && npm run docker npm install`
-      )} install dependencies and then ${chalk.grey(
+      )} install dependencies and then ${chalk.blue.bold(
         `npm run docker:dev`
       )} to run your application!`
     );
