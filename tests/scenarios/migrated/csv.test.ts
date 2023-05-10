@@ -41,7 +41,6 @@ describe("CSV", () => {
 
     const index = "nyc-open-data";
     const collection = "yellow-taxi";
-    let response;
 
     await expect(sdk.index.exists("nyc-open-data")).resolves.toBe(true);
 
@@ -80,7 +79,10 @@ describe("CSV", () => {
         "export:collection",
         "nyc-open-data",
         "yellow-taxi",
-        ["--format", "csv", "--fields", "city,district,nested.field,object"]
+        "--format",
+        "csv",
+        "--fields",
+        "city,district,nested.field,object"
       );
     } catch (error) {
       console.error(error);
@@ -125,7 +127,8 @@ describe("CSV", () => {
         "export:collection",
         "nyc-open-data",
         "yellow-taxi",
-        ["--format", "csv"]
+        "--format",
+        "csv"
       );
     } catch (error) {
       console.error(error);

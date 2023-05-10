@@ -54,10 +54,10 @@ describe("File", () => {
     let document;
     let response;
 
-    fs.writeFileSync("test-secrets.json", {
+    fs.writeFileSync("test-secrets.json", `{
       aws: { s3: "foobar" },
       my: { huong: "hcmc" },
-    });
+    }`);
 
     try {
       const { stdout } = await kourou("file:encrypt", "test-secrets.json", [
@@ -96,10 +96,10 @@ describe("File", () => {
     let document;
     let response;
 
-    fs.writeFileSync("test-secrets.json", {
+    fs.writeFileSync("test-secrets.json", `{
       aws: { s3: "foobar" },
       my: { huong: "hcmc" },
-    });
+    }`);
 
     try {
       const { stdout } = await kourou("file:encrypt", "test-secrets.json", [

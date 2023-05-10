@@ -18,10 +18,7 @@ function kourou(...command: any[]) {
 describe("Redis", () => {
   let sdk = useSdk();
   let shouldResetSecurity = false;
-  let shouldLogout = false;
-  let esClient = new Client({
-    node: process.env.ELASTICSEARCH_URL || "http://localhost:9200",
-  });
+  const shouldLogout = false;
 
   beforeAll(async () => {
     await sdk.connect();
@@ -49,9 +46,6 @@ describe("Redis", () => {
   it("List matching keys", async () => {
     shouldResetSecurity = false;
 
-    let index;
-    let collection;
-    let document;
     let response;
 
     response = await sdk.query({
@@ -76,7 +70,7 @@ describe("Redis", () => {
     });
 
     try {
-      const { stdout } = await kourou("redis:list-keys", "trekking-*", []);
+      const { stdout } = await kourou("redis:list-keys", "trekking-*");
       response = stdout;
     } catch (error) {
       console.error(error);
@@ -120,9 +114,7 @@ describe("Redis", () => {
     });
 
     try {
-      const { stdout } = await kourou("redis:list-keys", "trekking-*", [
-        "--remove",
-      ]);
+      const { stdout } = await kourou("redis:list-keys", "trekking-*", "--remove" );
       response = stdout;
     } catch (error) {
       console.error(error);
@@ -130,7 +122,7 @@ describe("Redis", () => {
     }
 
     try {
-      const { stdout } = await kourou("redis:list-keys", "*", []);
+      const { stdout } = await kourou("redis:list-keys", "*");
       response = stdout;
     } catch (error) {
       console.error(error);

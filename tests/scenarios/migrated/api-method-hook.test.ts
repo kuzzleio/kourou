@@ -41,20 +41,18 @@ describe("ApiMethodHook", () => {
   it("Unregistered API method", async () => {
     shouldResetSecurity = false;
 
-    let index = "nyc-open-data";
-    let collection;
+    const index = "nyc-open-data";
+    const collection  = "yellow-taxi";
     let response;
 
-    await expect(sdk.index.exists("nyc-open-data")).resolves.toBe(true);
-    index = "nyc-open-data";
+    await expect(sdk.index.exists(index)).resolves.toBe(true);
 
     await expect(
-      sdk.collection.exists("nyc-open-data", "yellow-taxi")
+      sdk.collection.exists(index, collection)
     ).resolves.toBe(true);
-    collection = "yellow-taxi";
 
     try {
-      const { stdout } = await kourou("document:createOrReplace", [
+      const { stdout } = await kourou("document:createOrReplace",
         "--arg",
         "index=nyc-open-data",
         "--arg",
@@ -63,7 +61,7 @@ describe("ApiMethodHook", () => {
         "_id=chuon-chuon-kim",
         "--body",
         '{ "other-name": "my" }',
-      ]);
+      );
       response = stdout;
     } catch (error) {
       console.error(error);
@@ -78,21 +76,18 @@ describe("ApiMethodHook", () => {
   it("Infer common arguments", async () => {
     shouldResetSecurity = false;
 
-    let index;
-    let collection;
-    let document;
+    const index = "nyc-open-data";
+    const collection = "yellow-taxi";
     let response;
 
-    await expect(sdk.index.exists("nyc-open-data")).resolves.toBe(true);
-    index = "nyc-open-data";
+    await expect(sdk.index.exists(index)).resolves.toBe(true);
 
     await expect(
-      sdk.collection.exists("nyc-open-data", "yellow-taxi")
+      sdk.collection.exists(index, collection)
     ).resolves.toBe(true);
-    collection = "yellow-taxi";
 
     try {
-      const { stdout } = await kourou("collection:list", "nyc-open-data", []);
+      const { stdout } = await kourou("collection:list", index);
       response = stdout;
     } catch (error) {
       console.error(error);
@@ -122,8 +117,7 @@ describe("ApiMethodHook", () => {
         "nyc-open-data",
         "yellow-taxi",
         "foobar-1",
-        "{helloWorld: 42}",
-        []
+        "{helloWorld: 42}"
       );
       response = stdout;
     } catch (error) {
@@ -138,8 +132,7 @@ describe("ApiMethodHook", () => {
         "document:delete",
         "nyc-open-data",
         "yellow-taxi",
-        "foobar-1",
-        []
+        "foobar-1"
       );
       response = stdout;
     } catch (error) {
@@ -154,8 +147,7 @@ describe("ApiMethodHook", () => {
         "collection:updateMapping",
         "nyc-open-data",
         "yellow-taxi",
-        '{ dynamic: "false" }',
-        []
+        '{ dynamic: "false" }'
       );
       response = stdout;
     } catch (error) {

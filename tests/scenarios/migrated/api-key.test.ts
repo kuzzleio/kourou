@@ -65,10 +65,10 @@ describe("ApiKey", () => {
     });
 
     try {
-      const { stdout } = await kourou("api-key:search", "gordon", [
+      const { stdout } = await kourou("api-key:search", "gordon",
         "--query",
         '"Test"',
-      ]);
+      );
       response = stdout;
     } catch (error) {
       console.error(error);

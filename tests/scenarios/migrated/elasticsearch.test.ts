@@ -6,7 +6,6 @@ import { resetSecurityDefault } from "../../hooks/securities";
 import { Client } from "@elastic/elasticsearch";
 import { execute } from "../../../lib/support/execute";
 import fs from "fs";
-import { exec } from "child_process";
 
 jest.setTimeout(20000);
 
@@ -16,12 +15,9 @@ function kourou(...command: any[]) {
 }
 
 describe("Elasticsearch", () => {
-  let sdk = useSdk();
+  const sdk = useSdk();
   let shouldResetSecurity = false;
-  let shouldLogout = false;
-  let esClient = new Client({
-    node: process.env.ELASTICSEARCH_URL || "http://localhost:9200",
-  });
+  const shouldLogout = false;
 
   beforeAll(async () => {
     await sdk.connect();
@@ -46,21 +42,20 @@ describe("Elasticsearch", () => {
   afterAll(async () => {
     sdk.disconnect();
   });
+
+  let index = "nyc-open-data";
+
   it("Get a document", async () => {
     shouldResetSecurity = false;
 
-    let index;
-    let collection;
-    let document;
+    const collection = "yellow-taxi";
     let response;
 
-    await expect(sdk.index.exists("nyc-open-data")).resolves.toBe(true);
-    index = "nyc-open-data";
+    await expect(sdk.index.exists(index)).resolves.toBe(true);
 
     await expect(
-      sdk.collection.exists("nyc-open-data", "yellow-taxi")
+      sdk.collection.exists(index, "yellow-taxi")
     ).resolves.toBe(true);
-    collection = "yellow-taxi";
 
     await sdk.document.create(index, collection, {}, "chuon-chuon-kim");
 
@@ -82,22 +77,18 @@ describe("Elasticsearch", () => {
   it("Cat ES indexes", async () => {
     shouldResetSecurity = false;
 
-    let index;
-    let collection;
-    let document;
+    const collection = "green-taxi";
     let response;
 
-    await sdk.collection.create("nyc-open-data", "green-taxi", {
+    await sdk.collection.create(index, collection, {
       mappings: {},
     });
-    index = "nyc-open-data";
-    collection = "green-taxi";
 
     try {
       const { stdout } = await kourou(
         "es:indices:cat",
         "--grep",
-        "nyc-open-data"
+        index
       );
       response = stdout;
     } catch (error) {
@@ -113,7 +104,6 @@ describe("Elasticsearch", () => {
   it("Cat ES aliases", async () => {
     shouldResetSecurity = false;
 
-    const index = "nyc-open-data";
     const collection = "green-taxi";
     let response;
 
@@ -138,7 +128,7 @@ describe("Elasticsearch", () => {
     shouldResetSecurity = false;
     let response;
 
-    await sdk.collection.create("nyc-open-data", "green-taxi", {
+    await sdk.collection.create(index, "green-taxi", {
       mappings: {},
     });
 
@@ -222,7 +212,7 @@ describe("Elasticsearch", () => {
       console.error(error);
       throw error;
     }
-
+  console.log(response);
     expect(response).toMatch(new RegExp("test-snapshot"));
   });
 
@@ -231,44 +221,47 @@ describe("Elasticsearch", () => {
 
     let response;
 
-    await sdk.index.create("nyc-open-data");
+    await sdk.index.delete(index);
+    await sdk.index.create(index);
 
-    await sdk.collection.create("nyc-open-data", "yellow-taxi", {
+    let collection = "yellow-taxi";
+    await sdk.collection.create(index, collection, {
       mappings: {},
     });
-    let index  = "nyc-open-data";
-    let collection = "yellow-taxi";
 
     await sdk.document.create(
       index,
       collection,
       { city: "hcmc", district: 1 },
-      "chuon-chuon-kim"
+      "chuon-chuon-kim",
+      { refresh: 'wait_for' }
     );
 
     await sdk.document.create(
       index,
       collection,
       { city: "hcmc", district: 2 },
-      "the-hive-vn"
+      "the-hive-vn",
+      { refresh: 'wait_for' }
     );
 
     await sdk.document.create(
       index,
       collection,
       { city: "changmai", district: 7 },
-      "the-hive-th"
+      "the-hive-th",
+      { refresh: 'wait_for' }
     );
 
     await expect(sdk.document.count(index, collection)).resolves.toBe(3);
 
     try {
-      const { stdout } = await kourou("es:migrate", [
+      const { stdout } = await kourou("es:migrate",
         "--src",
         "http://localhost:9200",
         "--dest",
         "./kourou-dump",
-      ]);
+      );
       response = stdout;
     } catch (error) {
       console.error(error);
@@ -294,11 +287,10 @@ describe("Elasticsearch", () => {
       throw error;
     }
 
-    await expect(sdk.index.exists("nyc-open-data")).resolves.toBe(true);
-    index = "nyc-open-data";
+    await expect(sdk.index.exists(index)).resolves.toBe(true);
 
     await expect(
-      sdk.collection.exists("nyc-open-data", "yellow-taxi")
+      sdk.collection.exists(index, "yellow-taxi")
     ).resolves.toBe(true);
     collection = "yellow-taxi";
 
