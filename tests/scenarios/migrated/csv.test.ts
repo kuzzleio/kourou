@@ -3,10 +3,8 @@ import { beforeEachTruncateCollections } from "../../hooks/collections";
 import { beforeEachLoadFixtures } from "../../hooks/fixtures";
 import { resetSecurityDefault } from "../../hooks/securities";
 
-import { Client } from "@elastic/elasticsearch";
 import { execute } from "../../../lib/support/execute";
 import fs from "fs";
-import { exec } from "child_process";
 
 jest.setTimeout(20000);
 
@@ -16,12 +14,8 @@ function kourou(...command: any[]) {
 }
 
 describe("CSV", () => {
-  let sdk = useSdk();
+  const sdk = useSdk();
   let shouldResetSecurity = false;
-  let shouldLogout = false;
-  let esClient = new Client({
-    node: process.env.ELASTICSEARCH_URL || "http://localhost:9200",
-  });
 
   beforeAll(async () => {
     await sdk.connect();
@@ -37,10 +31,6 @@ describe("CSV", () => {
       await resetSecurityDefault(sdk);
       shouldResetSecurity = false;
     }
-
-    if (shouldLogout) {
-      sdk.jwt = null;
-    }
   });
 
   afterAll(async () => {
@@ -49,20 +39,17 @@ describe("CSV", () => {
   it("Exports a collection to CSV specifying the fields", async () => {
     shouldResetSecurity = false;
 
-    let index;
-    let collection;
-    let document;
+    const index = "nyc-open-data";
+    const collection = "yellow-taxi";
     let response;
 
     await expect(sdk.index.exists("nyc-open-data")).resolves.toBe(true);
-    index = "nyc-open-data";
 
     await expect(
       sdk.collection.exists("nyc-open-data", "yellow-taxi")
     ).resolves.toBe(true);
-    collection = "yellow-taxi";
 
-    response = await sdk.document["mCreate"](index, collection, [
+    await sdk.document["mCreate"](index, collection, [
       {
         _id: "chuon-chuon-kim",
         body: { city: "hcmc", district: 1, nested: { field: 1 } },
@@ -84,18 +71,17 @@ describe("CSV", () => {
           object: { field: "this is an object" },
         },
       },
-    ]);
+    ] as Array<any>);
 
     await sdk.collection.refresh(index, collection);
 
     try {
-      const { stdout } = await kourou(
+      await kourou(
         "export:collection",
         "nyc-open-data",
         "yellow-taxi",
         ["--format", "csv", "--fields", "city,district,nested.field,object"]
       );
-      response = stdout;
     } catch (error) {
       console.error(error);
       throw error;
@@ -111,20 +97,16 @@ describe("CSV", () => {
   it("Exports a collection to CSV without specifying any field", async () => {
     shouldResetSecurity = false;
 
-    let index;
-    let collection;
-    let document;
-    let response;
+    const index = "nyc-open-data";
+    const collection  = "yellow-taxi";
 
     await expect(sdk.index.exists("nyc-open-data")).resolves.toBe(true);
-    index = "nyc-open-data";
 
     await expect(
       sdk.collection.exists("nyc-open-data", "yellow-taxi")
     ).resolves.toBe(true);
-    collection = "yellow-taxi";
 
-    response = await sdk.document["mCreate"](index, collection, [
+    await sdk.document["mCreate"](index, collection, [
       {
         _id: "the-hive-th",
         body: { city: "changmai", district: 7, unwanted: "field" },
@@ -134,18 +116,17 @@ describe("CSV", () => {
         _id: "chuon-chuon-kim",
         body: { city: "hcmc", district: 1, nested: { field: 1 } },
       },
-    ]);
+    ] as Array<any>);
 
     await sdk.collection.refresh(index, collection);
 
     try {
-      const { stdout } = await kourou(
+      await kourou(
         "export:collection",
         "nyc-open-data",
         "yellow-taxi",
         ["--format", "csv"]
       );
-      response = stdout;
     } catch (error) {
       console.error(error);
       throw error;

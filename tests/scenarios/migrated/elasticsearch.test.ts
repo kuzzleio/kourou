@@ -113,16 +113,13 @@ describe("Elasticsearch", () => {
   it("Cat ES aliases", async () => {
     shouldResetSecurity = false;
 
-    let index;
-    let collection;
-    let document;
+    const index = "nyc-open-data";
+    const collection = "green-taxi";
     let response;
 
-    await sdk.collection.create("nyc-open-data", "green-taxi", {
+    await sdk.collection.create(index, collection, {
       mappings: {},
     });
-    index = "nyc-open-data";
-    collection = "green-taxi";
 
     try {
       const { stdout } = await kourou("es:aliases:cat", "--grep", "users");
@@ -139,23 +136,17 @@ describe("Elasticsearch", () => {
 
   it("Insert ES document", async () => {
     shouldResetSecurity = false;
-
-    let index;
-    let collection;
-    let document;
     let response;
 
     await sdk.collection.create("nyc-open-data", "green-taxi", {
       mappings: {},
     });
-    index = "nyc-open-data";
-    collection = "green-taxi";
 
     try {
       const { stdout } = await kourou(
         "es:indices:insert",
         "&nyc-open-data.yellow-taxi",
-        ["--id", "kindred", "--body", "{}"]
+        "--id", "kindred", "--body", "{}"
       );
       response = stdout;
     } catch (error) {
@@ -181,9 +172,6 @@ describe("Elasticsearch", () => {
   it("Create a snapshot repository", async () => {
     shouldResetSecurity = false;
 
-    let index;
-    let collection;
-    let document;
     let response;
 
     try {
@@ -191,7 +179,7 @@ describe("Elasticsearch", () => {
         "es:snapshot:create-repository",
         "backup",
         "/tmp/snapshots",
-        ["--compress"]
+        "--compress"
       );
       response = stdout;
     } catch (error) {
@@ -205,17 +193,13 @@ describe("Elasticsearch", () => {
   it("Dump ES data to a snapshot into a repository", async () => {
     shouldResetSecurity = false;
 
-    let index;
-    let collection;
-    let document;
     let response;
 
     try {
       const { stdout } = await kourou(
         "es:snapshot:create",
         "backup",
-        "test-snapshot",
-        []
+        "test-snapshot"
       );
       response = stdout;
     } catch (error) {
@@ -229,13 +213,10 @@ describe("Elasticsearch", () => {
   it("List all available snapshot of a repository", async () => {
     shouldResetSecurity = false;
 
-    let index;
-    let collection;
-    let document;
     let response;
 
     try {
-      const { stdout } = await kourou("es:snapshot:list", "backup", []);
+      const { stdout } = await kourou("es:snapshot:list", "backup");
       response = stdout;
     } catch (error) {
       console.error(error);
@@ -248,18 +229,15 @@ describe("Elasticsearch", () => {
   it("Dump and restore ES data to a dump folder using the pattern option", async () => {
     shouldResetSecurity = false;
 
-    let index;
-    let collection;
-    let document;
     let response;
 
-    index = await sdk.index.create("nyc-open-data");
+    await sdk.index.create("nyc-open-data");
 
     await sdk.collection.create("nyc-open-data", "yellow-taxi", {
       mappings: {},
     });
-    index = "nyc-open-data";
-    collection = "yellow-taxi";
+    let index  = "nyc-open-data";
+    let collection = "yellow-taxi";
 
     await sdk.document.create(
       index,
@@ -303,15 +281,14 @@ describe("Elasticsearch", () => {
     expect(lines.filter((line) => line !== "").length).toBe(3);
 
     try {
-      const { stdout } = await kourou("es:migrate", [
+      await kourou("es:migrate",
         "--src",
         "./kourou-dump",
         "--dest",
         "http://localhost:9200",
         "--reset",
         "--no-interactive",
-      ]);
-      response = stdout;
+      );
     } catch (error) {
       console.error(error);
       throw error;

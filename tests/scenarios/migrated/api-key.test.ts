@@ -3,10 +3,7 @@ import { beforeEachTruncateCollections } from "../../hooks/collections";
 import { beforeEachLoadFixtures } from "../../hooks/fixtures";
 import { resetSecurityDefault } from "../../hooks/securities";
 
-import { Client } from "@elastic/elasticsearch";
 import { execute } from "../../../lib/support/execute";
-import fs from "fs";
-import { exec } from "child_process";
 
 jest.setTimeout(20000);
 
@@ -16,12 +13,9 @@ function kourou(...command: any[]) {
 }
 
 describe("ApiKey", () => {
-  let sdk = useSdk();
+  const sdk = useSdk();
   let shouldResetSecurity = false;
-  let shouldLogout = false;
-  let esClient = new Client({
-    node: process.env.ELASTICSEARCH_URL || "http://localhost:9200",
-  });
+  const shouldLogout = false;
 
   beforeAll(async () => {
     await sdk.connect();

@@ -5,7 +5,7 @@ export async function truncateCollection(
   index: string,
   collection: string
 ) {
-  if(! await sdk.index.exists(index)){
+  if (!(await sdk.index.exists(index))) {
     await sdk.index.create(index);
   } else {
     await sdk.collection.refresh(index, collection);
@@ -14,7 +14,5 @@ export async function truncateCollection(
 }
 
 export async function beforeEachTruncateCollections(sdk: Kuzzle) {
-  await Promise.all([
-    truncateCollection(sdk, "nyc-open-data", "yellow-taxi"),
-  ]);
+  await Promise.all([truncateCollection(sdk, "nyc-open-data", "yellow-taxi")]);
 }

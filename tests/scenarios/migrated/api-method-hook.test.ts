@@ -2,26 +2,18 @@ import { useSdk } from "../../helpers/sdk";
 import { beforeEachTruncateCollections } from "../../hooks/collections";
 import { beforeEachLoadFixtures } from "../../hooks/fixtures";
 import { resetSecurityDefault } from "../../hooks/securities";
-
-import { Client } from "@elastic/elasticsearch";
-import { execute } from "../../../lib/support/execute";
-import fs from "fs";
-import { exec } from "child_process";
-
-jest.setTimeout(20000);
+import {execute} from "../../../lib/support/execute";
 
 function kourou(...command: any[]) {
   const kourouRuntime = process.env.KOUROU_RUNTIME || "./bin/run";
   return execute(kourouRuntime, ...command);
 }
 
+jest.setTimeout(20000);
 describe("ApiMethodHook", () => {
-  let sdk = useSdk();
+  const sdk = useSdk();
   let shouldResetSecurity = false;
-  let shouldLogout = false;
-  let esClient = new Client({
-    node: process.env.ELASTICSEARCH_URL || "http://localhost:9200",
-  });
+  const shouldLogout = false;
 
   beforeAll(async () => {
     await sdk.connect();
@@ -49,9 +41,8 @@ describe("ApiMethodHook", () => {
   it("Unregistered API method", async () => {
     shouldResetSecurity = false;
 
-    let index;
+    let index = "nyc-open-data";
     let collection;
-    let document;
     let response;
 
     await expect(sdk.index.exists("nyc-open-data")).resolves.toBe(true);
