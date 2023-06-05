@@ -124,7 +124,7 @@ class PaasLogs extends PaasKommand {
 
     // Don't continue if an error occurred
     if (incomingMessage.statusCode !== 200) {
-      return new Promise((_, reject) => {
+      return new Promise<void>((_, reject) => {
         // Collect the whole response body
         let responseBody = "";
 
