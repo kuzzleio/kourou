@@ -60,7 +60,7 @@ jobs:
     needs: [build]
     strategy:
       matrix:
-        test-set: [stdout, cucumber]
+        test-set: [stdout, cucumber, jest]
     steps:
       - uses: actions/checkout@v2
       - name: Cache node modules
@@ -85,7 +85,7 @@ jobs:
       - name: Unpack and prepare artifact for tests
         run: |
           tar xfz ./kourou-*.tgz
-          cp -fr .mocharc.json .nycrc tsconfig.json features test package/
+          cp -fr .nycrc tsconfig.json features tests package/
       - uses: ./.github/actions/functional-test
         with:
           test-set: ${{ matrix.test-set }}

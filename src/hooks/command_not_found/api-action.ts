@@ -1,9 +1,9 @@
 import chalk from "chalk";
 import { Hook } from "@oclif/config";
-import SdkQuery from "../../commands/sdk/query";
+import Api from "../../commands/api";
 
 /**
- * Hooks that run the corresponding API action with sdk:query.
+ * Hooks that run the corresponding API action with api.
  *
  * Example:
  *  - kourou document:create -i index -c collection --id foobar-1 --body '{}'
@@ -56,7 +56,7 @@ const hook: Hook<"command_not_found"> = async function (opts) {
       args.splice(0, 1);
     }
   } else {
-    const exitCode = await SdkQuery.run([...commandArgs, ...args]);
+    const exitCode = await Api.run([...commandArgs, ...args]);
     process.exit(exitCode);
   }
 
@@ -72,7 +72,7 @@ const hook: Hook<"command_not_found"> = async function (opts) {
 
     args.splice(0, 1);
   } else {
-    const exitCode = await SdkQuery.run([...commandArgs, ...args]);
+    const exitCode = await Api.run([...commandArgs, ...args]);
     process.exit(exitCode);
   }
 
@@ -90,7 +90,7 @@ const hook: Hook<"command_not_found"> = async function (opts) {
       args.splice(0, 1);
     }
   } else {
-    const exitCode = await SdkQuery.run([...commandArgs, ...args]);
+    const exitCode = await Api.run([...commandArgs, ...args]);
     process.exit(exitCode);
   }
 
@@ -102,7 +102,7 @@ const hook: Hook<"command_not_found"> = async function (opts) {
     args.splice(0, 1);
   }
 
-  const exitCode = await SdkQuery.run([...commandArgs, ...args]);
+  const exitCode = await Api.run([...commandArgs, ...args]);
   process.exit(exitCode);
 };
 

@@ -60,11 +60,9 @@ export default class RedisListKeys extends Kommand {
       }
 
       pages++;
-      process.stdout.write(
+      this.logInfo(
         `Iterate on page ${pages}. ${keys.length} keys found so far.`
       );
-      process.stdout.write("\r");
-
       if (maxPages !== -1 && pages >= maxPages) {
         break;
       }
@@ -72,6 +70,10 @@ export default class RedisListKeys extends Kommand {
 
     keys = keys.sort();
 
+    if (keys.length === 0) {
+      this.logInfo("No keys found in Redis");
+      return;
+    }
     const values = await this.sdk.ms.mget(keys);
 
     for (let i = 0; i < keys.length; i++) {

@@ -8,8 +8,8 @@ class ApiKeySearch extends Kommand {
 
   public static flags = {
     help: flags.help(),
-    filter: flags.string({
-      description: "Filter to match the API Key descriptions",
+    query: flags.string({
+      description: "Query to match the API Key descriptions",
     }),
     ...kuzzleFlags,
   };
@@ -18,10 +18,10 @@ class ApiKeySearch extends Kommand {
 
   async runSafe() {
     let query = {};
-    if (this.flags.filter) {
+    if (this.flags.query) {
       query = {
         match: {
-          description: this.flags.filter,
+          description: this.flags.query,
         },
       };
     }

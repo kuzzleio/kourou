@@ -17,6 +17,10 @@ export default class DocumentSearch extends Kommand {
       description: "Sort in JS or JSON format.",
       default: "{}",
     }),
+    aggs: flags.string({
+      description: "Aggregations in JS or JSON format.",
+      default: "{}",
+    }),
     from: flags.string({
       description: "Optional offset",
     }),
@@ -57,6 +61,7 @@ export default class DocumentSearch extends Kommand {
       body: {
         query: this.parseJs(this.args.query || "{}"),
         sort: this.parseJs(this.flags.sort),
+        aggs: this.parseJs(this.flags.aggs),
       },
     };
 

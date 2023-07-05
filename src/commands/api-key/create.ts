@@ -8,11 +8,6 @@ class ApiKeyCreate extends Kommand {
 
   public static flags = {
     help: flags.help(),
-    description: flags.string({
-      char: "d",
-      description: "API Key description",
-      required: true,
-    }),
     id: flags.string({
       description: "API Key unique ID",
     }),
@@ -23,12 +18,15 @@ class ApiKeyCreate extends Kommand {
     ...kuzzleFlags,
   };
 
-  static args = [{ name: "user", description: "User kuid", required: true }];
+  static args = [
+    { name: "user", description: "User kuid", required: true },
+    { name: "description", description: "API Key description", required: true },
+  ];
 
   async runSafe() {
     const apiKey = await this.sdk.security.createApiKey(
       this.args.user,
-      this.flags.description,
+      this.args.description,
       {
         _id: this.flags.id,
         expiresIn: this.flags.expire,

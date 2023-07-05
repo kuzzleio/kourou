@@ -12,7 +12,7 @@
         "<node_internals>/**"
       ],
       "program": "${workspaceFolder}/bin/run",
-      "args": ["collection:export", "mtp-open-data", "yellow-taxi"],
+      "args": ["export:collection", "mtp-open-data", "yellow-taxi"],
       "outFiles": [
         "${workspaceFolder}/**/*.js"
       ]
@@ -25,7 +25,7 @@
         "<node_internals>/**"
       ],
       "program": "${workspaceFolder}/bin/run",
-      "args": ["collection:export", "nyc-open-data", "yellow-taxi", "--format", "csv", "--fields", "city,district"],
+      "args": ["export:collection", "nyc-open-data", "yellow-taxi", "--format", "csv", "--fields", "city,district"],
       "outFiles": [
         "${workspaceFolder}/**/*.js"
       ]

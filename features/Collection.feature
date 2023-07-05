@@ -1,9 +1,9 @@
 Feature: Collection Commands
 
-  # collection:export & collection:import ======================================
+  # export:collection ======================================
 
   @mappings
-  Scenario: Export and import a collection
+  Scenario: Export a collection
     Given an existing collection "nyc-open-data":"yellow-taxi"
     And I "create" the following documents:
       | _id               | body                                  |
@@ -11,8 +11,8 @@ Feature: Collection Commands
       | "the-hive-vn"     | { "city": "hcmc", "district": 2 }     |
       | "the-hive-th"     | { "city": "changmai", "district": 7 } |
     And I refresh the collection
-    # collection:export
-    When I run the command "collection:export" with:
+    # export:collection
+    When I run the command "export:collection" with:
       | arg  | nyc-open-data |                            |
       | arg  | yellow-taxi   |                            |
       | flag | --query       | { term: { city: "hcmc" } } |
@@ -21,8 +21,11 @@ Feature: Collection Commands
       | index      | "nyc-open-data" |
       | collection | "yellow-taxi"   |
     # collection:import
-    And I run the command "collection:import" with args:
-      | "nyc-open-data/yellow-taxi" |
+    And I run the command "import" with:
+      | arg | ./nyc-open-data |  |
+    And I successfully call the route "collection":"getMapping" with args:
+      | index      | "nyc-open-data" |
+      | collection | "yellow-taxi"   |
     Then The document "chuon-chuon-kim" content match:
       | city     | "hcmc" |
       | district | 1      |
@@ -60,7 +63,7 @@ Feature: Collection Commands
       | "antoine" | { "name": "Antoine Ducuroy" }    |
       | "karina"  | { "name": "Karina Tsimashenka" } |
     Given I refresh the collection
-    Given I run the command "collection:export" with:
+    Given I run the command "export:collection" with:
       | arg | nyc-open-data |  |
       | arg | yellow-taxi   |  |
     Given I successfully call the route "collection":"truncate" with args:

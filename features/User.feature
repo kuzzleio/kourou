@@ -1,9 +1,9 @@
 Feature: User Commands
 
-  # user:export & user:import ==================================================
+  # export:users ==================================================
 
   @security
-  Scenario: Export and import users
+  Scenario: Export users
     Given I create a user "kleiner" with content:
       | profileIds | ["admin"]              |
       | email      | "kleiner@blackmesa.us" |
@@ -14,16 +14,6 @@ Feature: User Commands
       | flag | --path    | ./dump     |
       | flag | --exclude | gordon     |
       | flag | --exclude | test-admin |
-    And I delete the user "kleiner"
-    And I delete the user "alyx"
-    When I run the command "user:import" with:
-      | arg | ./dump/users.json |  |
-    Then The user "kleiner" should match:
-      | profileIds | ["admin"]              |
-      | email      | "kleiner@blackmesa.us" |
-    And The user "alyx" should match:
-      | profileIds | ["admin"]           |
-      | email      | "alyx@blackmesa.us" |
 
   # user:export-mapping & user:import-mapping ==================================================
 

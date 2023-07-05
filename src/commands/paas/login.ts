@@ -92,7 +92,7 @@ class PaasLogin extends PaasKommand {
 
     const targetUrl = `https://${this.packagesHost}/-/user/org.couchdb.user:${username}`;
     const response = await fetch(targetUrl, options);
-    const json = await response.json();
+    const json = (await response.json()) as any;
 
     if (response.status !== 201) {
       throw new Error(json.error);

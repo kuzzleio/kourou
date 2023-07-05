@@ -95,9 +95,15 @@ export class ConfigKeyDiff extends Kommand {
         ) {
           walkObject(_base[key], _object[key], [...path, key]);
         } else if (this.flags.values && _base[key] !== _object[key]) {
+          const currentValue = _.isObject(_object[key])
+            ? JSON.stringify(_object[key])
+            : _object[key];
+          const previousValue = _.isObject(_base[key])
+            ? JSON.stringify(_base[key])
+            : _base[key];
           changes[
             [...path, key].join(".")
-          ] = `value is "${_object[key]}" and was "${_base[key]}"`;
+          ] = `value is "${currentValue}" and was "${previousValue}"`;
         }
       }
     };
