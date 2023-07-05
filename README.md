@@ -26,7 +26,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.25.0 linux-x64 node-v16.15.0
+kourou/0.25.0 darwin-arm64 node-v16.19.1
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -163,6 +163,9 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou paas:init PROJECT`](#kourou-paasinit-project)
 * [`kourou paas:login`](#kourou-paaslogin)
 * [`kourou paas:logs ENVIRONMENT APPLICATION`](#kourou-paaslogs-environment-application)
+* [`kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID`](#kourou-paassnapshotscat-environment-applicationid)
+* [`kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID`](#kourou-paassnapshotsdump-environment-applicationid)
+* [`kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID`](#kourou-paassnapshotsrestore-environment-applicationid-snapshotid)
 * [`kourou profile:export`](#kourou-profileexport)
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
 * [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
@@ -365,7 +368,7 @@ ARGUMENTS
   DESTINATION  Directory to scaffold the app
 
 OPTIONS
-  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-platform", "iot-console", "iot-platform").
+  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-backend", "iot-console").
                    Those can be found here: https://github.com/kuzzleio/project-templates
 
   --help           show CLI help
@@ -725,7 +728,7 @@ OPTIONS
   --src=src                (required) Migration source provider
 
 EXAMPLES
-  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern
+  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern 
   '&myindexes.collection-*'
   kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive
 ```
@@ -1116,6 +1119,67 @@ OPTIONS
 
 _See code: [src/commands/paas/logs.ts](src/commands/paas/logs.ts)_
 
+## `kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID`
+
+List all snapshots for a given kuzzle application in a environment
+
+```
+USAGE
+  $ kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID
+
+ARGUMENTS
+  ENVIRONMENT    Project environment name
+  APPLICATIONID  Application Identifier
+
+OPTIONS
+  --help             show CLI help
+  --project=project  Current PaaS project
+  --token=token      Authentication token
+```
+
+_See code: [src/commands/paas/snapshots/cat.ts](src/commands/paas/snapshots/cat.ts)_
+
+## `kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID`
+
+List all snapshots for a given kuzzle application in a environment
+
+```
+USAGE
+  $ kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID
+
+ARGUMENTS
+  ENVIRONMENT    Project environment name
+  APPLICATIONID  Application Identifier
+
+OPTIONS
+  --help             show CLI help
+  --project=project  Current PaaS project
+  --token=token      Authentication token
+```
+
+_See code: [src/commands/paas/snapshots/dump.ts](src/commands/paas/snapshots/dump.ts)_
+
+## `kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID`
+
+List all snapshots for a given kuzzle application in a environment
+
+```
+USAGE
+  $ kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID
+
+ARGUMENTS
+  ENVIRONMENT    Project environment name
+  APPLICATIONID  Application Identifier
+  SNAPSHOTID     Snapshot Identifier
+
+OPTIONS
+  --help             show CLI help
+  --project=project  Current PaaS project
+  --token=token      Authentication token
+```
+
+_See code: [src/commands/paas/snapshots/restore.ts](src/commands/paas/snapshots/restore.ts)_
+
 ## `kourou profile:export`
 
 Exports profiles
@@ -1487,7 +1551,7 @@ DESCRIPTION
 
   You can either:
     - Manually re-create credentials for your users
-    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
+    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
