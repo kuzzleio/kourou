@@ -140,7 +140,7 @@ export class KuzzleSDK {
         }, 80 * SECOND);
       }
 
-      logger.logInfo(`Loggued as ${this.username}.`);
+      logger.logInfo(`Logged as ${this.username}.`);
     }
   }
 
