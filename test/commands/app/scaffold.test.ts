@@ -13,10 +13,12 @@ describe("app:scaffold", () => {
     should(fs.existsSync("./blackmesa/.eslintignore")).be.eql(true);
     should(fs.existsSync("./blackmesa/.eslintrc.json")).be.eql(true);
     should(fs.existsSync("./blackmesa/.gitignore")).be.eql(true);
-    should(fs.existsSync("./blackmesa/.mocharc.json")).be.eql(true);
+    should(fs.existsSync("./blackmesa/Dockerfile")).be.eql(true);
+    should(fs.existsSync("./blackmesa/docker-compose.yml")).be.eql(true);
     should(fs.existsSync("./blackmesa/app.ts")).be.eql(true);
     should(fs.existsSync("./blackmesa/package.json")).be.eql(true);
     should(fs.existsSync("./blackmesa/README.md")).be.eql(true);
     should(fs.existsSync("./blackmesa/tsconfig.json")).be.eql(true);
+    should(fs.existsSync("./blackmesa/jest.config.ts")).be.eql(true);
   }).timeout("60s");
 });

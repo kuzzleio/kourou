@@ -14,8 +14,7 @@ export default class AppScaffold extends Kommand {
     help: flags.help(),
     flavor: flags.string({
       default: "generic",
-      description: `Template flavor ("generic", "iot-backend", "iot-console").
-    Those can be found here: https://github.com/kuzzleio/project-templates`,
+      description: `Template flavor ("generic", "iot-platform").`,
     }),
   };
 
@@ -54,18 +53,20 @@ export default class AppScaffold extends Kommand {
 
     await execute("rm", "-rf", templatesDir);
 
+    const repo = flavor === "generic" ? "template-kuzzle-project" : "template-kiotp-project";
+
     await execute(
       "git",
       "clone",
       "--depth=1",
-      "https://github.com/kuzzleio/project-templates",
+      `https://github.com/kuzzleio/${repo}`,
       "--branch",
-      flavor,
+      "master",
       "--single-branch",
       templatesDir
     );
 
-    await execute("cp", "-r", `${templatesDir}/${flavor}`, `${destination}/`);
+    await execute("cp", "-r", `${templatesDir}/${repo}`, `${destination}/`);
 
     await execute("rm", "-rf", templatesDir);
   }
