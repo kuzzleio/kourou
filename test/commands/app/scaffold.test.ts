@@ -42,8 +42,9 @@ describe("app:scaffold", () => {
   it("should create iot flavor when specified", () => {
     execSync("rm -rf blackmesa/");
 
-    kourou("app:scaffold blackmesa --flavor iot-platform");
+    kourou("app:scaffold blackmesa --flavor iot");
 
+    should(fs.existsSync("./blackmesa/apps")).be.eql(true);
     should(fs.existsSync("./blackmesa/.eslintignore")).be.eql(true);
     should(fs.existsSync("./blackmesa/.eslintrc.json")).be.eql(true);
     should(fs.existsSync("./blackmesa/.gitignore")).be.eql(true);
