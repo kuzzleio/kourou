@@ -9,7 +9,7 @@ export function kourou(command: string) {
   } catch (error: any) {
     console.log(error);
     console.log("STDOUT: ", error.stdout.toString());
-    console.log("STDOUT: ", error.stderr.toString());
+    console.log("STDERR: ", error.stderr.toString());
     throw error;
   }
 }
