@@ -47,10 +47,7 @@ export function execute(...args: any[]): ProcessExecutor<ExecutionResult> {
   let stdout = "";
   let stderr = "";
 
-  // eslint-disable-next-line
   process.stdout.on("data", (data) => (stdout += data.toString()));
-
-  // eslint-disable-next-line
   process.stderr.on("data", (data) => (stderr += data.toString()));
 
   const executor: any = new Promise((resolve, reject) => {
