@@ -10,9 +10,9 @@ jobs:
     name: Lint
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
@@ -22,9 +22,9 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - uses: actions/setup-node@v1.4.4
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 18
       - uses: ./.github/actions/es-lint
 
   build:
@@ -32,9 +32,9 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [lint]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
         with:
@@ -44,9 +44,9 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - uses: actions/setup-node@v1.4.4
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 18
       - uses: ./.github/actions/build
       - name: Store build archive as artifact
         uses: actions/upload-artifact@v2
@@ -62,9 +62,9 @@ jobs:
       matrix:
         test-set: [stdout, cucumber]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Cache node modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         env:
           cache-name: cache-node-modules
           NODE_ENV: test
@@ -75,9 +75,9 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - uses: actions/setup-node@v1.4.4
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 18
       - name: Recover previously built Kourou
         uses: actions/download-artifact@v2
         with:
@@ -95,10 +95,10 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [functional-test]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 18
           registry-url: "https://registry.npmjs.org"
       - run: npm install
       - run: npm run build
