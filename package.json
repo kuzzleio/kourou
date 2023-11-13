@@ -37,6 +37,7 @@
     "ndjson": "^2.0.0",
     "node-emoji": "^1.10.0",
     "node-fetch": "^2.6.7",
+    "production": "^0.0.2",
     "strip-json-comments": "^3.1.1",
     "tar": "^6.1.11",
     "tmp": "^0.2.1",
