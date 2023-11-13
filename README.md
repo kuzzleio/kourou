@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.26.0 linux-x64 node-v14.21.2
+kourou/0.26.1 darwin-arm64 node-v18.17.1
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -126,72 +126,64 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 # Commands
 
 <!-- commands -->
-- [kourou](#kourou)
-- [Usage](#usage)
-  - [Connect and authenticate to Kuzzle API](#connect-and-authenticate-to-kuzzle-api)
-  - [User impersonation](#user-impersonation)
-  - [Automatic command infering for API actions](#automatic-command-infering-for-api-actions)
-- [Commands](#commands)
-  - [`kourou api-key:check TOKEN`](#kourou-api-keycheck-token)
-  - [`kourou api-key:create USER`](#kourou-api-keycreate-user)
-  - [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
-  - [`kourou api-key:search USER`](#kourou-api-keysearch-user)
-  - [`kourou app:debug-proxy`](#kourou-appdebug-proxy)
-  - [`kourou app:doctor`](#kourou-appdoctor)
-  - [`kourou app:scaffold DESTINATION`](#kourou-appscaffold-destination)
-  - [`kourou app:start-services`](#kourou-appstart-services)
-  - [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
-  - [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
-  - [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
-  - [`kourou collection:import PATH`](#kourou-collectionimport-path)
-  - [`kourou collection:migrate SCRIPT PATH`](#kourou-collectionmigrate-script-path)
-  - [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
-  - [`kourou document:search INDEX COLLECTION [QUERY]`](#kourou-documentsearch-index-collection-query)
-  - [`kourou es:aliases:cat`](#kourou-esaliasescat)
-  - [`kourou es:indices:cat`](#kourou-esindicescat)
-  - [`kourou es:indices:get INDEX ID`](#kourou-esindicesget-index-id)
-  - [`kourou es:indices:insert INDEX`](#kourou-esindicesinsert-index)
-  - [`kourou es:migrate`](#kourou-esmigrate)
-  - [`kourou es:snapshot:create REPOSITORY NAME`](#kourou-essnapshotcreate-repository-name)
-  - [`kourou es:snapshot:create-repository REPOSITORY LOCATION`](#kourou-essnapshotcreate-repository-repository-location)
-  - [`kourou es:snapshot:list REPOSITORY`](#kourou-essnapshotlist-repository)
-  - [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
-  - [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
-  - [`kourou file:test FILE`](#kourou-filetest-file)
-  - [`kourou help [COMMAND]`](#kourou-help-command)
-  - [`kourou import PATH`](#kourou-import-path)
-  - [`kourou index:export INDEX`](#kourou-indexexport-index)
-  - [`kourou index:import PATH`](#kourou-indeximport-path)
-  - [`kourou instance:kill`](#kourou-instancekill)
-  - [`kourou instance:list`](#kourou-instancelist)
-  - [`kourou instance:logs`](#kourou-instancelogs)
-  - [`kourou instance:spawn`](#kourou-instancespawn)
-  - [`kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE`](#kourou-paasdeploy-environment-applicationid-image)
-  - [`kourou paas:init PROJECT`](#kourou-paasinit-project)
-  - [`kourou paas:login`](#kourou-paaslogin)
-  - [`kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID`](#kourou-paassnapshotscat-environment-applicationid)
-  - [`kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID`](#kourou-paassnapshotsdump-environment-applicationid)
-  - [`kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID`](#kourou-paassnapshotsrestore-environment-applicationid-snapshotid)
-  - [`kourou profile:export`](#kourou-profileexport)
-  - [`kourou profile:import PATH`](#kourou-profileimport-path)
-  - [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
-  - [`kourou redis:list-keys [MATCH]`](#kourou-redislist-keys-match)
-  - [`kourou role:export`](#kourou-roleexport)
-  - [`kourou role:import PATH`](#kourou-roleimport-path)
-  - [`kourou sdk:execute [CODE]`](#kourou-sdkexecute-code)
-  - [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
-  - [`kourou user:export`](#kourou-userexport)
-  - [`kourou user:export-mappings`](#kourou-userexport-mappings)
-  - [`kourou user:import PATH`](#kourou-userimport-path)
-  - [`kourou user:import-mappings PATH`](#kourou-userimport-mappings-path)
-  - [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
-  - [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
-  - [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
-  - [`kourou vault:show SECRETS-FILE [KEY]`](#kourou-vaultshow-secrets-file-key)
-  - [`kourou vault:test SECRETS-FILE`](#kourou-vaulttest-secrets-file)
-- [Where does this weird name come from?](#where-does-this-weird-name-come-from)
-- [Have fun with a quine](#have-fun-with-a-quine)
-- [Telemetry](#telemetry)
+* [`kourou api-key:check TOKEN`](#kourou-api-keycheck-token)
+* [`kourou api-key:create USER`](#kourou-api-keycreate-user)
+* [`kourou api-key:delete USER ID`](#kourou-api-keydelete-user-id)
+* [`kourou api-key:search USER`](#kourou-api-keysearch-user)
+* [`kourou app:debug-proxy`](#kourou-appdebug-proxy)
+* [`kourou app:doctor`](#kourou-appdoctor)
+* [`kourou app:scaffold DESTINATION`](#kourou-appscaffold-destination)
+* [`kourou app:start-services`](#kourou-appstart-services)
+* [`kourou autocomplete [SHELL]`](#kourou-autocomplete-shell)
+* [`kourou collection:create INDEX COLLECTION [BODY]`](#kourou-collectioncreate-index-collection-body)
+* [`kourou collection:export INDEX COLLECTION`](#kourou-collectionexport-index-collection)
+* [`kourou collection:import PATH`](#kourou-collectionimport-path)
+* [`kourou collection:migrate SCRIPT PATH`](#kourou-collectionmigrate-script-path)
+* [`kourou config:diff FIRST SECOND`](#kourou-configdiff-first-second)
+* [`kourou document:search INDEX COLLECTION [QUERY]`](#kourou-documentsearch-index-collection-query)
+* [`kourou es:aliases:cat`](#kourou-esaliasescat)
+* [`kourou es:indices:cat`](#kourou-esindicescat)
+* [`kourou es:indices:get INDEX ID`](#kourou-esindicesget-index-id)
+* [`kourou es:indices:insert INDEX`](#kourou-esindicesinsert-index)
+* [`kourou es:migrate`](#kourou-esmigrate)
+* [`kourou es:snapshot:create REPOSITORY NAME`](#kourou-essnapshotcreate-repository-name)
+* [`kourou es:snapshot:create-repository REPOSITORY LOCATION`](#kourou-essnapshotcreate-repository-repository-location)
+* [`kourou es:snapshot:list REPOSITORY`](#kourou-essnapshotlist-repository)
+* [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
+* [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
+* [`kourou file:test FILE`](#kourou-filetest-file)
+* [`kourou help [COMMAND]`](#kourou-help-command)
+* [`kourou import PATH`](#kourou-import-path)
+* [`kourou index:export INDEX`](#kourou-indexexport-index)
+* [`kourou index:import PATH`](#kourou-indeximport-path)
+* [`kourou instance:kill`](#kourou-instancekill)
+* [`kourou instance:list`](#kourou-instancelist)
+* [`kourou instance:logs`](#kourou-instancelogs)
+* [`kourou instance:spawn`](#kourou-instancespawn)
+* [`kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE`](#kourou-paasdeploy-environment-applicationid-image)
+* [`kourou paas:init PROJECT`](#kourou-paasinit-project)
+* [`kourou paas:login`](#kourou-paaslogin)
+* [`kourou paas:logs ENVIRONMENT APPLICATION`](#kourou-paaslogs-environment-application)
+* [`kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID`](#kourou-paassnapshotscat-environment-applicationid)
+* [`kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID`](#kourou-paassnapshotsdump-environment-applicationid)
+* [`kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID`](#kourou-paassnapshotsrestore-environment-applicationid-snapshotid)
+* [`kourou profile:export`](#kourou-profileexport)
+* [`kourou profile:import PATH`](#kourou-profileimport-path)
+* [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
+* [`kourou redis:list-keys [MATCH]`](#kourou-redislist-keys-match)
+* [`kourou role:export`](#kourou-roleexport)
+* [`kourou role:import PATH`](#kourou-roleimport-path)
+* [`kourou sdk:execute [CODE]`](#kourou-sdkexecute-code)
+* [`kourou sdk:query CONTROLLER:ACTION`](#kourou-sdkquery-controlleraction)
+* [`kourou user:export`](#kourou-userexport)
+* [`kourou user:export-mappings`](#kourou-userexport-mappings)
+* [`kourou user:import PATH`](#kourou-userimport-path)
+* [`kourou user:import-mappings PATH`](#kourou-userimport-mappings-path)
+* [`kourou vault:add SECRETS-FILE KEY VALUE`](#kourou-vaultadd-secrets-file-key-value)
+* [`kourou vault:decrypt FILE`](#kourou-vaultdecrypt-file)
+* [`kourou vault:encrypt FILE`](#kourou-vaultencrypt-file)
+* [`kourou vault:show SECRETS-FILE [KEY]`](#kourou-vaultshow-secrets-file-key)
+* [`kourou vault:test SECRETS-FILE`](#kourou-vaulttest-secrets-file)
 
 ## `kourou api-key:check TOKEN`
 
@@ -377,9 +369,7 @@ ARGUMENTS
   DESTINATION  Directory to scaffold the app
 
 OPTIONS
-  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-backend", "iot-console").
-                   Those can be found here: https://github.com/kuzzleio/project-templates
-
+  --flavor=flavor  [default: generic] Template flavor ("generic", "iot").
   --help           show CLI help
 ```
 
@@ -421,7 +411,7 @@ EXAMPLES
   $ kourou autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.3.0/src/commands/autocomplete/index.ts)_
+_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v1.3.10/src/commands/autocomplete/index.ts)_
 
 ## `kourou collection:create INDEX COLLECTION [BODY]`
 
@@ -885,7 +875,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.18/src/commands/help.ts)_
 
 ## `kourou import PATH`
 
@@ -1108,6 +1098,31 @@ OPTIONS
 
 _See code: [src/commands/paas/login.ts](src/commands/paas/login.ts)_
 
+## `kourou paas:logs ENVIRONMENT APPLICATION`
+
+Show logs of the targeted application
+
+```
+USAGE
+  $ kourou paas:logs ENVIRONMENT APPLICATION
+
+ARGUMENTS
+  ENVIRONMENT  Kuzzle PaaS environment
+  APPLICATION  Kuzzle PaaS application
+
+OPTIONS
+  -f, --follow       Follow log output
+  -n, --tail=tail    Number of lines to show from the end of the logs
+  -t, --timestamp    Show timestamp
+  --help             show CLI help
+  --podName=podName  Name of the pod to show logs from
+  --project=project  Current PaaS project
+  --since=since      Display logs from a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time
+  --until=until      Display logs until a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time
+```
+
+_See code: [src/commands/paas/logs.ts](src/commands/paas/logs.ts)_
+
 ## `kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID`
 
 List all snapshots for a given kuzzle application in a environment
@@ -1124,13 +1139,16 @@ OPTIONS
   --help             show CLI help
   --project=project  Current PaaS project
   --token=token      Authentication token
+
+EXAMPLE
+  kourou paas:snapshots:cat --project paas-project-myproject api main
 ```
 
 _See code: [src/commands/paas/snapshots/cat.ts](src/commands/paas/snapshots/cat.ts)_
 
 ## `kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID`
 
-List all snapshots for a given kuzzle application in a environment
+Create a new snapshot of the current application state
 
 ```
 USAGE
@@ -1144,13 +1162,16 @@ OPTIONS
   --help             show CLI help
   --project=project  Current PaaS project
   --token=token      Authentication token
+
+EXAMPLE
+  kourou paas:snapshots:dump --project paas-project-myproject api main
 ```
 
 _See code: [src/commands/paas/snapshots/dump.ts](src/commands/paas/snapshots/dump.ts)_
 
 ## `kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID`
 
-List all snapshots for a given kuzzle application in a environment
+Restore a snapshot of the current application state
 
 ```
 USAGE
@@ -1165,6 +1186,9 @@ OPTIONS
   --help             show CLI help
   --project=project  Current PaaS project
   --token=token      Authentication token
+
+EXAMPLE
+  kourou paas:snapshots:restore --project paas-project-myproject api main snapshot-id
 ```
 
 _See code: [src/commands/paas/snapshots/restore.ts](src/commands/paas/snapshots/restore.ts)_

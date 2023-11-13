@@ -224,7 +224,10 @@ export class KuzzleSDK {
     const options = {
       method: "POST",
       headers: {
+        Accept: "application/json",
+        "Accept-Encoding": "identity",
         Authorization: `Bearer ${this.sdk.jwt}`,
+        Connection: "keep-alive",
         "Content-Length": Buffer.byteLength(body),
         "Content-Type": "application/json",
       },

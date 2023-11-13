@@ -136,6 +136,31 @@ class PaasLogs extends PaasKommand {
       until,
     });
 
+    // Don't continue if an error occurred
+    if (incomingMessage.statusCode !== 200) {
+      return new Promise<void>((_, reject) => {
+        // Collect the whole response body
+        let responseBody = "";
+
+        incomingMessage.on("data", (buffer) => {
+          responseBody += buffer.toString();
+        });
+
+        incomingMessage.on("end", () => {
+          let response;
+
+          try {
+            response = JSON.parse(responseBody);
+          } catch (error: any) {
+            reject(new Error("An error occurred while parsing the error response body from Kuzzle"));
+            return;
+          }
+
+          reject(response.error);
+        });
+      });
+    }
+
     // Read the response line by line
     const lineStream = readline.createInterface({
       input: incomingMessage,

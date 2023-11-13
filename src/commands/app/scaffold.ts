@@ -6,6 +6,7 @@ import { Kommand } from "../../common";
 import { execute } from "../../support/execute";
 
 export default class AppScaffold extends Kommand {
+  public templatesDir = "/tmp/kuzzle-templates";
   static initSdk = false;
 
   static description = "Scaffolds a new Kuzzle application";
@@ -14,8 +15,7 @@ export default class AppScaffold extends Kommand {
     help: flags.help(),
     flavor: flags.string({
       default: "generic",
-      description: `Template flavor ("generic", "iot-backend", "iot-console").
-    Those can be found here: https://github.com/kuzzleio/project-templates`,
+      description: `Template flavor ("generic", "iot").`,
     }),
   };
 
@@ -33,40 +33,89 @@ export default class AppScaffold extends Kommand {
 
     const tasks = new Listr([
       {
-        title: "Creating and rendering application files",
-        task: async () => this.cloneTemplate(flavor, destination),
+        title: "Checking destination",
+        task: async () => this.checkDestination(destination),
       },
+      {
+        title: "Prepare temporary folder",
+        task: async () => this.prepareTemplate(),
+      },
+      {
+        title: "Cloning template repository",
+        task: async () => this.cloneTemplate(flavor)
+      }, {
+        title: "Copying template files",
+        task: async () => this.copyTemplate(destination)
+      },
+      {
+        title: "Cleaning up",
+        task: async () => this.cleanup()
+      }
     ]);
 
     await tasks.run();
     this.log("");
-    this.logOk(
-      `Scaffolding complete! Use ${chalk.grey(
-        `cd ${destination} && npm run docker npm install`
-      )} install dependencies and then ${chalk.grey(
-        `npm run docker:dev`
-      )} to run your application!`
-    );
+    this.logOk(`Scaffolding complete!`);
+    this.logOk(`Use ${chalk.blue.bold(
+      `cd ${destination} && docker compose up -d`
+    )} to start your Kuzzle stack.`);
   }
 
-  async cloneTemplate(flavor: string, destination: string) {
-    const templatesDir = "/tmp/project-templates";
+  getRepo(flavor: string) {
+    console.log(flavor);
+    switch (flavor) {
+      case "generic":
+        return "template-kuzzle-project";
+      case "iot":
+        return "template-kiotp-project";
+      default:
+        return "template-kuzzle-project";
+    }
+  }
 
-    await execute("rm", "-rf", templatesDir);
+  async checkDestination(destination: string) {
+    let process: any;
+
+    try {
+      process = await execute("test", "-d", destination)
+    } catch (error: any) {
+      if (error.result.exitCode === 1) {
+        // Destination directory does not exist
+        return;
+      }
+    }
+
+    if (process.exitCode === 0) {
+      throw new Error(
+        `Destination directory ${destination} already exists.`
+      );
+    }
+  }
+
+  async prepareTemplate() {
+    await execute("rm", "-rf", this.templatesDir);
+  }
+
+  async cloneTemplate(flavor: string) {
+    const repo = this.getRepo(flavor);
 
     await execute(
       "git",
       "clone",
       "--depth=1",
-      "https://github.com/kuzzleio/project-templates",
+      `https://github.com/kuzzleio/${repo}`,
       "--branch",
-      flavor,
+      "master",
       "--single-branch",
-      templatesDir
+      this.templatesDir
     );
+  }
 
-    await execute("cp", "-r", `${templatesDir}/${flavor}`, `${destination}/`);
+  async copyTemplate(destination: string) {
+    await execute("cp", "-r", `${this.templatesDir}/`, `${destination}/`);
+  }
 
-    await execute("rm", "-rf", templatesDir);
+  async cleanup() {
+    await execute("rm", "-rf", this.templatesDir);
   }
 }
