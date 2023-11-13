@@ -30,6 +30,8 @@ class PaasSnapshotsCat extends PaasKommand {
     }
   ];
 
+  static examples = ["kourou paas:snapshots:cat --project paas-project-myproject api main"];
+
   async runSafe() {
     const apiKey = await this.getCredentials();
 

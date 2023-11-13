@@ -4,7 +4,7 @@ import { PaasKommand } from "../../../support/PaasKommand";
 
 class PaasSnapshotsRestore extends PaasKommand {
   public static description =
-    "List all snapshots for a given kuzzle application in a environment";
+    "Restore a snapshot of the current application state";
 
   public static flags = {
     help: flags.help(),
@@ -34,6 +34,8 @@ class PaasSnapshotsRestore extends PaasKommand {
       required: true,
     }
   ];
+
+  static examples = ["kourou paas:snapshots:restore --project paas-project-myproject api main snapshot-id"];
 
   async runSafe() {
     const apiKey = await this.getCredentials();
