@@ -52,6 +52,10 @@ exportable fields in the mapping will be exported.`,
 expressed in ms format, e.g. '2s', '1m', '3h'.`,
       default: "20s",
     }),
+    type: flags.string({
+      description: "Type of the export: all, mappings, data",
+      default: "all",
+    }),
     ...kuzzleFlags,
     protocol: flags.string({
       description: "Kuzzle protocol (http or websocket)",
@@ -99,30 +103,35 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
     );
 
     this.logInfo(
-      `Dumping ${count} of ${countAll} documents from collection "${this.args.index}:${this.args.collection}" in ${exportPath} ...`
+      `Dumping collection "${this.args.index}:${this.args.collection}" in ${exportPath} ...`
     );
 
     fs.mkdirSync(exportPath, { recursive: true });
 
-    await dumpCollectionMappings(
-      this.sdk,
-      this.args.index,
-      this.args.collection,
-      exportPath,
-      this.flags.format
-    );
-
-    await dumpCollectionData(
-      this.sdk,
-      this.args.index,
-      this.args.collection,
-      Number(this.flags["batch-size"]),
-      exportPath,
-      query,
-      this.flags.format,
-      fields,
-      this.flags.scrollTTL
-    );
+    if (this.flags.type === "all" || this.flags.type === "mappings") {
+      this.logInfo(`Dumping collection mappings ...`);
+      await dumpCollectionMappings(
+        this.sdk,
+        this.args.index,
+        this.args.collection,
+        exportPath,
+        this.flags.format
+      );
+    }
+    if (this.flags.type === "all" || this.flags.type === "data") {
+      this.logInfo(`Dumping collection ${count} of ${countAll} documents ...`);
+      await dumpCollectionData(
+        this.sdk,
+        this.args.index,
+        this.args.collection,
+        Number(this.flags["batch-size"]),
+        exportPath,
+        query,
+        this.flags.format,
+        fields,
+        this.flags.scrollTTL
+      );
+    }
 
     this.logOk(`Collection ${this.args.index}:${this.args.collection} dumped`);
   }

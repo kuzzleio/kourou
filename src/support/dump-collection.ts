@@ -83,14 +83,14 @@ abstract class AbstractDumper {
    * @returns void
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public async setup() { }
+  public async setup() {}
 
   /**
    * One-shot call before iterating over the data. Can be
    * used to write the header of the dumped output.
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public async writeHeader() { }
+  public async writeHeader() {}
 
   /**
    * You can put here the logic to write into the dump.
@@ -111,7 +111,7 @@ abstract class AbstractDumper {
   abstract onResult(document: { _id: string; _source: any }): Promise<void>;
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public async tearDown() { }
+  public async tearDown() {}
 
   /**
    * The loop that iterates over the documents of the collection and
@@ -120,6 +120,7 @@ abstract class AbstractDumper {
    * @returns a promise resolving when the dump is finished.
    */
   async dump() {
+    fs.mkdirSync(this.collectionDir, { recursive: true });
     this.filename = path.join(
       this.collectionDir,
       `documents.${this.fileExtension}`
