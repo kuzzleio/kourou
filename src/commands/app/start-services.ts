@@ -9,7 +9,7 @@ import emoji from "node-emoji";
 import { Kommand } from "../../common";
 import { execute } from "../../support/execute";
 
-const MIN_DOCO_VERSION = "1.12.0";
+const MIN_DOCO_VERSION = "2.0.0";
 
 const kuzzleServicesFile = `
 version: '3'
@@ -64,22 +64,22 @@ export default class AppStartServices extends Kommand {
     }
 
     this.log(
-      chalk.grey(`\nWriting docker-compose file to ${docoFilename}...\n`)
+      chalk.grey(`\nWriting docker compose file to ${docoFilename}...\n`)
     );
 
     writeFileSync(docoFilename, kuzzleServicesFile);
 
     // clean up
-    await execute("docker-compose", "-f", docoFilename, "down");
+    await execute("docker", "compose", "-f", docoFilename, "down");
 
     try {
-      await execute("docker-compose", "-f", docoFilename, "up", "-d");
+      await execute("docker", "compose", "-f", docoFilename, "up", "-d");
 
       this.logOk(
         "Elasticsearch and Redis are booting in the background right now."
       );
       this.log(chalk.grey("\nTo watch the logs, run"));
-      this.log(chalk.blue.bold(`  docker-compose -f ${docoFilename} logs -f\n`));
+      this.log(chalk.blue.bold(`  docker compose -f ${docoFilename} logs -f\n`));
       this.log(`  Elasticsearch port: ${chalk.bold("9200")}`);
       this.log(`          Redis port: ${chalk.bold("6379")}`);
     } catch (error: any) {
@@ -88,7 +88,7 @@ export default class AppStartServices extends Kommand {
         chalk.grey("If you want to investigate the problem, try running")
       );
 
-      this.log(chalk.grey(`  docker-compose -f ${docoFilename} up\n`));
+      this.log(chalk.grey(`  docker compose -f ${docoFilename} up\n`));
     }
   }
 
@@ -97,27 +97,27 @@ export default class AppStartServices extends Kommand {
 
     const checks: Listr = new Listr([
       {
-        title: `docker-compose exists and the version is at least ${MIN_DOCO_VERSION}`,
+        title: `docker compose exists and the version is at least ${MIN_DOCO_VERSION}`,
         task: async () => {
           try {
-            const docov = await execute("docker-compose", "-v");
+            const docov = await execute("docker", "compose", "version");
             const matches = docov.stdout.match(/[^0-9.]*([0-9.]*).*/);
             if (matches === null) {
               throw new Error(
-                "Unable to read docker-compose verson. This is weird."
+                "Unable to read docker compose verson. This is weird."
               );
             }
             const docoVersion = matches.length > 0 ? matches[1] : null;
 
             if (docoVersion === null) {
               throw new Error(
-                "Unable to read docker-compose version. This is weird."
+                "Unable to read docker compose version. This is weird."
               );
             }
             try {
               if (docoVersion < MIN_DOCO_VERSION) {
                 throw new Error(
-                  `The detected version of docker-compose (${docoVersion}) is not recent enough (${MIN_DOCO_VERSION})`
+                  `The detected version of docker compose (${docoVersion}) is not recent enough (${MIN_DOCO_VERSION})`
                 );
               }
             } catch (error: any) {
@@ -125,7 +125,7 @@ export default class AppStartServices extends Kommand {
             }
           } catch (error: any) {
             throw new Error(
-              "No docker-compose found. Are you sure docker-compose is installed?"
+              "No docker compose found. Are you sure docker is installed?"
             );
           }
         },

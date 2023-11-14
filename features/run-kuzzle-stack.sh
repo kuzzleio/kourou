@@ -7,7 +7,7 @@ mkdir -p /tmp/snapshots
 chmod 777 -R /tmp/snapshots
 
 # Launch the kuzzle stack
-docker-compose -f features/docker/docker-compose.yml up -d
+docker compose -f features/docker/docker-compose.yml up -d
 
 echo "[$(date --rfc-3339 seconds)] - Starting Kuzzle..."
 while ! curl -f -s -o /dev/null http://localhost:7512

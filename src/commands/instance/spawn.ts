@@ -13,7 +13,7 @@ import { Kommand } from "../../common";
 import { execute } from "../../support/execute";
 
 const MIN_MAX_MAP_COUNT = 262144;
-const MIN_DOCO_VERSION = "1.12.0";
+const MIN_DOCO_VERSION = "2.0.0";
 
 const kuzzleStackV1 = (increment: number): string => `
 version: '3'
@@ -127,7 +127,7 @@ export default class InstanceSpawn extends Kommand {
       );
     }
 
-    this.log(chalk.grey(`\nWriting docker-compose file to ${docoFilename}...`));
+    this.log(chalk.grey(`\nWriting docker compose file to ${docoFilename}...`));
     writeFileSync(
       docoFilename,
       this.generateDocoFile(this.flags.version, portIndex)
@@ -135,7 +135,8 @@ export default class InstanceSpawn extends Kommand {
 
     // clean up
     await execute(
-      "docker-compose",
+      "docker",
+      "compose",
       "-f",
       docoFilename,
       "-p",
@@ -143,7 +144,8 @@ export default class InstanceSpawn extends Kommand {
       "down"
     );
 
-    const doco: ChildProcess = spawn("docker-compose", [
+    const doco: ChildProcess = spawn("docker", [
+      "compose",
       "-f",
       docoFilename,
       "-p",
@@ -153,8 +155,7 @@ export default class InstanceSpawn extends Kommand {
     ]);
 
     cli.action.start(
-      ` ${emoji.get("rocket")} Kuzzle version ${
-        this.flags.version
+      ` ${emoji.get("rocket")} Kuzzle version ${this.flags.version
       } is launching`,
       undefined,
       {
@@ -173,7 +174,7 @@ export default class InstanceSpawn extends Kommand {
         this.log(chalk.grey("To watch the logs, run"));
         this.log(
           chalk.grey(
-            `  docker-compose -f ${docoFilename} -p stack-${portIndex} logs -f\n`
+            `  docker compose -f ${docoFilename} -p stack-${portIndex} logs -f\n`
           )
         );
         this.log(`  Kuzzle port: ${7512 + portIndex}`);
@@ -183,7 +184,7 @@ export default class InstanceSpawn extends Kommand {
       } else {
         cli.action.stop(
           chalk.red(
-            ` Something went wrong: docker-compose exited with ${docoCode}`
+            ` Something went wrong: docker compose exited with ${docoCode}`
           )
         );
         this.log(
@@ -191,10 +192,10 @@ export default class InstanceSpawn extends Kommand {
         );
         this.log(
           chalk.grey(
-            `  docker-compose -f ${docoFilename} -p stack-${portIndex} up\n`
+            `  docker compose -f ${docoFilename} -p stack-${portIndex} up\n`
           )
         );
-        throw new Error("docker-compose exited witn non-zero status");
+        throw new Error("docker compose exited witn non-zero status");
       }
     });
   }
@@ -203,27 +204,28 @@ export default class InstanceSpawn extends Kommand {
     this.log(chalk.grey("Checking prerequisites..."));
     const checks: Listr = new Listr([
       {
-        title: `docker-compose exists and the version is at least ${MIN_DOCO_VERSION}`,
+        title: `docker compose exists and the version is at least ${MIN_DOCO_VERSION}`,
         task: async () => {
           try {
-            const docov = await execute("docker-compose", "-v");
+            const docov = await execute("docker", "compose version");
             const matches = docov.stdout.match(/[^0-9.]*([0-9.]*).*/);
+
             if (matches === null) {
               throw new Error(
-                "Unable to read docker-compose verson. This is weird."
+                "Unable to read docker compose verson. This is weird."
               );
             }
             const docoVersion = matches.length > 0 ? matches[1] : null;
 
             if (docoVersion === null) {
               throw new Error(
-                "Unable to read docker-compose version. This is weird."
+                "Unable to read docker compose version. This is weird."
               );
             }
             try {
               if (docoVersion < MIN_DOCO_VERSION) {
                 throw new Error(
-                  `The detected version of docker-compose (${docoVersion}) is not recent enough (${MIN_DOCO_VERSION})`
+                  `The detected version of docker compose (${docoVersion}) is not recent enough (${MIN_DOCO_VERSION})`
                 );
               }
             } catch (error: any) {
@@ -231,7 +233,7 @@ export default class InstanceSpawn extends Kommand {
             }
           } catch (error: any) {
             throw new Error(
-              "No docker-compose found. Are you sure docker-compose is installed?"
+              "No docker compose found. Are you sure docker compose is installed?"
             );
           }
         },

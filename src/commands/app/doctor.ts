@@ -217,16 +217,18 @@ export default class AppDoctor extends Kommand {
 
     this.log("Docker checks");
     try {
-      const docov = await execute("docker-compose", "-v");
+      const docov = await execute("docker", "compose", "version");
       const matches = docov.stdout.match(/[^0-9.]*([0-9.]*).*/);
+
       if (matches === null || matches.length === 0) {
         this.logKo("Docker Version cannot be found");
       } else {
         this.logOk(`Docker Compose Version: ${matches[1]}`);
       }
     } catch (error: any) {
+      console.log(error);
       this.logKo("Docker Compose cannot be found");
-      suggestions.push("Install Docker Compose with 'npm run install:docker'");
+      suggestions.push("Install docker, It ship docker compose");
     }
 
     this.log(`----------------- DoKtor finish his job ! -----------------`);
