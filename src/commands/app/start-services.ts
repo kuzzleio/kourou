@@ -64,7 +64,7 @@ export default class AppStartServices extends Kommand {
     }
 
     this.log(
-      chalk.grey(`\nWriting docker compose file to ${docoFilename}...\n`)
+      chalk.grey(`\nWriting the Docker Compose file to ${docoFilename}...\n`)
     );
 
     writeFileSync(docoFilename, kuzzleServicesFile);
