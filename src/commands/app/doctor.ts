@@ -222,7 +222,7 @@ export default class AppDoctor extends Kommand {
       suggestions.push("Install Docker and the Compose plugin");
     }
 
-    this.log(`----------------- DoKtor finish his job ! -----------------`);
+    this.log(`----------------- DoKtor finished its job ! -----------------`);
     this.log(`He suggest you to check the following points:`);
     for (const suggestion of suggestions) {
       this.logInfo(" => " + suggestion);
