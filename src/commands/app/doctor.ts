@@ -228,7 +228,7 @@ export default class AppDoctor extends Kommand {
     } catch (error: any) {
       console.log(error);
       this.logKo("Docker Compose cannot be found");
-      suggestions.push("Install docker, It ship docker compose");
+      suggestions.push("Install Docker and the Compose plugin");
     }
 
     this.log(`----------------- DoKtor finish his job ! -----------------`);
