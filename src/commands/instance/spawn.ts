@@ -219,7 +219,7 @@ export default class InstanceSpawn extends Kommand {
 
             if (docoVersion === null) {
               throw new Error(
-                "Unable to read docker compose version. This is weird."
+                "Unable to read the version of Docker Compose. This is weird."
               );
             }
             try {
