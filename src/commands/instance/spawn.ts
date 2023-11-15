@@ -11,6 +11,7 @@ import emoji from "node-emoji";
 
 import { Kommand } from "../../common";
 import { execute } from "../../support/execute";
+import { checkPrerequisites } from "../../support/docker/checkPrerequisites";
 
 const MIN_MAX_MAP_COUNT = 262144;
 const MIN_DOCO_VERSION = "2.0.0";
@@ -112,7 +113,7 @@ export default class InstanceSpawn extends Kommand {
     );
 
     const successfullCheck = this.flags.check
-      ? await this.checkPrerequisites()
+      ? await checkPrerequisites(this)
       : true;
 
     if (this.flags.check && successfullCheck) {
@@ -198,82 +199,6 @@ export default class InstanceSpawn extends Kommand {
         throw new Error("docker compose exited with a non-zero status");
       }
     });
-  }
-
-  public async checkPrerequisites(): Promise<boolean> {
-    this.log(chalk.grey("Checking prerequisites..."));
-    const checks: Listr = new Listr([
-      {
-        title: `docker compose exists and the version is at least ${MIN_DOCO_VERSION}`,
-        task: async () => {
-          try {
-            const docov = await execute("docker", "compose version");
-            const matches = docov.stdout.match(/[^0-9.]*([0-9.]*).*/);
-
-            if (matches === null) {
-              throw new Error(
-                "Unable to read the version of Docker Compose. This is weird."
-              );
-            }
-            const docoVersion = matches.length > 0 ? matches[1] : null;
-
-            if (docoVersion === null) {
-              throw new Error(
-                "Unable to read the version of Docker Compose. This is weird."
-              );
-            }
-            try {
-              if (docoVersion < MIN_DOCO_VERSION) {
-                throw new Error(
-                  `Your version of Docker Compose (${docoVersion}) is below the required version (${MIN_DOCO_VERSION}).`
-                );
-              }
-            } catch (error: any) {
-              throw new Error(error);
-            }
-          } catch (error: any) {
-            throw new Error(
-              "Docker Compose couldn't be found. Are you sure Docker and the Compose plugin are installed?"
-            );
-          }
-        },
-      },
-      {
-        title: `vm.max_map_count is greater than ${MIN_MAX_MAP_COUNT}`,
-        task: async () => {
-          try {
-            const sysctl = await execute(
-              "/sbin/sysctl",
-              "-n",
-              "vm.max_map_count"
-            );
-
-            if (sysctl.exitCode !== 0) {
-              throw new Error("Something went wrong checking vm.max_map_count");
-            }
-
-            const value: number = parseInt(sysctl.stdout, 10);
-            if (value < MIN_MAX_MAP_COUNT) {
-              throw new Error(
-                `vm.max_map_count must be at least ${MIN_MAX_MAP_COUNT} (found ${value})`
-              );
-            }
-          } catch (error: any) {
-            throw new Error(
-              `Something went wrong checking vm.max_map_count: ${error.message}`
-            );
-          }
-        },
-      },
-    ]);
-
-    try {
-      await checks.run();
-      return true;
-    } catch (error: any) {
-      this.logKo(error.message);
-      return false;
-    }
   }
 
   private generateDocoFile(kuzzleMajor: string, portIndex: number): string {
