@@ -225,7 +225,7 @@ export default class InstanceSpawn extends Kommand {
             try {
               if (docoVersion < MIN_DOCO_VERSION) {
                 throw new Error(
-                  `The detected version of docker compose (${docoVersion}) is not recent enough (${MIN_DOCO_VERSION})`
+                  `Your version of Docker Compose (${docoVersion}) is below the required version (${MIN_DOCO_VERSION}).`
                 );
               }
             } catch (error: any) {
