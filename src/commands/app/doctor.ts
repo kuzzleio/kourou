@@ -5,6 +5,7 @@ import { kuzzleFlags } from "../../support/kuzzle";
 import { Client } from "@elastic/elasticsearch";
 import { execute } from "../../support/execute";
 import _ from "lodash";
+import { checkPrerequisites } from "../../support/docker/checkPrerequisites";
 
 export default class AppDoctor extends Kommand {
   static description = "Analyze a Kuzzle application";
@@ -50,7 +51,7 @@ export default class AppDoctor extends Kommand {
     const suggestions = [];
 
     const [nodeVersion, adminExists, anonymous] = await Promise.all([
-      this.sdk.query({ controller: "debug",  action: "nodeVersion", }),
+      this.sdk.query({ controller: "debug", action: "nodeVersion", }),
       this.sdk.server.adminExists({}),
       this.sdk.security.getRole("anonymous")
     ]);
@@ -67,8 +68,7 @@ export default class AppDoctor extends Kommand {
     } else {
       this.logKo("No admin user exists");
       suggestions.push(
-        `Create an admin user ${
-          anonymousNotRestricted ? "and restrict anonymous role " : ""
+        `Create an admin user ${anonymousNotRestricted ? "and restrict anonymous role " : ""
         }with
            kourou security:createFirstAdmin '{
               credentials: {
@@ -216,20 +216,13 @@ export default class AppDoctor extends Kommand {
     }
 
     this.log("Docker checks");
-    try {
-      const docov = await execute("docker-compose", "-v");
-      const matches = docov.stdout.match(/[^0-9.]*([0-9.]*).*/);
-      if (matches === null || matches.length === 0) {
-        this.logKo("Docker Version cannot be found");
-      } else {
-        this.logOk(`Docker Compose Version: ${matches[1]}`);
-      }
-    } catch (error: any) {
-      this.logKo("Docker Compose cannot be found");
-      suggestions.push("Install Docker Compose with 'npm run install:docker'");
+    const result = await checkPrerequisites(this);
+
+    if (!result) {
+      suggestions.push("Install Docker and the Compose plugin");
     }
 
-    this.log(`----------------- DoKtor finish his job ! -----------------`);
+    this.log(`----------------- DoKtor finished its job ! -----------------`);
     this.log(`He suggest you to check the following points:`);
     for (const suggestion of suggestions) {
       this.logInfo(" => " + suggestion);
