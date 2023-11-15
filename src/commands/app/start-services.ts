@@ -125,7 +125,7 @@ export default class AppStartServices extends Kommand {
             }
           } catch (error: any) {
             throw new Error(
-              "No docker compose found. Are you sure docker is installed?"
+              "Docker Compose couldn't be found. Are you sure Docker and the Compose plugin are installed?"
             );
           }
         },
