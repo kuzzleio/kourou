@@ -104,7 +104,7 @@ export default class AppStartServices extends Kommand {
             const matches = docov.stdout.match(/[^0-9.]*([0-9.]*).*/);
             if (matches === null) {
               throw new Error(
-                "Unable to read docker compose verson. This is weird."
+                "Unable to read the version of Docker Compose. This is weird."
               );
             }
             const docoVersion = matches.length > 0 ? matches[1] : null;
