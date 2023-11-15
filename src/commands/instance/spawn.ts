@@ -233,7 +233,7 @@ export default class InstanceSpawn extends Kommand {
             }
           } catch (error: any) {
             throw new Error(
-              "No docker compose found. Are you sure docker compose is installed?"
+              "Docker Compose couldn't be found. Are you sure Docker and the Compose plugin are installed?"
             );
           }
         },
