@@ -195,7 +195,7 @@ export default class InstanceSpawn extends Kommand {
             `  docker compose -f ${docoFilename} -p stack-${portIndex} up\n`
           )
         );
-        throw new Error("docker compose exited witn non-zero status");
+        throw new Error("docker compose exited with a non-zero status");
       }
     });
   }
