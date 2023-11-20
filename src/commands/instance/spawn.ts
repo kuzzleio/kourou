@@ -11,9 +11,10 @@ import emoji from "node-emoji";
 
 import { Kommand } from "../../common";
 import { execute } from "../../support/execute";
+import { checkPrerequisites } from "../../support/docker/checkPrerequisites";
 
 const MIN_MAX_MAP_COUNT = 262144;
-const MIN_DOCO_VERSION = "1.12.0";
+const MIN_DOCO_VERSION = "2.0.0";
 
 const kuzzleStackV1 = (increment: number): string => `
 version: '3'
@@ -112,7 +113,7 @@ export default class InstanceSpawn extends Kommand {
     );
 
     const successfullCheck = this.flags.check
-      ? await this.checkPrerequisites()
+      ? await checkPrerequisites(this)
       : true;
 
     if (this.flags.check && successfullCheck) {
@@ -127,7 +128,7 @@ export default class InstanceSpawn extends Kommand {
       );
     }
 
-    this.log(chalk.grey(`\nWriting docker-compose file to ${docoFilename}...`));
+    this.log(chalk.grey(`\nWriting docker compose file to ${docoFilename}...`));
     writeFileSync(
       docoFilename,
       this.generateDocoFile(this.flags.version, portIndex)
@@ -135,7 +136,8 @@ export default class InstanceSpawn extends Kommand {
 
     // clean up
     await execute(
-      "docker-compose",
+      "docker",
+      "compose",
       "-f",
       docoFilename,
       "-p",
@@ -143,7 +145,8 @@ export default class InstanceSpawn extends Kommand {
       "down"
     );
 
-    const doco: ChildProcess = spawn("docker-compose", [
+    const doco: ChildProcess = spawn("docker", [
+      "compose",
       "-f",
       docoFilename,
       "-p",
@@ -153,8 +156,7 @@ export default class InstanceSpawn extends Kommand {
     ]);
 
     cli.action.start(
-      ` ${emoji.get("rocket")} Kuzzle version ${
-        this.flags.version
+      ` ${emoji.get("rocket")} Kuzzle version ${this.flags.version
       } is launching`,
       undefined,
       {
@@ -173,7 +175,7 @@ export default class InstanceSpawn extends Kommand {
         this.log(chalk.grey("To watch the logs, run"));
         this.log(
           chalk.grey(
-            `  docker-compose -f ${docoFilename} -p stack-${portIndex} logs -f\n`
+            `  docker compose -f ${docoFilename} -p stack-${portIndex} logs -f\n`
           )
         );
         this.log(`  Kuzzle port: ${7512 + portIndex}`);
@@ -183,7 +185,7 @@ export default class InstanceSpawn extends Kommand {
       } else {
         cli.action.stop(
           chalk.red(
-            ` Something went wrong: docker-compose exited with ${docoCode}`
+            ` Something went wrong: docker compose exited with ${docoCode}`
           )
         );
         this.log(
@@ -191,87 +193,12 @@ export default class InstanceSpawn extends Kommand {
         );
         this.log(
           chalk.grey(
-            `  docker-compose -f ${docoFilename} -p stack-${portIndex} up\n`
+            `  docker compose -f ${docoFilename} -p stack-${portIndex} up\n`
           )
         );
-        throw new Error("docker-compose exited witn non-zero status");
+        throw new Error("docker compose exited with a non-zero status");
       }
     });
-  }
-
-  public async checkPrerequisites(): Promise<boolean> {
-    this.log(chalk.grey("Checking prerequisites..."));
-    const checks: Listr = new Listr([
-      {
-        title: `docker-compose exists and the version is at least ${MIN_DOCO_VERSION}`,
-        task: async () => {
-          try {
-            const docov = await execute("docker-compose", "-v");
-            const matches = docov.stdout.match(/[^0-9.]*([0-9.]*).*/);
-            if (matches === null) {
-              throw new Error(
-                "Unable to read docker-compose verson. This is weird."
-              );
-            }
-            const docoVersion = matches.length > 0 ? matches[1] : null;
-
-            if (docoVersion === null) {
-              throw new Error(
-                "Unable to read docker-compose version. This is weird."
-              );
-            }
-            try {
-              if (docoVersion < MIN_DOCO_VERSION) {
-                throw new Error(
-                  `The detected version of docker-compose (${docoVersion}) is not recent enough (${MIN_DOCO_VERSION})`
-                );
-              }
-            } catch (error: any) {
-              throw new Error(error);
-            }
-          } catch (error: any) {
-            throw new Error(
-              "No docker-compose found. Are you sure docker-compose is installed?"
-            );
-          }
-        },
-      },
-      {
-        title: `vm.max_map_count is greater than ${MIN_MAX_MAP_COUNT}`,
-        task: async () => {
-          try {
-            const sysctl = await execute(
-              "/sbin/sysctl",
-              "-n",
-              "vm.max_map_count"
-            );
-
-            if (sysctl.exitCode !== 0) {
-              throw new Error("Something went wrong checking vm.max_map_count");
-            }
-
-            const value: number = parseInt(sysctl.stdout, 10);
-            if (value < MIN_MAX_MAP_COUNT) {
-              throw new Error(
-                `vm.max_map_count must be at least ${MIN_MAX_MAP_COUNT} (found ${value})`
-              );
-            }
-          } catch (error: any) {
-            throw new Error(
-              `Something went wrong checking vm.max_map_count: ${error.message}`
-            );
-          }
-        },
-      },
-    ]);
-
-    try {
-      await checks.run();
-      return true;
-    } catch (error: any) {
-      this.logKo(error.message);
-      return false;
-    }
   }
 
   private generateDocoFile(kuzzleMajor: string, portIndex: number): string {
