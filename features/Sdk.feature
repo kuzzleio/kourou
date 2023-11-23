@@ -31,6 +31,6 @@ Feature: SDK commands
   Scenario: Execute Typescript code in the SDK context
     Given an existing collection "nyc-open-data":"yellow-taxi"
     When I run the command "sdk:execute" with:
-      | arg | return const index: string = "nyc-open-data"; const collection: string = "yellow-taxi"; const id: string = "document-ricky"; await sdk.document.create(index, collection, {}, id); |
+      | arg | const index: string = "nyc-open-data"; const collection: string = "yellow-taxi"; const id: string = "document-ricky"; return await sdk.document.create(index, collection, {}, id); |
     Then The document "document-ricky" should exist
     And I should match stdout with "document-ricky"
