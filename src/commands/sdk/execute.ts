@@ -131,7 +131,7 @@ ${this.getVariables()}
     let result;
     try {
       // eslint-disable-next-line no-eval
-      result = vm.runInContext(this.code, vm.createContext({}));
+      result = eval(this.code);
     } catch (error: any) {
       userError = error;
     }
