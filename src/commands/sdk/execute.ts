@@ -4,8 +4,8 @@ import { isEmpty } from "lodash";
 import { Editor } from "../../support/editor";
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
-import { exec } from "child_process";
-import fs from "fs";
+import ts from "typescript";
+import vm from 'node:vm'
 
 class SdkExecute extends Kommand {
   public static description = `
@@ -71,40 +71,16 @@ Other
 
   static readStdin = true;
 
-  async toJavascript(filename: string): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      exec(
-        `npx tsc -t es5 ${filename}`,
-        () => {
-          // We do not care for TS errors, user should now if this will work or not
-          resolve(true);
-        });
-    });
-  }
-
   async beforeConnect() {
     this.code = this.stdin || this.args.code || "// paste your code here";
     try {
-      eval(this.code);
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        const tsFile = "kourou-sdk-execute-tmp.ts";
-        const jsFile = "kourou-sdk-execute-tmp.js";
-
-        // Write to file, transpile it and read it back
-        fs.writeFileSync(tsFile, this.code);
-        await this.toJavascript(tsFile);
-        const file = fs.readFileSync(jsFile, "utf8");
-        this.code = file;
-
-        // Clean up
-        fs.unlinkSync(tsFile);
-        fs.unlinkSync(jsFile);
+      vm.runInContext(this.code, vm.createContext({}));
+    } catch (e: any) {
+      if (e.name === "SyntaxError") {
+        const result = ts.transpileModule(this.code, { compilerOptions: { module: ts.ModuleKind.CommonJS } });
+        this.code = result.outputText;
       }
     }
-
-    console.log(this.code);
-
     if (this.haveSubscription) {
       this.sdkOptions.protocol = "ws";
     }
@@ -155,7 +131,7 @@ ${this.getVariables()}
     let result;
     try {
       // eslint-disable-next-line no-eval
-      result = await eval(this.code);
+      result = vm.runInContext(this.code, vm.createContext({}));
     } catch (error: any) {
       userError = error;
     }
