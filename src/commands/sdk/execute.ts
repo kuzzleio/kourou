@@ -4,6 +4,8 @@ import { isEmpty } from "lodash";
 import { Editor } from "../../support/editor";
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
+import ts from "typescript";
+import vm from 'node:vm'
 
 class SdkExecute extends Kommand {
   public static description = `
@@ -71,10 +73,29 @@ Other
 
   async beforeConnect() {
     this.code = this.stdin || this.args.code || "// paste your code here";
-
+    try {
+      vm.runInContext(this.code, vm.createContext({}));
+    } catch (e: any) {
+      if (e.name === "SyntaxError") {
+        const result = ts.transpileModule(this.code, { compilerOptions: { module: ts.ModuleKind.CommonJS } });
+        this.code = result.outputText;
+      }
+    }
     if (this.haveSubscription) {
       this.sdkOptions.protocol = "ws";
     }
+  }
+
+  getVariables() {
+    return (this.flags.var || [])
+      .map((nameValue: string) => {
+        const [name, value] = nameValue.split("=");
+
+        return `    let ${name} = ${value};`;
+      })
+      .join("\n");
+
+
   }
 
   async runSafe() {
@@ -84,18 +105,12 @@ Other
 
     let userError: Error | null = null;
 
-    const variables = (this.flags.var || [])
-      .map((nameValue: string) => {
-        const [name, value] = nameValue.split("=");
 
-        return `    let ${name} = ${value};`;
-      })
-      .join("\n");
 
     this.code = `
 (async () => {
   try {
-${variables}
+${this.getVariables()}
     ${this.code}
   }
   catch (error) {
@@ -137,7 +152,7 @@ ${variables}
       this.logInfo("Keep alive for realtime notifications ...");
 
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      await new Promise(() => {});
+      await new Promise(() => { });
     }
   }
 
