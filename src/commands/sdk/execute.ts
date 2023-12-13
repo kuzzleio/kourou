@@ -131,7 +131,7 @@ ${this.getVariables()}
     let result;
     try {
       // eslint-disable-next-line no-eval
-      result = eval(this.code);
+      result = await eval(this.code);
     } catch (error: any) {
       userError = error;
     }
