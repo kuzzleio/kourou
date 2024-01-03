@@ -139,34 +139,39 @@ class PaasEsDump extends PaasKommand {
     let dumpedDocuments = 0;
     let totalDocuments = 0;
 
-    // Dump the first batch
-    let result = await this.dumpDocuments(pitId, searchAfter);
-    let hits = result.hits.hits;
+    try {
+      // Dump the first batch
+      let result = await this.dumpDocuments(pitId, searchAfter);
+      let hits = result.hits.hits;
 
-    while (hits.length > 0) {
-      // Update the PIT ID and the cursor for the next dump
-      pitId = result.pit_id;
-      searchAfter = hits[hits.length - 1].sort;
+      while (hits.length > 0) {
+        // Update the PIT ID and the cursor for the next dump
+        pitId = result.pit_id;
+        searchAfter = hits[hits.length - 1].sort;
 
-      // Save the document
-      await fs.writeFile(path.join(this.args.dumpDirectory, "documents/", `${currentDocumentChunk++}.json`), JSON.stringify(hits));
+        // Save the document
+        await fs.writeFile(path.join(this.args.dumpDirectory, "documents/", `${currentDocumentChunk++}.json`), JSON.stringify(hits));
 
-      dumpedDocuments += hits.length;
-      totalDocuments = result.hits.total.value;
-      this.logInfo(`Dumping Elasticsearch documents: ${Math.floor(dumpedDocuments / totalDocuments * 100)}% (${dumpedDocuments}/${totalDocuments})`);
+        dumpedDocuments += hits.length;
+        totalDocuments = result.hits.total.value;
+        this.logInfo(`Dumping Elasticsearch documents: ${Math.floor(dumpedDocuments / totalDocuments * 100)}% (${dumpedDocuments}/${totalDocuments})`);
 
-      // Dump the next batch
-      result = await this.dumpDocuments(pitId, searchAfter);
-      hits = result.hits.hits;
+        // Dump the next batch
+        result = await this.dumpDocuments(pitId, searchAfter);
+        hits = result.hits.hits;
+      }
+    } catch (error: any) {
+      // Attempt to finish the dump if a PIT ID is set
+      if (pitId.length > 0) {
+        await this.finishDump(pitId);
+      }
+
+      this.logKo(`Error while dumping the documents: ${error}`);
+      process.exit(1);
     }
 
     // Finish the dump
-    try {
-      await this.finishDump(pitId);
-    } catch (error: any) {
-      this.logInfo("Unable to cleanly finish the dump session:");
-      console.warn(error)
-    }
+    await this.finishDump(pitId);
   }
 
   /**
@@ -174,16 +179,20 @@ class PaasEsDump extends PaasKommand {
     * @param pitId ID of the PIT opened on Elasticsearch.
     */
   private async finishDump(pitId: string) {
-    await this.paas.query({
-      controller: "application/storage",
-      action: "finishDumpDocuments",
-      environmentId: this.args.environment,
-      projectId: this.flags.project || this.getProject(),
-      applicationId: this.args.applicationId,
-      body: {
-        pitId,
-      },
-    });
+    try {
+      await this.paas.query({
+        controller: "application/storage",
+        action: "finishDumpDocuments",
+        environmentId: this.args.environment,
+        projectId: this.flags.project || this.getProject(),
+        applicationId: this.args.applicationId,
+        body: {
+          pitId,
+        },
+      });
+    } catch (error: any) {
+      this.logInfo(`Unable to cleanly finish the dump session: ${error}`);
+    }
   }
 }
 
