@@ -1,25 +1,22 @@
-import fs from "fs";
+import fs, { write } from "fs";
 
 import chalk from "chalk";
 import ndjson from "ndjson";
 import { JSONObject } from "kuzzle-sdk";
 
 function handleError(log: any, dumpFile: string, error: any) {
-  if (error.status === 206) {
+  if (error.errors) {
     const errorFile = `${dumpFile
       .split(".")
       .slice(0, -1)
       .join(".")}-errors.jsonl`;
     const writeStream = fs.createWriteStream(errorFile, { flags: "a" });
-    const serialize = ndjson.stringify().pipe(writeStream);
-
-    serialize.on("data", (line: string) => writeStream.write(line));
 
     for (const partialError of error.errors) {
-      serialize.write(partialError);
+      writeStream.write(JSON.stringify(partialError) + '\n');
     }
 
-    serialize.end();
+    writeStream.end();
 
     log(
       chalk.red(`[X] Error importing ${dumpFile}. See errors in ${errorFile}`)
@@ -44,6 +41,7 @@ export async function restoreCollectionData(
     action: "mWrite",
     index: "",
     collection: "",
+    strict: true,
     body: {
       documents: [{}],
     },
@@ -110,8 +108,8 @@ export async function restoreCollectionData(
 
           sdk
             .query(mWriteRequest)
-            .then(() => {
-              total += mWriteRequest.body.documents.length;
+            .then((response: JSONObject) => {
+              total += response.result.successes.length;
 
               process.stdout.write(`  ${total} documents imported`);
               process.stdout.write("\r");

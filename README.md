@@ -2,6 +2,7 @@
 
 The CLI that helps you manage your Kuzzle instances.
 
+
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/kourou.svg)](https://npmjs.org/package/kourou)
 [![Downloads/week](https://img.shields.io/npm/dw/kourou.svg)](https://npmjs.org/package/kourou)
@@ -26,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.25.0 linux-x64 node-v16.15.0
+kourou/0.27.1 darwin-arm64 node-v18.17.1
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -164,6 +165,9 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou paas:init PROJECT`](#kourou-paasinit-project)
 * [`kourou paas:login`](#kourou-paaslogin)
 * [`kourou paas:logs ENVIRONMENT APPLICATION`](#kourou-paaslogs-environment-application)
+* [`kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID`](#kourou-paassnapshotscat-environment-applicationid)
+* [`kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID`](#kourou-paassnapshotsdump-environment-applicationid)
+* [`kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID`](#kourou-paassnapshotsrestore-environment-applicationid-snapshotid)
 * [`kourou profile:export`](#kourou-profileexport)
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
 * [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
@@ -208,7 +212,7 @@ EXAMPLE
   kourou api-key:check eyJhbG...QxfQrc
 ```
 
-_See code: [src/commands/api-key/check.ts](src/commands/api-key/check.ts)_
+_See code: [lib/commands/api-key/check.js](lib/commands/api-key/check.js)_
 
 ## `kourou api-key:create USER`
 
@@ -236,7 +240,7 @@ OPTIONS
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/api-key/create.ts](src/commands/api-key/create.ts)_
+_See code: [lib/commands/api-key/create.js](lib/commands/api-key/create.js)_
 
 ## `kourou api-key:delete USER ID`
 
@@ -265,7 +269,7 @@ EXAMPLE
   kourou vault:delete sigfox-gateway 1k-BF3EBjsXdvA2PR8x
 ```
 
-_See code: [src/commands/api-key/delete.ts](src/commands/api-key/delete.ts)_
+_See code: [lib/commands/api-key/delete.js](lib/commands/api-key/delete.js)_
 
 ## `kourou api-key:search USER`
 
@@ -291,7 +295,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/api-key/search.ts](src/commands/api-key/search.ts)_
+_See code: [lib/commands/api-key/search.js](lib/commands/api-key/search.js)_
 
 ## `kourou app:debug-proxy`
 
@@ -329,7 +333,7 @@ OPTIONS
   --username=username        [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/app/debug-proxy.ts](src/commands/app/debug-proxy.ts)_
+_See code: [lib/commands/app/debug-proxy.js](lib/commands/app/debug-proxy.js)_
 
 ## `kourou app:doctor`
 
@@ -352,7 +356,7 @@ OPTIONS
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/app/doctor.ts](src/commands/app/doctor.ts)_
+_See code: [lib/commands/app/doctor.js](lib/commands/app/doctor.js)_
 
 ## `kourou app:scaffold DESTINATION`
 
@@ -366,13 +370,11 @@ ARGUMENTS
   DESTINATION  Directory to scaffold the app
 
 OPTIONS
-  --flavor=flavor  [default: generic] Template flavor ("generic", "iot-platform", "iot-console", "iot-platform").
-                   Those can be found here: https://github.com/kuzzleio/project-templates
-
+  --flavor=flavor  [default: generic] Template flavor ("generic", "iot").
   --help           show CLI help
 ```
 
-_See code: [src/commands/app/scaffold.ts](src/commands/app/scaffold.ts)_
+_See code: [lib/commands/app/scaffold.js](lib/commands/app/scaffold.js)_
 
 ## `kourou app:start-services`
 
@@ -387,7 +389,7 @@ OPTIONS
   --help   show CLI help
 ```
 
-_See code: [src/commands/app/start-services.ts](src/commands/app/start-services.ts)_
+_See code: [lib/commands/app/start-services.js](lib/commands/app/start-services.js)_
 
 ## `kourou autocomplete [SHELL]`
 
@@ -437,7 +439,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/collection/create.ts](src/commands/collection/create.ts)_
+_See code: [lib/commands/collection/create.js](lib/commands/collection/create.js)_
 
 ## `kourou collection:export INDEX COLLECTION`
 
@@ -507,6 +509,9 @@ OPTIONS
   --ssl
       Use SSL to connect to Kuzzle
 
+  --type=type
+      [default: all] Type of the export: all, mappings, data
+
   --username=username
       [default: anonymous] Kuzzle username (local strategy)
 
@@ -515,7 +520,7 @@ EXAMPLES
   kourou collection:export nyc-open-data yellow-taxi --query '{ term: { city: "Saigon" } }'
 ```
 
-_See code: [src/commands/collection/export.ts](src/commands/collection/export.ts)_
+_See code: [lib/commands/collection/export.js](lib/commands/collection/export.js)_
 
 ## `kourou collection:import PATH`
 
@@ -544,7 +549,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/collection/import.ts](src/commands/collection/import.ts)_
+_See code: [lib/commands/collection/import.js](lib/commands/collection/import.js)_
 
 ## `kourou collection:migrate SCRIPT PATH`
 
@@ -573,7 +578,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/collection/migrate.ts](src/commands/collection/migrate.ts)_
+_See code: [lib/commands/collection/migrate.js](lib/commands/collection/migrate.js)_
 
 ## `kourou config:diff FIRST SECOND`
 
@@ -595,7 +600,7 @@ EXAMPLE
   kourou config:diff config/local/kuzzlerc config/production/kuzzlerc
 ```
 
-_See code: [src/commands/config/diff.ts](src/commands/config/diff.ts)_
+_See code: [lib/commands/config/diff.js](lib/commands/config/diff.js)_
 
 ## `kourou document:search INDEX COLLECTION [QUERY]`
 
@@ -633,7 +638,7 @@ EXAMPLES
   kourou document:search iot sensors --editor
 ```
 
-_See code: [src/commands/document/search.ts](src/commands/document/search.ts)_
+_See code: [lib/commands/document/search.js](lib/commands/document/search.js)_
 
 ## `kourou es:aliases:cat`
 
@@ -649,7 +654,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/aliases/cat.ts](src/commands/es/aliases/cat.ts)_
+_See code: [lib/commands/es/aliases/cat.js](lib/commands/es/aliases/cat.js)_
 
 ## `kourou es:indices:cat`
 
@@ -665,7 +670,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/indices/cat.ts](src/commands/es/indices/cat.ts)_
+_See code: [lib/commands/es/indices/cat.js](lib/commands/es/indices/cat.js)_
 
 ## `kourou es:indices:get INDEX ID`
 
@@ -684,7 +689,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/indices/get.ts](src/commands/es/indices/get.ts)_
+_See code: [lib/commands/es/indices/get.js](lib/commands/es/indices/get.js)_
 
 ## `kourou es:indices:insert INDEX`
 
@@ -704,7 +709,7 @@ OPTIONS
   --id=id          Document ID
 ```
 
-_See code: [src/commands/es/indices/insert.ts](src/commands/es/indices/insert.ts)_
+_See code: [lib/commands/es/indices/insert.js](lib/commands/es/indices/insert.js)_
 
 ## `kourou es:migrate`
 
@@ -726,12 +731,12 @@ OPTIONS
   --src=src                (required) Migration source provider
 
 EXAMPLES
-  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern
+  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern 
   '&myindexes.collection-*'
   kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive
 ```
 
-_See code: [src/commands/es/migrate.ts](src/commands/es/migrate.ts)_
+_See code: [lib/commands/es/migrate.js](lib/commands/es/migrate.js)_
 
 ## `kourou es:snapshot:create REPOSITORY NAME`
 
@@ -750,7 +755,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/snapshot/create.ts](src/commands/es/snapshot/create.ts)_
+_See code: [lib/commands/es/snapshot/create.js](lib/commands/es/snapshot/create.js)_
 
 ## `kourou es:snapshot:create-repository REPOSITORY LOCATION`
 
@@ -770,7 +775,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/snapshot/create-repository.ts](src/commands/es/snapshot/create-repository.ts)_
+_See code: [lib/commands/es/snapshot/create-repository.js](lib/commands/es/snapshot/create-repository.js)_
 
 ## `kourou es:snapshot:list REPOSITORY`
 
@@ -788,7 +793,7 @@ OPTIONS
   --help           show CLI help
 ```
 
-_See code: [src/commands/es/snapshot/list.ts](src/commands/es/snapshot/list.ts)_
+_See code: [lib/commands/es/snapshot/list.js](lib/commands/es/snapshot/list.js)_
 
 ## `kourou file:decrypt FILE`
 
@@ -811,7 +816,7 @@ EXAMPLES
   kourou file:decrypt books/cryptonomicon.txt.enc -o books/cryptonomicon.txt --vault-key <vault-key>
 ```
 
-_See code: [src/commands/file/decrypt.ts](src/commands/file/decrypt.ts)_
+_See code: [lib/commands/file/decrypt.js](lib/commands/file/decrypt.js)_
 
 ## `kourou file:encrypt FILE`
 
@@ -834,7 +839,7 @@ EXAMPLES
   kourou file:encrypt books/cryptonomicon.txt -o books/cryptonomicon.txt.enc --vault-key <vault-key>
 ```
 
-_See code: [src/commands/file/encrypt.ts](src/commands/file/encrypt.ts)_
+_See code: [lib/commands/file/encrypt.js](lib/commands/file/encrypt.js)_
 
 ## `kourou file:test FILE`
 
@@ -854,7 +859,7 @@ EXAMPLE
   kourou file:test books/cryptonomicon.txt.enc --vault-key <vault-key>
 ```
 
-_See code: [src/commands/file/test.ts](src/commands/file/test.ts)_
+_See code: [lib/commands/file/test.js](lib/commands/file/test.js)_
 
 ## `kourou help [COMMAND]`
 
@@ -898,7 +903,7 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/import.ts](src/commands/import.ts)_
+_See code: [lib/commands/import.js](lib/commands/import.js)_
 
 ## `kourou index:export INDEX`
 
@@ -939,6 +944,8 @@ OPTIONS
 
   --ssl                    Use SSL to connect to Kuzzle
 
+  --type=type              [default: all] Type of the export: all, mappings, data
+
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 
 EXAMPLES
@@ -946,7 +953,7 @@ EXAMPLES
   kourou index:export nyc-open-data --query '{"range":{"_kuzzle_info.createdAt":{"gt":1632935638866}}}'
 ```
 
-_See code: [src/commands/index/export.ts](src/commands/index/export.ts)_
+_See code: [lib/commands/index/export.js](lib/commands/index/export.js)_
 
 ## `kourou index:import PATH`
 
@@ -978,7 +985,7 @@ EXAMPLES
   kourou index:import ./dump/iot-data --index iot-data-production --no-mappings
 ```
 
-_See code: [src/commands/index/import.ts](src/commands/index/import.ts)_
+_See code: [lib/commands/index/import.js](lib/commands/index/import.js)_
 
 ## `kourou instance:kill`
 
@@ -993,7 +1000,7 @@ OPTIONS
   -i, --instance=instance  Kuzzle instance name [ex: stack-0]
 ```
 
-_See code: [src/commands/instance/kill.ts](src/commands/instance/kill.ts)_
+_See code: [lib/commands/instance/kill.js](lib/commands/instance/kill.js)_
 
 ## `kourou instance:list`
 
@@ -1004,7 +1011,7 @@ USAGE
   $ kourou instance:list
 ```
 
-_See code: [src/commands/instance/list.ts](src/commands/instance/list.ts)_
+_See code: [lib/commands/instance/list.js](lib/commands/instance/list.js)_
 
 ## `kourou instance:logs`
 
@@ -1019,7 +1026,7 @@ OPTIONS
   -i, --instance=instance  Kuzzle instance name
 ```
 
-_See code: [src/commands/instance/logs.ts](src/commands/instance/logs.ts)_
+_See code: [lib/commands/instance/logs.js](lib/commands/instance/logs.js)_
 
 ## `kourou instance:spawn`
 
@@ -1035,7 +1042,7 @@ OPTIONS
   --help                 show CLI help
 ```
 
-_See code: [src/commands/instance/spawn.ts](src/commands/instance/spawn.ts)_
+_See code: [lib/commands/instance/spawn.js](lib/commands/instance/spawn.js)_
 
 ## `kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE`
 
@@ -1056,7 +1063,7 @@ OPTIONS
   --token=token      Authentication token
 ```
 
-_See code: [src/commands/paas/deploy.ts](src/commands/paas/deploy.ts)_
+_See code: [lib/commands/paas/deploy.js](lib/commands/paas/deploy.js)_
 
 ## `kourou paas:elasticsearch:dump ENVIRONMENT APPLICATIONID DUMPDIRECTORY`
 
@@ -1094,7 +1101,7 @@ OPTIONS
   --help  show CLI help
 ```
 
-_See code: [src/commands/paas/init.ts](src/commands/paas/init.ts)_
+_See code: [lib/commands/paas/init.js](lib/commands/paas/init.js)_
 
 ## `kourou paas:login`
 
@@ -1111,7 +1118,7 @@ OPTIONS
   --username=username  PaaS username
 ```
 
-_See code: [src/commands/paas/login.ts](src/commands/paas/login.ts)_
+_See code: [lib/commands/paas/login.js](lib/commands/paas/login.js)_
 
 ## `kourou paas:logs ENVIRONMENT APPLICATION`
 
@@ -1136,7 +1143,77 @@ OPTIONS
   --until=until      Display logs until a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time
 ```
 
-_See code: [src/commands/paas/logs.ts](src/commands/paas/logs.ts)_
+_See code: [lib/commands/paas/logs.js](lib/commands/paas/logs.js)_
+
+## `kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID`
+
+List all snapshots for a given kuzzle application in a environment
+
+```
+USAGE
+  $ kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID
+
+ARGUMENTS
+  ENVIRONMENT    Project environment name
+  APPLICATIONID  Application Identifier
+
+OPTIONS
+  --help             show CLI help
+  --project=project  Current PaaS project
+  --token=token      Authentication token
+
+EXAMPLE
+  kourou paas:snapshots:cat --project paas-project-myproject api main
+```
+
+_See code: [lib/commands/paas/snapshots/cat.js](lib/commands/paas/snapshots/cat.js)_
+
+## `kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID`
+
+Create a new snapshot of the current application state
+
+```
+USAGE
+  $ kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID
+
+ARGUMENTS
+  ENVIRONMENT    Project environment name
+  APPLICATIONID  Application Identifier
+
+OPTIONS
+  --help             show CLI help
+  --project=project  Current PaaS project
+  --token=token      Authentication token
+
+EXAMPLE
+  kourou paas:snapshots:dump --project paas-project-myproject api main
+```
+
+_See code: [lib/commands/paas/snapshots/dump.js](lib/commands/paas/snapshots/dump.js)_
+
+## `kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID`
+
+Restore a snapshot of the current application state
+
+```
+USAGE
+  $ kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID
+
+ARGUMENTS
+  ENVIRONMENT    Project environment name
+  APPLICATIONID  Application Identifier
+  SNAPSHOTID     Snapshot Identifier
+
+OPTIONS
+  --help             show CLI help
+  --project=project  Current PaaS project
+  --token=token      Authentication token
+
+EXAMPLE
+  kourou paas:snapshots:restore --project paas-project-myproject api main snapshot-id
+```
+
+_See code: [lib/commands/paas/snapshots/restore.js](lib/commands/paas/snapshots/restore.js)_
 
 ## `kourou profile:export`
 
@@ -1159,7 +1236,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/profile/export.ts](src/commands/profile/export.ts)_
+_See code: [lib/commands/profile/export.js](lib/commands/profile/export.js)_
 
 ## `kourou profile:import PATH`
 
@@ -1184,7 +1261,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/profile/import.ts](src/commands/profile/import.ts)_
+_See code: [lib/commands/profile/import.js](lib/commands/profile/import.js)_
 
 ## `kourou realtime:subscribe INDEX COLLECTION [FILTERS]`
 
@@ -1236,7 +1313,7 @@ EXAMPLES
   kourou realtime:subscribe iot-data sensors --display result._source.temperature
 ```
 
-_See code: [src/commands/realtime/subscribe.ts](src/commands/realtime/subscribe.ts)_
+_See code: [lib/commands/realtime/subscribe.js](lib/commands/realtime/subscribe.js)_
 
 ## `kourou redis:list-keys [MATCH]`
 
@@ -1268,7 +1345,7 @@ EXAMPLES
   kourou redis:list-keys "counters/*" --remove
 ```
 
-_See code: [src/commands/redis/list-keys.ts](src/commands/redis/list-keys.ts)_
+_See code: [lib/commands/redis/list-keys.js](lib/commands/redis/list-keys.js)_
 
 ## `kourou role:export`
 
@@ -1291,7 +1368,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/role/export.ts](src/commands/role/export.ts)_
+_See code: [lib/commands/role/export.js](lib/commands/role/export.js)_
 
 ## `kourou role:import PATH`
 
@@ -1317,7 +1394,7 @@ OPTIONS
   --username=username   [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/role/import.ts](src/commands/role/import.ts)_
+_See code: [lib/commands/role/import.js](lib/commands/role/import.js)_
 
 ## `kourou sdk:execute [CODE]`
 
@@ -1375,7 +1452,7 @@ DESCRIPTION
       - kourou sdk:execute 'return await sdk.server.now()' --editor
 ```
 
-_See code: [src/commands/sdk/execute.ts](src/commands/sdk/execute.ts)_
+_See code: [lib/commands/sdk/execute.js](lib/commands/sdk/execute.js)_
 
 ## `kourou sdk:query CONTROLLER:ACTION`
 
@@ -1476,7 +1553,7 @@ DESCRIPTION
       - kourou admin:loadMappings < mappings.json
 ```
 
-_See code: [src/commands/sdk/query.ts](src/commands/sdk/query.ts)_
+_See code: [lib/commands/sdk/query.js](lib/commands/sdk/query.js)_
 
 ## `kourou user:export`
 
@@ -1509,7 +1586,7 @@ DESCRIPTION
 
   You can either:
     - Manually re-create credentials for your users
-    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see
+    - Use the "mustChangePasswordIfSetByAdmin" option Kuzzle password policies (see 
   https://github.com/kuzzleio/kuzzle-plugin-auth-passport-local/#optional-properties)
     - Use the "--generate-credentials" flag to auto-generate credentials for your users
 
@@ -1528,7 +1605,7 @@ DESCRIPTION
     - kourou user:export --generate-credentials --generated-username content.email
 ```
 
-_See code: [src/commands/user/export.ts](src/commands/user/export.ts)_
+_See code: [lib/commands/user/export.js](lib/commands/user/export.js)_
 
 ## `kourou user:export-mappings`
 
@@ -1551,7 +1628,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/user/export-mappings.ts](src/commands/user/export-mappings.ts)_
+_See code: [lib/commands/user/export-mappings.js](lib/commands/user/export-mappings.js)_
 
 ## `kourou user:import PATH`
 
@@ -1576,7 +1653,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/user/import.ts](src/commands/user/import.ts)_
+_See code: [lib/commands/user/import.js](lib/commands/user/import.js)_
 
 ## `kourou user:import-mappings PATH`
 
@@ -1601,7 +1678,7 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
-_See code: [src/commands/user/import-mappings.ts](src/commands/user/import-mappings.ts)_
+_See code: [lib/commands/user/import-mappings.js](lib/commands/user/import-mappings.js)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
@@ -1632,7 +1709,7 @@ EXAMPLE
   kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/add.ts](src/commands/vault/add.ts)_
+_See code: [lib/commands/vault/add.js](lib/commands/vault/add.js)_
 
 ## `kourou vault:decrypt FILE`
 
@@ -1662,7 +1739,7 @@ EXAMPLES
   kourou vault:decrypt config/secrets.enc.json -o config/secrets.json --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/decrypt.ts](src/commands/vault/decrypt.ts)_
+_See code: [lib/commands/vault/decrypt.js](lib/commands/vault/decrypt.js)_
 
 ## `kourou vault:encrypt FILE`
 
@@ -1703,7 +1780,7 @@ EXAMPLES
   kourou vault:encrypt config/secrets.json -o config/secrets_prod.enc.json --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/encrypt.ts](src/commands/vault/encrypt.ts)_
+_See code: [lib/commands/vault/encrypt.js](lib/commands/vault/encrypt.js)_
 
 ## `kourou vault:show SECRETS-FILE [KEY]`
 
@@ -1734,7 +1811,7 @@ EXAMPLES
   kourou vault:show config/secrets.enc.json aws.s3.secretKey --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/show.ts](src/commands/vault/show.ts)_
+_See code: [lib/commands/vault/show.js](lib/commands/vault/show.js)_
 
 ## `kourou vault:test SECRETS-FILE`
 
@@ -1759,7 +1836,7 @@ EXAMPLE
   kourou vault:test config/secrets.enc.json --vault-key <vault-key>
 ```
 
-_See code: [src/commands/vault/test.ts](src/commands/vault/test.ts)_
+_See code: [lib/commands/vault/test.js](lib/commands/vault/test.js)_
 <!-- commandsstop -->
 
 # Where does this weird name come from?

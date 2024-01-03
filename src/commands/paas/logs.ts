@@ -55,10 +55,12 @@ class PaasLogs extends PaasKommand {
       description: "Name of the pod to show logs from",
     }),
     since: flags.string({
-      description: "Display logs from a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time",
+      description:
+        "Display logs from a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time",
     }),
     until: flags.string({
-      description: "Display logs until a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time",
+      description:
+        "Display logs until a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time",
     }),
   };
 
@@ -78,7 +80,15 @@ class PaasLogs extends PaasKommand {
   /**
    * Allowed colors for pod names.
    */
-  private readonly allColors = [chalk.red, chalk.green, chalk.yellow, chalk.blue, chalk.magenta, chalk.cyan, chalk.gray];
+  private readonly allColors = [
+    chalk.red,
+    chalk.green,
+    chalk.yellow,
+    chalk.blue,
+    chalk.magenta,
+    chalk.cyan,
+    chalk.gray,
+  ];
 
   /**
    * Available colors for pod names.
@@ -105,8 +115,12 @@ class PaasLogs extends PaasKommand {
     const separator = "\t";
 
     // Parse the time arguments
-    const since = this.flags.since ? chrono.parseDate(this.flags.since).toISOString() : undefined;
-    const until = this.flags.until ? chrono.parseDate(this.flags.until).toISOString() : undefined;
+    const since = this.flags.since
+      ? chrono.parseDate(this.flags.since).toISOString()
+      : undefined;
+    const until = this.flags.until
+      ? chrono.parseDate(this.flags.until).toISOString()
+      : undefined;
 
     // Perform the streamed request
     const incomingMessage = await this.paas.queryHttpStream({
@@ -122,6 +136,31 @@ class PaasLogs extends PaasKommand {
       until,
     });
 
+    // Don't continue if an error occurred
+    if (incomingMessage.statusCode !== 200) {
+      return new Promise<void>((_, reject) => {
+        // Collect the whole response body
+        let responseBody = "";
+
+        incomingMessage.on("data", (buffer) => {
+          responseBody += buffer.toString();
+        });
+
+        incomingMessage.on("end", () => {
+          let response;
+
+          try {
+            response = JSON.parse(responseBody);
+          } catch (error: any) {
+            reject(new Error("An error occurred while parsing the error response body from Kuzzle"));
+            return;
+          }
+
+          reject(response.error);
+        });
+      });
+    }
+
     // Read the response line by line
     const lineStream = readline.createInterface({
       input: incomingMessage,
@@ -134,10 +173,8 @@ class PaasLogs extends PaasKommand {
       try {
         const data: PaasLogData = JSON.parse(line);
 
-
         // Exclude logs that are empty or that are not from a pod
         if (!data.content || !data.podName) {
-          this.logKo(line);
           continue;
         }
 
@@ -145,12 +182,14 @@ class PaasLogs extends PaasKommand {
         const podColor = this.getPodColor(data.podName);
 
         // Display the log
-        const timestamp = this.flags.timestamp ? `[${new Date(data.timeStamp).toLocaleString()}] ` : "";
+        const timestamp = this.flags.timestamp
+          ? `[${new Date(data.timeStamp).toLocaleString()}] `
+          : "";
         const name = podColor(`${data.podName}${separator}`);
 
         this.log(`${timestamp}${name}| ${data.content}`);
       } catch (error) {
-        this.logKo(`Unable to parse the following line: ${line}`);
+        this.logKo(`Error while parsing log: ${error} (Received: "${line}")`);
       }
     }
   }

@@ -80,7 +80,8 @@ export class InstanceLogs extends Kommand {
         stdout: true,
       }
     );
-    const instanceKill: ChildProcess = spawn("docker-compose", [
+    const instanceKill: ChildProcess = spawn("docker", [
+      "compose",
       "-f",
       docoFilename,
       "-p",
