@@ -26,7 +26,7 @@ type DocumentDumpHit = {
   sort: string[];
 };
 
-class PaasInit extends PaasKommand {
+class PaasEsDump extends PaasKommand {
   public static description = "Dump data from the Elasticsearch of a PaaS application";
 
   public static flags = {
@@ -182,4 +182,4 @@ class PaasInit extends PaasKommand {
   }
 }
 
-export default PaasInit;
+export default PaasEsDump;
