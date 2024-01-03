@@ -1072,8 +1072,9 @@ ARGUMENTS
   DUMPDIRECTORY  Directory where to store dump files
 
 OPTIONS
-  --help             show CLI help
-  --project=project  Current PaaS project
+  --batch-size=batch-size  [default: 2000] Maximum batch size
+  --help                   show CLI help
+  --project=project        Current PaaS project
 ```
 
 _See code: [src/commands/paas/elasticsearch/dump.ts](src/commands/paas/elasticsearch/dump.ts)_
