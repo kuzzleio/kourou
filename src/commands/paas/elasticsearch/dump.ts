@@ -60,6 +60,12 @@ class PaasEsDump extends PaasKommand {
   ];
 
   async runSafe() {
+    // Check that the batch size is positive
+    if (this.flags["batch-size"] <= 0) {
+      this.logKo(`The batch size must be greater than zero. (Specified batch size: ${this.flags["batch-size"]})`);
+      process.exit(1);
+    }
+
     // Log in to the PaaS
     const apiKey = await this.getCredentials();
 
