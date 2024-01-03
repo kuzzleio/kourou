@@ -1,6 +1,7 @@
 import path from "path";
 import fs from "node:fs/promises";
 
+import ndjson from "ndjson";
 import { flags } from "@oclif/command";
 
 import { PaasKommand } from "../../../support/PaasKommand";
@@ -72,7 +73,6 @@ class PaasEsDump extends PaasKommand {
 
     // Create the dump directory
     await fs.mkdir(this.args.dumpDirectory, { recursive: true });
-    await fs.mkdir(path.join(this.args.dumpDirectory, "documents/"), { recursive: true });
 
     // Dump the indexes
     this.logInfo("Dumping Elasticsearch indexes...");
@@ -135,9 +135,31 @@ class PaasEsDump extends PaasKommand {
     let pitId = "";
     let searchAfter: string[] = [];
 
-    let currentDocumentChunk = 0;
     let dumpedDocuments = 0;
     let totalDocuments = 0;
+
+    const fd = await fs.open(path.join(this.args.dumpDirectory, "documents.jsonl"), "w");
+    const writeStream = fd.createWriteStream();
+    const ndjsonStream = ndjson.stringify();
+
+    writeStream.on("error", (error) => {
+      throw error;
+    });
+
+    ndjsonStream.on("data", (line: string) => {
+      writeStream.write(line);
+    });
+
+    const teardown = async () => {
+      // Finish the dump session if a PIT ID is set
+      if (pitId.length > 0) {
+        await this.finishDump(pitId);
+      }
+
+      // Close the open streams/file
+      writeStream.close();
+      await fd.close();
+    };
 
     try {
       // Dump the first batch
@@ -149,8 +171,10 @@ class PaasEsDump extends PaasKommand {
         pitId = result.pit_id;
         searchAfter = hits[hits.length - 1].sort;
 
-        // Save the document
-        await fs.writeFile(path.join(this.args.dumpDirectory, "documents/", `${currentDocumentChunk++}.json`), JSON.stringify(hits));
+        // Save the documents
+        for (let i = 0; i < hits.length; ++i) {
+          ndjsonStream.write(hits[i]);
+        }
 
         dumpedDocuments += hits.length;
         totalDocuments = result.hits.total.value;
@@ -161,17 +185,14 @@ class PaasEsDump extends PaasKommand {
         hits = result.hits.hits;
       }
     } catch (error: any) {
-      // Attempt to finish the dump if a PIT ID is set
-      if (pitId.length > 0) {
-        await this.finishDump(pitId);
-      }
+      teardown();
 
       this.logKo(`Error while dumping the documents: ${error}`);
       process.exit(1);
     }
 
     // Finish the dump
-    await this.finishDump(pitId);
+    teardown();
   }
 
   /**
