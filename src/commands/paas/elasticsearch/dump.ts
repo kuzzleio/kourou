@@ -34,6 +34,10 @@ class PaasEsDump extends PaasKommand {
     project: flags.string({
       description: "Current PaaS project",
     }),
+    "batch-size": flags.integer({
+      description: "Maximum batch size",
+      default: 2000,
+    }),
   };
 
   static args = [
@@ -119,6 +123,7 @@ class PaasEsDump extends PaasKommand {
       body: {
         pitId,
         searchAfter: JSON.stringify(searchAfter),
+        size: this.flags["batch-size"],
       },
     });
 
