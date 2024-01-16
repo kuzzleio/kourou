@@ -55,10 +55,7 @@ class PaasSnapshotsRestore extends PaasKommand {
       environmentId: this.args.environment,
       projectId: this.flags.project || this.getProject(),
       applicationId: this.args.applicationId,
-      body: {
-        repository: "automated",
-        snapshot: this.args.snapshotId,
-      },
+      snapshotId: this.args.snapshotId
     });
 
     this.logInfo("Ok");
