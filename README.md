@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.27.1 darwin-arm64 node-v18.17.1
+kourou/0.28.0 darwin-arm64 node-v20.10.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -161,6 +161,7 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
 * [`kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE`](#kourou-paasdeploy-environment-applicationid-image)
+* [`kourou paas:elasticsearch:dump ENVIRONMENT APPLICATIONID DUMPDIRECTORY`](#kourou-paaselasticsearchdump-environment-applicationid-dumpdirectory)
 * [`kourou paas:init PROJECT`](#kourou-paasinit-project)
 * [`kourou paas:login`](#kourou-paaslogin)
 * [`kourou paas:logs ENVIRONMENT APPLICATION`](#kourou-paaslogs-environment-application)
@@ -1063,6 +1064,25 @@ OPTIONS
 ```
 
 _See code: [lib/commands/paas/deploy.js](lib/commands/paas/deploy.js)_
+
+## `kourou paas:elasticsearch:dump ENVIRONMENT APPLICATIONID DUMPDIRECTORY`
+
+Dump data from the Elasticsearch of a PaaS application
+
+```
+USAGE
+  $ kourou paas:elasticsearch:dump ENVIRONMENT APPLICATIONID DUMPDIRECTORY
+
+ARGUMENTS
+  ENVIRONMENT    Project environment name
+  APPLICATIONID  Application Identifier
+  DUMPDIRECTORY  Directory where to store dump files
+
+OPTIONS
+  --batch-size=batch-size  [default: 2000] Maximum batch size
+  --help                   show CLI help
+  --project=project        Current PaaS project
+```
 
 ## `kourou paas:init PROJECT`
 
