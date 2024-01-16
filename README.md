@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.27.1 darwin-arm64 node-v18.17.1
+kourou/0.28.0 darwin-arm64 node-v20.10.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -1083,8 +1083,6 @@ OPTIONS
   --help                   show CLI help
   --project=project        Current PaaS project
 ```
-
-_See code: [src/commands/paas/elasticsearch/dump.ts](src/commands/paas/elasticsearch/dump.ts)_
 
 ## `kourou paas:init PROJECT`
 
