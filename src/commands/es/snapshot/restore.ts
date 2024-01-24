@@ -25,6 +25,10 @@ export default class EsSnapshotsRestore extends Kommand {
   async runSafe() {
     const esClient = new Client({ node: this.flags.node });
 
+    await esClient.indices.close({
+      index: "*",
+    });
+
     const esRequest = {
       repository: this.args.repository,
       snapshot: this.args.name,
