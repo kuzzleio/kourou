@@ -33,6 +33,7 @@ export default class EsSnapshotsRestore extends Kommand {
       repository: this.args.repository,
       snapshot: this.args.name,
       body: {
+        feature_states: ["none"],
         include_global_state: false,
         indices: "*",
       },
