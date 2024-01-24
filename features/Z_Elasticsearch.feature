@@ -28,37 +28,7 @@ Feature: Elasticsearch commands
     Then I should match stdout with "{"index": "%kuzzle.users", "alias": "@%kuzzle.users"}"
 
   @mappings
-  Scenario: Insert ES document
-    Given a collection "nyc-open-data":"green-taxi"
-    When I run the command "es:indices:insert" with:
-      | arg  | &nyc-open-data.yellow-taxi |         |
-      | flag | --id                       | kindred |
-      | flag | --body                     | {}      |
-    When I run the command "es:indices:get" with args:
-      | "&nyc-open-data.yellow-taxi" |
-      | "kindred"                    |
-    Then I should match stdout with "kindred"
-
-  Scenario: Create a snapshot repository
-    When I run the command "es:snapshot:create-repository" with:
-      | arg  | backup         |  |
-      | arg  | /tmp/snapshots |  |
-      | flag | --compress     |  |
-    Then I should match stdout with "Success"
-
-  Scenario: Dump ES data to a snapshot into a repository
-    When I run the command "es:snapshot:create" with:
-      | arg | backup        |  |
-      | arg | test-snapshot |  |
-    Then I should match stdout with "Success"
-
-  Scenario: List all available snapshot of a repository
-    When I run the command "es:snapshot:list" with:
-      | arg | backup |  |
-    Then I should match stdout with "test-snapshot"
-
   Scenario: Dump and restore ES data to a dump folder using the pattern option
-    Given an index "nyc-open-data"
     Given a collection "nyc-open-data":"yellow-taxi"
     Then I create the following document:
       | _id  | "chuon-chuon-kim"                 |
@@ -82,3 +52,38 @@ Feature: Elasticsearch commands
     Given an existing collection "nyc-open-data":"yellow-taxi"
     Then I refresh the collection
     And I count 3 documents
+
+  Scenario: Insert ES document
+    Given a collection "nyc-open-data":"blue-taxi"
+    When I run the command "es:indices:insert" with:
+      | arg  | &nyc-open-data.blue-taxi |         |
+      | flag | --id                     | kindred |
+      | flag | --body                   | {}      |
+    When I run the command "es:indices:get" with args:
+      | "&nyc-open-data.blue-taxi" |
+      | "kindred"                  |
+    Then I should match stdout with "kindred"
+
+  Scenario: Create a snapshot repository
+    When I run the command "es:snapshot:create-repository" with:
+      | arg  | backup         |  |
+      | arg  | /tmp/snapshots |  |
+      | flag | --compress     |  |
+    Then I should match stdout with "Success"
+
+  Scenario: Dump ES data to a snapshot into a repository
+    When I run the command "es:snapshot:create" with:
+      | arg | backup        |  |
+      | arg | test-snapshot |  |
+    Then I should match stdout with "Success"
+
+  Scenario: List all available snapshot of a repository
+    When I run the command "es:snapshot:list" with:
+      | arg | backup |  |
+    Then I should match stdout with "test-snapshot"
+
+  Scenario: Restore ES data from a snapshot
+    When I run the command "es:snapshot:restore" with:
+      | arg | backup        |  |
+      | arg | test-snapshot |  |
+    Then I should match stdout with "Success"

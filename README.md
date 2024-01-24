@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.28.0 darwin-arm64 node-v20.10.0
+kourou/0.28.1 darwin-arm64 node-v20.10.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -149,6 +149,7 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou es:snapshot:create REPOSITORY NAME`](#kourou-essnapshotcreate-repository-name)
 * [`kourou es:snapshot:create-repository REPOSITORY LOCATION`](#kourou-essnapshotcreate-repository-repository-location)
 * [`kourou es:snapshot:list REPOSITORY`](#kourou-essnapshotlist-repository)
+* [`kourou es:snapshot:restore REPOSITORY NAME`](#kourou-essnapshotrestore-repository-name)
 * [`kourou file:decrypt FILE`](#kourou-filedecrypt-file)
 * [`kourou file:encrypt FILE`](#kourou-fileencrypt-file)
 * [`kourou file:test FILE`](#kourou-filetest-file)
@@ -794,6 +795,23 @@ OPTIONS
 ```
 
 _See code: [lib/commands/es/snapshot/list.js](lib/commands/es/snapshot/list.js)_
+
+## `kourou es:snapshot:restore REPOSITORY NAME`
+
+Restore a snapshot repository inside an ES instance
+
+```
+USAGE
+  $ kourou es:snapshot:restore REPOSITORY NAME
+
+ARGUMENTS
+  REPOSITORY  ES repository name
+  NAME        ES snapshot name
+
+OPTIONS
+  -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
+  --help           show CLI help
+```
 
 ## `kourou file:decrypt FILE`
 

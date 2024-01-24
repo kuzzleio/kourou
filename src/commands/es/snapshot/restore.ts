@@ -3,10 +3,10 @@ import { Client } from "@elastic/elasticsearch";
 
 import { Kommand } from "../../../common";
 
-export default class EsSnapshotsCreate extends Kommand {
+export default class EsSnapshotsRestore extends Kommand {
   static initSdk = false;
 
-  static description = "Create a snapshot repository inside an ES instance";
+  static description = "Restore a snapshot repository inside an ES instance";
 
   static flags = {
     node: flags.string({
@@ -25,17 +25,22 @@ export default class EsSnapshotsCreate extends Kommand {
   async runSafe() {
     const esClient = new Client({ node: this.flags.node });
 
+    await esClient.indices.close({
+      index: "*",
+      expand_wildcards: "all",
+    });
+
     const esRequest = {
       repository: this.args.repository,
       snapshot: this.args.name,
       body: {
-        indices: "*",
+        feature_states: ["none"],
         include_global_state: false,
-        partial: false,
+        indices: "*",
       },
     };
 
-    const response = await esClient.snapshot.create(esRequest);
+    const response = await esClient.snapshot.restore(esRequest);
 
     this.logOk(`Success ${JSON.stringify(response.body)}`);
   }
