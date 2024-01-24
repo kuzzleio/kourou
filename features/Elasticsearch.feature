@@ -29,7 +29,6 @@ Feature: Elasticsearch commands
 
   @mappings
   Scenario: Dump and restore ES data to a dump folder using the pattern option
-    Given an index "nyc-open-data"
     Given a collection "nyc-open-data":"yellow-taxi"
     Then I create the following document:
       | _id  | "chuon-chuon-kim"                 |
@@ -55,14 +54,14 @@ Feature: Elasticsearch commands
     And I count 3 documents
 
   Scenario: Insert ES document
-    Given a collection "nyc-open-data":"green-taxi"
+    Given a collection "nyc-open-data":"blue-taxi"
     When I run the command "es:indices:insert" with:
-      | arg  | &nyc-open-data.yellow-taxi |         |
-      | flag | --id                       | kindred |
-      | flag | --body                     | {}      |
+      | arg  | &nyc-open-data.blue-taxi |         |
+      | flag | --id                     | kindred |
+      | flag | --body                   | {}      |
     When I run the command "es:indices:get" with args:
-      | "&nyc-open-data.yellow-taxi" |
-      | "kindred"                    |
+      | "&nyc-open-data.blue-taxi" |
+      | "kindred"                  |
     Then I should match stdout with "kindred"
 
   Scenario: Create a snapshot repository
