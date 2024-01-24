@@ -36,7 +36,7 @@ export default class EsSnapshotsRestore extends Kommand {
       body: {
         feature_states: ["none"],
         include_global_state: false,
-        indices: "-.ds-.logs-deprecation.elasticsearch-default, *",
+        indices: "*",
       },
     };
 
