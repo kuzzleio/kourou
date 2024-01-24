@@ -57,6 +57,12 @@ Feature: Elasticsearch commands
       | arg | backup |  |
     Then I should match stdout with "test-snapshot"
 
+  Scenario: Restore ES data from a snapshot
+    When I run the command "es:snapshot:restore" with:
+      | arg | backup        |  |
+      | arg | test-snapshot |  |
+    Then I should match stdout with "Success"
+
   Scenario: Dump and restore ES data to a dump folder using the pattern option
     Given an index "nyc-open-data"
     Given a collection "nyc-open-data":"yellow-taxi"
