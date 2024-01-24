@@ -35,7 +35,7 @@ export default class EsSnapshotsRestore extends Kommand {
       },
     };
 
-    const response = await esClient.snapshot.create(esRequest);
+    const response = await esClient.snapshot.restore(esRequest);
 
     this.logOk(`Success ${JSON.stringify(response.body)}`);
   }
