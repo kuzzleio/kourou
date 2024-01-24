@@ -27,6 +27,7 @@ export default class EsSnapshotsRestore extends Kommand {
 
     await esClient.indices.close({
       index: "*",
+      expand_wildcards: "all",
     });
 
     const esRequest = {
