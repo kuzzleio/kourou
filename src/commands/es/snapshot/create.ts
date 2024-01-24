@@ -28,7 +28,11 @@ export default class EsSnapshotsCreate extends Kommand {
     const esRequest = {
       repository: this.args.repository,
       snapshot: this.args.name,
-      body: {},
+      body: {
+        indices: "*",
+        include_global_state: false,
+        partial: false,
+      },
     };
 
     const response = await esClient.snapshot.create(esRequest);
