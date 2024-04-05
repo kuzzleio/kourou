@@ -11,8 +11,6 @@ import { execute } from "../../support/execute";
 import { checkPrerequisites } from "../../support/docker/checkPrerequisites";
 
 const kuzzleServicesFile = `
-version: '3'
-
 services:
   redis:
     image: redis:5
