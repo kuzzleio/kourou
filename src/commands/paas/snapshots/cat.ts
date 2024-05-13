@@ -53,7 +53,8 @@ class PaasSnapshotsCat extends PaasKommand {
       body: {},
     });
 
-    this.logInfo(JSON.stringify(result, null, 2));
+    this.logOk("Snapshots of your PaaS application:");
+    this.logOk(JSON.stringify(result, null, 2));
   }
 }
 
