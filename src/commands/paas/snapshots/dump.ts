@@ -53,7 +53,8 @@ class PaasSnapshotsDump extends PaasKommand {
       body: {},
     });
 
-    this.logOk(result.body);
+    this.logInfo(JSON.stringify(result.body));
+    this.logOk("Your snapshot is being created.");
   }
 }
 

@@ -58,7 +58,7 @@ class PaasSnapshotsRestore extends PaasKommand {
       snapshotId: this.args.snapshotId
     });
 
-    this.logInfo("Ok");
+    this.logOk("Your snapshot is being restored.");
   }
 }
 
