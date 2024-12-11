@@ -1,6 +1,7 @@
 services:
   kuzzle:
     image: kuzzleio/kuzzle:2
+    container_name: kuzzle
     command: /run.sh
     volumes:
       - "./run.sh:/run.sh"
@@ -24,9 +25,11 @@ services:
       - DEBUG=kuzzle:*,-kuzzle:entry-point:protocols:websocket
 
   redis:
+    container_name: redis
     image: redis:5
 
   elasticsearch:
+    container_name: elasticsearch
     build:
       dockerfile: Dockerfile
       context: ./elasticsearch
