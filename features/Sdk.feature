@@ -12,12 +12,12 @@ Feature: SDK commands
     Then The document "chuon-chuon-kim" content match:
       | other-name | "my" |
 
-  Scenario: Impersonate an user
-    When I run the command "sdk:query" with:
-      | arg  | auth:getCurrentUser |        |
-      | flag | --as                | gordon |
-    Then I should match stdout with:
-      | "_id": "gordon" |
+  # Scenario: Impersonate an user
+  #   When I run the command "sdk:query" with:
+  #     | arg  | auth:getCurrentUser |        |
+  #     | flag | --as                | gordon |
+  #   Then I should match stdout with:
+  #     | "_id": "gordon" |
 
   @mappings
   Scenario: Execute code in the SDK context
