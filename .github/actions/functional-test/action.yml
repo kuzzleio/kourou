@@ -12,7 +12,7 @@ runs:
       run: |
         set -x
         cd package
-        npm clean-install
+        npm install
         features/run-kuzzle-stack.sh
         npm run test:functional:${{ inputs.test-set }}
       env:
