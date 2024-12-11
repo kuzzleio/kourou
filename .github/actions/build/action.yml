@@ -3,12 +3,10 @@ description: Run Build
 runs:
   using: "composite"
   steps:
-    - name: update npm
-      run: npm install -g npm
-      shell: bash
     - name: Install deps
       run: npm ci
       shell: bash
+
     - name: Build and package the application
       run: npm run build && npm pack
       shell: bash
