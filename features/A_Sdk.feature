@@ -12,13 +12,6 @@ Feature: SDK commands
     Then The document "chuon-chuon-kim" content match:
       | other-name | "my" |
 
-  # Scenario: Impersonate an user
-  #   When I run the command "sdk:query" with:
-  #     | arg  | auth:getCurrentUser |        |
-  #     | flag | --as                | gordon |
-  #   Then I should match stdout with:
-  #     | "_id": "gordon" |
-
   @mappings
   Scenario: Execute code in the SDK context
     Given an existing collection "nyc-open-data":"yellow-taxi"
@@ -34,3 +27,11 @@ Feature: SDK commands
       | arg | const index: string = "nyc-open-data"; const collection: string = "yellow-taxi"; const id: string = "document-ricky"; return await sdk.document.create(index, collection, {}, id); |
     Then The document "document-ricky" should exist
     And I should match stdout with "document-ricky"
+
+  @mappings
+  Scenario: Impersonate an user
+    When I run the command "sdk:query" with:
+      | arg  | auth:getCurrentUser |        |
+      | flag | --as                | gordon |
+    Then I should match stdout with:
+      | "_id": "gordon" |
