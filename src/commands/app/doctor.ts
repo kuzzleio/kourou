@@ -133,7 +133,7 @@ export default class AppDoctor extends Kommand {
       );
     }
     this.logOk(`NodeJS Building version: ${process.version}`);
-    if (nodeVersion.result !== process.version) {
+    if (nodeVersion.result as any !== process.version) {
       this.logKo(
         "=> Kuzzle node version is different from the build node version"
       );
