@@ -2,7 +2,6 @@ services:
   kuzzle:
     image: kuzzleio/kuzzle:2
     command: /run.sh
-    container_name: kuzzle
     volumes:
       - "./run.sh:/run.sh"
     cap_add:
@@ -32,7 +31,6 @@ services:
       dockerfile: Dockerfile
       context: ./elasticsearch
       target: elasticsearch
-    container_name: kuzzle_elasticsearch
     volumes:
       - "/tmp/snapshots:/tmp/snapshots"
     ports:

@@ -107,6 +107,7 @@ jobs:
       - uses: ./.github/actions/functional-test
         with:
           test-set: ${{ matrix.test-set }}
+
   release:
     name: Release process
     runs-on: ubuntu-22.04
