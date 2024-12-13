@@ -31,8 +31,7 @@ Feature: SDK commands
   @mappings
   Scenario: Impersonate an user
     Given an existing user "pandacrobate"
-    When I run the command "sdk:query" with:
-      | arg  | auth:getCurrentUser |              |
-      | flag | --as                | pandacrobate |
+    When I run the command "sdk:query auth:getCurrentUser" with flags:
+      | --as | "pandacrobate" |
     Then I should match stdout with:
       | "_id": "pandacrobate" |
