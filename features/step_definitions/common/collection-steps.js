@@ -31,7 +31,6 @@ Given(
     try {
       await this.sdk.security.getUser(userId);
     } catch (error) {
-      console.log('✔ User not found, creating...');
       await this.sdk.security.createUser(userId, {
         content: {
           profileIds: ['default']

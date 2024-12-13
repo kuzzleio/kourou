@@ -153,7 +153,7 @@ export class KuzzleSDK {
    * @returns {void}
    */
   public async impersonate(userKuid: string, callback: { (): Promise<void> }) {
-    // const currentToken = this.sdk.jwt;
+    const currentToken = this.sdk.jwt;
 
     let apiKey: any;
 
@@ -161,20 +161,18 @@ export class KuzzleSDK {
       apiKey = await this.security.createApiKey(
         userKuid,
         "Kourou impersonation token",
-        { expiresIn: "2h", refresh: false } as any
+        { expiresIn: "2h", refresh: "wait_for" } as any
       );
-
-      console.log(`Impersonating user ${userKuid}...`, apiKey);
 
       this.sdk.jwt = apiKey._source.token;
 
       await callback();
     } finally {
-    // this.sdk.jwt = currentToken;
+      this.sdk.jwt = currentToken;
 
-      // if (apiKey?._id) {
-      //   await this.security.deleteApiKey(userKuid, apiKey._id);
-      // }
+      if (apiKey?._id) {
+        await this.security.deleteApiKey(userKuid, apiKey._id);
+      }
     }
   }
 

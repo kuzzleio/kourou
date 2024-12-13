@@ -4,7 +4,7 @@ set -e
 
 # Create the folder where will be stored snapshots
 mkdir -p /tmp/snapshots
-# chmod 777 -R /tmp/snapshots
+chmod 777 -R /tmp/snapshots
 
 # Launch the kuzzle stack
 docker compose -f features/docker/docker-compose.yml up -d
