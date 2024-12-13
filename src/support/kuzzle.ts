@@ -155,6 +155,7 @@ export class KuzzleSDK {
   public async impersonate(userKuid: string, callback: { (): Promise<void> }) {
     const currentToken = this.sdk.jwt;
     let apiKey: any;
+    let callbackResult;
 
     try {
       console.log('Starting impersonation process...');
@@ -168,15 +169,17 @@ export class KuzzleSDK {
       this.sdk.jwt = apiKey._source.token;
 
       console.log('Executing callback...');
-      await callback();
+      callbackResult = await callback(); // Store the result
       console.log('Callback completed successfully');
+
+      return callbackResult; // Return the callback result
     } catch (error) {
       console.error('Error during impersonation:', error);
       throw error;
     } finally {
       console.log("Starting cleanup in finally block...");
-      this.sdk.jwt = currentToken;
 
+      // Move token restoration after cleanup
       if (apiKey?._id) {
         try {
           await this.security.deleteApiKey(userKuid, apiKey._id);
@@ -185,9 +188,13 @@ export class KuzzleSDK {
           console.error('Error cleaning up API key:', cleanupError);
         }
       }
-      console.log("Cleanup completed");
+
+      // Restore token last
+      this.sdk.jwt = currentToken;
+      console.log("Token restored and cleanup completed");
     }
   }
+
 
 
   disconnect() {

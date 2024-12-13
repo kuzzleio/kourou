@@ -114,7 +114,7 @@ Default fallback to API action
 
   static readStdin = true;
 
-  async runSafe() {
+  async runSafe(): Promise<void> {
     const [controller, action] = this.args["controller:action"].split(":");
 
     const requestArgs: any = {};
