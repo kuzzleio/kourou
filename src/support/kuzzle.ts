@@ -152,48 +152,56 @@ export class KuzzleSDK {
    * @param {Function} callback - Callback that will be impersonated
    * @returns {void}
    */
-  public async impersonate(userKuid: string, callback: { (): Promise<void> }) {
+  public impersonate(userKuid: string, callback: { (): Promise<void> }): Promise<void> {
     const currentToken = this.sdk.jwt;
     let apiKey: any;
-    let callbackResult;
 
-    try {
+    return new Promise((resolve, reject) => {
       console.log('Starting impersonation process...');
-      apiKey = await this.security.createApiKey(
+
+      this.security.createApiKey(
         userKuid,
         "Kourou impersonation token",
         { expiresIn: "2h", refresh: false } as any
-      );
+      )
+        .then((createdApiKey) => {
+          apiKey = createdApiKey;
+          console.log(`Impersonating user ${userKuid}...`, apiKey);
+          this.sdk.jwt = apiKey._source.token;
 
-      console.log(`Impersonating user ${userKuid}...`, apiKey);
-      this.sdk.jwt = apiKey._source.token;
+          console.log('Executing callback...');
+          return callback();
+        })
+        .then((result) => {
+          console.log('Callback completed successfully');
+          resolve(result);
+        })
+        .catch((error) => {
+          console.error('Error during impersonation:', error);
+          reject(error);
+        })
+        .finally(() => {
+          console.log("Starting cleanup in finally block...");
 
-      console.log('Executing callback...');
-      callbackResult = await callback(); // Store the result
-      console.log('Callback completed successfully');
+          const cleanup = async () => {
+            if (apiKey?._id) {
+              try {
+                await this.security.deleteApiKey(userKuid, apiKey._id);
+                console.log('API key cleanup successful');
+              } catch (cleanupError) {
+                console.error('Error cleaning up API key:', cleanupError);
+              }
+            }
 
-      return callbackResult; // Return the callback result
-    } catch (error) {
-      console.error('Error during impersonation:', error);
-      throw error;
-    } finally {
-      console.log("Starting cleanup in finally block...");
+            this.sdk.jwt = currentToken;
+            console.log("Token restored and cleanup completed");
+          };
 
-      // Move token restoration after cleanup
-      if (apiKey?._id) {
-        try {
-          await this.security.deleteApiKey(userKuid, apiKey._id);
-          console.log('API key cleanup successful');
-        } catch (cleanupError) {
-          console.error('Error cleaning up API key:', cleanupError);
-        }
-      }
-
-      // Restore token last
-      this.sdk.jwt = currentToken;
-      console.log("Token restored and cleanup completed");
-    }
+          return cleanup();
+        });
+    });
   }
+
 
 
 
