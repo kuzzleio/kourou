@@ -165,10 +165,13 @@ export class KuzzleSDK {
         { expiresIn: "2h", refresh: false } as any
       );
 
+      console.log(`Impersonating user ${userKuid}...`, apiKey);
+
       this.sdk.jwt = apiKey._source.token;
 
       await callback();
     } finally {
+      console.log("Restoring previous token...");
       this.sdk.jwt = currentToken;
 
       if (apiKey?._id) {
