@@ -114,8 +114,7 @@ export class KuzzleSDK {
     this.sdk.on("networkError", (error: any) => logger.logKo(error.message));
 
     logger.logInfo(
-      `Connecting to ${this.protocol}${this.ssl ? "s" : ""}://${this.host}:${
-        this.port
+      `Connecting to ${this.protocol}${this.ssl ? "s" : ""}://${this.host}:${this.port
       } ...`
     );
 
@@ -155,10 +154,10 @@ export class KuzzleSDK {
    */
   public async impersonate(userKuid: string, callback: { (): Promise<void> }) {
     const currentToken = this.sdk.jwt;
-
     let apiKey: any;
 
     try {
+      console.log('Starting impersonation process...');
       apiKey = await this.security.createApiKey(
         userKuid,
         "Kourou impersonation token",
@@ -166,19 +165,30 @@ export class KuzzleSDK {
       );
 
       console.log(`Impersonating user ${userKuid}...`, apiKey);
-
       this.sdk.jwt = apiKey._source.token;
 
+      console.log('Executing callback...');
       await callback();
+      console.log('Callback completed successfully');
+    } catch (error) {
+      console.error('Error during impersonation:', error);
+      throw error;
     } finally {
-      console.log("Restoring previous token...");
+      console.log("Starting cleanup in finally block...");
       this.sdk.jwt = currentToken;
 
       if (apiKey?._id) {
-        await this.security.deleteApiKey(userKuid, apiKey._id);
+        try {
+          await this.security.deleteApiKey(userKuid, apiKey._id);
+          console.log('API key cleanup successful');
+        } catch (cleanupError) {
+          console.error('Error cleaning up API key:', cleanupError);
+        }
       }
+      console.log("Cleanup completed");
     }
   }
+
 
   disconnect() {
     this.sdk.disconnect();
@@ -217,9 +227,8 @@ export class KuzzleSDK {
     }
 
     // Construct the URL
-    const url = `${this.ssl ? "https" : "http"}://${this.host}:${
-      this.port
-    }/_query`;
+    const url = `${this.ssl ? "https" : "http"}://${this.host}:${this.port
+      }/_query`;
 
     // Construct the request
     const body = JSON.stringify(request);

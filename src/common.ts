@@ -189,8 +189,6 @@ export abstract class Kommand extends Command {
 
       process.exit(this.exitCode);
     }
-
-    return this.exitCode;
   }
 
   async beforeConnect() {
