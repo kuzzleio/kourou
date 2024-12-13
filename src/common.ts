@@ -165,6 +165,7 @@ export abstract class Kommand extends Command {
           this.logKo(`${e.document._id} : ${e.reason}`);
         }
       } else {
+        console.log(error);
         this.logKo(JSON.stringify(error.reason));
       }
 
@@ -192,7 +193,7 @@ export abstract class Kommand extends Command {
     return this.exitCode;
   }
 
-  beforeConnect() {
+  async beforeConnect() {
     // will be called before connecting to Kuzzle
   }
 
