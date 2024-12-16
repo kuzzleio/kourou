@@ -28,10 +28,10 @@ Feature: SDK commands
     Then The document "document-ricky" should exist
     And I should match stdout with "document-ricky"
 
-  # @mappings
-  # Scenario: Impersonate an user
-  #   When I run the command "sdk:query" with:
-  #     | arg  | auth:getCurrentUser |        |
-  #     | flag | --as                | gordon |
-  #   Then I should match stdout with:
-  #     | "_id": "gordon" |
+  @security
+  Scenario: Impersonate an user
+    Given an existing user "pandacrobate"
+    When I run the command "sdk:query auth:getCurrentUser" with flags:
+      | --as | "pandacrobate" |
+    Then I should match stdout with:
+      | "_id": "pandacrobate" |

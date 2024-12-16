@@ -24,6 +24,28 @@ Given(
   }
 );
 
+Given(
+  "an existing user {string}",
+  async function (userId) {
+
+    try {
+      await this.sdk.security.getUser(userId);
+    } catch (error) {
+      await this.sdk.security.createUser(userId, {
+        content: {
+          profileIds: ['default']
+        },
+        credentials: {
+          local: {
+            username: userId,
+            password: 'password'
+          }
+        }
+      });
+    }
+  }
+);
+
 Then("I list collections in index {string}", async function (index) {
   this.props.result = await this.sdk.collection.list(index);
 });

@@ -62,7 +62,6 @@ export default class AppScaffold extends Kommand {
   }
 
   getRepo(flavor: string) {
-    console.log(flavor);
     switch (flavor) {
       case "generic":
         return "template-kuzzle-project";
