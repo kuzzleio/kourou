@@ -87,7 +87,6 @@ jobs:
         run: |
           npm clean-install
           npm run build
-          npm clean-install --omit=dev
 
       - name: Release
         env:
