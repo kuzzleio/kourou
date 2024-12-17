@@ -92,11 +92,7 @@ jobs:
 
       - name: Release
         env:
-<<<<<<< HEAD
           GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GHP }}
-=======
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
->>>>>>> 8ed7785db2b5b293af9022181b99727371cd75b6
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           SEMANTIC_RELEASE_NPM_PUBLISH: "true"
           SEMANTIC_RELEASE_SLACK_WEBHOOK: ${{ secrets.SEMANTIC_RELEASE_SLACK_WEBHOOK }}
