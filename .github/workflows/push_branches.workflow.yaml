@@ -82,6 +82,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
+          registry-url: "https://registry.npmjs.org"
+          scope: '@kuzzleio'
 
       - name: Install dependencies
         run: |
@@ -90,6 +92,8 @@ jobs:
 
       - name: Release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GHP }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          SEMANTIC_RELEASE_NPM_PUBLISH: "true"
           SEMANTIC_RELEASE_SLACK_WEBHOOK: ${{ secrets.SEMANTIC_RELEASE_SLACK_WEBHOOK }}
         run: npx semantic-release
