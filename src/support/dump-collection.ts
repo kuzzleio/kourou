@@ -356,7 +356,12 @@ export async function dumpCollectionMappings(
     type: "mappings",
     content: {
       [index]: {
-        [collection]: mappings,
+        [collection]: {
+          mappings
+          // For later use, we could add the settings here
+          // eg: "settings": { "index.mapping.total_fields.limit": 10000 }
+          // This can be added after the dump and it will work with kourou:import command
+        },
       },
     },
   };

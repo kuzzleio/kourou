@@ -17,8 +17,6 @@ const MIN_MAX_MAP_COUNT = 262144;
 const MIN_DOCO_VERSION = "2.0.0";
 
 const kuzzleStackV1 = (increment: number): string => `
-version: '3'
-
 services:
   kuzzle:
     image: kuzzleio/kuzzle:1
@@ -53,8 +51,6 @@ services:
 `;
 
 const kuzzleStackV2 = (increment: number): string => `
-version: '3'
-
 services:
   kuzzle:
     image: kuzzleio/kuzzle:2

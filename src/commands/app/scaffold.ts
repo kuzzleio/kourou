@@ -49,7 +49,7 @@ export default class AppScaffold extends Kommand {
       },
       {
         title: "Cleaning up",
-        task: async () => this.cleanup()
+        task: async () => this.cleanup(destination)
       }
     ]);
 
@@ -62,7 +62,6 @@ export default class AppScaffold extends Kommand {
   }
 
   getRepo(flavor: string) {
-    console.log(flavor);
     switch (flavor) {
       case "generic":
         return "template-kuzzle-project";
@@ -115,7 +114,8 @@ export default class AppScaffold extends Kommand {
     await execute("cp", "-r", `${this.templatesDir}/`, `${destination}/`);
   }
 
-  async cleanup() {
+  async cleanup(destination: string) {
     await execute("rm", "-rf", this.templatesDir);
+    await execute("rm", "-rf", `${destination}/.git`);
   }
 }

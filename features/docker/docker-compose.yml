@@ -1,10 +1,8 @@
-version: "3.4"
-
 services:
   kuzzle:
     image: kuzzleio/kuzzle:2
-    command: /run.sh
     container_name: kuzzle
+    command: /run.sh
     volumes:
       - "./run.sh:/run.sh"
     cap_add:
@@ -27,14 +25,15 @@ services:
       - DEBUG=kuzzle:*,-kuzzle:entry-point:protocols:websocket
 
   redis:
+    container_name: redis
     image: redis:5
 
   elasticsearch:
+    container_name: elasticsearch
     build:
       dockerfile: Dockerfile
       context: ./elasticsearch
       target: elasticsearch
-    container_name: kuzzle_elasticsearch
     volumes:
       - "/tmp/snapshots:/tmp/snapshots"
     ports:

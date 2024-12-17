@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.28.1 darwin-arm64 node-v20.10.0
+kourou/1.0.0-beta.1 linux-x64 node-v22.12.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -161,14 +161,7 @@ All other arguments and options will be passed as-is to the `sdk:query` method.
 * [`kourou instance:list`](#kourou-instancelist)
 * [`kourou instance:logs`](#kourou-instancelogs)
 * [`kourou instance:spawn`](#kourou-instancespawn)
-* [`kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE`](#kourou-paasdeploy-environment-applicationid-image)
-* [`kourou paas:elasticsearch:dump ENVIRONMENT APPLICATIONID DUMPDIRECTORY`](#kourou-paaselasticsearchdump-environment-applicationid-dumpdirectory)
-* [`kourou paas:init PROJECT`](#kourou-paasinit-project)
 * [`kourou paas:login`](#kourou-paaslogin)
-* [`kourou paas:logs ENVIRONMENT APPLICATION`](#kourou-paaslogs-environment-application)
-* [`kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID`](#kourou-paassnapshotscat-environment-applicationid)
-* [`kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID`](#kourou-paassnapshotsdump-environment-applicationid)
-* [`kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID`](#kourou-paassnapshotsrestore-environment-applicationid-snapshotid)
 * [`kourou profile:export`](#kourou-profileexport)
 * [`kourou profile:import PATH`](#kourou-profileimport-path)
 * [`kourou realtime:subscribe INDEX COLLECTION [FILTERS]`](#kourou-realtimesubscribe-index-collection-filters)
@@ -813,6 +806,8 @@ OPTIONS
   --help           show CLI help
 ```
 
+_See code: [lib/commands/es/snapshot/restore.js](lib/commands/es/snapshot/restore.js)_
+
 ## `kourou file:decrypt FILE`
 
 Decrypts an encrypted file.
@@ -1062,63 +1057,6 @@ OPTIONS
 
 _See code: [lib/commands/instance/spawn.js](lib/commands/instance/spawn.js)_
 
-## `kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE`
-
-Deploy a new version of the application in the PaaS
-
-```
-USAGE
-  $ kourou paas:deploy ENVIRONMENT APPLICATIONID IMAGE
-
-ARGUMENTS
-  ENVIRONMENT    Project environment name
-  APPLICATIONID  Application Identifier
-  IMAGE          Image name and hash as myimage:mytag
-
-OPTIONS
-  --help             show CLI help
-  --project=project  Current PaaS project
-  --token=token      Authentication token
-```
-
-_See code: [lib/commands/paas/deploy.js](lib/commands/paas/deploy.js)_
-
-## `kourou paas:elasticsearch:dump ENVIRONMENT APPLICATIONID DUMPDIRECTORY`
-
-Dump data from the Elasticsearch of a PaaS application
-
-```
-USAGE
-  $ kourou paas:elasticsearch:dump ENVIRONMENT APPLICATIONID DUMPDIRECTORY
-
-ARGUMENTS
-  ENVIRONMENT    Project environment name
-  APPLICATIONID  Application Identifier
-  DUMPDIRECTORY  Directory where to store dump files
-
-OPTIONS
-  --batch-size=batch-size  [default: 2000] Maximum batch size
-  --help                   show CLI help
-  --project=project        Current PaaS project
-```
-
-## `kourou paas:init PROJECT`
-
-Initialize a PaaS project in current directory
-
-```
-USAGE
-  $ kourou paas:init PROJECT
-
-ARGUMENTS
-  PROJECT  Kuzzle PaaS project name
-
-OPTIONS
-  --help  show CLI help
-```
-
-_See code: [lib/commands/paas/init.js](lib/commands/paas/init.js)_
-
 ## `kourou paas:login`
 
 Login for a PaaS project
@@ -1135,101 +1073,6 @@ OPTIONS
 ```
 
 _See code: [lib/commands/paas/login.js](lib/commands/paas/login.js)_
-
-## `kourou paas:logs ENVIRONMENT APPLICATION`
-
-Show logs of the targeted application
-
-```
-USAGE
-  $ kourou paas:logs ENVIRONMENT APPLICATION
-
-ARGUMENTS
-  ENVIRONMENT  Kuzzle PaaS environment
-  APPLICATION  Kuzzle PaaS application
-
-OPTIONS
-  -f, --follow       Follow log output
-  -n, --tail=tail    Number of lines to show from the end of the logs
-  -t, --timestamp    Show timestamp
-  --help             show CLI help
-  --podName=podName  Name of the pod to show logs from
-  --project=project  Current PaaS project
-  --since=since      Display logs from a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time
-  --until=until      Display logs until a specific absolute (e.g. 2022/12/02 09:41) or relative (e.g. a minute ago) time
-```
-
-_See code: [lib/commands/paas/logs.js](lib/commands/paas/logs.js)_
-
-## `kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID`
-
-List all snapshots for a given kuzzle application in a environment
-
-```
-USAGE
-  $ kourou paas:snapshots:cat ENVIRONMENT APPLICATIONID
-
-ARGUMENTS
-  ENVIRONMENT    Project environment name
-  APPLICATIONID  Application Identifier
-
-OPTIONS
-  --help             show CLI help
-  --project=project  Current PaaS project
-  --token=token      Authentication token
-
-EXAMPLE
-  kourou paas:snapshots:cat --project paas-project-myproject api main
-```
-
-_See code: [lib/commands/paas/snapshots/cat.js](lib/commands/paas/snapshots/cat.js)_
-
-## `kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID`
-
-Create a new snapshot of the current application state
-
-```
-USAGE
-  $ kourou paas:snapshots:dump ENVIRONMENT APPLICATIONID
-
-ARGUMENTS
-  ENVIRONMENT    Project environment name
-  APPLICATIONID  Application Identifier
-
-OPTIONS
-  --help             show CLI help
-  --project=project  Current PaaS project
-  --token=token      Authentication token
-
-EXAMPLE
-  kourou paas:snapshots:dump --project paas-project-myproject api main
-```
-
-_See code: [lib/commands/paas/snapshots/dump.js](lib/commands/paas/snapshots/dump.js)_
-
-## `kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID`
-
-Restore a snapshot of the current application state
-
-```
-USAGE
-  $ kourou paas:snapshots:restore ENVIRONMENT APPLICATIONID SNAPSHOTID
-
-ARGUMENTS
-  ENVIRONMENT    Project environment name
-  APPLICATIONID  Application Identifier
-  SNAPSHOTID     Snapshot Identifier
-
-OPTIONS
-  --help             show CLI help
-  --project=project  Current PaaS project
-  --token=token      Authentication token
-
-EXAMPLE
-  kourou paas:snapshots:restore --project paas-project-myproject api main snapshot-id
-```
-
-_See code: [lib/commands/paas/snapshots/restore.js](lib/commands/paas/snapshots/restore.js)_
 
 ## `kourou profile:export`
 

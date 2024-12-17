@@ -188,11 +188,9 @@ export abstract class Kommand extends Command {
 
       process.exit(this.exitCode);
     }
-
-    return this.exitCode;
   }
 
-  beforeConnect() {
+  async beforeConnect() {
     // will be called before connecting to Kuzzle
   }
 

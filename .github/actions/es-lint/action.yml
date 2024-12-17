@@ -3,12 +3,10 @@ description: Run ESLint
 runs:
   using: "composite"
   steps:
-    - name: update npm
-      run: npm install -g npm
-      shell: bash
     - name: Install deps
       run: npm ci
       shell: bash
+
     - name: Run lint tests
       run: npm run  test:lint
       shell: bash
