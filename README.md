@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/0.28.1 darwin-arm64 node-v20.10.0
+kourou/1.0.0-beta.1 linux-x64 node-v22.12.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -805,6 +805,8 @@ OPTIONS
   -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --help           show CLI help
 ```
+
+_See code: [lib/commands/es/snapshot/restore.js](lib/commands/es/snapshot/restore.js)_
 
 ## `kourou file:decrypt FILE`
 
