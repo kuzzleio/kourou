@@ -1,3 +1,12 @@
+## [1.0.1-beta.1](https://github.com/kuzzleio/kourou/compare/v1.0.0...v1.0.1-beta.1) (2024-12-17)
+
+
+### Bug Fixes
+
+* npm release ([05ab902](https://github.com/kuzzleio/kourou/commit/05ab90206efcf461ebb356390c131cb50102c1fe))
+* npm release ([a80beb4](https://github.com/kuzzleio/kourou/commit/a80beb44d627113390614da251ecc177e74a8936))
+* provide the right npm token ([b13016d](https://github.com/kuzzleio/kourou/commit/b13016d0a40b6fc667581d54db9bdf104a5b4010))
+
 # 1.0.0 (2024-12-17)
 
 
