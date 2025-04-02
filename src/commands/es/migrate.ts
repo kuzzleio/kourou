@@ -6,7 +6,13 @@ import emoji from "node-emoji";
 import { promises as fs } from "fs";
 
 import { Kommand } from "../../common";
-import { Elasticsearch, File, Provider, isURL, fileExists } from "../../support/migrate/providers";
+import {
+  Elasticsearch,
+  File,
+  Provider,
+  isURL,
+  fileExists,
+} from "../../support/migrate/providers";
 
 export default class EsMigrate extends Kommand {
   static initSdk = false;
@@ -49,6 +55,10 @@ export default class EsMigrate extends Kommand {
     scroll: flags.string({
       description: "Scroll duration for Elasticsearch scrolling",
       default: "30s",
+    }),
+    "only-mappings": flags.boolean({
+      description: "Only migrate mappings",
+      default: false,
     }),
   };
 
@@ -126,6 +136,12 @@ export default class EsMigrate extends Kommand {
     await this.migrateIndex(index);
     this.logOk("Mappings successfully imported!");
 
+    if (this.flags["only-mappings"]) {
+      this.logInfo("Skipping data import");
+      return;
+    }
+
+    this.logInfo("Importing data...");
     const count = await this.migrateData(index);
 
     if (count === 0) {
