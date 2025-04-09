@@ -11,8 +11,46 @@ export class Elasticsearch implements Provider {
   private readonly options: ElasticsearchProviderOptions;
 
   constructor(url: string, options: ElasticsearchProviderOptions) {
-    this.client = new Client({ node: url });
+    const { auth, url: cleanedUrl } = this.extractCredentials(url);
+
+    this.client = new Client({
+      node: cleanedUrl,
+      auth,
+    });
     this.options = options;
+  }
+
+  private extractCredentials(url: string) {
+    let auth = undefined;
+    if (url.includes("@")) {
+      const urlCleaned = url.replace(/https?:\/\//, "");
+      const [credentials] = urlCleaned.split("@");
+      const [username, password] = credentials.split(":");
+
+      if (!username || !password) {
+        throw new Error(
+          "Invalid credentials format. Expected format: username:password@url"
+        );
+      }
+
+      if (username === "nologin" && password) {
+        auth = {
+          apiKey: password,
+        };
+      } else if (username && password) {
+        auth = {
+          username,
+          password,
+        };
+      }
+
+      if (url.startsWith("http://")) {
+        url = url.replace(/https?:\/\/[^@]+@/, "http://");
+      } else if (url.startsWith("https://")) {
+        url = url.replace(/https?:\/\/[^@]+@/, "https://");
+      }
+    }
+    return { auth, url };
   }
 
   async listIndices(pattern?: string): Promise<string[]> {
@@ -63,19 +101,18 @@ export class Elasticsearch implements Provider {
       return {
         documents: body.hits.hits,
         total: body.hits.total.value,
-        scrollId: body._scroll_id
+        scrollId: body._scroll_id,
       };
     } else {
       const {
         body: { hits },
       } = await this.client.scroll({
         scroll_id: args.scrollId,
-        scroll: this.options.scrollDuration
+        scroll: this.options.scrollDuration,
       });
 
       return hits.hits;
     }
-
   }
 
   async writeData(index: string, docs: any): Promise<number> {
