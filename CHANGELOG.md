@@ -1,3 +1,16 @@
+# [1.1.0](https://github.com/kuzzleio/kourou/compare/v1.0.1...v1.1.0) (2025-04-09)
+
+
+### Bug Fixes
+
+* use main branches for template scaffolding ([cc02982](https://github.com/kuzzleio/kourou/commit/cc02982900c6d8b2643da4b9c378c74d7b863dd3))
+
+
+### Features
+
+* add apiKey support for the es:migrate command ([06110fb](https://github.com/kuzzleio/kourou/commit/06110fbb0c9c0d221027ea6cfb4ad013984e2c32))
+* be able to only transfert index mappings and settings ([f992f17](https://github.com/kuzzleio/kourou/commit/f992f170248359ceb7004b931efd36cb4de03793))
+
 # [1.1.0-beta.1](https://github.com/kuzzleio/kourou/compare/v1.0.1...v1.1.0-beta.1) (2025-04-09)
 
 
