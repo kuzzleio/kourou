@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/1.0.1 linux-x64 node-v20.18.1
+kourou/1.1.0-beta.1 linux-x64 node-v22.14.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -206,6 +206,8 @@ EXAMPLE
   kourou api-key:check eyJhbG...QxfQrc
 ```
 
+_See code: [lib/commands/api-key/check.js](lib/commands/api-key/check.js)_
+
 ## `kourou api-key:create USER`
 
 Creates a new API Key for a user
@@ -231,6 +233,8 @@ OPTIONS
   --ssl                          Use SSL to connect to Kuzzle
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
+
+_See code: [lib/commands/api-key/create.js](lib/commands/api-key/create.js)_
 
 ## `kourou api-key:delete USER ID`
 
@@ -259,6 +263,8 @@ EXAMPLE
   kourou vault:delete sigfox-gateway 1k-BF3EBjsXdvA2PR8x
 ```
 
+_See code: [lib/commands/api-key/delete.js](lib/commands/api-key/delete.js)_
+
 ## `kourou api-key:search USER`
 
 Lists a user's API Keys.
@@ -282,6 +288,8 @@ OPTIONS
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
+
+_See code: [lib/commands/api-key/search.js](lib/commands/api-key/search.js)_
 
 ## `kourou app:debug-proxy`
 
@@ -319,6 +327,8 @@ OPTIONS
   --username=username        [default: anonymous] Kuzzle username (local strategy)
 ```
 
+_See code: [lib/commands/app/debug-proxy.js](lib/commands/app/debug-proxy.js)_
+
 ## `kourou app:doctor`
 
 Analyze a Kuzzle application
@@ -340,6 +350,8 @@ OPTIONS
   --username=username            [default: anonymous] Kuzzle username (local strategy)
 ```
 
+_See code: [lib/commands/app/doctor.js](lib/commands/app/doctor.js)_
+
 ## `kourou app:scaffold DESTINATION`
 
 Scaffolds a new Kuzzle application
@@ -356,6 +368,8 @@ OPTIONS
   --help           show CLI help
 ```
 
+_See code: [lib/commands/app/scaffold.js](lib/commands/app/scaffold.js)_
+
 ## `kourou app:start-services`
 
 Starts Kuzzle services (Elasticsearch and Redis)
@@ -368,6 +382,8 @@ OPTIONS
   --check  Check prerequisite before running services
   --help   show CLI help
 ```
+
+_See code: [lib/commands/app/start-services.js](lib/commands/app/start-services.js)_
 
 ## `kourou autocomplete [SHELL]`
 
@@ -416,6 +432,8 @@ OPTIONS
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
+
+_See code: [lib/commands/collection/create.js](lib/commands/collection/create.js)_
 
 ## `kourou collection:export INDEX COLLECTION`
 
@@ -496,6 +514,8 @@ EXAMPLES
   kourou collection:export nyc-open-data yellow-taxi --query '{ term: { city: "Saigon" } }'
 ```
 
+_See code: [lib/commands/collection/export.js](lib/commands/collection/export.js)_
+
 ## `kourou collection:import PATH`
 
 Imports a collection
@@ -522,6 +542,8 @@ OPTIONS
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
+
+_See code: [lib/commands/collection/import.js](lib/commands/collection/import.js)_
 
 ## `kourou collection:migrate SCRIPT PATH`
 
@@ -550,6 +572,8 @@ OPTIONS
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
 
+_See code: [lib/commands/collection/migrate.js](lib/commands/collection/migrate.js)_
+
 ## `kourou config:diff FIRST SECOND`
 
 Returns differences between two Kuzzle configuration files (kuzzlerc)
@@ -569,6 +593,8 @@ OPTIONS
 EXAMPLE
   kourou config:diff config/local/kuzzlerc config/production/kuzzlerc
 ```
+
+_See code: [lib/commands/config/diff.js](lib/commands/config/diff.js)_
 
 ## `kourou document:search INDEX COLLECTION [QUERY]`
 
@@ -606,6 +632,8 @@ EXAMPLES
   kourou document:search iot sensors --editor
 ```
 
+_See code: [lib/commands/document/search.js](lib/commands/document/search.js)_
+
 ## `kourou es:aliases:cat`
 
 Lists available ES aliases
@@ -620,6 +648,8 @@ OPTIONS
   --help           show CLI help
 ```
 
+_See code: [lib/commands/es/aliases/cat.js](lib/commands/es/aliases/cat.js)_
+
 ## `kourou es:indices:cat`
 
 Lists available ES indexes
@@ -633,6 +663,8 @@ OPTIONS
   -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --help           show CLI help
 ```
+
+_See code: [lib/commands/es/indices/cat.js](lib/commands/es/indices/cat.js)_
 
 ## `kourou es:indices:get INDEX ID`
 
@@ -651,6 +683,8 @@ OPTIONS
   --help           show CLI help
 ```
 
+_See code: [lib/commands/es/indices/get.js](lib/commands/es/indices/get.js)_
+
 ## `kourou es:indices:insert INDEX`
 
 Inserts a document directly into ES (will replace if exists)
@@ -668,6 +702,8 @@ OPTIONS
   --help           show CLI help
   --id=id          Document ID
 ```
+
+_See code: [lib/commands/es/indices/insert.js](lib/commands/es/indices/insert.js)_
 
 ## `kourou es:migrate`
 
@@ -700,6 +736,8 @@ EXAMPLES
   kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive
 ```
 
+_See code: [lib/commands/es/migrate.js](lib/commands/es/migrate.js)_
+
 ## `kourou es:snapshot:create REPOSITORY NAME`
 
 Create a snapshot repository inside an ES instance
@@ -716,6 +754,8 @@ OPTIONS
   -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --help           show CLI help
 ```
+
+_See code: [lib/commands/es/snapshot/create.js](lib/commands/es/snapshot/create.js)_
 
 ## `kourou es:snapshot:create-repository REPOSITORY LOCATION`
 
@@ -735,6 +775,8 @@ OPTIONS
   --help           show CLI help
 ```
 
+_See code: [lib/commands/es/snapshot/create-repository.js](lib/commands/es/snapshot/create-repository.js)_
+
 ## `kourou es:snapshot:list REPOSITORY`
 
 List all snapshot from a repository acknowledge by an ES instance
@@ -750,6 +792,8 @@ OPTIONS
   -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --help           show CLI help
 ```
+
+_See code: [lib/commands/es/snapshot/list.js](lib/commands/es/snapshot/list.js)_
 
 ## `kourou es:snapshot:restore REPOSITORY NAME`
 
@@ -767,6 +811,8 @@ OPTIONS
   -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --help           show CLI help
 ```
+
+_See code: [lib/commands/es/snapshot/restore.js](lib/commands/es/snapshot/restore.js)_
 
 ## `kourou file:decrypt FILE`
 
@@ -789,6 +835,8 @@ EXAMPLES
   kourou file:decrypt books/cryptonomicon.txt.enc -o books/cryptonomicon.txt --vault-key <vault-key>
 ```
 
+_See code: [lib/commands/file/decrypt.js](lib/commands/file/decrypt.js)_
+
 ## `kourou file:encrypt FILE`
 
 Encrypts an entire file.
@@ -810,6 +858,8 @@ EXAMPLES
   kourou file:encrypt books/cryptonomicon.txt -o books/cryptonomicon.txt.enc --vault-key <vault-key>
 ```
 
+_See code: [lib/commands/file/encrypt.js](lib/commands/file/encrypt.js)_
+
 ## `kourou file:test FILE`
 
 Tests if an encrypted file can be decrypted.
@@ -827,6 +877,8 @@ OPTIONS
 EXAMPLE
   kourou file:test books/cryptonomicon.txt.enc --vault-key <vault-key>
 ```
+
+_See code: [lib/commands/file/test.js](lib/commands/file/test.js)_
 
 ## `kourou help [COMMAND]`
 
@@ -869,6 +921,8 @@ OPTIONS
   --ssl                    Use SSL to connect to Kuzzle
   --username=username      [default: anonymous] Kuzzle username (local strategy)
 ```
+
+_See code: [lib/commands/import.js](lib/commands/import.js)_
 
 ## `kourou index:export INDEX`
 
@@ -918,6 +972,8 @@ EXAMPLES
   kourou index:export nyc-open-data --query '{"range":{"_kuzzle_info.createdAt":{"gt":1632935638866}}}'
 ```
 
+_See code: [lib/commands/index/export.js](lib/commands/index/export.js)_
+
 ## `kourou index:import PATH`
 
 Imports an index (JSONL format)
@@ -948,6 +1004,8 @@ EXAMPLES
   kourou index:import ./dump/iot-data --index iot-data-production --no-mappings
 ```
 
+_See code: [lib/commands/index/import.js](lib/commands/index/import.js)_
+
 ## `kourou instance:kill`
 
 Stop and remove all the containers of a running kuzzle instance
@@ -961,6 +1019,8 @@ OPTIONS
   -i, --instance=instance  Kuzzle instance name [ex: stack-0]
 ```
 
+_See code: [lib/commands/instance/kill.js](lib/commands/instance/kill.js)_
+
 ## `kourou instance:list`
 
 Lists the Kuzzle running instances
@@ -969,6 +1029,8 @@ Lists the Kuzzle running instances
 USAGE
   $ kourou instance:list
 ```
+
+_See code: [lib/commands/instance/list.js](lib/commands/instance/list.js)_
 
 ## `kourou instance:logs`
 
@@ -982,6 +1044,8 @@ OPTIONS
   -f, --follow             Follow log output
   -i, --instance=instance  Kuzzle instance name
 ```
+
+_See code: [lib/commands/instance/logs.js](lib/commands/instance/logs.js)_
 
 ## `kourou instance:spawn`
 
@@ -997,6 +1061,8 @@ OPTIONS
   --help                 show CLI help
 ```
 
+_See code: [lib/commands/instance/spawn.js](lib/commands/instance/spawn.js)_
+
 ## `kourou paas:login`
 
 Login for a PaaS project
@@ -1011,6 +1077,8 @@ OPTIONS
   --project=project    Current PaaS project
   --username=username  PaaS username
 ```
+
+_See code: [lib/commands/paas/login.js](lib/commands/paas/login.js)_
 
 ## `kourou profile:export`
 
@@ -1032,6 +1100,8 @@ OPTIONS
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
+
+_See code: [lib/commands/profile/export.js](lib/commands/profile/export.js)_
 
 ## `kourou profile:import PATH`
 
@@ -1055,6 +1125,8 @@ OPTIONS
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
+
+_See code: [lib/commands/profile/import.js](lib/commands/profile/import.js)_
 
 ## `kourou realtime:subscribe INDEX COLLECTION [FILTERS]`
 
@@ -1106,6 +1178,8 @@ EXAMPLES
   kourou realtime:subscribe iot-data sensors --display result._source.temperature
 ```
 
+_See code: [lib/commands/realtime/subscribe.js](lib/commands/realtime/subscribe.js)_
+
 ## `kourou redis:list-keys [MATCH]`
 
 Lists keys stored in Redis
@@ -1136,6 +1210,8 @@ EXAMPLES
   kourou redis:list-keys "counters/*" --remove
 ```
 
+_See code: [lib/commands/redis/list-keys.js](lib/commands/redis/list-keys.js)_
+
 ## `kourou role:export`
 
 Exports roles
@@ -1156,6 +1232,8 @@ OPTIONS
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
+
+_See code: [lib/commands/role/export.js](lib/commands/role/export.js)_
 
 ## `kourou role:import PATH`
 
@@ -1180,6 +1258,8 @@ OPTIONS
   --ssl                 Use SSL to connect to Kuzzle
   --username=username   [default: anonymous] Kuzzle username (local strategy)
 ```
+
+_See code: [lib/commands/role/import.js](lib/commands/role/import.js)_
 
 ## `kourou sdk:execute [CODE]`
 
@@ -1236,6 +1316,8 @@ DESCRIPTION
     Examples:
       - kourou sdk:execute 'return await sdk.server.now()' --editor
 ```
+
+_See code: [lib/commands/sdk/execute.js](lib/commands/sdk/execute.js)_
 
 ## `kourou sdk:query CONTROLLER:ACTION`
 
@@ -1336,6 +1418,8 @@ DESCRIPTION
       - kourou admin:loadMappings < mappings.json
 ```
 
+_See code: [lib/commands/sdk/query.js](lib/commands/sdk/query.js)_
+
 ## `kourou user:export`
 
 Exports users to JSON.
@@ -1386,6 +1470,8 @@ DESCRIPTION
     - kourou user:export --generate-credentials --generated-username content.email
 ```
 
+_See code: [lib/commands/user/export.js](lib/commands/user/export.js)_
+
 ## `kourou user:export-mappings`
 
 Exports users collection mappings to JSON.
@@ -1406,6 +1492,8 @@ OPTIONS
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
+
+_See code: [lib/commands/user/export-mappings.js](lib/commands/user/export-mappings.js)_
 
 ## `kourou user:import PATH`
 
@@ -1430,6 +1518,8 @@ OPTIONS
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
 
+_See code: [lib/commands/user/import.js](lib/commands/user/import.js)_
+
 ## `kourou user:import-mappings PATH`
 
 Imports users collection mappings
@@ -1452,6 +1542,8 @@ OPTIONS
   --ssl                Use SSL to connect to Kuzzle
   --username=username  [default: anonymous] Kuzzle username (local strategy)
 ```
+
+_See code: [lib/commands/user/import-mappings.js](lib/commands/user/import-mappings.js)_
 
 ## `kourou vault:add SECRETS-FILE KEY VALUE`
 
@@ -1482,6 +1574,8 @@ EXAMPLE
   kourou vault:add config/secrets.enc.json aws.s3.keyId b61e267676660c314b006b06 --vault-key <vault-key>
 ```
 
+_See code: [lib/commands/vault/add.js](lib/commands/vault/add.js)_
+
 ## `kourou vault:decrypt FILE`
 
 Decrypts an entire secrets file.
@@ -1509,6 +1603,8 @@ EXAMPLES
   kourou vault:decrypt config/secrets.enc.json --vault-key <vault-key>
   kourou vault:decrypt config/secrets.enc.json -o config/secrets.json --vault-key <vault-key>
 ```
+
+_See code: [lib/commands/vault/decrypt.js](lib/commands/vault/decrypt.js)_
 
 ## `kourou vault:encrypt FILE`
 
@@ -1549,6 +1645,8 @@ EXAMPLES
   kourou vault:encrypt config/secrets.json -o config/secrets_prod.enc.json --vault-key <vault-key>
 ```
 
+_See code: [lib/commands/vault/encrypt.js](lib/commands/vault/encrypt.js)_
+
 ## `kourou vault:show SECRETS-FILE [KEY]`
 
 Prints an encrypted secrets file content.
@@ -1578,6 +1676,8 @@ EXAMPLES
   kourou vault:show config/secrets.enc.json aws.s3.secretKey --vault-key <vault-key>
 ```
 
+_See code: [lib/commands/vault/show.js](lib/commands/vault/show.js)_
+
 ## `kourou vault:test SECRETS-FILE`
 
 Tests if an encrypted secrets file can be decrypted.
@@ -1600,6 +1700,8 @@ DESCRIPTION
 EXAMPLE
   kourou vault:test config/secrets.enc.json --vault-key <vault-key>
 ```
+
+_See code: [lib/commands/vault/test.js](lib/commands/vault/test.js)_
 <!-- commandsstop -->
 
 # Where does this weird name come from?
