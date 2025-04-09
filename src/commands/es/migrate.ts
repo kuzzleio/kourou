@@ -6,7 +6,13 @@ import emoji from "node-emoji";
 import { promises as fs } from "fs";
 
 import { Kommand } from "../../common";
-import { Elasticsearch, File, Provider, isURL, fileExists } from "../../support/migrate/providers";
+import {
+  Elasticsearch,
+  File,
+  Provider,
+  isURL,
+  fileExists,
+} from "../../support/migrate/providers";
 
 export default class EsMigrate extends Kommand {
   static initSdk = false;
@@ -50,9 +56,17 @@ export default class EsMigrate extends Kommand {
       description: "Scroll duration for Elasticsearch scrolling",
       default: "30s",
     }),
+    "only-mappings": flags.boolean({
+      description: "Only migrate mappings",
+      default: false,
+    }),
   };
 
   static examples = [
+    "kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup",
+    "kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200",
+    "kourou es:migrate --src ./my-backup --dest http://username:password@elasticsearch:9200 --reset",
+    "kourou es:migrate --src ./my-backup --dest http://nologin:api-key@elasticsearch:9200 --reset // nologin is a special username that allows you to use an API key as password",
     "kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern '&myindexes.collection-*'",
     "kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive",
   ];
@@ -126,6 +140,12 @@ export default class EsMigrate extends Kommand {
     await this.migrateIndex(index);
     this.logOk("Mappings successfully imported!");
 
+    if (this.flags["only-mappings"]) {
+      this.logInfo("Skipping data import");
+      return;
+    }
+
+    this.logInfo("Importing data...");
     const count = await this.migrateData(index);
 
     if (count === 0) {

@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/1.0.1 linux-x64 node-v22.12.0
+kourou/1.1.0-beta.1 linux-x64 node-v22.14.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -719,12 +719,18 @@ OPTIONS
   --dry-run                Print witch collections will be migrated
   --help                   show CLI help
   --no-interactive         Skip confirmation interactive prompts (perfect for scripting)
+  --only-mappings          Only migrate mappings
   --pattern=pattern        Pattern to match indices to migrate
   --reset                  Reset destination Elasticsearch server
   --scroll=scroll          [default: 30s] Scroll duration for Elasticsearch scrolling
   --src=src                (required) Migration source provider
 
 EXAMPLES
+  kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup
+  kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200
+  kourou es:migrate --src ./my-backup --dest http://username:password@elasticsearch:9200 --reset
+  kourou es:migrate --src ./my-backup --dest http://nologin:api-key@elasticsearch:9200 --reset // nologin is a special 
+  username that allows you to use an API key as password
   kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern 
   '&myindexes.collection-*'
   kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive
