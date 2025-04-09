@@ -56,6 +56,10 @@ export default class EsMigrate extends Kommand {
       description: "Scroll duration for Elasticsearch scrolling",
       default: "30s",
     }),
+    "only-mappings": flags.boolean({
+      description: "Only migrate mappings",
+      default: false,
+    }),
   };
 
   static examples = [
@@ -136,6 +140,12 @@ export default class EsMigrate extends Kommand {
     await this.migrateIndex(index);
     this.logOk("Mappings successfully imported!");
 
+    if (this.flags["only-mappings"]) {
+      this.logInfo("Skipping data import");
+      return;
+    }
+
+    this.logInfo("Importing data...");
     const count = await this.migrateData(index);
 
     if (count === 0) {

@@ -683,6 +683,7 @@ OPTIONS
   --dry-run                Print witch collections will be migrated
   --help                   show CLI help
   --no-interactive         Skip confirmation interactive prompts (perfect for scripting)
+  --only-mappings          Only migrate mappings
   --pattern=pattern        Pattern to match indices to migrate
   --reset                  Reset destination Elasticsearch server
   --scroll=scroll          [default: 30s] Scroll duration for Elasticsearch scrolling
