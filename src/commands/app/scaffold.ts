@@ -42,23 +42,26 @@ export default class AppScaffold extends Kommand {
       },
       {
         title: "Cloning template repository",
-        task: async () => this.cloneTemplate(flavor)
-      }, {
+        task: async () => this.cloneTemplate(flavor),
+      },
+      {
         title: "Copying template files",
-        task: async () => this.copyTemplate(destination)
+        task: async () => this.copyTemplate(destination),
       },
       {
         title: "Cleaning up",
-        task: async () => this.cleanup(destination)
-      }
+        task: async () => this.cleanup(destination),
+      },
     ]);
 
     await tasks.run();
     this.log("");
     this.logOk(`Scaffolding complete!`);
-    this.logOk(`Use ${chalk.blue.bold(
-      `cd ${destination} && docker compose up -d`
-    )} to start your Kuzzle stack.`);
+    this.logOk(
+      `Use ${chalk.blue.bold(
+        `cd ${destination} && docker compose up -d`
+      )} to start your Kuzzle stack.`
+    );
   }
 
   getRepo(flavor: string) {
@@ -76,7 +79,7 @@ export default class AppScaffold extends Kommand {
     let process: any;
 
     try {
-      process = await execute("test", "-d", destination)
+      process = await execute("test", "-d", destination);
     } catch (error: any) {
       if (error.result.exitCode === 1) {
         // Destination directory does not exist
@@ -85,9 +88,7 @@ export default class AppScaffold extends Kommand {
     }
 
     if (process.exitCode === 0) {
-      throw new Error(
-        `Destination directory ${destination} already exists.`
-      );
+      throw new Error(`Destination directory ${destination} already exists.`);
     }
   }
 
@@ -104,7 +105,7 @@ export default class AppScaffold extends Kommand {
       "--depth=1",
       `https://github.com/kuzzleio/${repo}`,
       "--branch",
-      "master",
+      "main",
       "--single-branch",
       this.templatesDir
     );
