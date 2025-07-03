@@ -126,6 +126,11 @@ export class Elasticsearch8 implements Provider {
   }
 
   async clear(): Promise<void> {
-    await this.client.indices.delete({ index: "_all" });
+    const indices = await this.listIndices();
+    if (indices.length === 0) {
+      return;
+    }
+    // Delete all indices
+    await this.client.indices.delete({ index: indices.join(",") });
   }
 }
