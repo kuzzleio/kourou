@@ -60,6 +60,11 @@ export default class EsMigrate extends Kommand {
       description: "Only migrate mappings",
       default: false,
     }),
+    esVersion: flags.string({
+      description: "Elasticsearch version to use for the migration",
+      default: "7",
+      options: ["7", "8"],
+    }),
   };
 
   static examples = [

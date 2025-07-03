@@ -1,6 +1,6 @@
 import { IndexSpecification } from "../types";
 
-export * from "./elasticsearch";
+export * from "./elasticsearch7";
 export * from "./file";
 
 export interface Provider {

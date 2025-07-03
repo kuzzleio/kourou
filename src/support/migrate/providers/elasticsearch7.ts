@@ -1,4 +1,4 @@
-import { Client } from "@elastic/elasticsearch";
+import { Client } from "sdk-es7";
 import { Provider } from ".";
 
 export type ElasticsearchProviderOptions = {
@@ -6,7 +6,7 @@ export type ElasticsearchProviderOptions = {
   batchSize: number;
 };
 
-export class Elasticsearch implements Provider {
+export class Elasticsearch7 implements Provider {
   private readonly client: Client;
   private readonly options: ElasticsearchProviderOptions;
 
