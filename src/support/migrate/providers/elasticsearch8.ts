@@ -1,12 +1,10 @@
 import { Client } from "sdk-es8";
 import { Provider } from ".";
+import { ElasticsearchProviderOptions } from "./elasticsearchTypes";
 
-export type ElasticsearchProviderOptions = {
-  scrollDuration: string;
-  batchSize: number;
-};
 
-export class Elasticsearch7 implements Provider {
+
+export class Elasticsearch8 implements Provider {
   private readonly client: Client;
   private readonly options: ElasticsearchProviderOptions;
 

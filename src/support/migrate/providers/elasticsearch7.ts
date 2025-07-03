@@ -1,10 +1,6 @@
 import { Client } from "sdk-es7";
 import { Provider } from ".";
-
-export type ElasticsearchProviderOptions = {
-  scrollDuration: string;
-  batchSize: number;
-};
+import { ElasticsearchProviderOptions } from "./elasticsearchTypes";
 
 export class Elasticsearch7 implements Provider {
   private readonly client: Client;
