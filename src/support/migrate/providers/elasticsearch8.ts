@@ -1,12 +1,10 @@
-import { Client } from "@elastic/elasticsearch";
+import { Client } from "sdk-es8";
 import { Provider } from ".";
+import { ElasticsearchProviderOptions } from "./elasticsearchTypes";
 
-export type ElasticsearchProviderOptions = {
-  scrollDuration: string;
-  batchSize: number;
-};
 
-export class Elasticsearch implements Provider {
+
+export class Elasticsearch8 implements Provider {
   private readonly client: Client;
   private readonly options: ElasticsearchProviderOptions;
 
@@ -54,10 +52,10 @@ export class Elasticsearch implements Provider {
   }
 
   async listIndices(pattern?: string): Promise<string[]> {
-    const { body } = await this.client.cat.indices({ format: "json" });
+    const body = await this.client.cat.indices({ format: "json" });
 
     return body
-      .map(({ index }: { index: string }) => index)
+      .map((record: { index?: string }) => record.index as string)
       .filter((index: string) => index.match(pattern as string))
       .filter((index: string) => !index.startsWith(".")) // ignore system indices
       .sort();
@@ -67,13 +65,13 @@ export class Elasticsearch implements Provider {
     const resp = await this.client.indices.get({ index });
 
     // Remove unsupported settings properties
-    const specifications = resp.body[index as keyof typeof resp];
-    delete specifications.settings.index.creation_date;
-    delete specifications.settings.index.provided_name;
-    delete specifications.settings.index.uuid;
-    delete specifications.settings.index.version;
-    delete specifications.settings.index.routing;
-    delete specifications.settings.index.history;
+    const specifications = resp[index as keyof typeof resp];
+    delete specifications?.settings?.index?.creation_date;
+    delete specifications?.settings?.index?.provided_name;
+    delete specifications?.settings?.index?.uuid;
+    delete specifications?.settings?.index?.version;
+    delete specifications?.settings?.index?.routing;
+    delete specifications?.settings?.index?.history;
 
     return specifications;
   }
@@ -87,7 +85,7 @@ export class Elasticsearch implements Provider {
 
   async readData(index: string, args: any): Promise<any> {
     if (!args || !args.scrollId) {
-      const { body } = await this.client.search({
+      const body = await this.client.search({
         index,
         scroll: this.options.scrollDuration,
         body: {
@@ -100,12 +98,12 @@ export class Elasticsearch implements Provider {
 
       return {
         documents: body.hits.hits,
-        total: body.hits.total.value,
+        total: body?.hits?.total,
         scrollId: body._scroll_id,
       };
     } else {
       const {
-        body: { hits },
+        hits,
       } = await this.client.scroll({
         scroll_id: args.scrollId,
         scroll: this.options.scrollDuration,
@@ -128,6 +126,11 @@ export class Elasticsearch implements Provider {
   }
 
   async clear(): Promise<void> {
-    await this.client.indices.delete({ index: "_all" });
+    const indices = await this.listIndices();
+    if (indices.length === 0) {
+      return;
+    }
+    // Delete all indices
+    await this.client.indices.delete({ index: indices.join(",") });
   }
 }

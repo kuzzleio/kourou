@@ -1,5 +1,5 @@
 const { Kuzzle, WebSocket, Http } = require("kuzzle-sdk"),
-  { Client } = require("@elastic/elasticsearch"),
+  { Client } = require("sdk-es7"),
   { setWorldConstructor } = require("cucumber");
 
 require("./assertions");

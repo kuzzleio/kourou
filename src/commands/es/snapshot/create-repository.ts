@@ -1,5 +1,5 @@
 import { flags } from "@oclif/command";
-import { Client } from "@elastic/elasticsearch";
+import { Client } from "sdk-es7";
 
 import { Kommand } from "../../../common";
 

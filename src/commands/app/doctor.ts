@@ -2,7 +2,7 @@ import { flags } from "@oclif/command";
 
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
-import { Client } from "@elastic/elasticsearch";
+import { Client } from "sdk-es7";
 import { execute } from "../../support/execute";
 import _ from "lodash";
 import { checkPrerequisites } from "../../support/docker/checkPrerequisites";
