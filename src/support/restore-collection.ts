@@ -1,4 +1,4 @@
-import fs, { write } from "fs";
+import fs from "fs";
 
 import chalk from "chalk";
 import ndjson from "ndjson";
