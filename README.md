@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/1.1.0 linux-x64 node-v22.14.0
+kourou/1.2.0-beta.1 linux-x64 node-v22.16.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -717,6 +717,7 @@ OPTIONS
   --batch-size=batch-size  [default: 1000] How many documents to move in batch per operation
   --dest=dest              (required) Migration destination provider
   --dry-run                Print witch collections will be migrated
+  --esVersion=7|8          [default: 7] Elasticsearch version to use for the migration
   --help                   show CLI help
   --no-interactive         Skip confirmation interactive prompts (perfect for scripting)
   --only-mappings          Only migrate mappings
@@ -734,6 +735,8 @@ EXAMPLES
   kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern 
   '&myindexes.collection-*'
   kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive
+  kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive 
+  --esVersion 8
 ```
 
 _See code: [lib/commands/es/migrate.js](lib/commands/es/migrate.js)_

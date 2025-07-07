@@ -1,3 +1,17 @@
+# [1.2.0-beta.1](https://github.com/kuzzleio/kourou/compare/v1.1.0...v1.2.0-beta.1) (2025-07-07)
+
+
+### Bug Fixes
+
+* config in tsconfig ([61048b2](https://github.com/kuzzleio/kourou/commit/61048b2d0626422d11a936f3906d0360ff0a1273))
+* dont use wildcard on es8 ([07f4538](https://github.com/kuzzleio/kourou/commit/07f4538510e493b2b4850e923310345eca8fab66))
+* properly export es8 sdk ([faa23b2](https://github.com/kuzzleio/kourou/commit/faa23b2ebb9bd221c810c3cec0d5517c07526b83))
+
+
+### Features
+
+* add example, use the right es sdk ([39cc1b0](https://github.com/kuzzleio/kourou/commit/39cc1b0be06c0dc52f75ec16b5979200ca65c63f))
+
 # [1.1.0](https://github.com/kuzzleio/kourou/compare/v1.0.1...v1.1.0) (2025-04-09)
 
 
