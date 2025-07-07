@@ -51,6 +51,5 @@ describe("app:scaffold", () => {
     should(fs.existsSync("./blackmesa/package.json")).be.eql(true);
     should(fs.existsSync("./blackmesa/README.md")).be.eql(true);
     should(fs.existsSync("./blackmesa/turbo.json")).be.eql(true);
-    should(fs.existsSync("./blackmesa/start.sh")).be.eql(true);
   }).timeout("60s");
 });

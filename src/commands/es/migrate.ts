@@ -7,7 +7,8 @@ import { promises as fs } from "fs";
 
 import { Kommand } from "../../common";
 import {
-  Elasticsearch,
+  Elasticsearch7,
+  Elasticsearch8,
   File,
   Provider,
   isURL,
@@ -60,6 +61,11 @@ export default class EsMigrate extends Kommand {
       description: "Only migrate mappings",
       default: false,
     }),
+    esVersion: flags.string({
+      description: "Elasticsearch version to use for the migration",
+      default: "7",
+      options: ["7", "8"],
+    }),
   };
 
   static examples = [
@@ -69,6 +75,7 @@ export default class EsMigrate extends Kommand {
     "kourou es:migrate --src ./my-backup --dest http://nologin:api-key@elasticsearch:9200 --reset // nologin is a special username that allows you to use an API key as password",
     "kourou es:migrate --src http://elasticsearch:9200 --dest ./my-backup --batch-size 2000 --pattern '&myindexes.collection-*'",
     "kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive",
+    "kourou es:migrate --src ./my-backup --dest http://elasticsearch:9200 --reset --batch-size 2000 --no-interactive --esVersion 8",
   ];
 
   private src: Provider = undefined as any;
@@ -76,7 +83,14 @@ export default class EsMigrate extends Kommand {
 
   private async detectProviderType(provider: string) {
     if (isURL(provider)) {
-      return new Elasticsearch(provider, {
+      if (this.flags.esVersion === "8") {
+        return new Elasticsearch8(provider, {
+          batchSize: this.flags["batch-size"],
+          scrollDuration: this.flags.scroll,
+        });
+      }
+
+      return new Elasticsearch7(provider, {
         batchSize: this.flags["batch-size"],
         scrollDuration: this.flags.scroll,
       });
