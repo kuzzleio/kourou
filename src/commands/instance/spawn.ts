@@ -6,15 +6,11 @@ import { flags } from "@oclif/command";
 import chalk from "chalk";
 import { ChildProcess, spawn } from "child_process";
 import cli from "cli-ux";
-import Listr from "listr";
 import emoji from "node-emoji";
 
 import { Kommand } from "../../common";
 import { execute } from "../../support/execute";
 import { checkPrerequisites } from "../../support/docker/checkPrerequisites";
-
-const MIN_MAX_MAP_COUNT = 262144;
-const MIN_DOCO_VERSION = "2.0.0";
 
 const kuzzleStackV1 = (increment: number): string => `
 services:
