@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - 1-dev
       - beta
 
 jobs:
@@ -75,6 +76,9 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
+      # Required by npm trusted publishing (OIDC): @semantic-release/npm
+      # exchanges the GitHub Actions ID token for a short-lived npm token.
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -91,10 +95,15 @@ jobs:
           npm clean-install
           npm run build
 
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          app-id: ${{ vars.KUZZLE_BOT_APP_ID }}
+          private-key: ${{ secrets.KUZZLE_BOT_PRIVATE_KEY }}
+
       - name: Release
         env:
-          GITHUB_TOKEN: ${{ secrets.SEMANTIC_RELEASE_GHP }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           SEMANTIC_RELEASE_NPM_PUBLISH: "true"
           SEMANTIC_RELEASE_SLACK_WEBHOOK: ${{ secrets.SEMANTIC_RELEASE_SLACK_WEBHOOK }}
         run: npx semantic-release
