@@ -9,10 +9,10 @@ on:
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [20, 22, 24]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,11 +22,11 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [lint]
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [20, 22, 24]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -41,11 +41,11 @@ jobs:
 
   functional-test:
     name: Functional Tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [build]
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [20, 22, 24]
         test-set: [stdout, cucumber]
     steps:
       - uses: actions/checkout@v4
@@ -69,7 +69,7 @@ jobs:
 
   release:
     name: Release process
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [functional-test]
     permissions:
       contents: write
