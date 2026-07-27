@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/1.2.0 linux-x64 node-v22.16.0
+kourou/1.3.0 linux-x64 node-v24.18.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -366,6 +366,7 @@ ARGUMENTS
 OPTIONS
   --flavor=flavor  [default: generic] Template flavor ("generic", "iot", "hypervision").
   --help           show CLI help
+
   --token=token    GitHub token used to clone private template repositories.
                    Defaults to the GITHUB_TOKEN environment variable, then to the GitHub CLI credentials.
 ```
