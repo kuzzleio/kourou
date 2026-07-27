@@ -75,12 +75,8 @@
     "should": "13.2.3",
     "source-map-support": "0.5.19",
     "ts-node": "10.9.*",
-    "semantic-release-config-kuzzle": "1.0.0",
-    "semantic-release-slack-bot": "4.0.2",
-    "@semantic-release/changelog": "6.0.3",
-    "@semantic-release/commit-analyzer": "13.0.0",
-    "@semantic-release/git": "10.0.1",
-    "@semantic-release/release-notes-generator": "14.0.1"
+    "semantic-release": "25.0.8",
+    "semantic-release-config-kuzzle": "1.7.0"
   },
   "engines": {
     "node": ">=18.0.0"

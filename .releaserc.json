@@ -5,8 +5,8 @@
   "branches": [
     "master",
     {
-      "name": "beta",
-      "prerelease": true
+      "name": "1-dev",
+      "prerelease": "beta"
     }
   ]
 }
