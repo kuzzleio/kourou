@@ -1,5 +1,6 @@
 import { Client } from "sdk-es7";
 import { Provider } from ".";
+import { chunkDocuments, throwOnBulkErrors } from "./bulk";
 import { ElasticsearchProviderOptions } from "./elasticsearchTypes";
 
 export class Elasticsearch7 implements Provider {
@@ -112,15 +113,26 @@ export class Elasticsearch7 implements Provider {
   }
 
   async writeData(index: string, docs: any): Promise<number> {
-    const bulk = [];
+    let count = 0;
 
-    for (const doc of docs) {
-      bulk.push({ index: { _index: index, _id: doc._id } });
-      bulk.push(doc._source);
+    // Documents are sent by chunks, otherwise the bulk request may exceed
+    // the Elasticsearch "http.max_content_length" limit (100mb by default)
+    for (const chunk of chunkDocuments(docs, this.options.batchSize)) {
+      const bulk = [];
+
+      for (const doc of chunk) {
+        bulk.push({ index: { _index: index, _id: doc._id } });
+        bulk.push(doc._source);
+      }
+
+      const { body } = await this.client.bulk({ body: bulk });
+
+      throwOnBulkErrors(body);
+
+      count += bulk.length / 2;
     }
 
-    await this.client.bulk({ body: bulk });
-    return bulk.length / 2;
+    return count;
   }
 
   async clear(): Promise<void> {

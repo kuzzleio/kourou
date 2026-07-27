@@ -1,5 +1,6 @@
 import { IndexSpecification } from "../types";
 
+export * from "./bulk";
 export * from "./elasticsearch7";
 export * from "./elasticsearch8";
 export * from "./file";

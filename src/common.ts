@@ -154,9 +154,16 @@ export abstract class Kommand extends Command {
             })`
           : "";
 
+      // Elasticsearch client errors keep their details in "meta", they would
+      // be lost otherwise
+      const esBody = error.meta?.body ?? error.body;
+      const esDetails = esBody
+        ? `\n\nElasticsearch response: ${JSON.stringify(esBody)}`
+        : "";
+
       this.logKo(
-        `Error stack: \n${stack || error.message}\n\nError status: ${
-          error.status
+        `Error stack: \n${stack || error.message}${esDetails}\n\nError status: ${
+          error.status ?? error.statusCode ?? error.meta?.statusCode
         }\n\nError id: ${error.id}${errorLink}`
       );
 
