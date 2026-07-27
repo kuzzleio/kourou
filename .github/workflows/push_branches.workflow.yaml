@@ -5,7 +5,6 @@ on:
     branches:
       - master
       - 1-dev
-      - beta
 
 jobs:
   lint:
@@ -104,6 +103,10 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          # Names the changelog file (changelogs/CHANGELOG_<channel>.md). Without
+          # it, the shared config falls back to the branch name, which would give
+          # CHANGELOG_1-dev.md instead of the `dev` prerelease channel.
+          RELEASE_CHANNEL: ${{ github.ref_name == '1-dev' && 'dev' || github.ref_name }}
           SEMANTIC_RELEASE_NPM_PUBLISH: "true"
           SEMANTIC_RELEASE_SLACK_WEBHOOK: ${{ secrets.SEMANTIC_RELEASE_SLACK_WEBHOOK }}
         run: npx semantic-release

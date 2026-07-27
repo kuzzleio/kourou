@@ -6,7 +6,7 @@
     "master",
     {
       "name": "1-dev",
-      "prerelease": "beta"
+      "prerelease": "dev"
     }
   ]
 }
