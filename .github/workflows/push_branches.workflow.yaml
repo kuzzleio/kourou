@@ -65,6 +65,7 @@ jobs:
       - uses: ./.github/actions/functional-test
         with:
           test-set: ${{ matrix.test-set }}
+          github-token: ${{ secrets.TEMPLATES_READ_GHP }}
 
   release:
     name: Release process

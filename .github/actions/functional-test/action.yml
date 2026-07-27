@@ -4,6 +4,10 @@ inputs:
   test-set:
     description: Test set to run
     required: true
+  github-token:
+    description: Token allowed to clone the private template repositories (app:scaffold)
+    required: false
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -17,3 +21,4 @@ runs:
         npm run test:functional:${{ inputs.test-set }}
       env:
         KOUROU_USAGE: "false"
+        GITHUB_TOKEN: ${{ inputs.github-token }}

@@ -366,6 +366,8 @@ ARGUMENTS
 OPTIONS
   --flavor=flavor  [default: generic] Template flavor ("generic", "iot", "hypervision").
   --help           show CLI help
+  --token=token    GitHub token used to clone private template repositories.
+                   Defaults to the GITHUB_TOKEN environment variable, then to the GitHub CLI credentials.
 ```
 
 _See code: [lib/commands/app/scaffold.js](lib/commands/app/scaffold.js)_
