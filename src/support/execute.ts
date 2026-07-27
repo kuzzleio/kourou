@@ -51,6 +51,10 @@ export function execute(...args: any[]): ProcessExecutor<ExecutionResult> {
   process.stderr.on("data", (data) => (stderr += data.toString()));
 
   const executor: any = new Promise((resolve, reject) => {
+    // Command cannot be spawned (e.g. binary not installed).
+    // Without this listener, Node throws the error instead of rejecting.
+    process.on("error", (error: any) => reject(error));
+
     process.on("close", (code: any) => {
       if (code === 0) {
         resolve({ stdout, stderr, exitCode: code });
