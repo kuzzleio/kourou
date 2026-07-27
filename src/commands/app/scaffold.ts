@@ -15,7 +15,7 @@ export default class AppScaffold extends Kommand {
     help: flags.help(),
     flavor: flags.string({
       default: "generic",
-      description: `Template flavor ("generic", "iot").`,
+      description: `Template flavor ("generic", "iot", "hypervision").`,
     }),
   };
 
@@ -70,6 +70,8 @@ export default class AppScaffold extends Kommand {
         return "template-kuzzle-project";
       case "iot":
         return "template-kiotp-project";
+      case "hypervision":
+        return "template-hypervision-project";
       default:
         return "template-kuzzle-project";
     }
@@ -105,7 +107,7 @@ export default class AppScaffold extends Kommand {
       "--depth=1",
       `https://github.com/kuzzleio/${repo}`,
       "--branch",
-      "main",
+      "stable",
       "--single-branch",
       this.templatesDir
     );

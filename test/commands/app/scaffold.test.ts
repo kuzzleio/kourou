@@ -52,4 +52,17 @@ describe("app:scaffold", () => {
     should(fs.existsSync("./blackmesa/README.md")).be.eql(true);
     should(fs.existsSync("./blackmesa/turbo.json")).be.eql(true);
   }).timeout("60s");
+
+  it("should create hypervision flavor when specified", () => {
+    execSync("rm -rf blackmesa/");
+
+    kourou("app:scaffold blackmesa --flavor hypervision");
+
+    should(fs.existsSync("./blackmesa/tsconfig.node.json")).be.eql(true);
+    should(fs.existsSync("./blackmesa/tsconfig.web.json")).be.eql(true);
+    should(fs.existsSync("./blackmesa/.gitignore")).be.eql(true);
+    should(fs.existsSync("./blackmesa/docker-compose.yml")).be.eql(true);
+    should(fs.existsSync("./blackmesa/package.json")).be.eql(true);
+    should(fs.existsSync("./blackmesa/apps")).be.eql(true);
+  }).timeout("60s");
 });

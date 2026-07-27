@@ -364,7 +364,7 @@ ARGUMENTS
   DESTINATION  Directory to scaffold the app
 
 OPTIONS
-  --flavor=flavor  [default: generic] Template flavor ("generic", "iot").
+  --flavor=flavor  [default: generic] Template flavor ("generic", "iot", "hypervision").
   --help           show CLI help
 ```
 
