@@ -20,7 +20,7 @@ export default class UserImportMappings extends Kommand {
 
   async runSafe() {
     this.logInfo(
-      `Importing users collection mappings from ${this.args.path} ...`
+      `Importing users collection mappings from ${this.args.path} ...`,
     );
 
     const dump = JSON.parse(fs.readFileSync(this.args.path, "utf-8"));

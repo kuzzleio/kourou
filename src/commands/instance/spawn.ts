@@ -101,7 +101,7 @@ export default class InstanceSpawn extends Kommand {
     const portIndex = await this.findAvailablePort();
     const docoFilename = path.join(
       this.kourouDir,
-      `kuzzle-stack-${portIndex}.yml`
+      `kuzzle-stack-${portIndex}.yml`,
     );
 
     const successfullCheck = this.flags.check
@@ -110,20 +110,20 @@ export default class InstanceSpawn extends Kommand {
 
     if (this.flags.check && successfullCheck) {
       this.log(
-        `\n${emoji.get("ok_hand")} Prerequisites are ${chalk.green.bold("OK")}!`
+        `\n${emoji.get("ok_hand")} Prerequisites are ${chalk.green.bold("OK")}!`,
       );
     } else if (this.flags.check && !successfullCheck) {
       throw new Error(
         `${emoji.get(
-          "shrug"
-        )} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle.`
+          "shrug",
+        )} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle.`,
       );
     }
 
     this.log(chalk.grey(`\nWriting docker compose file to ${docoFilename}...`));
     writeFileSync(
       docoFilename,
-      this.generateDocoFile(this.flags.version, portIndex)
+      this.generateDocoFile(this.flags.version, portIndex),
     );
 
     // clean up
@@ -134,7 +134,7 @@ export default class InstanceSpawn extends Kommand {
       docoFilename,
       "-p",
       `stack-${portIndex}`,
-      "down"
+      "down",
     );
 
     const doco: ChildProcess = spawn("docker", [
@@ -148,12 +148,13 @@ export default class InstanceSpawn extends Kommand {
     ]);
 
     cli.action.start(
-      ` ${emoji.get("rocket")} Kuzzle version ${this.flags.version
+      ` ${emoji.get("rocket")} Kuzzle version ${
+        this.flags.version
       } is launching`,
       undefined,
       {
         stdout: true,
-      }
+      },
     );
 
     doco.on("close", (docoCode) => {
@@ -161,14 +162,14 @@ export default class InstanceSpawn extends Kommand {
         cli.action.stop("done");
         this.log(
           `\n${emoji.get("thumbsup")} ${chalk.bold(
-            "Kuzzle is booting"
-          )} in the background right now.`
+            "Kuzzle is booting",
+          )} in the background right now.`,
         );
         this.log(chalk.grey("To watch the logs, run"));
         this.log(
           chalk.grey(
-            `  docker compose -f ${docoFilename} -p stack-${portIndex} logs -f\n`
-          )
+            `  docker compose -f ${docoFilename} -p stack-${portIndex} logs -f\n`,
+          ),
         );
         this.log(`  Kuzzle port: ${7512 + portIndex}`);
         this.log(`  MQTT port: ${1883 + portIndex}`);
@@ -177,16 +178,16 @@ export default class InstanceSpawn extends Kommand {
       } else {
         cli.action.stop(
           chalk.red(
-            ` Something went wrong: docker compose exited with ${docoCode}`
-          )
+            ` Something went wrong: docker compose exited with ${docoCode}`,
+          ),
         );
         this.log(
-          chalk.grey("If you want to investigate the problem, try running")
+          chalk.grey("If you want to investigate the problem, try running"),
         );
         this.log(
           chalk.grey(
-            `  docker compose -f ${docoFilename} -p stack-${portIndex} up\n`
-          )
+            `  docker compose -f ${docoFilename} -p stack-${portIndex} up\n`,
+          ),
         );
         throw new Error("docker compose exited with a non-zero status");
       }

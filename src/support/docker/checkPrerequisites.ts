@@ -15,7 +15,7 @@ export async function checkPrerequisites(ctx: Kommand): Promise<boolean> {
 
         if (!docoVersion) {
           throw new Error(
-            "Unable to read the version of Docker Compose. Are you sure Docker and the Compose plugin are installed?"
+            "Unable to read the version of Docker Compose. Are you sure Docker and the Compose plugin are installed?",
           );
         }
       },

@@ -51,7 +51,7 @@ export default class CollectionImport extends Kommand {
         this.sdk,
         dump,
         this.flags.index,
-        this.flags.collection
+        this.flags.collection,
       );
     }
 
@@ -61,11 +61,11 @@ export default class CollectionImport extends Kommand {
       Number(this.flags["batch-size"]),
       path.join(this.args.path, "documents.jsonl"),
       this.flags.index,
-      this.flags.collection
+      this.flags.collection,
     );
 
     this.logOk(
-      `Successfully imported ${total} documents from "${this.args.path}" in "${index}:${collection}"`
+      `Successfully imported ${total} documents from "${this.args.path}" in "${index}:${collection}"`,
     );
   }
 }

@@ -1,22 +1,17 @@
 {
-  "extends": [
-    "oclif",
-    "oclif-typescript"
-  ],
-  "plugins": [
-    "@typescript-eslint"
-  ],
-  "extends": [
-    "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
+  "plugins": ["kuzzle"],
+  "extends": ["plugin:kuzzle/default", "plugin:kuzzle/node"],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
   "rules": {
-    "@typescript-eslint/ban-ts-comment": 0,
-    "@typescript-eslint/explicit-module-boundary-types": 0,
-    "@typescript-eslint/no-explicit-any": 0,
-    "@typescript-eslint/no-shadow": "error",
-    "no-empty": ["error", { "allowEmptyCatch": true }],
-    "no-shadow": "off"
-  }
+    "sort-keys": "warn",
+    "kuzzle/array-foreach": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": ["plugin:kuzzle/typescript"]
+    }
+  ]
 }

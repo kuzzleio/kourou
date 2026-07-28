@@ -73,7 +73,7 @@ export default class DocumentSearch extends Kommand {
     }
 
     this.logOk(
-      `${result?.hits.length} documents fetched on a total of ${result?.total}`
+      `${result?.hits.length} documents fetched on a total of ${result?.total}`,
     );
   }
 }

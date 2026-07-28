@@ -74,7 +74,7 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 
     if (fs.existsSync(outputFile) && !this.flags.force) {
       throw new Error(
-        `Output file "${outputFile}" already exists. Use -f flag to overwrite it.`
+        `Output file "${outputFile}" already exists. Use -f flag to overwrite it.`,
       );
     }
 
@@ -91,7 +91,7 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
       secrets = PARSER.parse(fs.readFileSync(this.args.file, "utf8"));
     } catch (error: any) {
       throw new Error(
-        `Cannot read secrets from file "${this.args.file}": ${error.message}`
+        `Cannot read secrets from file "${this.args.file}": ${error.message}`,
       );
     }
 
@@ -100,7 +100,7 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
     fs.writeFileSync(outputFile, PARSER.stringify(encryptedSecrets, null, 2));
 
     this.logOk(
-      `Secrets were successfully encrypted into the file ${outputFile}`
+      `Secrets were successfully encrypted into the file ${outputFile}`,
     );
   }
 }

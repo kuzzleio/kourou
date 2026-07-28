@@ -7,7 +7,7 @@ const PRINT_STDOUT = false;
 const checkStackDetails = (
   stdout: string,
   line: number,
-  expectedValues: any
+  expectedValues: any,
 ) => {
   const splittedOutput: string[] = stdout.split("\n");
 

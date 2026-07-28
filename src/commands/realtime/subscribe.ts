@@ -59,7 +59,7 @@ export default class RealtimeSubscribe extends Kommand {
   async beforeConnect() {
     if (this.flags.protocol === "http") {
       throw new Error(
-        "Realtime notification does not work with the Http protocol"
+        "Realtime notification does not work with the Http protocol",
       );
     }
   }
@@ -78,7 +78,7 @@ export default class RealtimeSubscribe extends Kommand {
       this.parseJs(filters),
       (notification: any) => {
         this.logInfo(
-          `New notification triggered by API action "${notification.controller}:${notification.action}"`
+          `New notification triggered by API action "${notification.controller}:${notification.action}"`,
         );
 
         const display =
@@ -92,11 +92,11 @@ export default class RealtimeSubscribe extends Kommand {
         scope: this.flags.scope,
         users: this.flags.users,
         volatile: this.parseJs(this.flags.volatile),
-      }
+      },
     );
 
     this.logInfo(
-      `Waiting for realtime notifications on "${this.args.index}":"${this.args.collection}" ...`
+      `Waiting for realtime notifications on "${this.args.index}":"${this.args.collection}" ...`,
     );
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function

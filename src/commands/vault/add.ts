@@ -59,14 +59,14 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
     let encryptedSecrets = {};
     if (fs.existsSync(this.args["secrets-file"])) {
       encryptedSecrets = PARSER.parse(
-        fs.readFileSync(this.args["secrets-file"], "utf8")
+        fs.readFileSync(this.args["secrets-file"], "utf8"),
       );
 
       try {
         cryptonomicon.decryptObject(encryptedSecrets);
       } catch (error: any) {
         throw new Error(
-          "Trying to add a secret encrypted with a different key"
+          "Trying to add a secret encrypted with a different key",
         );
       }
     }
@@ -74,16 +74,16 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
     _.set(
       encryptedSecrets,
       this.args.key,
-      cryptonomicon.encryptString(this.args.value)
+      cryptonomicon.encryptString(this.args.value),
     );
 
     fs.writeFileSync(
       this.args["secrets-file"],
-      PARSER.stringify(encryptedSecrets, null, 2)
+      PARSER.stringify(encryptedSecrets, null, 2),
     );
 
     this.logOk(
-      `Key "${this.args.key}" has been securely added "${this.args["secrets-file"]}"`
+      `Key "${this.args.key}" has been securely added "${this.args["secrets-file"]}"`,
     );
   }
 }

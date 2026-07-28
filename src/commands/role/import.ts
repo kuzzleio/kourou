@@ -30,7 +30,7 @@ export default class RoleImport extends Kommand {
     const count = await restoreRoles(
       this,
       dump,
-      this.flags["preserve-anonymous"]
+      this.flags["preserve-anonymous"],
     );
 
     this.logOk(`${count} roles restored`);

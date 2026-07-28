@@ -16,7 +16,7 @@ xdescribe("app:start-services", () => {
       await wait(10 * SECOND);
       expect(ctx.stdout).to.contain("Elasticsearch and Redis are launching");
       expect(ctx.stdout).to.contain(
-        "Elasticsearch and Redis are booting in the background right now"
+        "Elasticsearch and Redis are booting in the background right now",
       );
       done();
     });

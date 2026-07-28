@@ -32,7 +32,7 @@ class ApiKeySearch extends Kommand {
       {
         from: 0,
         size: 100,
-      }
+      },
     );
 
     this.logOk(`${result.total} API Keys found for user ${this.args.user}`);

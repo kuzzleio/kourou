@@ -35,11 +35,11 @@ export default class CollectionCreate extends Kommand {
     await this.sdk.collection.create(
       this.args.index,
       this.args.collection,
-      this.parseJs(body)
+      this.parseJs(body),
     );
 
     this.logOk(
-      `Collection "${this.args.index}":"${this.args.collection}" created`
+      `Collection "${this.args.index}":"${this.args.collection}" created`,
     );
   }
 }

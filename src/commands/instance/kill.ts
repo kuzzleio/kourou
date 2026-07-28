@@ -61,7 +61,7 @@ export class InstanceLogs extends Kommand {
       instance = responses.instance;
     } else if (!instancesList.includes(instance)) {
       throw new Error(
-        `The instance parameter you setted ${instance} isn't running`
+        `The instance parameter you setted ${instance} isn't running`,
       );
     }
 
@@ -71,14 +71,14 @@ export class InstanceLogs extends Kommand {
   private async killInstance(instanceName: string) {
     const docoFilename = path.join(
       this.kourouDir,
-      `kuzzle-${instanceName}.yml`
+      `kuzzle-${instanceName}.yml`,
     );
     cli.action.start(
       `${emoji.get("boom")}  Killing Kuzzle instance ${instanceName}`,
       undefined,
       {
         stdout: true,
-      }
+      },
     );
     const instanceKill: ChildProcess = spawn("docker", [
       "compose",
@@ -94,21 +94,21 @@ export class InstanceLogs extends Kommand {
           cli.action.stop(
             chalk.green(
               `\n${emoji.get(
-                "thumbsup"
-              )}  Instance ${instanceName} successfully killed.`
-            )
+                "thumbsup",
+              )}  Instance ${instanceName} successfully killed.`,
+            ),
           );
         } else {
           cli.action.stop(
             chalk.red(
               `\n${emoji.get(
-                "thumbsdown"
-              )}  Something went wrong whilde killing instance ${instanceName}.`
-            )
+                "thumbsdown",
+              )}  Something went wrong whilde killing instance ${instanceName}.`,
+            ),
           );
         }
         resolve(undefined);
-      })
+      }),
     );
   }
 
@@ -120,11 +120,11 @@ export class InstanceLogs extends Kommand {
         "docker",
         "ps",
         "--format",
-        '"{{.Names}}"'
+        '"{{.Names}}"',
       );
     } catch (error: any) {
       this.warn(
-        `Something went wrong while getting kuzzle running instances list: ${error.message}`
+        `Something went wrong while getting kuzzle running instances list: ${error.message}`,
       );
       return [];
     }
@@ -138,7 +138,7 @@ export class InstanceLogs extends Kommand {
         (containerName) =>
           containerName.includes("kuzzle") &&
           !containerName.includes("redis") &&
-          !containerName.includes("elasticsearch")
+          !containerName.includes("elasticsearch"),
       )
       .map((containerName) => containerName.split("_")[0]);
   }

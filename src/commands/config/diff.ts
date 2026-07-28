@@ -45,10 +45,10 @@ export class ConfigKeyDiff extends Kommand {
     }
 
     const first = JSON.parse(
-      stripComments(fs.readFileSync(this.args.first, "utf8"))
+      stripComments(fs.readFileSync(this.args.first, "utf8")),
     );
     const second = JSON.parse(
-      stripComments(fs.readFileSync(this.args.second, "utf8"))
+      stripComments(fs.readFileSync(this.args.second, "utf8")),
     );
 
     const changes = this._keyChanges(first, second);
@@ -59,7 +59,7 @@ export class ConfigKeyDiff extends Kommand {
     }
 
     this.logInfo(
-      "Found differences between keys in the provided configurations. In the second file:"
+      "Found differences between keys in the provided configurations. In the second file:",
     );
 
     for (const [path, change] of Object.entries(changes)) {
@@ -95,9 +95,8 @@ export class ConfigKeyDiff extends Kommand {
         ) {
           walkObject(_base[key], _object[key], [...path, key]);
         } else if (this.flags.values && _base[key] !== _object[key]) {
-          changes[
-            [...path, key].join(".")
-          ] = `value is "${_object[key]}" and was "${_base[key]}"`;
+          changes[[...path, key].join(".")] =
+            `value is "${_object[key]}" and was "${_base[key]}"`;
         }
       }
     };

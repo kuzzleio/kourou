@@ -29,11 +29,11 @@ export class InstanceList extends Kommand {
         "docker",
         "ps",
         "--format",
-        '"{{.Names}}%{{.Image}}%{{.Status}}%{{.Ports}}"'
+        '"{{.Names}}%{{.Image}}%{{.Status}}%{{.Ports}}"',
       );
     } catch {
       this.warn(
-        "Something went wrong while getting kuzzle running instances list"
+        "Something went wrong while getting kuzzle running instances list",
       );
       return [];
     }
@@ -46,14 +46,18 @@ export class InstanceList extends Kommand {
       (c) =>
         c.match(/stack-\d{0,3}_kuzzle_1/) ||
         c.match(/stack-\d{0,3}_elasticsearch_1/) ||
-        c.match(/stack-\d{0,3}_redis_1/)
+        c.match(/stack-\d{0,3}_redis_1/),
     );
 
     const stacks = [
       ...new Set(containersList.map((container) => container.split("_")[0])),
-    ].sort((stackA, stackB) =>
-      stackA > stackB ? 1 : stackA < stackB ? -1 : 0
-    );
+    ].sort((stackA, stackB) => {
+      if (stackA > stackB) {
+        return 1;
+      }
+
+      return stackA < stackB ? -1 : 0;
+    });
 
     const formatedStacks = stacks.map((stack) => ({
       name: stack,
@@ -71,7 +75,7 @@ export class InstanceList extends Kommand {
 
       const stackNumber: number = parseInt(
         splitted[0].split("_")[0].split("-")[1],
-        10
+        10,
       );
       const type: string = splitted[0].split("_")[1];
       const version: number = parseInt(splitted[1].split(":")[1], 10);
@@ -83,16 +87,16 @@ export class InstanceList extends Kommand {
           formatedStacks[stackNumber].kuzzlePort = parseInt(
             port.substring(
               port.indexOf("->7512/tcp") - 4,
-              port.indexOf("->7512/tcp")
+              port.indexOf("->7512/tcp"),
             ),
-            10
+            10,
           );
           break;
         case "redis":
           formatedStacks[stackNumber].redisVersion = version;
           formatedStacks[stackNumber].redisPort = parseInt(
             port.replace("/tcp", ""),
-            10
+            10,
           );
           break;
         case "elasticsearch":
@@ -100,9 +104,9 @@ export class InstanceList extends Kommand {
           formatedStacks[stackNumber].esPort = parseInt(
             port.substring(
               port.indexOf("->9200/tcp") - 4,
-              port.indexOf("->9200/tcp")
+              port.indexOf("->9200/tcp"),
             ),
-            10
+            10,
           );
           break;
       }

@@ -24,7 +24,7 @@ export default class UserExportMappings extends Kommand {
   async runSafe() {
     const filename = path.join(
       this.flags.path,
-      "users-collection-mappings.json"
+      "users-collection-mappings.json",
     );
 
     this.logInfo(`Exporting users collection mappings in ${filename} ...`);

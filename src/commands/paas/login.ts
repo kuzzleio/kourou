@@ -48,13 +48,13 @@ class PaasLogin extends PaasKommand {
     await this.authenticateNPM(username, password);
 
     const apiKey: ApiKey = await this.paas.auth.createApiKey(
-      "Kourou PaaS API Key"
+      "Kourou PaaS API Key",
     );
 
     this.createProjectCredentials(apiKey);
 
     this.logOk(
-      `Successfully logged in as ${username}. Your Kuzzle Enterprise license is now enabled on this host.`
+      `Successfully logged in as ${username}. Your Kuzzle Enterprise license is now enabled on this host.`,
     );
   }
 
@@ -66,7 +66,7 @@ class PaasLogin extends PaasKommand {
     };
 
     this.logInfo(
-      `Saving credentials for project "${project}" in "${projectFile}".`
+      `Saving credentials for project "${project}" in "${projectFile}".`,
     );
 
     fs.writeFileSync(projectFile, JSON.stringify(credentials, null, 2));
@@ -81,7 +81,7 @@ class PaasLogin extends PaasKommand {
         "Content-Type": "application/json",
         Accept: "application/json",
         Authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
-          "base64"
+          "base64",
         )}`,
       },
       body: JSON.stringify({
@@ -102,13 +102,8 @@ class PaasLogin extends PaasKommand {
 
     spawnSync(
       "npm",
-      [
-        "config",
-        "set",
-        "@kuzzleio:registry",
-        `https://${this.packagesHost}`,
-      ],
-      { stdio: "inherit" }
+      ["config", "set", "@kuzzleio:registry", `https://${this.packagesHost}`],
+      { stdio: "inherit" },
     );
     spawnSync("npm", ["set", `//${this.packagesHost}/:_authToken`, token], {
       stdio: "inherit",

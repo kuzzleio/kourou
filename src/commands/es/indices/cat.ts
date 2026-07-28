@@ -30,13 +30,13 @@ export default class EsListIndex extends Kommand {
       const indexes: string[] = body
         .map(({ index }: { index: string }) => index)
         .filter((index: string) =>
-          this.flags.grep ? index.match(new RegExp(this.flags.grep)) : true
+          this.flags.grep ? index.match(new RegExp(this.flags.grep)) : true,
         )
         .sort();
 
       this.log(JSON.stringify(indexes, null, 2));
     } catch (error: any) {
-      console.log(error);
+      this.logKo(error.message);
     }
   }
 }
