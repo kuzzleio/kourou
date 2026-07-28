@@ -74,7 +74,7 @@ Examples:
       !this.flags["generate-credentials"]
     ) {
       throw new Error(
-        'The "--generated-username" cannot be used without "--generate-credentials"'
+        'The "--generated-username" cannot be used without "--generate-credentials"',
       );
     }
   }
@@ -109,13 +109,13 @@ Examples:
 
     let results = await this.sdk.security.searchUsers(
       {},
-      { scroll: "5s", size: this.flags["batch-size"] }
+      { scroll: "5s", size: this.flags["batch-size"] },
     );
 
     while (results) {
       for (const user of results.hits) {
         const shouldInclude = this.excludes.every(
-          (exclude: string) => !user._id.match(new RegExp(exclude))
+          (exclude: string) => !user._id.match(new RegExp(exclude)),
         );
 
         if (!shouldInclude) {
@@ -134,7 +134,7 @@ Examples:
           // Check for empty string or undefined property converted to string
           if (_.isEmpty(username) || username === "undefined") {
             this.logInfo(
-              `User ${user._id} does not have a "${this.flags["generated-username"]}" property. Use user ID instead.`
+              `User ${user._id} does not have a "${this.flags["generated-username"]}" property. Use user ID instead.`,
             );
             username = user._id;
           }

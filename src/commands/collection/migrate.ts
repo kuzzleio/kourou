@@ -11,7 +11,8 @@ import { JSONObject } from "kuzzle-sdk";
 export default class CollectionMigrate extends Kommand {
   static keepAuth = true;
 
-  static description = "Migrate a collection by transforming documents from a dump file and importing them into Kuzzle";
+  static description =
+    "Migrate a collection by transforming documents from a dump file and importing them into Kuzzle";
 
   static flags = {
     help: flags.help({}),
@@ -38,7 +39,9 @@ export default class CollectionMigrate extends Kommand {
   ];
 
   async runSafe() {
-    this.logInfo(`Start migration documents with ${this.args.script} from ${this.args.path}`);
+    this.logInfo(
+      `Start migration documents with ${this.args.script} from ${this.args.path}`,
+    );
 
     const migrateDocument = this.getMigrationFunction();
 
@@ -49,11 +52,11 @@ export default class CollectionMigrate extends Kommand {
       path.join(this.args.path, "documents.jsonl"),
       this.flags.index,
       this.flags.collection,
-      migrateDocument
+      migrateDocument,
     );
 
     this.logOk(
-      `Successfully migrated ${total} documents from "${this.args.path}" in "${index}:${collection}"`
+      `Successfully migrated ${total} documents from "${this.args.path}" in "${index}:${collection}"`,
     );
   }
 

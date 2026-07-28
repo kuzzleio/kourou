@@ -5,7 +5,7 @@ import { Editor } from "../../support/editor";
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
 import ts from "typescript";
-import vm from 'node:vm'
+import vm from "node:vm";
 
 class SdkExecute extends Kommand {
   public static description = `
@@ -77,7 +77,9 @@ Other
       vm.runInContext(this.code, vm.createContext({}));
     } catch (e: any) {
       if (e.name === "SyntaxError") {
-        const result = ts.transpileModule(this.code, { compilerOptions: { module: ts.ModuleKind.CommonJS } });
+        const result = ts.transpileModule(this.code, {
+          compilerOptions: { module: ts.ModuleKind.CommonJS },
+        });
         this.code = result.outputText;
       }
     }
@@ -94,8 +96,6 @@ Other
         return `    let ${name} = ${value};`;
       })
       .join("\n");
-
-
   }
 
   async runSafe() {
@@ -104,8 +104,6 @@ Other
     }
 
     let userError: Error | null = null;
-
-
 
     this.code = `
 (async () => {
@@ -152,7 +150,7 @@ ${this.getVariables()}
       this.logInfo("Keep alive for realtime notifications ...");
 
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      await new Promise(() => { });
+      await new Promise(() => {});
     }
   }
 

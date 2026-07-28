@@ -66,8 +66,8 @@ export abstract class Kommand extends Command {
     this.log("");
     this.log(
       `${chalk.blue.bold(
-        `${emoji.get("rocket")} Kourou`
-      )} - ${shortDescription}`
+        `${emoji.get("rocket")} Kourou`,
+      )} - ${shortDescription}`,
     );
     this.log("");
   }
@@ -164,7 +164,7 @@ export abstract class Kommand extends Command {
       this.logKo(
         `Error stack: \n${stack || error.message}${esDetails}\n\nError status: ${
           error.status ?? error.statusCode ?? error.meta?.statusCode
-        }\n\nError id: ${error.id}${errorLink}`
+        }\n\nError id: ${error.id}${errorLink}`,
       );
 
       if (Array.isArray(error.errors)) {
@@ -221,7 +221,7 @@ export abstract class Kommand extends Command {
 
   fromEditor(
     defaultContent: Record<string, unknown> | string,
-    options?: EditorParams
+    options?: EditorParams,
   ): Record<string, unknown> {
     let content = defaultContent;
 

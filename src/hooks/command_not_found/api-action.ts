@@ -36,7 +36,7 @@ const hook: Hook<"command_not_found"> = async function (opts) {
   }
 
   this.log(
-    chalk.yellow(`[ℹ] Unknown command "${opts.id}", fallback to API action`)
+    chalk.yellow(`[ℹ] Unknown command "${opts.id}", fallback to API action`),
   );
 
   const args = process.argv.slice(3);

@@ -50,18 +50,18 @@ export default class AppStartServices extends Kommand {
 
     if (this.flags.check && successfullCheck) {
       this.log(
-        `\n${emoji.get("ok_hand")} Prerequisites are ${chalk.green.bold("OK")}!`
+        `\n${emoji.get("ok_hand")} Prerequisites are ${chalk.green.bold("OK")}!`,
       );
     } else if (this.flags.check && !successfullCheck) {
       throw new Error(
         `${emoji.get(
-          "shrug"
-        )} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle services.`
+          "shrug",
+        )} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle services.`,
       );
     }
 
     this.log(
-      chalk.grey(`\nWriting the Docker Compose file to ${docoFilename}...\n`)
+      chalk.grey(`\nWriting the Docker Compose file to ${docoFilename}...\n`),
     );
 
     writeFileSync(docoFilename, kuzzleServicesFile);
@@ -73,16 +73,18 @@ export default class AppStartServices extends Kommand {
       await execute("docker", "compose", "-f", docoFilename, "up", "-d");
 
       this.logOk(
-        "Elasticsearch and Redis are booting in the background right now."
+        "Elasticsearch and Redis are booting in the background right now.",
       );
       this.log(chalk.grey("\nTo watch the logs, run"));
-      this.log(chalk.blue.bold(`  docker compose -f ${docoFilename} logs -f\n`));
+      this.log(
+        chalk.blue.bold(`  docker compose -f ${docoFilename} logs -f\n`),
+      );
       this.log(`  Elasticsearch port: ${chalk.bold("9200")}`);
       this.log(`          Redis port: ${chalk.bold("6379")}`);
     } catch (error: any) {
       this.logKo(` Something went wrong: ${error.message}`);
       this.log(
-        chalk.grey("If you want to investigate the problem, try running")
+        chalk.grey("If you want to investigate the problem, try running"),
       );
 
       this.log(chalk.grey(`  docker compose -f ${docoFilename} up\n`));

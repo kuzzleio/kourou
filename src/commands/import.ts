@@ -54,15 +54,15 @@ export default class Import extends Kommand {
         const dump = JSON.parse(fs.readFileSync(file, "utf8"));
         const { index, collection } = await restoreCollectionMappings(
           this.sdk,
-          dump
+          dump,
         );
 
         this.logOk(
-          `[collection] Imported mappings for "${index}":"${collection}"`
+          `[collection] Imported mappings for "${index}":"${collection}"`,
         );
       } catch (error: any) {
         this.logKo(
-          `Error during import of ${file}: ${error.message}. Skipped.`
+          `Error during import of ${file}: ${error.message}. Skipped.`,
         );
       }
     }
@@ -75,15 +75,15 @@ export default class Import extends Kommand {
           this.sdk,
           this.log.bind(this),
           Number(this.flags["batch-size"]),
-          file
+          file,
         );
 
         this.logOk(
-          `[collection] Imported ${total} documents in "${index}":"${collection}"`
+          `[collection] Imported ${total} documents in "${index}":"${collection}"`,
         );
       } catch (error: any) {
         this.logKo(
-          `Error during import of ${file}: ${error.message}. Skipped.`
+          `Error during import of ${file}: ${error.message}. Skipped.`,
         );
       }
     }
@@ -96,13 +96,13 @@ export default class Import extends Kommand {
         const total = await restoreRoles(
           this,
           dump,
-          this.flags["preserve-anonymous"]
+          this.flags["preserve-anonymous"],
         );
 
         this.logOk(`[roles] Imported ${total} roles`);
       } catch (error: any) {
         this.logKo(
-          `Error during import of ${file}: ${error.message}. Skipped.`
+          `Error during import of ${file}: ${error.message}. Skipped.`,
         );
       }
     }
@@ -117,14 +117,14 @@ export default class Import extends Kommand {
         this.logOk(`[profiles] Imported ${total} profiles`);
       } catch (error: any) {
         this.logKo(
-          `Error during import of ${file}: ${error.message}. Skipped.`
+          `Error during import of ${file}: ${error.message}. Skipped.`,
         );
       }
     }
     for (const file of files.usersMappings) {
       try {
         this.logInfo(
-          `[users] Start importing users collection mappings in ${file}`
+          `[users] Start importing users collection mappings in ${file}`,
         );
         const dump = JSON.parse(fs.readFileSync(file, "utf8"));
 
@@ -134,7 +134,7 @@ export default class Import extends Kommand {
         this.logOk("[users] collection mappings imported");
       } catch (error: any) {
         this.logKo(
-          `Error during import of ${file}: ${error.message}. Skipped.`
+          `Error during import of ${file}: ${error.message}. Skipped.`,
         );
       }
     }
@@ -149,7 +149,7 @@ export default class Import extends Kommand {
         this.logOk(`[users] Imported ${total} users`);
       } catch (error: any) {
         this.logKo(
-          `Error during import of ${file}: ${error.message}. Skipped.`
+          `Error during import of ${file}: ${error.message}. Skipped.`,
         );
       }
     }
@@ -180,7 +180,7 @@ export default class Import extends Kommand {
           profiles: [],
           usersMappings: [],
           users: [],
-        }
+        },
       );
 
     for (const dir of directories) {
@@ -209,7 +209,7 @@ export default class Import extends Kommand {
       return dump.type;
     } catch (error: any) {
       this.logKo(
-        `Invalid JSON file "${file}". Import skipped. ${error.message}`
+        `Invalid JSON file "${file}". Import skipped. ${error.message}`,
       );
     }
   }

@@ -5,8 +5,7 @@ import { Kommand } from "../common";
 import { KuzzleSDK } from "./kuzzle";
 
 type PaaSClientCredentials =
-  | { username: string; password: string }
-  | { apiKey: string };
+  { username: string; password: string } | { apiKey: string };
 
 export class PaasKommand extends Kommand {
   static initSdk = false;
@@ -68,7 +67,7 @@ export class PaasKommand extends Kommand {
 
     if (!this.flags.project) {
       throw new Error(
-        "Cannot find PaaS project in package.json or command line"
+        "Cannot find PaaS project in package.json or command line",
       );
     }
 

@@ -21,7 +21,10 @@ export class File implements Provider {
   async listIndices(pattern?: string): Promise<string[]> {
     const data = await fsAsync.readdir(this.path);
     return data
-      .filter((file: string) => file.match(/\.specs\.json$/) && file.match(pattern as string))
+      .filter(
+        (file: string) =>
+          file.match(/\.specs\.json$/) && file.match(pattern as string),
+      )
       .map((file: string) => file.replace(/\.specs\.json$/, ""));
   }
 
@@ -32,9 +35,12 @@ export class File implements Provider {
 
   async createIndex(
     index: string,
-    specification: IndexSpecification
+    specification: IndexSpecification,
   ): Promise<void> {
-    await fsAsync.writeFile(this.getIndexSpecFile(index), JSON.stringify(specification));
+    await fsAsync.writeFile(
+      this.getIndexSpecFile(index),
+      JSON.stringify(specification),
+    );
     await fsAsync.writeFile(this.getIndexDataFile(index), ""); // Create empty file for data
   }
 
@@ -47,25 +53,26 @@ export class File implements Provider {
 
     const data = content
       .toString()
-      .replace(/\r\n/g, '\n') // Normalize line endings Windows -> Unix
-      .split('\n')
-      .map((line: string) =>
-        line
-          .trim()) // Remove trailing spaces
+      .replace(/\r\n/g, "\n") // Normalize line endings Windows -> Unix
+      .split("\n")
+      .map((line: string) => line.trim()) // Remove trailing spaces
       .filter((line: string) => line.length > 0) // Remove empty lines
       .map((line: string) => JSON.parse(line));
 
     return {
       documents: data,
       total: data.length,
-    }
+    };
   }
 
   async writeData(index: string, data: any): Promise<number> {
     let count = 0;
 
     for (const line of data) {
-      await fsAsync.appendFile(this.getIndexDataFile(index), `${JSON.stringify(line)}\n`);
+      await fsAsync.appendFile(
+        this.getIndexDataFile(index),
+        `${JSON.stringify(line)}\n`,
+      );
       count++;
     }
 
@@ -83,7 +90,7 @@ export class File implements Provider {
 
 export function fileExists(filePath: string): boolean {
   try {
-    fs.accessSync(filePath, fsConstants.F_OK,);
+    fs.accessSync(filePath, fsConstants.F_OK);
     return true;
   } catch (error) {
     return false;

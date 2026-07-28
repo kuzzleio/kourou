@@ -45,7 +45,7 @@ export default class IndexImport extends Kommand {
   async runSafe() {
     if (this.flags.index) {
       this.logInfo(
-        `Start importing dump from ${this.args.path} in index ${this.flags.index}`
+        `Start importing dump from ${this.args.path} in index ${this.flags.index}`,
       );
     } else {
       this.logInfo(`Start importing dump from ${this.args.path} in same index`);
@@ -73,15 +73,15 @@ export default class IndexImport extends Kommand {
           this.log.bind(this),
           Number(this.flags["batch-size"]),
           path.join(dumpDir, "documents.jsonl"),
-          this.flags.index
+          this.flags.index,
         );
 
         this.logOk(
-          `Successfully imported ${total} documents in "${dstIndex}:${collection}"`
+          `Successfully imported ${total} documents in "${dstIndex}:${collection}"`,
         );
       } catch (error: any) {
         this.logKo(
-          `Error when importing collection from "${dumpDir}": ${error}`
+          `Error when importing collection from "${dumpDir}": ${error}`,
         );
       }
     }

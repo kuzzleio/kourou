@@ -63,8 +63,8 @@ export default class AppScaffold extends Kommand {
     this.logOk(`Scaffolding complete!`);
     this.logOk(
       `Use ${chalk.blue.bold(
-        `cd ${destination} && docker compose up -d`
-      )} to start your Kuzzle stack.`
+        `cd ${destination} && docker compose up -d`,
+      )} to start your Kuzzle stack.`,
     );
   }
 
@@ -180,7 +180,7 @@ export default class AppScaffold extends Kommand {
                 process.env.GIT_SSH_COMMAND ||
                 "ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new",
             },
-          }
+          },
         );
 
         return;
@@ -197,8 +197,8 @@ export default class AppScaffold extends Kommand {
         "If this repository is private, provide credentials with the --token flag, " +
         "the GITHUB_TOKEN environment variable, the GitHub CLI (gh auth login) " +
         `or a SSH key allowed to read it.\n${this.hideToken(
-          lastError?.message || ""
-        )}`
+          lastError?.message || "",
+        )}`,
     );
   }
 

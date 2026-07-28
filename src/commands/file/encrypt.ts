@@ -48,7 +48,7 @@ export class VaultEncrypt extends Kommand {
 
     if (fs.existsSync(outputFile) && !this.flags.force) {
       throw new Error(
-        `Output file "${outputFile}" already exists. Use -f flag to overwrite it.`
+        `Output file "${outputFile}" already exists. Use -f flag to overwrite it.`,
       );
     }
 

@@ -142,7 +142,7 @@ Default fallback to API action
     // content from user editor
     if (this.flags.editor && this.flags["body-editor"]) {
       throw new Error(
-        "You cannot specify --editor and --body-editor at the same time"
+        "You cannot specify --editor and --body-editor at the same time",
       );
     } else if (this.flags.editor) {
       request = this.fromEditor(request, { json: true });
@@ -157,7 +157,7 @@ Default fallback to API action
         ? response
         : _.get(response, this.flags.display);
 
-    console.log(JSON.stringify(display, null, 2))
+    console.log(JSON.stringify(display, null, 2));
 
     this.logOk(`Successfully executed "${controller}:${action}"`);
   }

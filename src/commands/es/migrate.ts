@@ -100,11 +100,10 @@ export default class EsMigrate extends Kommand {
       }
 
       return new File(provider);
-    } else {
-      throw new Error(
-        `Unknown provider type: ${provider}. You should provide either an Elasticsearch URL or a file path.`
-      );
     }
+    throw new Error(
+      `Unknown provider type: ${provider}. You should provide either an Elasticsearch URL or a file path.`,
+    );
   }
 
   private async migrateIndex(index: string) {
@@ -124,7 +123,7 @@ export default class EsMigrate extends Kommand {
 
     const progressBar = cli.progress({
       format: chalk.blue(
-        " [*] Importing |{bar}| {percentage}% || {value}/{total} documents"
+        " [*] Importing |{bar}| {percentage}% || {value}/{total} documents",
       ),
     });
 
@@ -148,7 +147,7 @@ export default class EsMigrate extends Kommand {
 
   async runMigrate(index: string) {
     this.logInfo(
-      `Importing ${chalk.bold(index)} to ${chalk.bold(this.flags.dest)}`
+      `Importing ${chalk.bold(index)} to ${chalk.bold(this.flags.dest)}`,
     );
 
     await this.migrateIndex(index);
@@ -178,16 +177,16 @@ export default class EsMigrate extends Kommand {
         this.log(
           chalk.red(
             `${emoji.get("fire")} Are you sure you want to reset ${chalk.bold(
-              this.flags.dest
-            )}?`
-          )
+              this.flags.dest,
+            )}?`,
+          ),
         );
         await cli.confirm(
           chalk.redBright(
             ` ${emoji.get(
-              "fire"
-            )} You will lose all the data stored in it (Type "yes" to confirm)`
-          )
+              "fire",
+            )} You will lose all the data stored in it (Type "yes" to confirm)`,
+          ),
         );
       }
       await this.dest.clear();
@@ -205,8 +204,8 @@ export default class EsMigrate extends Kommand {
 
     this.logInfo(
       `Starting indices migration from ${chalk.bold(
-        this.flags.src
-      )} to ${chalk.bold(this.flags.dest)}`
+        this.flags.src,
+      )} to ${chalk.bold(this.flags.dest)}`,
     );
 
     for (const index of srcIndices) {

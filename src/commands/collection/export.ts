@@ -82,7 +82,7 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
 
     if (this.flags.format === "csv" && fields.length === 0) {
       this.logInfo(
-        "It looks like you are exporting to CSV but you did not select any field. All exportable fields in the mapping will be exported."
+        "It looks like you are exporting to CSV but you did not select any field. All exportable fields in the mapping will be exported.",
       );
     }
 
@@ -94,16 +94,16 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
 
     const countAll = await this.sdk.document.count(
       this.args.index,
-      this.args.collection
+      this.args.collection,
     );
     const count = await this.sdk.document.count(
       this.args.index,
       this.args.collection,
-      { query }
+      { query },
     );
 
     this.logInfo(
-      `Dumping collection "${this.args.index}:${this.args.collection}" in ${exportPath} ...`
+      `Dumping collection "${this.args.index}:${this.args.collection}" in ${exportPath} ...`,
     );
 
     fs.mkdirSync(exportPath, { recursive: true });
@@ -115,7 +115,7 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
         this.args.index,
         this.args.collection,
         exportPath,
-        this.flags.format
+        this.flags.format,
       );
     }
     if (this.flags.type === "all" || this.flags.type === "data") {
@@ -129,7 +129,7 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
         query,
         this.flags.format,
         fields,
-        this.flags.scrollTTL
+        this.flags.scrollTTL,
       );
     }
 

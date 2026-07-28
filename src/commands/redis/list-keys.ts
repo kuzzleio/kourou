@@ -61,7 +61,7 @@ export default class RedisListKeys extends Kommand {
 
       pages++;
       process.stdout.write(
-        `Iterate on page ${pages}. ${keys.length} keys found so far.`
+        `Iterate on page ${pages}. ${keys.length} keys found so far.`,
       );
       process.stdout.write("\r");
 

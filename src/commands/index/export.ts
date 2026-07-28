@@ -65,7 +65,7 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
     const query = this.parseJs(this.flags.query);
 
     this.logInfo(
-      `Dumping index "${this.args.index}" in ${exportPath}${path.sep} ...`
+      `Dumping index "${this.args.index}" in ${exportPath}${path.sep} ...`,
     );
 
     fs.mkdirSync(exportPath, { recursive: true });
@@ -85,7 +85,7 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
             this.args.index,
             collection.name,
             exportPath,
-            this.flags.format
+            this.flags.format,
           );
         }
 
@@ -99,14 +99,14 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
             exportPath,
             query,
             this.flags.format,
-            this.flags.scrollTTL
+            this.flags.scrollTTL,
           );
         }
 
         cli.action.stop();
       } catch (error: any) {
         this.logKo(
-          `Error when exporting collection "${collection.name}": ${error}`
+          `Error when exporting collection "${collection.name}": ${error}`,
         );
       }
     }
