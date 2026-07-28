@@ -63,11 +63,9 @@ export default class CollectionMigrate extends Kommand {
   private getMigrationFunction(): (document: JSONObject) => JSONObject {
     const migrationScript = fs.readFileSync(this.args.script, "utf8");
 
-    let migrationFunction;
-    {
-      migrationFunction = eval(`var f = ${migrationScript}; f`);
-    }
-
-    return migrationFunction;
+    // Evaluating user-supplied code is the whole point of the command: the
+    // script argument is the migration function itself.
+    // eslint-disable-next-line no-eval
+    return eval(`var f = ${migrationScript}; f`);
   }
 }

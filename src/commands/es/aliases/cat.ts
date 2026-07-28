@@ -34,7 +34,7 @@ export default class EsListAliases extends Kommand {
         .sort();
       this.log(JSON.stringify(elements, null, 2));
     } catch (error: any) {
-      console.log(error);
+      this.logKo(error.message);
     }
   }
 }

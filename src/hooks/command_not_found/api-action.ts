@@ -28,13 +28,15 @@ import SdkQuery from "../../commands/sdk/query";
  *  - kourou bulk:import index collection '{bulkData: []}'
  */
 
-const hook: Hook<"command_not_found"> = async function (opts) {
+const hook: Hook<"command_not_found"> = async function apiActionHook(opts) {
   const [controller, action] = opts.id.split(":");
 
   if (!controller || !action) {
     return;
   }
 
+  // oclif binds the hook to its own context before calling it
+  // eslint-disable-next-line no-invalid-this
   this.log(
     chalk.yellow(`[ℹ] Unknown command "${opts.id}", fallback to API action`),
   );

@@ -51,9 +51,13 @@ export class InstanceList extends Kommand {
 
     const stacks = [
       ...new Set(containersList.map((container) => container.split("_")[0])),
-    ].sort((stackA, stackB) =>
-      stackA > stackB ? 1 : stackA < stackB ? -1 : 0,
-    );
+    ].sort((stackA, stackB) => {
+      if (stackA > stackB) {
+        return 1;
+      }
+
+      return stackA < stackB ? -1 : 0;
+    });
 
     const formatedStacks = stacks.map((stack) => ({
       name: stack,

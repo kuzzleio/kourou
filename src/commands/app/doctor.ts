@@ -171,12 +171,15 @@ export default class AppDoctor extends Kommand {
       const nodes = await client.cat.nodes({ format: "json" });
 
       this.log(`ElasticSearch nodes`);
+      // oclif has no tabular output helper, console.table is the only option
+      // eslint-disable-next-line no-console
       console.table(
         nodes.body.map((i: any) => ({ node_name: i.name, ip: i.ip })),
       );
       const indices = await client.cat.indices({ format: "json" });
 
       this.log(`ElasticSearch indices`);
+      // eslint-disable-next-line no-console
       console.table(
         indices.body.map((i: any) => ({
           indice_name: i.index,

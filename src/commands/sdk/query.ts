@@ -157,7 +157,7 @@ Default fallback to API action
         ? response
         : _.get(response, this.flags.display);
 
-    console.log(JSON.stringify(display, null, 2));
+    this.log(JSON.stringify(display, null, 2));
 
     this.logOk(`Successfully executed "${controller}:${action}"`);
   }
