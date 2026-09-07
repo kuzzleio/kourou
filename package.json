@@ -54,7 +54,7 @@
     "@types/listr": "0.14.10",
     "@types/mocha": "8.2.3",
     "@types/ndjson": "2.0.4",
-    "@types/node": "20.14.15",
+    "@types/node": "22.20.1",
     "@types/node-emoji": "1.8.2",
     "@types/node-fetch": "2.6.13",
     "@types/tmp": "0.2.6",
@@ -76,7 +76,7 @@
     "ts-node": "10.9.*"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.0.0"
   },
   "files": [
     "/bin",
