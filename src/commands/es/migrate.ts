@@ -2,7 +2,7 @@ import { flags } from "@oclif/command";
 import path from "path";
 import cli from "cli-ux";
 import chalk from "chalk";
-import emoji from "node-emoji";
+import { emoji } from "../../support/emoji";
 import { promises as fs } from "fs";
 
 import { Kommand } from "../../common";
@@ -176,16 +176,14 @@ export default class EsMigrate extends Kommand {
       if (!this.flags["no-interactive"]) {
         this.log(
           chalk.red(
-            `${emoji.get("fire")} Are you sure you want to reset ${chalk.bold(
+            `${emoji.fire} Are you sure you want to reset ${chalk.bold(
               this.flags.dest,
             )}?`,
           ),
         );
         await cli.confirm(
           chalk.redBright(
-            ` ${emoji.get(
-              "fire",
-            )} You will lose all the data stored in it (Type "yes" to confirm)`,
+            ` ${emoji.fire} You will lose all the data stored in it (Type "yes" to confirm)`,
           ),
         );
       }
