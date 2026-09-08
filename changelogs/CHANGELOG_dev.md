@@ -1,3 +1,5 @@
+## [1.4.0-dev.4](https://github.com/kuzzleio/kourou/compare/v1.4.0-dev.3...v1.4.0-dev.4) (2026-09-08)
+
 ## [1.4.0-dev.3](https://github.com/kuzzleio/kourou/compare/v1.4.0-dev.2...v1.4.0-dev.3) (2026-07-28)
 
 ### Bug Fixes
