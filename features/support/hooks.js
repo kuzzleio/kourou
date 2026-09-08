@@ -104,6 +104,28 @@ Before({ tags: "@mappings" }, async function () {
   });
 });
 
+// snapshot hooks =============================================================
+
+// The repository lives in a host directory mounted by features/docker, so it
+// survives `docker compose down`, and admin:resetDatabase does not touch ES
+// snapshots. Without this, es:snapshot:create fails with an
+// invalid_snapshot_name_exception on every run after the first.
+//
+// Only the scenario that creates the snapshot carries the tag: the ones that
+// list and restore it run afterwards and expect it to be there.
+Before({ tags: "@snapshots" }, async function () {
+  try {
+    await this.esClient.snapshot.delete({
+      repository: "backup",
+      snapshot: "test-snapshot",
+    });
+  } catch (error) {
+    if (error.meta?.statusCode !== 404) {
+      throw error;
+    }
+  }
+});
+
 // vault hooks =================================================================
 
 Before({ tags: "@vault" }, async function () {

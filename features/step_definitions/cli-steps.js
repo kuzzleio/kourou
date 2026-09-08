@@ -20,7 +20,43 @@ Then("I subscribe to {string}:{string}", async function (index, collection) {
   await new Promise((resolve) => setTimeout(resolve, 4000));
 });
 
+/**
+ * Waits until a spawned process has written nothing for `idleMs`, so an
+ * assertion on its stdout is not racing output still in flight. Returns as
+ * soon as the stream goes quiet, and gives up after `timeoutMs` rather than
+ * hiding a process that never writes anything.
+ */
+async function waitForIdleStdout(
+  child,
+  { idleMs = 500, timeoutMs = 5000 } = {}
+) {
+  let last = Date.now();
+  const onData = () => {
+    last = Date.now();
+  };
+
+  child.stdout.on("data", onData);
+
+  try {
+    const started = Date.now();
+
+    while (Date.now() - started < timeoutMs) {
+      if (Date.now() - last >= idleMs) {
+        return;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+  } finally {
+    child.stdout.off("data", onData);
+  }
+}
+
 Then("I kill the CLI process", async function () {
+  // A realtime notification can still be on its way: killing immediately
+  // truncates the stdout the next step asserts on.
+  await waitForIdleStdout(this.props.executor.process);
+
   this.props.executor.process.kill();
 
   // the promise will be rejected since we killed the process
