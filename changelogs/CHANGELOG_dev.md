@@ -1,3 +1,9 @@
+## [1.5.0-dev.1](https://github.com/kuzzleio/kourou/compare/v1.4.0...v1.5.0-dev.1) (2026-09-08)
+
+### Bug Fixes
+
+* **es:migrate:** honor the answer to the reset confirmation ([9c35b9c](https://github.com/kuzzleio/kourou/commit/9c35b9c401ac5c70faabc00865860097a9f7b325))
+
 ## [1.4.0-dev.4](https://github.com/kuzzleio/kourou/compare/v1.4.0-dev.3...v1.4.0-dev.4) (2026-09-08)
 
 ## [1.4.0-dev.3](https://github.com/kuzzleio/kourou/compare/v1.4.0-dev.2...v1.4.0-dev.3) (2026-07-28)

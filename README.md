@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (--version)
-kourou/1.4.0 darwin-arm64 node-v24.11.1
+kourou/1.5.0-dev.1 linux-x64 node-v24.20.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
