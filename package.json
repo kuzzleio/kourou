@@ -60,7 +60,7 @@
     "nyc": "15.1.0",
     "oclif": "5.0.1",
     "semantic-release": "25.0.8",
-    "semantic-release-config-kuzzle": "1.7.0",
+    "semantic-release-config-kuzzle": "1.7.2",
     "should": "13.2.3",
     "source-map-support": "0.5.21",
     "ts-node": "10.9.*"
