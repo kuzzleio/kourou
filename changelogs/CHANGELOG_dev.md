@@ -1,3 +1,9 @@
+## [1.5.0-dev.3](https://github.com/kuzzleio/kourou/compare/v1.5.0-dev.2...v1.5.0-dev.3) (2026-09-08)
+
+### Bug Fixes
+
+* **sdk:query:** stop printing "undefined" for an empty result ([e767e63](https://github.com/kuzzleio/kourou/commit/e767e63603f8c3b77efc5abd4ec28e546d9e3f4c))
+
 ## [1.5.0-dev.2](https://github.com/kuzzleio/kourou/compare/v1.5.0-dev.1...v1.5.0-dev.2) (2026-09-08)
 
 ### Bug Fixes
