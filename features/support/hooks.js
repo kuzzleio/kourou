@@ -1,7 +1,7 @@
 "use strict";
 
 const fs = require("fs"),
-  { After, Before, BeforeAll } = require("cucumber"),
+  { After, Before, BeforeAll } = require("@cucumber/cucumber"),
   testMappings = require("../fixtures/mappings"),
   testSecurities = require("../fixtures/securities"),
   testFixtures = require("../fixtures/fixtures"),

@@ -1,6 +1,6 @@
 const _ = require("lodash"),
   should = require("should"),
-  { Given, Then } = require("cucumber");
+  { Given, Then } = require("@cucumber/cucumber");
 
 Given("I create the following document:", async function (dataTable) {
   const document = this.parseObject(dataTable);

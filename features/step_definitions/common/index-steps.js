@@ -1,4 +1,4 @@
-const { Given } = require("cucumber");
+const { Given } = require("@cucumber/cucumber");
 
 Given("an index {string}", async function (index) {
   this.props.result = await this.sdk.index.create(index);

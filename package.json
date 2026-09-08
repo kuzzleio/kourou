@@ -41,6 +41,7 @@
     "typescript": "5.9.*"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "13.2.1",
     "@istanbuljs/nyc-config-typescript": "1.0.2",
     "@oclif/dev-cli": "1.26.10",
     "@oclif/test": "1.2.8",
@@ -54,7 +55,6 @@
     "@types/tmp": "0.2.6",
     "@types/ws": "8.18.1",
     "chai": "4.5.0",
-    "cucumber": "6.0.7",
     "eslint": "9.32.0",
     "eslint-plugin-kuzzle": "1.0.0",
     "globby": "11.1.0",

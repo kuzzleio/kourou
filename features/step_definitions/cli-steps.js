@@ -2,7 +2,7 @@ const fs = require("fs");
 
 const _ = require("lodash");
 const should = require("should");
-const { Then } = require("cucumber");
+const { Then } = require("@cucumber/cucumber");
 
 // this need to build the lib with "npm run build" first
 const { execute } = require("../../lib/support/execute");
