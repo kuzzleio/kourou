@@ -121,7 +121,7 @@ export default class AppScaffold extends Kommand {
       const { stdout } = await execute("gh", "auth", "token");
 
       return stdout.trim() || undefined;
-    } catch (error) {
+    } catch {
       // GitHub CLI is not installed or not authenticated
       return undefined;
     }

@@ -6,7 +6,7 @@ import { flags } from "@oclif/command";
 import chalk from "chalk";
 import { ChildProcess, spawn } from "child_process";
 import cli from "cli-ux";
-import emoji from "node-emoji";
+import { emoji } from "../../support/emoji";
 
 import { Kommand } from "../../common";
 import { execute } from "../../support/execute";
@@ -110,13 +110,11 @@ export default class InstanceSpawn extends Kommand {
 
     if (this.flags.check && successfullCheck) {
       this.log(
-        `\n${emoji.get("ok_hand")} Prerequisites are ${chalk.green.bold("OK")}!`,
+        `\n${emoji.okHand} Prerequisites are ${chalk.green.bold("OK")}!`,
       );
     } else if (this.flags.check && !successfullCheck) {
       throw new Error(
-        `${emoji.get(
-          "shrug",
-        )} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle.`,
+        `${emoji.shrug} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle.`,
       );
     }
 
@@ -148,9 +146,7 @@ export default class InstanceSpawn extends Kommand {
     ]);
 
     cli.action.start(
-      ` ${emoji.get("rocket")} Kuzzle version ${
-        this.flags.version
-      } is launching`,
+      ` ${emoji.rocket} Kuzzle version ${this.flags.version} is launching`,
       undefined,
       {
         stdout: true,
@@ -161,7 +157,7 @@ export default class InstanceSpawn extends Kommand {
       if (docoCode === 0) {
         cli.action.stop("done");
         this.log(
-          `\n${emoji.get("thumbsup")} ${chalk.bold(
+          `\n${emoji.thumbsUp} ${chalk.bold(
             "Kuzzle is booting",
           )} in the background right now.`,
         );
@@ -222,7 +218,6 @@ export default class InstanceSpawn extends Kommand {
   private async findAvailablePort(): Promise<number> {
     let i = 0;
 
-    // eslint-disable-next-line
     while (true) {
       if (await this.isPortAvailable(7512 + i)) {
         return i;

@@ -4,7 +4,7 @@ import path from "path";
 import { flags } from "@oclif/command";
 import chalk from "chalk";
 
-import emoji from "node-emoji";
+import { emoji } from "../../support/emoji";
 
 import { Kommand } from "../../common";
 import { execute } from "../../support/execute";
@@ -50,13 +50,11 @@ export default class AppStartServices extends Kommand {
 
     if (this.flags.check && successfullCheck) {
       this.log(
-        `\n${emoji.get("ok_hand")} Prerequisites are ${chalk.green.bold("OK")}!`,
+        `\n${emoji.okHand} Prerequisites are ${chalk.green.bold("OK")}!`,
       );
     } else if (this.flags.check && !successfullCheck) {
       throw new Error(
-        `${emoji.get(
-          "shrug",
-        )} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle services.`,
+        `${emoji.shrug} Your system doesn't satisfy all the prerequisites. Cannot run Kuzzle services.`,
       );
     }
 

@@ -99,7 +99,6 @@ export default class RealtimeSubscribe extends Kommand {
       `Waiting for realtime notifications on "${this.args.index}":"${this.args.collection}" ...`,
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     await new Promise(() => {});
   }
 }

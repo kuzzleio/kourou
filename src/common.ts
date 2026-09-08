@@ -4,7 +4,7 @@ import path from "path";
 
 import { Command } from "@oclif/command";
 import chalk from "chalk";
-import emoji from "node-emoji";
+import { emoji } from "./support/emoji";
 import get from "lodash/get";
 import isObject from "lodash/isObject";
 import KeplerCompanion from "kepler-companion";
@@ -65,9 +65,7 @@ export abstract class Kommand extends Command {
 
     this.log("");
     this.log(
-      `${chalk.blue.bold(
-        `${emoji.get("rocket")} Kourou`,
-      )} - ${shortDescription}`,
+      `${chalk.blue.bold(`${emoji.rocket} Kourou`)} - ${shortDescription}`,
     );
     this.log("");
   }

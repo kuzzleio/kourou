@@ -188,7 +188,7 @@ export default class AppDoctor extends Kommand {
           count_docs: i["docs.count"],
         })),
       );
-    } catch (e) {
+    } catch {
       this.logKo(
         "=> Cannot show more information about ElasticSearch (cluster name, nodes, indices) because it's not accessible",
       );
@@ -212,7 +212,7 @@ export default class AppDoctor extends Kommand {
         if (result.stdout) {
           this.logOk(` ${lib} is installed`);
         }
-      } catch (e) {
+      } catch {
         this.logKo(`  => ${lib} is not installed`);
         notInstalled.push(lib);
       }

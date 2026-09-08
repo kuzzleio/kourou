@@ -1,6 +1,6 @@
 const _ = require("lodash"),
   should = require("should"),
-  { When, Then } = require("cucumber");
+  { When, Then } = require("@cucumber/cucumber");
 
 When(
   /I (successfully )?call the route "(.*?)":"(.*?)" with args:/,

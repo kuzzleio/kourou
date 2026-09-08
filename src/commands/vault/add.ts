@@ -64,7 +64,7 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
 
       try {
         cryptonomicon.decryptObject(encryptedSecrets);
-      } catch (error: any) {
+      } catch {
         throw new Error(
           "Trying to add a secret encrypted with a different key",
         );

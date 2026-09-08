@@ -5,7 +5,7 @@ import inquirer from "inquirer";
 import cli from "cli-ux";
 import { ChildProcess, spawn } from "child_process";
 import chalk from "chalk";
-import emoji from "node-emoji";
+import { emoji } from "../../support/emoji";
 
 import { Kommand } from "../../common";
 import { execute } from "../../support/execute";
@@ -74,7 +74,7 @@ export class InstanceLogs extends Kommand {
       `kuzzle-${instanceName}.yml`,
     );
     cli.action.start(
-      `${emoji.get("boom")}  Killing Kuzzle instance ${instanceName}`,
+      `${emoji.boom}  Killing Kuzzle instance ${instanceName}`,
       undefined,
       {
         stdout: true,
@@ -93,17 +93,13 @@ export class InstanceLogs extends Kommand {
         if (code === 0) {
           cli.action.stop(
             chalk.green(
-              `\n${emoji.get(
-                "thumbsup",
-              )}  Instance ${instanceName} successfully killed.`,
+              `\n${emoji.thumbsUp}  Instance ${instanceName} successfully killed.`,
             ),
           );
         } else {
           cli.action.stop(
             chalk.red(
-              `\n${emoji.get(
-                "thumbsdown",
-              )}  Something went wrong whilde killing instance ${instanceName}.`,
+              `\n${emoji.thumbsDown}  Something went wrong whilde killing instance ${instanceName}.`,
             ),
           );
         }

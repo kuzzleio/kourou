@@ -92,7 +92,7 @@ export function fileExists(filePath: string): boolean {
   try {
     fs.accessSync(filePath, fsConstants.F_OK);
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 }

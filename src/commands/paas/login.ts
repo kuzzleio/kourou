@@ -1,5 +1,4 @@
 import fs from "fs";
-import fetch from "node-fetch";
 
 import { flags } from "@oclif/command";
 import cli from "cli-ux";
@@ -92,13 +91,19 @@ class PaasLogin extends PaasKommand {
 
     const targetUrl = `https://${this.packagesHost}/-/user/org.couchdb.user:${username}`;
     const response = await fetch(targetUrl, options);
-    const json = await response.json();
+    const json = (await response.json()) as { error?: string; token?: string };
 
     if (response.status !== 201) {
       throw new Error(json.error);
     }
 
     const { token } = json;
+
+    if (!token) {
+      throw new Error(
+        "The registry accepted the credentials but returned no authentication token",
+      );
+    }
 
     spawnSync(
       "npm",

@@ -1,4 +1,4 @@
-const { Then, Given } = require("cucumber"),
+const { Then, Given } = require("@cucumber/cucumber"),
   should = require("should");
 
 Given("a collection {string}:{string}", async function (index, collection) {
