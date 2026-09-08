@@ -1,8 +1,7 @@
+import { Flags, ux } from "@oclif/core";
 import path from "path";
 
-import { flags } from "@oclif/command";
 import inquirer from "inquirer";
-import cli from "cli-ux";
 import { ChildProcess, spawn } from "child_process";
 import chalk from "chalk";
 import { emoji } from "../../support/emoji";
@@ -17,11 +16,11 @@ export class InstanceLogs extends Kommand {
     "Stop and remove all the containers of a running kuzzle instance";
 
   static flags = {
-    instance: flags.string({
+    instance: Flags.string({
       char: "i",
       description: "Kuzzle instance name [ex: stack-0]",
     }),
-    all: flags.boolean({
+    all: Flags.boolean({
       char: "a",
       description: "Kill all instances",
     }),
@@ -73,7 +72,7 @@ export class InstanceLogs extends Kommand {
       this.kourouDir,
       `kuzzle-${instanceName}.yml`,
     );
-    cli.action.start(
+    ux.action.start(
       `${emoji.boom}  Killing Kuzzle instance ${instanceName}`,
       undefined,
       {
@@ -91,13 +90,13 @@ export class InstanceLogs extends Kommand {
     return new Promise((resolve) =>
       instanceKill.on("close", (code) => {
         if (code === 0) {
-          cli.action.stop(
+          ux.action.stop(
             chalk.green(
               `\n${emoji.thumbsUp}  Instance ${instanceName} successfully killed.`,
             ),
           );
         } else {
-          cli.action.stop(
+          ux.action.stop(
             chalk.red(
               `\n${emoji.thumbsDown}  Something went wrong whilde killing instance ${instanceName}.`,
             ),

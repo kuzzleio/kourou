@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import { Client } from "sdk-es7";
 
 import { Kommand } from "../../../common";
@@ -10,24 +10,24 @@ export default class EsInsert extends Kommand {
     "Inserts a document directly into ES (will replace if exists)";
 
   static flags = {
-    body: flags.string({
+    body: Flags.string({
       description: "Document body in JSON",
       default: "{}",
     }),
-    id: flags.string({
+    id: Flags.string({
       description: "Document ID",
     }),
-    node: flags.string({
+    node: Flags.string({
       char: "n",
       description: "Elasticsearch server URL",
       default: "http://localhost:9200",
     }),
-    help: flags.help(),
+    help: Flags.help(),
   };
 
-  static args = [
-    { name: "index", description: "ES Index name", required: true },
-  ];
+  static args = {
+    index: Args.string({ description: "ES Index name", required: true }),
+  };
 
   async runSafe() {
     const esClient = new Client({ node: this.flags.node });

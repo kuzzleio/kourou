@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import _ from "lodash";
 
 import { Kommand } from "../../common";
@@ -16,43 +16,43 @@ export default class RealtimeSubscribe extends Kommand {
   ];
 
   static flags = {
-    scope: flags.string({
+    scope: Flags.string({
       description:
         "Subscribe to document entering or leaving the scope (all, in, out, none)",
       default: "all",
     }),
-    users: flags.string({
+    users: Flags.string({
       description:
         "Subscribe to users entering or leaving the room (all, in, out, none)",
       default: "all",
     }),
-    volatile: flags.string({
+    volatile: Flags.string({
       description:
         "Additional subscription information used in user join/leave notifications",
       default: "{}",
     }),
-    display: flags.string({
+    display: Flags.string({
       description:
         "Path of the property to display from the notification (empty string to display everything)",
       default: "result",
     }),
-    editor: flags.boolean({
+    editor: Flags.boolean({
       description:
         "Open an editor (EDITOR env variable) to edit the filters before subscribing.",
     }),
-    help: flags.help(),
+    help: Flags.help(),
     ...kuzzleFlags,
-    protocol: flags.string({
+    protocol: Flags.string({
       description: "Kuzzle protocol (only websocket for realtime)",
       default: "websocket",
     }),
   };
 
-  static args = [
-    { name: "index", description: "Index name", required: true },
-    { name: "collection", description: "Collection name", required: true },
-    { name: "filters", description: "Set of Koncorde filters" },
-  ];
+  static args = {
+    index: Args.string({ description: "Index name", required: true }),
+    collection: Args.string({ description: "Collection name", required: true }),
+    filters: Args.string({ description: "Set of Koncorde filters" }),
+  };
 
   static readStdin = true;
 

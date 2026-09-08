@@ -3,7 +3,7 @@ import _ from "lodash";
 import crypto from "crypto";
 import path from "path";
 
-import { flags } from "@oclif/command";
+import { Flags } from "@oclif/core";
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
 
@@ -38,29 +38,29 @@ Examples:
 `;
 
   static flags = {
-    help: flags.help({}),
-    path: flags.string({
+    help: Flags.help({}),
+    path: Flags.string({
       description: "Dump directory",
       default: "users",
     }),
-    exclude: flags.string({
+    exclude: Flags.string({
       description: "Exclude users by matching their IDs with a regexp",
       multiple: true,
     }),
-    "generate-credentials": flags.boolean({
+    "generate-credentials": Flags.boolean({
       description: "Generate credentials with a random password for users",
     }),
-    "generated-username": flags.string({
+    "generated-username": Flags.string({
       description:
         "User content property used as a username for local credentials",
       default: "_id",
     }),
-    "batch-size": flags.string({
+    "batch-size": Flags.string({
       description: "Maximum batch size (see limits.documentsFetchCount config)",
       default: "2000",
     }),
     ...kuzzleFlags,
-    protocol: flags.string({
+    protocol: Flags.string({
       description: "Kuzzle protocol (http or websocket)",
       default: "ws",
     }),

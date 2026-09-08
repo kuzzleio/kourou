@@ -2,7 +2,7 @@ import os from "os";
 import fs from "fs";
 import path from "path";
 
-import { Command } from "@oclif/command";
+import { Command } from "@oclif/core";
 import chalk from "chalk";
 import { emoji } from "./support/emoji";
 import get from "lodash/get";
@@ -106,7 +106,7 @@ export abstract class Kommand extends Command {
   async run() {
     const kommand = this.constructor as unknown as any;
 
-    const result = this.parse(kommand);
+    const result = await this.parse(kommand);
     this.args = result.args;
     this.flags = result.flags;
 

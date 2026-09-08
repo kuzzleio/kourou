@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import _ from "lodash";
 import { Cryptonomicon, Vault } from "kuzzle-vault";
 
@@ -24,25 +24,23 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
   ];
 
   static flags = {
-    "vault-key": flags.string({
+    "vault-key": Flags.string({
       description: "Kuzzle Vault Key (or KUZZLE_VAULT_KEY)",
       default: process.env.KUZZLE_VAULT_KEY,
     }),
   };
 
-  static args = [
-    {
-      name: "secrets-file",
+  static args = {
+    "secrets-file": Args.string({
       description: "Encrypted secrets file",
       required: true,
-    },
-    {
-      name: "key",
+    }),
+    key: Args.string({
       description: "Path to the key (lodash style)",
       required: true,
-    },
-    { name: "value", description: "Value to encrypt", required: true },
-  ];
+    }),
+    value: Args.string({ description: "Value to encrypt", required: true }),
+  };
 
   async runSafe() {
     if (_.isEmpty(this.flags["vault-key"])) {

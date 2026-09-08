@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Flags } from "@oclif/core";
 import inquirer from "inquirer";
 
 import { Kommand } from "../../common";
@@ -10,11 +10,11 @@ export class InstanceLogs extends Kommand {
   static description = "Displays the logs of a running Kuzzle";
 
   static flags = {
-    instance: flags.string({
+    instance: Flags.string({
       char: "i",
       description: "Kuzzle instance name",
     }),
-    follow: flags.boolean({
+    follow: Flags.boolean({
       char: "f",
       description: "Follow log output",
     }),

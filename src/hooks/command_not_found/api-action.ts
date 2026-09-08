@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { Hook } from "@oclif/config";
+import { Hook } from "@oclif/core";
 import SdkQuery from "../../commands/sdk/query";
 
 /**
@@ -58,8 +58,8 @@ const hook: Hook<"command_not_found"> = async function apiActionHook(opts) {
       args.splice(0, 1);
     }
   } else {
-    const exitCode = await SdkQuery.run([...commandArgs, ...args]);
-    process.exit(exitCode);
+    await SdkQuery.run([...commandArgs, ...args]);
+    process.exit();
   }
 
   // 2th positional argument (collection)
@@ -74,8 +74,8 @@ const hook: Hook<"command_not_found"> = async function apiActionHook(opts) {
 
     args.splice(0, 1);
   } else {
-    const exitCode = await SdkQuery.run([...commandArgs, ...args]);
-    process.exit(exitCode);
+    await SdkQuery.run([...commandArgs, ...args]);
+    process.exit();
   }
 
   // 3th positional argument (_id or body)
@@ -92,8 +92,8 @@ const hook: Hook<"command_not_found"> = async function apiActionHook(opts) {
       args.splice(0, 1);
     }
   } else {
-    const exitCode = await SdkQuery.run([...commandArgs, ...args]);
-    process.exit(exitCode);
+    await SdkQuery.run([...commandArgs, ...args]);
+    process.exit();
   }
 
   // 4th positional argument (body)
@@ -104,8 +104,8 @@ const hook: Hook<"command_not_found"> = async function apiActionHook(opts) {
     args.splice(0, 1);
   }
 
-  const exitCode = await SdkQuery.run([...commandArgs, ...args]);
-  process.exit(exitCode);
+  await SdkQuery.run([...commandArgs, ...args]);
+  process.exit();
 };
 
 export default hook;

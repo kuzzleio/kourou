@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Flags } from "@oclif/core";
 import { Client } from "sdk-es7";
 
 import { Kommand } from "../../../common";
@@ -9,13 +9,13 @@ export default class EsListIndex extends Kommand {
   static description = "Lists available ES indexes";
 
   static flags = {
-    help: flags.help(),
-    node: flags.string({
+    help: Flags.help(),
+    node: Flags.string({
       char: "n",
       description: "Elasticsearch server URL",
       default: "http://localhost:9200",
     }),
-    grep: flags.string({
+    grep: Flags.string({
       char: "g",
       description: "Match output with pattern",
     }),

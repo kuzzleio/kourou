@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import { isEmpty } from "lodash";
 
 import { Editor } from "../../support/editor";
@@ -39,33 +39,32 @@ Other
 `;
 
   public static flags = {
-    help: flags.help(),
-    var: flags.string({
+    help: Flags.help(),
+    var: Flags.string({
       char: "v",
       description:
         "Additional arguments injected into the code. (eg: --var 'index=\"iot-data\"'",
       multiple: true,
     }),
-    editor: flags.boolean({
+    editor: Flags.boolean({
       description:
         "Open an editor (EDITOR env variable) to edit the code before executing it.",
     }),
-    "keep-alive": flags.boolean({
+    "keep-alive": Flags.boolean({
       description: "Keep the connection running (websocket only)",
     }),
-    "print-raw": flags.boolean({
+    "print-raw": Flags.boolean({
       description: "Print only the script result to stdout",
     }),
     ...kuzzleFlags,
   };
 
-  public static args = [
-    {
-      name: "code",
+  public static args = {
+    code: Args.string({
       description: "Code to execute. Will be read from STDIN if available.",
       required: false,
-    },
-  ];
+    }),
+  };
 
   private code = "";
 

@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import _ from "lodash";
 
 import { Kommand } from "../../common";
@@ -62,55 +62,54 @@ Default fallback to API action
 `;
 
   public static flags = {
-    help: flags.help(),
-    arg: flags.string({
+    help: Flags.help(),
+    arg: Flags.string({
       char: "a",
       description:
         'Additional argument. Repeatable. (e.g. "-a refresh=wait_for")',
       multiple: true,
     }),
-    body: flags.string({
+    body: Flags.string({
       description:
         "Request body in JS or JSON format. Will be read from STDIN if available.",
       default: "{}",
     }),
-    editor: flags.boolean({
+    editor: Flags.boolean({
       description:
         "Open an editor (EDITOR env variable) to edit the request before sending.",
     }),
-    "body-editor": flags.boolean({
+    "body-editor": Flags.boolean({
       description:
         "Open an editor (EDITOR env variable) to edit the body before sending.",
     }),
-    index: flags.string({
+    index: Flags.string({
       char: "i",
       description: "Index argument",
     }),
-    collection: flags.string({
+    collection: Flags.string({
       char: "c",
       description: "Collection argument",
     }),
-    id: flags.string({
+    id: Flags.string({
       description: "ID argument (_id)",
     }),
-    display: flags.string({
+    display: Flags.string({
       description:
         "Path of the property to display from the response (empty string to display the result)",
       default: "result",
     }),
-    "print-raw": flags.boolean({
+    "print-raw": Flags.boolean({
       description: "Print only the query result to stdout",
     }),
     ...kuzzleFlags,
   };
 
-  static args = [
-    {
-      name: "controller:action",
+  static args = {
+    "controller:action": Args.string({
       description: 'Controller and action (eg: "server:now")',
       required: true,
-    },
-  ];
+    }),
+  };
 
   static readStdin = true;
 

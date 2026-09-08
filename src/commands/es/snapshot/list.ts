@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import { Client } from "sdk-es7";
 
 import { Kommand } from "../../../common";
@@ -10,22 +10,21 @@ export default class EsSnapshotsList extends Kommand {
     "List all snapshot from a repository acknowledge by an ES instance";
 
   static flags = {
-    node: flags.string({
+    node: Flags.string({
       char: "n",
       description: "Elasticsearch server URL",
       default: "http://localhost:9200",
     }),
-    help: flags.help(),
+    help: Flags.help(),
   };
 
-  static args = [
-    {
-      name: "repository",
+  static args = {
+    repository: Args.string({
       description:
         "Name of repository from which to fetch the snapshot information",
       required: true,
-    },
-  ];
+    }),
+  };
 
   async runSafe() {
     const esClient = new Client({ node: this.flags.node });

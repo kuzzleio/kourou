@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
@@ -7,19 +7,18 @@ export default class CollectionCreate extends Kommand {
   static description = "Creates a collection";
 
   static flags = {
-    help: flags.help(),
+    help: Flags.help(),
     ...kuzzleFlags,
   };
 
-  static args = [
-    { name: "index", description: "Index name", required: true },
-    { name: "collection", description: "Collection name", required: true },
-    {
-      name: "body",
+  static args = {
+    index: Args.string({ description: "Index name", required: true }),
+    collection: Args.string({ description: "Collection name", required: true }),
+    body: Args.string({
       description:
         "Collection mappings and settings in JS or JSON format. Will be read from STDIN if available",
-    },
-  ];
+    }),
+  };
 
   static readStdin = true;
 

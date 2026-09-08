@@ -1,6 +1,6 @@
 import fs from "fs";
 import _ from "lodash";
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import { Cryptonomicon } from "kuzzle-vault";
 
 import { Kommand } from "../../common";
@@ -16,23 +16,23 @@ export class FileDecrypt extends Kommand {
   ];
 
   static flags = {
-    force: flags.boolean({
+    force: Flags.boolean({
       char: "f",
       description: "Overwrite the output file if it already exists",
     }),
-    "output-file": flags.string({
+    "output-file": Flags.string({
       char: "o",
       description: 'Output file (default: remove ".enc")',
     }),
-    "vault-key": flags.string({
+    "vault-key": Flags.string({
       description: "Kuzzle Vault Key (or KUZZLE_VAULT_KEY)",
       default: process.env.KUZZLE_VAULT_KEY,
     }),
   };
 
-  static args = [
-    { name: "file", description: "Encrypted file", required: true },
-  ];
+  static args = {
+    file: Args.string({ description: "Encrypted file", required: true }),
+  };
 
   async runSafe() {
     if (_.isEmpty(this.flags["vault-key"])) {

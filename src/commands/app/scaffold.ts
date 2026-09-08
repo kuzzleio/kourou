@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import chalk from "chalk";
 import Listr from "listr";
 
@@ -12,24 +12,23 @@ export default class AppScaffold extends Kommand {
   static description = "Scaffolds a new Kuzzle application";
 
   static flags = {
-    help: flags.help(),
-    flavor: flags.string({
+    help: Flags.help(),
+    flavor: Flags.string({
       default: "generic",
       description: `Template flavor ("generic", "iot", "hypervision").`,
     }),
-    token: flags.string({
+    token: Flags.string({
       description: `GitHub token used to clone private template repositories.
     Defaults to the GITHUB_TOKEN environment variable, then to the GitHub CLI credentials.`,
     }),
   };
 
-  static args = [
-    {
-      name: "destination",
+  static args = {
+    destination: Args.string({
       description: "Directory to scaffold the app",
       required: true,
-    },
-  ];
+    }),
+  };
 
   async runSafe() {
     const destination = this.args.destination;

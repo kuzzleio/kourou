@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import fs from "fs";
 import path from "path";
 
@@ -15,30 +15,30 @@ export default class CollectionExport extends Kommand {
   static description = "Exports a collection (JSONL format)";
 
   static flags = {
-    help: flags.help({}),
-    path: flags.string({
+    help: Flags.help({}),
+    path: Flags.string({
       description: "Dump root directory",
     }),
-    "batch-size": flags.string({
+    "batch-size": Flags.string({
       description: "Maximum batch size (see limits.documentsFetchCount config)",
       default: "2000",
     }),
-    query: flags.string({
+    query: Flags.string({
       description: "Only dump documents matching the query (JS or JSON format)",
       default: "{}",
     }),
-    editor: flags.boolean({
+    editor: Flags.boolean({
       description:
         "Open an editor (EDITOR env variable) to edit the query before sending",
     }),
-    format: flags.string({
+    format: Flags.string({
       description: `"kuzzle" will export in Kuzzle format usable for internal fixtures,
 "jsonl" allows to import that data back with kourou,
 "csv" allows to import data into Excel (please, specify the fields to export using the --fields option).`,
       options: ["jsonl", "kuzzle", "csv"],
       default: "jsonl",
     }),
-    fields: flags.string({
+    fields: Flags.string({
       description: `[CSV format only] The list of fields to be included in the CSV export in dot-path format.
 
 Example:
@@ -47,26 +47,26 @@ Example:
 Note that the '_id' field is always included in the CSV export. Leaving this option empty implies that all
 exportable fields in the mapping will be exported.`,
     }),
-    scrollTTL: flags.string({
+    scrollTTL: Flags.string({
       description: `The scroll TTL option to pass to the dump operation (which performs a document.search under the hood),
 expressed in ms format, e.g. '2s', '1m', '3h'.`,
       default: "20s",
     }),
-    type: flags.string({
+    type: Flags.string({
       description: "Type of the export: all, mappings, data",
       default: "all",
     }),
     ...kuzzleFlags,
-    protocol: flags.string({
+    protocol: Flags.string({
       description: "Kuzzle protocol (http or websocket)",
       default: "ws",
     }),
   };
 
-  static args = [
-    { name: "index", description: "Index name", required: true },
-    { name: "collection", description: "Collection name", required: true },
-  ];
+  static args = {
+    index: Args.string({ description: "Index name", required: true }),
+    collection: Args.string({ description: "Collection name", required: true }),
+  };
 
   static examples = [
     "kourou collection:export nyc-open-data yellow-taxi",

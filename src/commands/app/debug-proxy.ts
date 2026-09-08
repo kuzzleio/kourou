@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Flags } from "@oclif/core";
 
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
@@ -21,29 +21,29 @@ export default class DebugProxy extends Kommand {
     "Create a Proxy Server that allows Chrome to debug Kuzzle remotely using the DebugController";
 
   public static flags = {
-    help: flags.help(),
-    forwardPort: flags.integer({
+    help: Flags.help(),
+    forwardPort: Flags.integer({
       description: "Port of the forwarding server",
       default: 9222,
     }),
-    ttl: flags.string({
+    ttl: Flags.string({
       description: "Kuzzle login TTL",
       default: "1h",
     }),
-    keepAuth: flags.boolean({
+    keepAuth: Flags.boolean({
       description: "Keep the user authenticated",
       default: false,
     }),
-    noAutoEnableDebugger: flags.boolean({
+    noAutoEnableDebugger: Flags.boolean({
       description:
         "True if Kourou should not enable and disable the Debugger automatically before and after usage",
       default: false,
     }),
-    showDebuggerEvents: flags.boolean({
+    showDebuggerEvents: Flags.boolean({
       description: "Verbose mode to display events sent to the Chrome Debugger",
       default: false,
     }),
-    showDebuggerPayloads: flags.boolean({
+    showDebuggerPayloads: Flags.boolean({
       description:
         "Verbose mode to display payloads sent by and to the Chrome Debugger",
       default: false,
