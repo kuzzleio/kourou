@@ -1,6 +1,5 @@
-import { flags } from "@oclif/command";
+import { Args, Flags, ux } from "@oclif/core";
 import fs from "fs";
-import cli from "cli-ux";
 import path from "path";
 
 import { Kommand } from "../../common";
@@ -16,41 +15,43 @@ export default class IndexExport extends Kommand {
   static description = "Exports an index (JSONL or Kuzzle format)";
 
   static flags = {
-    help: flags.help({}),
-    path: flags.string({
+    help: Flags.help({}),
+    path: Flags.string({
       description: "Dump root directory",
     }),
-    "batch-size": flags.string({
+    "batch-size": Flags.string({
       description: "Maximum batch size (see limits.documentsFetchCount config)",
       default: "2000",
     }),
-    query: flags.string({
+    query: Flags.string({
       description:
         "Only dump documents in collections matching the query (JS or JSON format)",
       default: "{}",
     }),
-    format: flags.string({
+    format: Flags.string({
       description:
         '"jsonl or kuzzle - kuzzle will export in Kuzzle format usable for internal fixtures and jsonl allows to import that data back with kourou',
       default: "jsonl",
     }),
-    scrollTTL: flags.string({
+    scrollTTL: Flags.string({
       description: `The scroll TTL option to pass to the dump operation (which performs a document.search under the hood),
 expressed in ms format, e.g. '2s', '1m', '3h'.`,
       default: "20s",
     }),
     ...kuzzleFlags,
-    protocol: flags.string({
+    protocol: Flags.string({
       description: "Kuzzle protocol (http or websocket)",
       default: "ws",
     }),
-    type: flags.string({
+    type: Flags.string({
       description: "Type of the export: all, mappings, data",
       default: "all",
     }),
   };
 
-  static args = [{ name: "index", description: "Index name", required: true }];
+  static args = {
+    index: Args.string({ description: "Index name", required: true }),
+  };
 
   static examples = [
     "kourou index:export nyc-open-data",
@@ -103,7 +104,7 @@ expressed in ms format, e.g. '2s', '1m', '3h'.`,
           );
         }
 
-        cli.action.stop();
+        ux.action.stop();
       } catch (error: any) {
         this.logKo(
           `Error when exporting collection "${collection.name}": ${error}`,

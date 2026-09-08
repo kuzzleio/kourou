@@ -1,11 +1,12 @@
-import { flags } from "@oclif/command";
+import { Flags } from "@oclif/core";
 import path from "path";
-import cli from "cli-ux";
 import chalk from "chalk";
+import inquirer from "inquirer";
 import { emoji } from "../../support/emoji";
 import { promises as fs } from "fs";
 
 import { Kommand } from "../../common";
+import { createProgressBar } from "../../support/progressBar";
 import {
   Elasticsearch7,
   Elasticsearch8,
@@ -22,46 +23,46 @@ export default class EsMigrate extends Kommand {
     "Migrate all the index from an Elasticsearch (or a file) to another Elasticsearch";
 
   static flags = {
-    help: flags.help(),
-    src: flags.string({
+    help: Flags.help(),
+    src: Flags.string({
       description: "Migration source provider",
       env: "KUZZLE_MIGRATION_SRC",
       required: true,
     }),
-    dest: flags.string({
+    dest: Flags.string({
       description: "Migration destination provider",
       env: "KUZZLE_MIGRATION_DEST",
       required: true,
     }),
-    reset: flags.boolean({
+    reset: Flags.boolean({
       description: "Reset destination Elasticsearch server",
       default: false,
     }),
-    "batch-size": flags.integer({
+    "batch-size": Flags.integer({
       description: "How many documents to move in batch per operation",
       default: 1000,
     }),
-    "no-interactive": flags.boolean({
+    "no-interactive": Flags.boolean({
       description:
         "Skip confirmation interactive prompts (perfect for scripting)",
       default: false,
     }),
-    "dry-run": flags.boolean({
+    "dry-run": Flags.boolean({
       description: "Print witch collections will be migrated",
       default: false,
     }),
-    pattern: flags.string({
+    pattern: Flags.string({
       description: "Pattern to match indices to migrate",
     }),
-    scroll: flags.string({
+    scroll: Flags.string({
       description: "Scroll duration for Elasticsearch scrolling",
       default: "30s",
     }),
-    "only-mappings": flags.boolean({
+    "only-mappings": Flags.boolean({
       description: "Only migrate mappings",
       default: false,
     }),
-    esVersion: flags.string({
+    esVersion: Flags.string({
       description: "Elasticsearch version to use for the migration",
       default: "7",
       options: ["7", "8"],
@@ -121,7 +122,7 @@ export default class EsMigrate extends Kommand {
     const total = data.total;
     documents = data.documents;
 
-    const progressBar = cli.progress({
+    const progressBar = createProgressBar({
       format: chalk.blue(
         " [*] Importing |{bar}| {percentage}% || {value}/{total} documents",
       ),
@@ -181,11 +182,20 @@ export default class EsMigrate extends Kommand {
             )}?`,
           ),
         );
-        await cli.confirm(
-          chalk.redBright(
-            ` ${emoji.fire} You will lose all the data stored in it (Type "yes" to confirm)`,
-          ),
-        );
+        const { confirmation } = await inquirer.prompt([
+          {
+            type: "input",
+            name: "confirmation",
+            message: chalk.redBright(
+              ` ${emoji.fire} You will lose all the data stored in it (Type "yes" to confirm)`,
+            ),
+          },
+        ]);
+
+        if (confirmation !== "yes") {
+          this.logKo("Aborted, nothing was cleared.");
+          return;
+        }
       }
       await this.dest.clear();
     }

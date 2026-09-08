@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
 import {
@@ -15,30 +15,30 @@ export default class CollectionImport extends Kommand {
   static description = "Imports a collection";
 
   static flags = {
-    help: flags.help({}),
-    "batch-size": flags.string({
+    help: Flags.help({}),
+    "batch-size": Flags.string({
       description: "Maximum batch size (see limits.documentsWriteCount config)",
       default: "200",
     }),
-    index: flags.string({
+    index: Flags.string({
       description: "If set, override the index destination name",
     }),
-    collection: flags.string({
+    collection: Flags.string({
       description: "If set, override the collection destination name",
     }),
-    "no-mappings": flags.boolean({
+    "no-mappings": Flags.boolean({
       description: "Skip collection mappings",
     }),
     ...kuzzleFlags,
-    protocol: flags.string({
+    protocol: Flags.string({
       description: "Kuzzle protocol (http or websocket)",
       default: "ws",
     }),
   };
 
-  static args = [
-    { name: "path", description: "Dump directory path", required: true },
-  ];
+  static args = {
+    path: Args.string({ description: "Dump directory path", required: true }),
+  };
 
   async runSafe() {
     this.logInfo(`Start importing dump from ${this.args.path}`);

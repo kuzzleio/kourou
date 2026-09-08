@@ -1,7 +1,7 @@
 import { writeFileSync } from "fs";
 import path from "path";
 
-import { flags } from "@oclif/command";
+import { Flags } from "@oclif/core";
 import chalk from "chalk";
 
 import { emoji } from "../../support/emoji";
@@ -32,8 +32,8 @@ export default class AppStartServices extends Kommand {
     "Starts Kuzzle services (Elasticsearch and Redis)";
 
   public static flags = {
-    help: flags.help(),
-    check: flags.boolean({
+    help: Flags.help(),
+    check: Flags.boolean({
       description: "Check prerequisite before running services",
       default: false,
     }),

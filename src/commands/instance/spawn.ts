@@ -1,11 +1,10 @@
+import { Flags, ux } from "@oclif/core";
 import path from "path";
 import { writeFileSync } from "fs";
 import net from "net";
 
-import { flags } from "@oclif/command";
 import chalk from "chalk";
 import { ChildProcess, spawn } from "child_process";
-import cli from "cli-ux";
 import { emoji } from "../../support/emoji";
 
 import { Kommand } from "../../common";
@@ -85,12 +84,12 @@ export default class InstanceSpawn extends Kommand {
   public static description = "Spawn a new Kuzzle instance";
 
   public static flags = {
-    help: flags.help(),
-    check: flags.boolean({
+    help: Flags.help(),
+    check: Flags.boolean({
       description: "Check prerequisite before running Kuzzle",
       default: false,
     }),
-    version: flags.string({
+    version: Flags.string({
       char: "v",
       description: "Core-version of the instance to spawn",
       default: "2",
@@ -145,7 +144,7 @@ export default class InstanceSpawn extends Kommand {
       "-d",
     ]);
 
-    cli.action.start(
+    ux.action.start(
       ` ${emoji.rocket} Kuzzle version ${this.flags.version} is launching`,
       undefined,
       {
@@ -155,7 +154,7 @@ export default class InstanceSpawn extends Kommand {
 
     doco.on("close", (docoCode) => {
       if (docoCode === 0) {
-        cli.action.stop("done");
+        ux.action.stop("done");
         this.log(
           `\n${emoji.thumbsUp} ${chalk.bold(
             "Kuzzle is booting",
@@ -172,7 +171,7 @@ export default class InstanceSpawn extends Kommand {
         this.log(`  Node.js debugger port: ${9229 + portIndex}`);
         this.log(`  Elasticsearch port: ${9200 + portIndex}`);
       } else {
-        cli.action.stop(
+        ux.action.stop(
           chalk.red(
             ` Something went wrong: docker compose exited with ${docoCode}`,
           ),

@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
@@ -15,28 +15,31 @@ export default class CollectionMigrate extends Kommand {
     "Migrate a collection by transforming documents from a dump file and importing them into Kuzzle";
 
   static flags = {
-    help: flags.help({}),
-    "batch-size": flags.string({
+    help: Flags.help({}),
+    "batch-size": Flags.string({
       description: "Maximum batch size (see limits.documentsWriteCount config)",
       default: "200",
     }),
-    index: flags.string({
+    index: Flags.string({
       description: "If set, override the index destination name",
     }),
-    collection: flags.string({
+    collection: Flags.string({
       description: "If set, override the collection destination name",
     }),
     ...kuzzleFlags,
-    protocol: flags.string({
+    protocol: Flags.string({
       description: "Kuzzle protocol (http or websocket)",
       default: "ws",
     }),
   };
 
-  static args = [
-    { name: "script", description: "Migration script path", required: true },
-    { name: "path", description: "Collection dump path", required: true },
-  ];
+  static args = {
+    script: Args.string({
+      description: "Migration script path",
+      required: true,
+    }),
+    path: Args.string({ description: "Collection dump path", required: true }),
+  };
 
   async runSafe() {
     this.logInfo(

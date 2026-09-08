@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import _ from "lodash";
 import { Vault } from "kuzzle-vault";
 
@@ -18,19 +18,18 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
   ];
 
   static flags = {
-    "vault-key": flags.string({
+    "vault-key": Flags.string({
       description: "Kuzzle Vault Key (or KUZZLE_VAULT_KEY)",
       default: process.env.KUZZLE_VAULT_KEY,
     }),
   };
 
-  static args = [
-    {
-      name: "secrets-file",
+  static args = {
+    "secrets-file": Args.string({
       description: "Encrypted secrets file",
       required: true,
-    },
-  ];
+    }),
+  };
 
   async runSafe() {
     if (_.isEmpty(this.flags["vault-key"])) {

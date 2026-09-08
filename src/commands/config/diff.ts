@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import _ from "lodash";
 import fs from "fs";
 import stripComments from "strip-json-comments";
@@ -16,24 +16,26 @@ export class ConfigKeyDiff extends Kommand {
   ];
 
   static flags = {
-    strict: flags.boolean({
+    strict: Flags.boolean({
       description: "Exit with an error if differences are found",
       default: false,
     }),
-    values: flags.boolean({
+    values: Flags.boolean({
       description: "Also displays value changes",
       default: false,
     }),
   };
 
-  static args = [
-    { name: "first", description: "First configuration file", required: true },
-    {
-      name: "second",
+  static args = {
+    first: Args.string({
+      description: "First configuration file",
+      required: true,
+    }),
+    second: Args.string({
       description: "Second configuration file",
       required: true,
-    },
-  ];
+    }),
+  };
 
   async runSafe() {
     if (!fs.existsSync(this.args.first)) {

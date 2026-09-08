@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
@@ -7,14 +7,16 @@ class ApiKeySearch extends Kommand {
   public static description = "Lists a user's API Keys.";
 
   public static flags = {
-    help: flags.help(),
-    filter: flags.string({
+    help: Flags.help(),
+    filter: Flags.string({
       description: "Filter to match the API Key descriptions",
     }),
     ...kuzzleFlags,
   };
 
-  static args = [{ name: "user", description: "User kuid", required: true }];
+  static args = {
+    user: Args.string({ description: "User kuid", required: true }),
+  };
 
   async runSafe() {
     let query = {};
