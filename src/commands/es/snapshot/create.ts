@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import { Client } from "sdk-es7";
 
 import { Kommand } from "../../../common";
@@ -11,24 +11,27 @@ export default class EsSnapshotsCreate extends Kommand {
   static description = "Create a snapshot repository inside an ES instance";
 
   static flags = {
-    node: flags.string({
+    node: Flags.string({
       char: "n",
       description: "Elasticsearch server URL",
       default: "http://localhost:9200",
     }),
-    wait: flags.boolean({
+    wait: Flags.boolean({
       description:
         "Wait for the snapshot to complete before returning. Use --no-wait to return as soon as Elasticsearch has accepted the request",
       default: true,
       allowNo: true,
     }),
-    help: flags.help(),
+    help: Flags.help(),
   };
 
-  static args = [
-    { name: "repository", description: "ES repository name", required: true },
-    { name: "name", description: "ES snapshot name", required: true },
-  ];
+  static args = {
+    repository: Args.string({
+      description: "ES repository name",
+      required: true,
+    }),
+    name: Args.string({ description: "ES snapshot name", required: true }),
+  };
 
   async runSafe() {
     const esClient = new Client({

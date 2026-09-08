@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
@@ -13,36 +13,36 @@ export default class DocumentSearch extends Kommand {
   ];
 
   static flags = {
-    sort: flags.string({
+    sort: Flags.string({
       description: "Sort in JS or JSON format.",
       default: "{}",
     }),
-    from: flags.string({
+    from: Flags.string({
       description: "Optional offset",
     }),
-    size: flags.string({
+    size: Flags.string({
       description: "Optional page size",
     }),
-    scroll: flags.string({
+    scroll: Flags.string({
       description: "Optional scroll TTL",
     }),
-    lang: flags.string({
+    lang: Flags.string({
       description: "Specify the query language to use",
       default: "koncorde",
     }),
-    editor: flags.boolean({
+    editor: Flags.boolean({
       description:
         "Open an editor (EDITOR env variable) to edit the request before sending",
     }),
-    help: flags.help(),
+    help: Flags.help(),
     ...kuzzleFlags,
   };
 
-  static args = [
-    { name: "index", description: "Index name", required: true },
-    { name: "collection", description: "Collection name", required: true },
-    { name: "query", description: "Search query in JS or JSON format." },
-  ];
+  static args = {
+    index: Args.string({ description: "Index name", required: true }),
+    collection: Args.string({ description: "Collection name", required: true }),
+    query: Args.string({ description: "Search query in JS or JSON format." }),
+  };
 
   async runSafe() {
     let request: any = {

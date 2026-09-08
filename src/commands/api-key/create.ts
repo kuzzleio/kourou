@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
@@ -7,23 +7,25 @@ class ApiKeyCreate extends Kommand {
   public static description = "Creates a new API Key for a user";
 
   public static flags = {
-    help: flags.help(),
-    description: flags.string({
+    help: Flags.help(),
+    description: Flags.string({
       char: "d",
       description: "API Key description",
       required: true,
     }),
-    id: flags.string({
+    id: Flags.string({
       description: "API Key unique ID",
     }),
-    expire: flags.string({
+    expire: Flags.string({
       description: "API Key validity",
       default: "-1",
     }),
     ...kuzzleFlags,
   };
 
-  static args = [{ name: "user", description: "User kuid", required: true }];
+  static args = {
+    user: Args.string({ description: "User kuid", required: true }),
+  };
 
   async runSafe() {
     const apiKey = await this.sdk.security.createApiKey(

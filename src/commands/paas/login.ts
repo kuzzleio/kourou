@@ -1,7 +1,7 @@
 import fs from "fs";
 
-import { flags } from "@oclif/command";
-import cli from "cli-ux";
+import { Flags } from "@oclif/core";
+import inquirer from "inquirer";
 import { ApiKey } from "kuzzle-sdk";
 
 import { PaasKommand } from "../../support/PaasKommand";
@@ -11,15 +11,15 @@ class PaasLogin extends PaasKommand {
   public static description = "Login for a PaaS project";
 
   public static flags = {
-    help: flags.help(),
-    project: flags.string({
+    help: Flags.help(),
+    project: Flags.string({
       description: "Current PaaS project",
       required: false,
     }),
-    username: flags.string({
+    username: Flags.string({
       description: "PaaS username",
     }),
-    only_npm: flags.boolean({
+    only_npm: Flags.boolean({
       description: "Only perform the login on the private NPM registry",
       required: false,
       default: false,
@@ -31,11 +31,20 @@ class PaasLogin extends PaasKommand {
 
     const username = this.flags.username
       ? this.flags.username
-      : await cli.prompt(`    Username`);
+      : (
+          await inquirer.prompt([
+            { type: "input", name: "username", message: `    Username` },
+          ])
+        ).username;
 
+    // "password" echoes nothing, which is what cli-ux's { type: "hide" } did
     const password = process.env.KUZZLE_PAAS_PASSWORD
       ? process.env.KUZZLE_PAAS_PASSWORD
-      : await cli.prompt(`    Password`, { type: "hide" });
+      : (
+          await inquirer.prompt([
+            { type: "password", name: "password", message: `    Password` },
+          ])
+        ).password;
 
     if (this.flags.only_npm) {
       await this.authenticateNPM(username, password);

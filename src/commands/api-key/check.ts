@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
@@ -7,13 +7,13 @@ class ApiKeyCheck extends Kommand {
   public static description = "Checks an API key validity";
 
   public static flags = {
-    help: flags.help(),
+    help: Flags.help(),
     ...kuzzleFlags,
   };
 
-  static args = [
-    { name: "token", description: "API key token", required: true },
-  ];
+  static args = {
+    token: Args.string({ description: "API key token", required: true }),
+  };
 
   static examples = ["kourou api-key:check eyJhbG...QxfQrc"];
 

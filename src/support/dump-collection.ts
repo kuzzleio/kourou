@@ -1,8 +1,9 @@
 import fs from "fs";
 import path from "path";
 
-import cli from "cli-ux";
 import ndjson from "ndjson";
+
+import { createProgressBar } from "./progressBar";
 import { pickValues } from "../common";
 import { JSONObject, CollectionController } from "kuzzle-sdk";
 /**
@@ -141,7 +142,7 @@ abstract class AbstractDumper {
       this.options,
     );
 
-    const progressBar = cli.progress({
+    const progressBar = createProgressBar({
       format: `Dumping ${this.collection} |{bar}| {percentage}% || {value}/{total} documents`,
     });
     progressBar.start(results.total, 0);

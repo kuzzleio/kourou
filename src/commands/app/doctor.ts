@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Flags } from "@oclif/core";
 
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
@@ -11,15 +11,15 @@ export default class AppDoctor extends Kommand {
   static description = "Analyze a Kuzzle application";
 
   static flags = {
-    help: flags.help(),
-    elasticsearch: flags.string({
+    help: Flags.help(),
+    elasticsearch: Flags.string({
       description: "Elasticsearch server URL",
       default: "http://localhost:9200",
     }),
     ...kuzzleFlags,
   };
 
-  static args = [];
+  static args = {};
 
   static readStdin = true;
 

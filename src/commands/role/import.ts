@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
 import { restoreRoles } from "../../support/restore-securities";
@@ -8,19 +8,21 @@ export default class RoleImport extends Kommand {
   static description = "Import roles";
 
   static flags = {
-    "preserve-anonymous": flags.boolean({
+    "preserve-anonymous": Flags.boolean({
       description: "Preserve anonymous rights",
       default: false,
     }),
-    help: flags.help({}),
+    help: Flags.help({}),
     ...kuzzleFlags,
-    protocol: flags.string({
+    protocol: Flags.string({
       description: "Kuzzle protocol (http or websocket)",
       default: "ws",
     }),
   };
 
-  static args = [{ name: "path", description: "Dump file", required: true }];
+  static args = {
+    path: Args.string({ description: "Dump file", required: true }),
+  };
 
   async runSafe() {
     this.logInfo(`Importing roles from ${this.args.path} ...`);

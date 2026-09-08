@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import { Client } from "sdk-es7";
 
 import { Kommand } from "../../../common";
@@ -9,18 +9,18 @@ export default class EsGet extends Kommand {
   static description = "Gets a document from ES";
 
   static flags = {
-    help: flags.help(),
-    node: flags.string({
+    help: Flags.help(),
+    node: Flags.string({
       char: "n",
       description: "Elasticsearch server URL",
       default: "http://localhost:9200",
     }),
   };
 
-  static args = [
-    { name: "index", description: "ES Index name", required: true },
-    { name: "id", description: "Document ID", required: true },
-  ];
+  static args = {
+    index: Args.string({ description: "ES Index name", required: true }),
+    id: Args.string({ description: "Document ID", required: true }),
+  };
 
   async runSafe() {
     const esClient = new Client({ node: this.flags.node });

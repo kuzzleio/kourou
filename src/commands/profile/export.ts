@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-import { flags } from "@oclif/command";
+import { Flags } from "@oclif/core";
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
 
@@ -9,13 +9,13 @@ export default class ProfileExport extends Kommand {
   static description = "Exports profiles";
 
   static flags = {
-    help: flags.help({}),
-    path: flags.string({
+    help: Flags.help({}),
+    path: Flags.string({
       description: "Dump directory",
       default: "profiles",
     }),
     ...kuzzleFlags,
-    protocol: flags.string({
+    protocol: Flags.string({
       description: "Kuzzle protocol (http or websocket)",
       default: "ws",
     }),

@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 import fs from "fs";
 import path from "path";
 
@@ -20,29 +20,28 @@ export default class Import extends Kommand {
   static description = "Recursively imports dump files from a root directory";
 
   static flags = {
-    "preserve-anonymous": flags.boolean({
+    "preserve-anonymous": Flags.boolean({
       description: "Preserve anonymous rights",
       default: false,
     }),
-    help: flags.help({}),
-    "batch-size": flags.string({
+    help: Flags.help({}),
+    "batch-size": Flags.string({
       description: "Maximum batch size (see limits.documentsWriteCount config)",
       default: "200",
     }),
     ...kuzzleFlags,
-    protocol: flags.string({
+    protocol: Flags.string({
       description: "Kuzzle protocol (http or websocket)",
       default: "ws",
     }),
   };
 
-  static args = [
-    {
-      name: "path",
+  static args = {
+    path: Args.string({
       description: "Root directory containing dumps",
       required: true,
-    },
-  ];
+    }),
+  };
 
   async runSafe() {
     const files = await this.walkDirectories(this.args.path);

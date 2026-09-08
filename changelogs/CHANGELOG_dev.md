@@ -1,3 +1,27 @@
+## [1.5.0-dev.4](https://github.com/kuzzleio/kourou/compare/v1.5.0-dev.3...v1.5.0-dev.4) (2026-09-08)
+
+### Dependencies
+
+* **deps:** move semantic-release-config-kuzzle to 1.7.2 ([6f452ea](https://github.com/kuzzleio/kourou/commit/6f452ea4aec5169a18e3ad0f9f19bfaf10289818))
+
+## [1.5.0-dev.3](https://github.com/kuzzleio/kourou/compare/v1.5.0-dev.2...v1.5.0-dev.3) (2026-09-08)
+
+### Bug Fixes
+
+* **sdk:query:** stop printing "undefined" for an empty result ([e767e63](https://github.com/kuzzleio/kourou/commit/e767e63603f8c3b77efc5abd4ec28e546d9e3f4c))
+
+## [1.5.0-dev.2](https://github.com/kuzzleio/kourou/compare/v1.5.0-dev.1...v1.5.0-dev.2) (2026-09-08)
+
+### Bug Fixes
+
+* **cli:** stop passing the command result as the flush timeout ([2c3c05a](https://github.com/kuzzleio/kourou/commit/2c3c05a6a035f075c0430c6f716b1cc908bdd315))
+
+## [1.5.0-dev.1](https://github.com/kuzzleio/kourou/compare/v1.4.0...v1.5.0-dev.1) (2026-09-08)
+
+### Bug Fixes
+
+* **es:migrate:** honor the answer to the reset confirmation ([9c35b9c](https://github.com/kuzzleio/kourou/commit/9c35b9c401ac5c70faabc00865860097a9f7b325))
+
 ## [1.4.0-dev.4](https://github.com/kuzzleio/kourou/compare/v1.4.0-dev.3...v1.4.0-dev.4) (2026-09-08)
 
 ## [1.4.0-dev.3](https://github.com/kuzzleio/kourou/compare/v1.4.0-dev.2...v1.4.0-dev.3) (2026-07-28)

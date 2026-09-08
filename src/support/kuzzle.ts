@@ -1,40 +1,40 @@
 import http from "http";
 import https from "https";
 
-import { flags } from "@oclif/command";
+import { Flags } from "@oclif/core";
 import { Http, WebSocket, Kuzzle, JSONObject } from "kuzzle-sdk";
 
 const SECOND = 1000;
 
 export const kuzzleFlags = {
-  host: flags.string({
+  host: Flags.string({
     description: "Kuzzle server host",
     default: process.env.KUZZLE_HOST || "localhost",
   }),
-  port: flags.string({
+  port: Flags.string({
     description: "Kuzzle server port",
     default: process.env.KUZZLE_PORT || "7512",
   }),
-  ssl: flags.boolean({
+  ssl: Flags.boolean({
     description: "Use SSL to connect to Kuzzle",
     default: Boolean(process.env.KUZZLE_SSL) || undefined,
   }),
-  username: flags.string({
+  username: Flags.string({
     description: "Kuzzle username (local strategy)",
     default: process.env.KUZZLE_USERNAME || "anonymous",
   }),
-  password: flags.string({
+  password: Flags.string({
     description: "Kuzzle user password",
     default: process.env.KUZZLE_PASSWORD || undefined,
   }),
-  protocol: flags.string({
+  protocol: Flags.string({
     description: "Kuzzle protocol (http or ws)",
     default: process.env.KUZZLE_PROTOCOL || "ws",
   }),
-  as: flags.string({
+  as: Flags.string({
     description: "Impersonate a user",
   }),
-  "api-key": flags.string({
+  "api-key": Flags.string({
     description: "Kuzzle user api-key",
     default: process.env.KUZZLE_API_KEY || undefined,
   }),

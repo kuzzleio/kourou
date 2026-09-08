@@ -1,4 +1,4 @@
-import { flags } from "@oclif/command";
+import { Args, Flags } from "@oclif/core";
 
 import { Kommand } from "../../common";
 import { kuzzleFlags } from "../../support/kuzzle";
@@ -7,16 +7,16 @@ export default class RedisListKeys extends Kommand {
   static description = "Lists keys stored in Redis";
 
   static flags = {
-    help: flags.help(),
-    remove: flags.boolean({
+    help: Flags.help(),
+    remove: Flags.boolean({
       description: "Remove matching keys",
       default: false,
     }),
-    size: flags.string({
+    size: Flags.string({
       description: "Page size",
       default: "100",
     }),
-    max: flags.string({
+    max: Flags.string({
       description:
         "Maximum number of page to retrieve (-1 to retrieve everything)",
       default: "-1",
@@ -24,13 +24,12 @@ export default class RedisListKeys extends Kommand {
     ...kuzzleFlags,
   };
 
-  static args = [
-    {
-      name: "match",
+  static args = {
+    match: Args.string({
       description: "Match Redis keys with a pattern",
       default: "*",
-    },
-  ];
+    }),
+  };
 
   static examples = [
     'kourou redis:list-keys "*cluster*"',
