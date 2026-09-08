@@ -182,7 +182,7 @@ export default class EsMigrate extends Kommand {
             )}?`,
           ),
         );
-        await inquirer.prompt([
+        const { confirmation } = await inquirer.prompt([
           {
             type: "input",
             name: "confirmation",
@@ -191,6 +191,11 @@ export default class EsMigrate extends Kommand {
             ),
           },
         ]);
+
+        if (confirmation !== "yes") {
+          this.logKo("Aborted, nothing was cleared.");
+          return;
+        }
       }
       await this.dest.clear();
     }
