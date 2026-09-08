@@ -156,7 +156,13 @@ Default fallback to API action
         ? response
         : _.get(response, this.flags.display);
 
-    this.log(JSON.stringify(display, null, 2));
+    // An action that answers without the property --display points at, which
+    // is "result" by default, has nothing to show. JSON.stringify returns the
+    // undefined value rather than a string here, which used to be logged as
+    // the literal " undefined".
+    if (display !== undefined) {
+      this.log(JSON.stringify(display, null, 2));
+    }
 
     this.logOk(`Successfully executed "${controller}:${action}"`);
   }
