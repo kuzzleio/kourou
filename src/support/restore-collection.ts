@@ -13,13 +13,13 @@ function handleError(log: any, dumpFile: string, error: any) {
     const writeStream = fs.createWriteStream(errorFile, { flags: "a" });
 
     for (const partialError of error.errors) {
-      writeStream.write(JSON.stringify(partialError) + '\n');
+      writeStream.write(JSON.stringify(partialError) + "\n");
     }
 
     writeStream.end();
 
     log(
-      chalk.red(`[X] Error importing ${dumpFile}. See errors in ${errorFile}`)
+      chalk.red(`[X] Error importing ${dumpFile}. See errors in ${errorFile}`),
     );
   } else {
     log(chalk.red(error.message));
@@ -34,7 +34,7 @@ export async function restoreCollectionData(
   dumpFile: string,
   index?: string,
   collection?: string,
-  migrateDocument?: (document: JSONObject) => JSONObject
+  migrateDocument?: (document: JSONObject) => JSONObject,
 ) {
   const mWriteRequest = {
     controller: "bulk",
@@ -60,10 +60,14 @@ export async function restoreCollectionData(
         if (headerSkipped) {
           const document = migrateDocument ? migrateDocument(obj) : obj;
           if (!document._id) {
-            throw new Error(`Document does not have an "_id" property: ${JSON.stringify(document)}`);
+            throw new Error(
+              `Document does not have an "_id" property: ${JSON.stringify(document)}`,
+            );
           }
           if (!document.body) {
-            throw new Error(`Document does not have an "body" property: ${JSON.stringify(document)}`);
+            throw new Error(
+              `Document does not have an "body" property: ${JSON.stringify(document)}`,
+            );
           }
           documents.push(document);
 
@@ -161,7 +165,7 @@ export async function restoreCollectionMappings(
   sdk: any,
   dump: any,
   index?: string,
-  collection?: string
+  collection?: string,
 ) {
   if (dump.type !== "mappings") {
     throw new Error("Dump file does not contain mappings definition");
@@ -180,7 +184,7 @@ export async function restoreCollectionMappings(
   await sdk?.collection.create(
     dstIndex,
     dstCollection,
-    dump.content[srcIndex][srcCollection]
+    dump.content[srcIndex][srcCollection],
   );
 
   return {

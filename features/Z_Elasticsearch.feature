@@ -71,6 +71,7 @@ Feature: Elasticsearch commands
       | flag | --compress     |  |
     Then I should match stdout with "Success"
 
+  @snapshots
   Scenario: Dump ES data to a snapshot into a repository
     When I run the command "es:snapshot:create" with:
       | arg | backup        |  |

@@ -50,7 +50,7 @@ export class FileDecrypt extends Kommand {
 
     if (fs.existsSync(outputFile) && !this.flags.force) {
       throw new Error(
-        `Output file "${outputFile}" already exists. Use -f flag to overwrite it.`
+        `Output file "${outputFile}" already exists. Use -f flag to overwrite it.`,
       );
     }
 
@@ -65,7 +65,7 @@ export class FileDecrypt extends Kommand {
       encryptedContent = fs.readFileSync(this.args.file, "utf8");
     } catch (error: any) {
       throw new Error(
-        `Cannot read encrypted content from file "${this.args.file}": ${error.message}`
+        `Cannot read encrypted content from file "${this.args.file}": ${error.message}`,
       );
     }
 

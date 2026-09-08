@@ -32,11 +32,11 @@ class ApiKeyCreate extends Kommand {
       {
         _id: this.flags.id,
         expiresIn: this.flags.expire,
-      }
+      },
     );
 
     this.logOk(
-      `Successfully created API Key "${apiKey._id}" for user "${this.args.user}"`
+      `Successfully created API Key "${apiKey._id}" for user "${this.args.user}"`,
     );
     this.log(apiKey._source.token);
   }

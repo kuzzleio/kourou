@@ -3,6 +3,8 @@ import { Client } from "sdk-es7";
 
 import { Kommand } from "../../../common";
 
+const SNAPSHOT_TIMEOUT = 30 * 60 * 1000;
+
 export default class EsSnapshotsCreate extends Kommand {
   static initSdk = false;
 
@@ -14,6 +16,12 @@ export default class EsSnapshotsCreate extends Kommand {
       description: "Elasticsearch server URL",
       default: "http://localhost:9200",
     }),
+    wait: flags.boolean({
+      description:
+        "Wait for the snapshot to complete before returning. Use --no-wait to return as soon as Elasticsearch has accepted the request",
+      default: true,
+      allowNo: true,
+    }),
     help: flags.help(),
   };
 
@@ -23,11 +31,17 @@ export default class EsSnapshotsCreate extends Kommand {
   ];
 
   async runSafe() {
-    const esClient = new Client({ node: this.flags.node });
+    const esClient = new Client({
+      node: this.flags.node,
+      // Waiting holds the HTTP request open for as long as the snapshot takes,
+      // which the 30s default would cut short on any real dataset.
+      requestTimeout: this.flags.wait ? SNAPSHOT_TIMEOUT : undefined,
+    });
 
     const esRequest = {
       repository: this.args.repository,
       snapshot: this.args.name,
+      wait_for_completion: this.flags.wait,
       body: {
         indices: "*",
         include_global_state: false,

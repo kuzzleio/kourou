@@ -51,9 +51,9 @@ export default class AppDoctor extends Kommand {
     const suggestions = [];
 
     const [nodeVersion, adminExists, anonymous] = await Promise.all([
-      this.sdk.query({ controller: "debug", action: "nodeVersion", }),
+      this.sdk.query({ controller: "debug", action: "nodeVersion" }),
       this.sdk.server.adminExists({}),
-      this.sdk.security.getRole("anonymous")
+      this.sdk.security.getRole("anonymous"),
     ]);
 
     this.log(`----------------- DoKtor begin his job ! -----------------`);
@@ -68,7 +68,8 @@ export default class AppDoctor extends Kommand {
     } else {
       this.logKo("No admin user exists");
       suggestions.push(
-        `Create an admin user ${anonymousNotRestricted ? "and restrict anonymous role " : ""
+        `Create an admin user ${
+          anonymousNotRestricted ? "and restrict anonymous role " : ""
         }with
            kourou security:createFirstAdmin '{
               credentials: {
@@ -77,7 +78,7 @@ export default class AppDoctor extends Kommand {
                   password: "password"
                 }
               }
-            }' ${anonymousNotRestricted ? "-a reset=true" : ""}`
+            }' ${anonymousNotRestricted ? "-a reset=true" : ""}`,
       );
     }
 
@@ -103,7 +104,7 @@ export default class AppDoctor extends Kommand {
               }
             }
           }' --id=anonymous
-          // or make your own restrictions (see: https://docs.kuzzle.io/core/2/guides/main-concepts/permissions/#roles)`
+          // or make your own restrictions (see: https://docs.kuzzle.io/core/2/guides/main-concepts/permissions/#roles)`,
       );
     }
     const config = await this.sdk.server.getConfig({});
@@ -118,7 +119,7 @@ export default class AppDoctor extends Kommand {
     }
 
     // Redis
-    if ("PONG" === (await this.sdk.ms.ping())) {
+    if ((await this.sdk.ms.ping()) === "PONG") {
       this.logOk("Redis Memory Storage is running");
     } else {
       this.logKo("=> Redis Memory Storage is not running");
@@ -127,35 +128,37 @@ export default class AppDoctor extends Kommand {
 
     this.logOk(`Kuzzle Version: ${config.version}`);
     this.logOk(`Kuzzle NodeJS version: ${nodeVersion.result}`);
-    if (nodeVersion.result as any > this.NODEJS_MAX_VERSION) {
+    if ((nodeVersion.result as any) > this.NODEJS_MAX_VERSION) {
       this.logKo(
-        `=> Kuzzle NodeJS version is not compatible with Kuzzle (max version is ${this.NODEJS_MAX_VERSION})`
+        `=> Kuzzle NodeJS version is not compatible with Kuzzle (max version is ${this.NODEJS_MAX_VERSION})`,
       );
     }
     this.logOk(`NodeJS Building version: ${process.version}`);
-    if (nodeVersion.result as any !== process.version) {
+    if ((nodeVersion.result as any) !== process.version) {
       this.logKo(
-        "=> Kuzzle node version is different from the build node version"
+        "=> Kuzzle node version is different from the build node version",
       );
       suggestions.push(
-        `Match Kuzzle NodeJS version ${nodeVersion.result} with the build NodeJS version ${process.version}`
+        `Match Kuzzle NodeJS version ${nodeVersion.result} with the build NodeJS version ${process.version}`,
       );
     }
 
     let elkVersion;
     try {
       const serverInfo = await this.sdk.server.info({});
-      elkVersion = parseFloat(serverInfo.serverInfo.services.publicStorage.version);
+      elkVersion = parseFloat(
+        serverInfo.serverInfo.services.publicStorage.version,
+      );
       if (elkVersion < this.ELK_MAX_VERSION) {
         this.logOk(
-          `ElasticSearch Version: ${elkVersion} which is compatible with Kuzzle (max version is ${this.ELK_MAX_VERSION})`
+          `ElasticSearch Version: ${elkVersion} which is compatible with Kuzzle (max version is ${this.ELK_MAX_VERSION})`,
         );
       } else {
         this.logKo(
-          `=> ElasticSearch version ${elkVersion} is not compatible with Kuzzle (max version is ${this.ELK_MAX_VERSION})`
+          `=> ElasticSearch version ${elkVersion} is not compatible with Kuzzle (max version is ${this.ELK_MAX_VERSION})`,
         );
         suggestions.push(
-          `Downgrade ElasticSearch to a compatible version (max: ${this.ELK_MAX_VERSION})`
+          `Downgrade ElasticSearch to a compatible version (max: ${this.ELK_MAX_VERSION})`,
         );
       }
 
@@ -168,22 +171,27 @@ export default class AppDoctor extends Kommand {
       const nodes = await client.cat.nodes({ format: "json" });
 
       this.log(`ElasticSearch nodes`);
+      // oclif has no tabular output helper, console.table is the only option
+      // eslint-disable-next-line no-console
       console.table(
-        nodes.body.map((i: any) => ({ node_name: i.name, ip: i.ip }))
+        nodes.body.map((i: any) => ({ node_name: i.name, ip: i.ip })),
       );
       const indices = await client.cat.indices({ format: "json" });
 
       this.log(`ElasticSearch indices`);
+      // eslint-disable-next-line no-console
       console.table(
         indices.body.map((i: any) => ({
           indice_name: i.index,
           health: i.health,
           status: i.status,
           count_docs: i["docs.count"],
-        }))
+        })),
       );
-    } catch (e) {
-      this.logKo("=> Cannot show more information about ElasticSearch (cluster name, nodes, indices) because it's not accessible");
+    } catch {
+      this.logKo(
+        "=> Cannot show more information about ElasticSearch (cluster name, nodes, indices) because it's not accessible",
+      );
     }
 
     let librairies: string[] = [];
@@ -204,14 +212,14 @@ export default class AppDoctor extends Kommand {
         if (result.stdout) {
           this.logOk(` ${lib} is installed`);
         }
-      } catch (e) {
+      } catch {
         this.logKo(`  => ${lib} is not installed`);
         notInstalled.push(lib);
       }
     }
     if (notInstalled.length) {
       suggestions.push(
-        `Install missing libraries: sudo apt-get install ${notInstalled.join(" ")}`
+        `Install missing libraries: sudo apt-get install ${notInstalled.join(" ")}`,
       );
     }
 

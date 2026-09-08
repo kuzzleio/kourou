@@ -5,7 +5,7 @@ import inquirer from "inquirer";
 import cli from "cli-ux";
 import { ChildProcess, spawn } from "child_process";
 import chalk from "chalk";
-import emoji from "node-emoji";
+import { emoji } from "../../support/emoji";
 
 import { Kommand } from "../../common";
 import { execute } from "../../support/execute";
@@ -61,7 +61,7 @@ export class InstanceLogs extends Kommand {
       instance = responses.instance;
     } else if (!instancesList.includes(instance)) {
       throw new Error(
-        `The instance parameter you setted ${instance} isn't running`
+        `The instance parameter you setted ${instance} isn't running`,
       );
     }
 
@@ -71,14 +71,14 @@ export class InstanceLogs extends Kommand {
   private async killInstance(instanceName: string) {
     const docoFilename = path.join(
       this.kourouDir,
-      `kuzzle-${instanceName}.yml`
+      `kuzzle-${instanceName}.yml`,
     );
     cli.action.start(
-      `${emoji.get("boom")}  Killing Kuzzle instance ${instanceName}`,
+      `${emoji.boom}  Killing Kuzzle instance ${instanceName}`,
       undefined,
       {
         stdout: true,
-      }
+      },
     );
     const instanceKill: ChildProcess = spawn("docker", [
       "compose",
@@ -93,22 +93,18 @@ export class InstanceLogs extends Kommand {
         if (code === 0) {
           cli.action.stop(
             chalk.green(
-              `\n${emoji.get(
-                "thumbsup"
-              )}  Instance ${instanceName} successfully killed.`
-            )
+              `\n${emoji.thumbsUp}  Instance ${instanceName} successfully killed.`,
+            ),
           );
         } else {
           cli.action.stop(
             chalk.red(
-              `\n${emoji.get(
-                "thumbsdown"
-              )}  Something went wrong whilde killing instance ${instanceName}.`
-            )
+              `\n${emoji.thumbsDown}  Something went wrong whilde killing instance ${instanceName}.`,
+            ),
           );
         }
         resolve(undefined);
-      })
+      }),
     );
   }
 
@@ -120,11 +116,11 @@ export class InstanceLogs extends Kommand {
         "docker",
         "ps",
         "--format",
-        '"{{.Names}}"'
+        '"{{.Names}}"',
       );
     } catch (error: any) {
       this.warn(
-        `Something went wrong while getting kuzzle running instances list: ${error.message}`
+        `Something went wrong while getting kuzzle running instances list: ${error.message}`,
       );
       return [];
     }
@@ -138,7 +134,7 @@ export class InstanceLogs extends Kommand {
         (containerName) =>
           containerName.includes("kuzzle") &&
           !containerName.includes("redis") &&
-          !containerName.includes("elasticsearch")
+          !containerName.includes("elasticsearch"),
       )
       .map((containerName) => containerName.split("_")[0]);
   }

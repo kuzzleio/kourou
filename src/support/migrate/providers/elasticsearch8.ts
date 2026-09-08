@@ -3,8 +3,6 @@ import { Provider } from ".";
 import { chunkDocuments, throwOnBulkErrors } from "./bulk";
 import { ElasticsearchProviderOptions } from "./elasticsearchTypes";
 
-
-
 export class Elasticsearch8 implements Provider {
   private readonly client: Client;
   private readonly options: ElasticsearchProviderOptions;
@@ -20,7 +18,7 @@ export class Elasticsearch8 implements Provider {
   }
 
   private extractCredentials(url: string) {
-    let auth = undefined;
+    let auth;
     if (url.includes("@")) {
       const urlCleaned = url.replace(/https?:\/\//, "");
       const [credentials] = urlCleaned.split("@");
@@ -28,7 +26,7 @@ export class Elasticsearch8 implements Provider {
 
       if (!username || !password) {
         throw new Error(
-          "Invalid credentials format. Expected format: username:password@url"
+          "Invalid credentials format. Expected format: username:password@url",
         );
       }
 
@@ -102,16 +100,13 @@ export class Elasticsearch8 implements Provider {
         total: body?.hits?.total,
         scrollId: body._scroll_id,
       };
-    } else {
-      const {
-        hits,
-      } = await this.client.scroll({
-        scroll_id: args.scrollId,
-        scroll: this.options.scrollDuration,
-      });
-
-      return hits.hits;
     }
+    const { hits } = await this.client.scroll({
+      scroll_id: args.scrollId,
+      scroll: this.options.scrollDuration,
+    });
+
+    return hits.hits;
   }
 
   async writeData(index: string, docs: any): Promise<number> {

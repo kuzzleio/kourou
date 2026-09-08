@@ -104,7 +104,7 @@ export class KuzzleSDK {
         port: this.port,
         sslConnection: this.ssl,
         pingInterval: 20 * 1000,
-      })
+      }),
     );
 
     this.sdk.volatile = {
@@ -114,8 +114,9 @@ export class KuzzleSDK {
     this.sdk.on("networkError", (error: any) => logger.logKo(error.message));
 
     logger.logInfo(
-      `Connecting to ${this.protocol}${this.ssl ? "s" : ""}://${this.host}:${this.port
-      } ...`
+      `Connecting to ${this.protocol}${this.ssl ? "s" : ""}://${this.host}:${
+        this.port
+      } ...`,
     );
 
     await this.sdk.connect();
@@ -161,7 +162,7 @@ export class KuzzleSDK {
       apiKey = await this.security.createApiKey(
         userKuid,
         "Kourou impersonation token",
-        { expiresIn: "2h", refresh: "wait_for" } as any
+        { expiresIn: "2h", refresh: "wait_for" } as any,
       );
 
       this.sdk.jwt = apiKey._source.token;
@@ -208,13 +209,14 @@ export class KuzzleSDK {
     // Ensure the protocol is HTTP
     if (this.protocol !== "http") {
       throw new TypeError(
-        "HTTP streaming is only available with the HTTP protocol"
+        "HTTP streaming is only available with the HTTP protocol",
       );
     }
 
     // Construct the URL
-    const url = `${this.ssl ? "https" : "http"}://${this.host}:${this.port
-      }/_query`;
+    const url = `${this.ssl ? "https" : "http"}://${this.host}:${
+      this.port
+    }/_query`;
 
     // Construct the request
     const body = JSON.stringify(request);

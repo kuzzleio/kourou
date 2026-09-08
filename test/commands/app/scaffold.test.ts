@@ -58,7 +58,7 @@ describe("app:scaffold", () => {
     kourou("app:scaffold blackmesa --flavor hypervision");
 
     should(fs.existsSync("./blackmesa/.gitignore")).be.eql(true);
-    should(fs.existsSync("./blackmesa/docker-compose.yml")).be.eql(true);
+    should(fs.existsSync("./blackmesa/compose.yml")).be.eql(true);
     should(fs.existsSync("./blackmesa/package.json")).be.eql(true);
     should(fs.existsSync("./blackmesa/tsconfig.node.json")).be.eql(true);
     should(fs.existsSync("./blackmesa/tsconfig.web.json")).be.eql(true);

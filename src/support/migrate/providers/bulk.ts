@@ -6,7 +6,7 @@ const DEFAULT_CHUNK_SIZE = 1000;
  */
 export function* chunkDocuments(
   docs: any[],
-  chunkSize = DEFAULT_CHUNK_SIZE
+  chunkSize = DEFAULT_CHUNK_SIZE,
 ): Generator<any[]> {
   const size = chunkSize > 0 ? chunkSize : DEFAULT_CHUNK_SIZE;
 
@@ -34,7 +34,7 @@ export function throwOnBulkErrors(response: any): void {
 
   const [first] = failures;
   const error: any = new Error(
-    `${failures.length} document(s) rejected by Elasticsearch. First failure on "${first._id}": ${first.error.type} - ${first.error.reason}`
+    `${failures.length} document(s) rejected by Elasticsearch. First failure on "${first._id}": ${first.error.type} - ${first.error.reason}`,
   );
   error.errors = failures.map((item: any) => ({
     document: { _id: item._id },

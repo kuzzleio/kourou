@@ -71,11 +71,11 @@ export class InstanceLogs extends Kommand {
         "docker",
         "ps",
         "--format",
-        '"{{.Names}}"'
+        '"{{.Names}}"',
       );
     } catch {
       this.warn(
-        "Something went wrong while getting kuzzle running instances list"
+        "Something went wrong while getting kuzzle running instances list",
       );
       return [];
     }
@@ -88,7 +88,7 @@ export class InstanceLogs extends Kommand {
       (containerName) =>
         containerName.includes("kuzzle") &&
         !containerName.includes("redis") &&
-        !containerName.includes("elasticsearch")
+        !containerName.includes("elasticsearch"),
     );
   }
 }

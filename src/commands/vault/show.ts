@@ -60,11 +60,11 @@ See https://github.com/kuzzleio/kuzzle-vault/ for more information.
     let encryptedSecrets = {};
     try {
       encryptedSecrets = PARSER.parse(
-        fs.readFileSync(this.args["secrets-file"], "utf8")
+        fs.readFileSync(this.args["secrets-file"], "utf8"),
       );
     } catch (error: any) {
       throw new Error(
-        `Cannot read secrets from file "${this.args["secrets-file"]}": ${error.message}`
+        `Cannot read secrets from file "${this.args["secrets-file"]}": ${error.message}`,
       );
     }
 

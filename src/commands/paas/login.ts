@@ -1,5 +1,4 @@
 import fs from "fs";
-import fetch from "node-fetch";
 
 import { flags } from "@oclif/command";
 import cli from "cli-ux";
@@ -48,13 +47,13 @@ class PaasLogin extends PaasKommand {
     await this.authenticateNPM(username, password);
 
     const apiKey: ApiKey = await this.paas.auth.createApiKey(
-      "Kourou PaaS API Key"
+      "Kourou PaaS API Key",
     );
 
     this.createProjectCredentials(apiKey);
 
     this.logOk(
-      `Successfully logged in as ${username}. Your Kuzzle Enterprise license is now enabled on this host.`
+      `Successfully logged in as ${username}. Your Kuzzle Enterprise license is now enabled on this host.`,
     );
   }
 
@@ -66,7 +65,7 @@ class PaasLogin extends PaasKommand {
     };
 
     this.logInfo(
-      `Saving credentials for project "${project}" in "${projectFile}".`
+      `Saving credentials for project "${project}" in "${projectFile}".`,
     );
 
     fs.writeFileSync(projectFile, JSON.stringify(credentials, null, 2));
@@ -81,7 +80,7 @@ class PaasLogin extends PaasKommand {
         "Content-Type": "application/json",
         Accept: "application/json",
         Authorization: `Basic ${Buffer.from(`${username}:${password}`).toString(
-          "base64"
+          "base64",
         )}`,
       },
       body: JSON.stringify({
@@ -92,7 +91,7 @@ class PaasLogin extends PaasKommand {
 
     const targetUrl = `https://${this.packagesHost}/-/user/org.couchdb.user:${username}`;
     const response = await fetch(targetUrl, options);
-    const json = await response.json();
+    const json = (await response.json()) as { error?: string; token?: string };
 
     if (response.status !== 201) {
       throw new Error(json.error);
@@ -100,15 +99,16 @@ class PaasLogin extends PaasKommand {
 
     const { token } = json;
 
+    if (!token) {
+      throw new Error(
+        "The registry accepted the credentials but returned no authentication token",
+      );
+    }
+
     spawnSync(
       "npm",
-      [
-        "config",
-        "set",
-        "@kuzzleio:registry",
-        `https://${this.packagesHost}`,
-      ],
-      { stdio: "inherit" }
+      ["config", "set", "@kuzzleio:registry", `https://${this.packagesHost}`],
+      { stdio: "inherit" },
     );
     spawnSync("npm", ["set", `//${this.packagesHost}/:_authToken`, token], {
       stdio: "inherit",

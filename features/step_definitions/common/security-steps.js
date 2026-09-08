@@ -1,5 +1,5 @@
 const should = require("should"),
-  { Given, Then, setDefaultTimeout } = require("cucumber"),
+  { Given, Then, setDefaultTimeout } = require("@cucumber/cucumber"),
   fs = require("fs");
 
 setDefaultTimeout(20 * 1000);

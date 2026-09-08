@@ -45,7 +45,7 @@ export class FileTest extends Kommand {
       encryptedContent = fs.readFileSync(this.args.file, "utf8");
     } catch (error: any) {
       throw new Error(
-        `Cannot read encrypted content from file "${this.args.file}": ${error.message}`
+        `Cannot read encrypted content from file "${this.args.file}": ${error.message}`,
       );
     }
 

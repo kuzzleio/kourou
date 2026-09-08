@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (-v|--version|version)
-kourou/1.3.0 linux-x64 node-v24.18.0
+kourou/1.4.0-dev.4 linux-x64 node-v24.20.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -759,6 +759,9 @@ ARGUMENTS
 OPTIONS
   -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --help           show CLI help
+
+  --[no-]wait      Wait for the snapshot to complete before returning. Use --no-wait to return as soon as Elasticsearch
+                   has accepted the request
 ```
 
 _See code: [lib/commands/es/snapshot/create.js](lib/commands/es/snapshot/create.js)_
@@ -816,6 +819,9 @@ ARGUMENTS
 OPTIONS
   -n, --node=node  [default: http://localhost:9200] Elasticsearch server URL
   --help           show CLI help
+
+  --[no-]wait      Wait for the restore to complete before returning. Use --no-wait to return as soon as Elasticsearch
+                   has accepted the request
 ```
 
 _See code: [lib/commands/es/snapshot/restore.js](lib/commands/es/snapshot/restore.js)_

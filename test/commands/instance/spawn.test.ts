@@ -18,7 +18,7 @@ xdescribe("instance:spawn", () => {
       await wait(WAIT_TIME_BEFORE_TEST);
       expect(ctx.stdout).to.contain("Kuzzle version 2 is launching");
       expect(ctx.stdout).to.contain(
-        "Kuzzle is booting in the background right now"
+        "Kuzzle is booting in the background right now",
       );
       done();
     });
@@ -34,7 +34,7 @@ xdescribe("instance:spawn", () => {
       await wait(WAIT_TIME_BEFORE_TEST);
       expect(ctx.stdout).to.contain("Kuzzle version 1 is launching");
       expect(ctx.stdout).to.contain(
-        "Kuzzle is booting in the background right now"
+        "Kuzzle is booting in the background right now",
       );
       done();
     });

@@ -14,3 +14,4 @@ test-secrets.enc.json
 test-secrets.json
 blackmesa
 .DS_Store
+tsconfig.tsbuildinfo

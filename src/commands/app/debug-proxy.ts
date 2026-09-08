@@ -151,7 +151,7 @@ export default class DebugProxy extends Kommand {
             this.logInfo(JSON.stringify(payload.result, null, 2));
           }
           ws.send(JSON.stringify(payload.result));
-        }
+        },
       );
 
       // When receiving message from Chrome Devtools Protocol, we forward it to the DebugController
@@ -171,8 +171,8 @@ export default class DebugProxy extends Kommand {
                   params: json.params,
                 },
                 null,
-                2
-              )
+                2,
+              ),
             );
           }
 
@@ -193,8 +193,8 @@ export default class DebugProxy extends Kommand {
                   result: response.result,
                 },
                 null,
-                2
-              )
+                2,
+              ),
             );
           }
 
@@ -203,7 +203,7 @@ export default class DebugProxy extends Kommand {
             JSON.stringify({
               id: json.id,
               result: response.result,
-            })
+            }),
           );
         } catch (e) {
           this.logKo(`${e}`);
@@ -222,10 +222,10 @@ export default class DebugProxy extends Kommand {
 
     server.listen(this.flags.forwardPort, () => {
       this.logOk(
-        `Listening on port ${this.flags.forwardPort}, forwarding to Kuzzle at ${this.flags.host}:${this.flags.port}`
+        `Listening on port ${this.flags.forwardPort}, forwarding to Kuzzle at ${this.flags.host}:${this.flags.port}`,
       );
       this.logInfo(
-        `Showing to Chrome Debugger as "Kuzzle Debugger - ${this.flags.host}:${this.flags.port}"`
+        `Showing to Chrome Debugger as "Kuzzle Debugger - ${this.flags.host}:${this.flags.port}"`,
       );
       this.logInfo("Waiting for Chrome Debugger to connect...");
     });

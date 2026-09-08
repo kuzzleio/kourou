@@ -1,6 +1,6 @@
 const { Kuzzle, WebSocket, Http } = require("kuzzle-sdk"),
   { Client } = require("sdk-es7"),
-  { setWorldConstructor } = require("cucumber");
+  { setWorldConstructor } = require("@cucumber/cucumber");
 
 require("./assertions");
 

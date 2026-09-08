@@ -34,7 +34,7 @@ function flattenObject(target: JSONObject): JSONObject {
 function flattenStep(
   output: JSONObject,
   object: JSONObject,
-  prev: string | null = null
+  prev: string | null = null,
 ): void {
   const keys = Object.keys(object);
 
@@ -67,7 +67,7 @@ abstract class AbstractDumper {
     protected readonly batchSize: number,
     protected readonly destPath: string,
     protected readonly query: any = {},
-    protected readonly scrollTTL: string = "20s"
+    protected readonly scrollTTL: string = "20s",
   ) {
     this.collectionDir = path.join(this.destPath, this.collection);
     this.options = {
@@ -82,14 +82,12 @@ abstract class AbstractDumper {
    *
    * @returns void
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public async setup() {}
 
   /**
    * One-shot call before iterating over the data. Can be
    * used to write the header of the dumped output.
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public async writeHeader() {}
 
   /**
@@ -110,7 +108,6 @@ abstract class AbstractDumper {
    */
   abstract onResult(document: { _id: string; _source: any }): Promise<void>;
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public async tearDown() {}
 
   /**
@@ -123,11 +120,11 @@ abstract class AbstractDumper {
     fs.mkdirSync(this.collectionDir, { recursive: true });
     this.filename = path.join(
       this.collectionDir,
-      `documents.${this.fileExtension}`
+      `documents.${this.fileExtension}`,
     );
     this.writeStream = fs.createWriteStream(this.filename);
     const waitWrite: Promise<void> = new Promise((resolve, reject) =>
-      this.writeStream ? this.writeStream.on("finish", resolve) : reject()
+      this.writeStream ? this.writeStream.on("finish", resolve) : reject(),
     );
 
     this.writeStream.on("error", (error) => {
@@ -141,7 +138,7 @@ abstract class AbstractDumper {
       this.index,
       this.collection,
       { query: this.query },
-      this.options
+      this.options,
     );
 
     const progressBar = cli.progress({
@@ -237,7 +234,7 @@ class CSVDumper extends AbstractDumper {
     query: any = {},
     protected fields: string[],
     protected readonly separator = ",",
-    protected readonly scrollTTL: string = "2s"
+    protected readonly scrollTTL: string = "2s",
   ) {
     super(sdk, index, collection, batchSize, destPath, query, scrollTTL);
   }
@@ -294,7 +291,7 @@ export async function dumpCollectionData(
   query: any = {},
   format = "jsonl",
   fields: string[] = [],
-  scrollTTL?: string
+  scrollTTL?: string,
 ) {
   let dumper: AbstractDumper;
   switch (format.toLowerCase()) {
@@ -306,7 +303,7 @@ export async function dumpCollectionData(
         batchSize,
         destPath,
         query,
-        scrollTTL
+        scrollTTL,
       );
       return dumper.dump();
 
@@ -320,7 +317,7 @@ export async function dumpCollectionData(
         query,
         fields,
         ",",
-        scrollTTL
+        scrollTTL,
       );
       return dumper.dump();
 
@@ -332,7 +329,7 @@ export async function dumpCollectionData(
         batchSize,
         destPath,
         query,
-        scrollTTL
+        scrollTTL,
       );
       return dumper.dump();
   }
@@ -343,7 +340,7 @@ export async function dumpCollectionMappings(
   index: string,
   collection: string,
   destPath: string,
-  format = "jsonl"
+  format = "jsonl",
 ) {
   const collectionDir = path.join(destPath, collection);
   const filename = path.join(collectionDir, "mappings.json");
@@ -357,7 +354,7 @@ export async function dumpCollectionMappings(
     content: {
       [index]: {
         [collection]: {
-          mappings
+          mappings,
           // For later use, we could add the settings here
           // eg: "settings": { "index.mapping.total_fields.limit": 10000 }
           // This can be added after the dump and it will work with kourou:import command
@@ -368,6 +365,6 @@ export async function dumpCollectionMappings(
 
   fs.writeFileSync(
     filename,
-    JSON.stringify(format.toLowerCase() === "jsonl" ? dump : mappings, null, 2)
+    JSON.stringify(format.toLowerCase() === "jsonl" ? dump : mappings, null, 2),
   );
 }

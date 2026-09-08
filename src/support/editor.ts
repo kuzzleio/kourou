@@ -53,7 +53,7 @@ export class Editor {
       // eslint-disable-next-line
       console.error(response.stderr);
       throw new Error(
-        `Unable to open editor "${editor}": ${response.error}.\nPlease set EDITOR environment variable.`
+        `Unable to open editor "${editor}": ${response.error}.\nPlease set EDITOR environment variable.`,
       );
     }
 

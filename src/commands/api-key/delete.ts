@@ -22,7 +22,7 @@ class ApiKeyDelete extends Kommand {
     await this.sdk.security.deleteApiKey(this.args.user, this.args.id);
 
     this.logOk(
-      `Successfully deleted API Key "${this.args.id}" of user "${this.args.user}"`
+      `Successfully deleted API Key "${this.args.id}" of user "${this.args.user}"`,
     );
   }
 }

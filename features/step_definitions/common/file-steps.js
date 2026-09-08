@@ -1,4 +1,4 @@
-const { Then } = require("cucumber"),
+const { Then } = require("@cucumber/cucumber"),
   fs = require("fs"),
   should = require("should");
 Then("I get the file in {string} containing", function (path, contents) {

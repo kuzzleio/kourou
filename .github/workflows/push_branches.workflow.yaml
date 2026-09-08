@@ -5,15 +5,14 @@ on:
     branches:
       - master
       - 1-dev
-      - beta
 
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [22, 24]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -23,11 +22,11 @@ jobs:
 
   build:
     name: Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [lint]
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [22, 24]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -42,11 +41,11 @@ jobs:
 
   functional-test:
     name: Functional Tests
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [build]
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [22, 24]
         test-set: [stdout, cucumber]
     steps:
       - uses: actions/checkout@v4
@@ -70,7 +69,7 @@ jobs:
 
   release:
     name: Release process
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [functional-test]
     permissions:
       contents: write
@@ -104,6 +103,10 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          # Names the changelog file (changelogs/CHANGELOG_<channel>.md). Without
+          # it, the shared config falls back to the branch name, which would give
+          # CHANGELOG_1-dev.md instead of the `dev` prerelease channel.
+          RELEASE_CHANNEL: ${{ github.ref_name == '1-dev' && 'dev' || github.ref_name }}
           SEMANTIC_RELEASE_NPM_PUBLISH: "true"
           SEMANTIC_RELEASE_SLACK_WEBHOOK: ${{ secrets.SEMANTIC_RELEASE_SLACK_WEBHOOK }}
         run: npx semantic-release
