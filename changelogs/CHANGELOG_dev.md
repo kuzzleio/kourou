@@ -1,3 +1,9 @@
+## [1.5.0-dev.2](https://github.com/kuzzleio/kourou/compare/v1.5.0-dev.1...v1.5.0-dev.2) (2026-09-08)
+
+### Bug Fixes
+
+* **cli:** stop passing the command result as the flush timeout ([2c3c05a](https://github.com/kuzzleio/kourou/commit/2c3c05a6a035f075c0430c6f716b1cc908bdd315))
+
 ## [1.5.0-dev.1](https://github.com/kuzzleio/kourou/compare/v1.4.0...v1.5.0-dev.1) (2026-09-08)
 
 ### Bug Fixes
