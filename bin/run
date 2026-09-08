@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-const oclif = require('@oclif/core')
-
 /**
  * oclif v1 accepted -v as an alias for --version, @oclif/core does not, and a
  * script calling `kourou -v` would print nothing at all rather than fail.
@@ -14,4 +12,8 @@ if (process.argv[2] === '-v') {
   process.argv[2] = '--version'
 }
 
-oclif.run().then(oclif.flush).catch(oclif.handle)
+void (async () => {
+  const oclif = await import('@oclif/core')
+
+  await oclif.execute({ dir: __dirname })
+})()
