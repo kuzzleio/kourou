@@ -56,7 +56,7 @@
     "chai": "4.5.0",
     "cucumber": "6.0.7",
     "eslint": "9.32.0",
-    "eslint-plugin-kuzzle": "1.0.0-dev.2",
+    "eslint-plugin-kuzzle": "1.0.0",
     "globby": "11.1.0",
     "mocha": "8.4.0",
     "nyc": "15.1.0",
