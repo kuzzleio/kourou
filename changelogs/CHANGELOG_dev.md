@@ -1,3 +1,9 @@
+## [1.5.0-dev.4](https://github.com/kuzzleio/kourou/compare/v1.5.0-dev.3...v1.5.0-dev.4) (2026-09-08)
+
+### Dependencies
+
+* **deps:** move semantic-release-config-kuzzle to 1.7.2 ([6f452ea](https://github.com/kuzzleio/kourou/commit/6f452ea4aec5169a18e3ad0f9f19bfaf10289818))
+
 ## [1.5.0-dev.3](https://github.com/kuzzleio/kourou/compare/v1.5.0-dev.2...v1.5.0-dev.3) (2026-09-08)
 
 ### Bug Fixes
