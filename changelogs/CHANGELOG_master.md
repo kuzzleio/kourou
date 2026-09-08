@@ -1,3 +1,16 @@
+## [1.5.0](https://github.com/kuzzleio/kourou/compare/v1.4.0...v1.5.0) (2026-09-08)
+
+### Dependencies
+
+* **deps:** move from oclif v1 to @oclif/core v5 ([ec92243](https://github.com/kuzzleio/kourou/commit/ec9224344934dc805057485326098a7e7f09a840))
+* **deps:** move semantic-release-config-kuzzle to 1.7.2 ([6f452ea](https://github.com/kuzzleio/kourou/commit/6f452ea4aec5169a18e3ad0f9f19bfaf10289818))
+
+### Bug Fixes
+
+* **cli:** stop passing the command result as the flush timeout ([2c3c05a](https://github.com/kuzzleio/kourou/commit/2c3c05a6a035f075c0430c6f716b1cc908bdd315))
+* **es:migrate:** honor the answer to the reset confirmation ([9c35b9c](https://github.com/kuzzleio/kourou/commit/9c35b9c401ac5c70faabc00865860097a9f7b325))
+* **sdk:query:** stop printing "undefined" for an empty result ([e767e63](https://github.com/kuzzleio/kourou/commit/e767e63603f8c3b77efc5abd4ec28e546d9e3f4c))
+
 ## [1.4.0](https://github.com/kuzzleio/kourou/compare/v1.3.0...v1.4.0) (2026-09-08)
 
 ### Bug Fixes
