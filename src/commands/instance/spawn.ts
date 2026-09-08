@@ -218,7 +218,6 @@ export default class InstanceSpawn extends Kommand {
   private async findAvailablePort(): Promise<number> {
     let i = 0;
 
-    // eslint-disable-next-line
     while (true) {
       if (await this.isPortAvailable(7512 + i)) {
         return i;

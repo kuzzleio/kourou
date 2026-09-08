@@ -149,7 +149,6 @@ ${this.getVariables()}
     if (!userError && (this.haveSubscription || this.flags["keep-alive"])) {
       this.logInfo("Keep alive for realtime notifications ...");
 
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       await new Promise(() => {});
     }
   }

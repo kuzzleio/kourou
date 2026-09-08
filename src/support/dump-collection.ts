@@ -82,14 +82,12 @@ abstract class AbstractDumper {
    *
    * @returns void
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public async setup() {}
 
   /**
    * One-shot call before iterating over the data. Can be
    * used to write the header of the dumped output.
    */
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public async writeHeader() {}
 
   /**
@@ -110,7 +108,6 @@ abstract class AbstractDumper {
    */
   abstract onResult(document: { _id: string; _source: any }): Promise<void>;
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public async tearDown() {}
 
   /**
