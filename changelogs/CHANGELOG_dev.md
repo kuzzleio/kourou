@@ -1,3 +1,9 @@
+## [1.5.1-dev.1](https://github.com/kuzzleio/kourou/compare/v1.5.0...v1.5.1-dev.1) (2026-10-09)
+
+### Bug Fixes
+
+* **es:migrate:** handle index specifications without settings ([4b6432b](https://github.com/kuzzleio/kourou/commit/4b6432be25bcad0af9432d2eb368ed9f3ea5048d))
+
 ## [1.5.0-dev.4](https://github.com/kuzzleio/kourou/compare/v1.5.0-dev.3...v1.5.0-dev.4) (2026-09-08)
 
 ### Dependencies
