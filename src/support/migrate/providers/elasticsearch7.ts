@@ -76,6 +76,8 @@ export class Elasticsearch7 implements Provider {
   }
 
   async createIndex(index: string, specifications: any): Promise<void> {
+    specifications = specifications ?? {};
+    specifications.settings = specifications.settings ?? {};
     specifications.settings.write = {
       wait_for_active_shards: 1, // Wait for at least one shard to be active before returning
     };

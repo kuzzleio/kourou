@@ -27,7 +27,7 @@ $ npm install -g kourou
 $ kourou COMMAND
 running command...
 $ kourou (--version)
-kourou/1.5.0 linux-x64 node-v24.20.0
+kourou/1.5.1-dev.3 linux-x64 node-v24.21.0
 $ kourou --help [COMMAND]
 USAGE
   $ kourou COMMAND
@@ -387,6 +387,9 @@ FLAGS
 
 DESCRIPTION
   Scaffolds a new Kuzzle application
+
+  Template repositories are private: this command is reserved to Kuzzle customers and members of the kuzzleio GitHub
+  organization. It requires GitHub credentials allowed to read the template repositories (see --token).
 ```
 
 _See code: [src/commands/app/scaffold.ts](src/commands/app/scaffold.ts)_

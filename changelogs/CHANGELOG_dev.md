@@ -1,3 +1,21 @@
+## [1.5.1-dev.3](https://github.com/kuzzleio/kourou/compare/v1.5.1-dev.2...v1.5.1-dev.3) (2026-10-14)
+
+### Bug Fixes
+
+* **app:scaffold:** let oclif wrap the command description ([98a4d37](https://github.com/kuzzleio/kourou/commit/98a4d37cbc124a22da047588f4fcf36b36def193))
+
+## [1.5.1-dev.2](https://github.com/kuzzleio/kourou/compare/v1.5.1-dev.1...v1.5.1-dev.2) (2026-10-14)
+
+### Bug Fixes
+
+* don't display undefined error status, id and reason ([81f93c8](https://github.com/kuzzleio/kourou/commit/81f93c8b93bd9c9d414603dc5bdfb444a3c7bfc3))
+
+## [1.5.1-dev.1](https://github.com/kuzzleio/kourou/compare/v1.5.0...v1.5.1-dev.1) (2026-10-09)
+
+### Bug Fixes
+
+* **es:migrate:** handle index specifications without settings ([4b6432b](https://github.com/kuzzleio/kourou/commit/4b6432be25bcad0af9432d2eb368ed9f3ea5048d))
+
 ## [1.5.0-dev.4](https://github.com/kuzzleio/kourou/compare/v1.5.0-dev.3...v1.5.0-dev.4) (2026-09-08)
 
 ### Dependencies

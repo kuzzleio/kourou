@@ -9,7 +9,9 @@ export default class AppScaffold extends Kommand {
   public templatesDir = "/tmp/kuzzle-templates";
   static initSdk = false;
 
-  static description = "Scaffolds a new Kuzzle application";
+  static description = `Scaffolds a new Kuzzle application
+
+Template repositories are private: this command is reserved to Kuzzle customers and members of the kuzzleio GitHub organization. It requires GitHub credentials allowed to read the template repositories (see --token).`;
 
   static flags = {
     help: Flags.help(),
@@ -193,9 +195,11 @@ export default class AppScaffold extends Kommand {
 
     throw new Error(
       `Unable to clone the template repository "kuzzleio/${repo}". ` +
-        "If this repository is private, provide credentials with the --token flag, " +
-        "the GITHUB_TOKEN environment variable, the GitHub CLI (gh auth login) " +
-        `or a SSH key allowed to read it.\n${this.hideToken(
+        "Template repositories are private and reserved to Kuzzle customers and " +
+        "members of the kuzzleio GitHub organization. Provide credentials allowed " +
+        "to read it with the --token flag, the GITHUB_TOKEN environment variable, " +
+        "the GitHub CLI (gh auth login) or a SSH key. " +
+        `If you need access, contact Kuzzle support.\n${this.hideToken(
           lastError?.message || "",
         )}`,
     );
