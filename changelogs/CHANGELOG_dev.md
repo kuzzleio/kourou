@@ -1,3 +1,9 @@
+## [1.5.1-dev.3](https://github.com/kuzzleio/kourou/compare/v1.5.1-dev.2...v1.5.1-dev.3) (2026-10-14)
+
+### Bug Fixes
+
+* **app:scaffold:** let oclif wrap the command description ([98a4d37](https://github.com/kuzzleio/kourou/commit/98a4d37cbc124a22da047588f4fcf36b36def193))
+
 ## [1.5.1-dev.2](https://github.com/kuzzleio/kourou/compare/v1.5.1-dev.1...v1.5.1-dev.2) (2026-10-14)
 
 ### Bug Fixes
