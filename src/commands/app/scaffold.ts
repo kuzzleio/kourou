@@ -11,9 +11,7 @@ export default class AppScaffold extends Kommand {
 
   static description = `Scaffolds a new Kuzzle application
 
-Template repositories are private: this command is reserved to Kuzzle customers
-and members of the kuzzleio GitHub organization. It requires GitHub credentials
-allowed to read the template repositories (see --token).`;
+Template repositories are private: this command is reserved to Kuzzle customers and members of the kuzzleio GitHub organization. It requires GitHub credentials allowed to read the template repositories (see --token).`;
 
   static flags = {
     help: Flags.help(),
