@@ -1,3 +1,9 @@
+## [1.5.1-dev.2](https://github.com/kuzzleio/kourou/compare/v1.5.1-dev.1...v1.5.1-dev.2) (2026-10-14)
+
+### Bug Fixes
+
+* don't display undefined error status, id and reason ([81f93c8](https://github.com/kuzzleio/kourou/commit/81f93c8b93bd9c9d414603dc5bdfb444a3c7bfc3))
+
 ## [1.5.1-dev.1](https://github.com/kuzzleio/kourou/compare/v1.5.0...v1.5.1-dev.1) (2026-10-09)
 
 ### Bug Fixes
