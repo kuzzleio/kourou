@@ -159,17 +159,27 @@ export abstract class Kommand extends Command {
         ? `\n\nElasticsearch response: ${JSON.stringify(esBody)}`
         : "";
 
-      this.logKo(
-        `Error stack: \n${stack || error.message}${esDetails}\n\nError status: ${
-          error.status ?? error.statusCode ?? error.meta?.statusCode
-        }\n\nError id: ${error.id}${errorLink}`,
-      );
+      const status = error.status ?? error.statusCode ?? error.meta?.statusCode;
+
+      // Status and id only exist on Kuzzle and Elasticsearch errors, don't
+      // display them for other errors
+      let message = `Error stack: \n${stack || error.message}${esDetails}`;
+
+      if (status !== undefined) {
+        message += `\n\nError status: ${status}`;
+      }
+
+      if (error.id !== undefined) {
+        message += `\n\nError id: ${error.id}${errorLink}`;
+      }
+
+      this.logKo(message);
 
       if (Array.isArray(error.errors)) {
         for (const e of error.errors) {
           this.logKo(`${e.document._id} : ${e.reason}`);
         }
-      } else {
+      } else if (error.reason !== undefined) {
         this.logKo(JSON.stringify(error.reason));
       }
 
