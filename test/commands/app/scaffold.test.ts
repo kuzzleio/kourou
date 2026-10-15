@@ -14,7 +14,7 @@ describe("app:scaffold", () => {
     should(fs.existsSync("./blackmesa/.eslintrc.json")).be.eql(true);
     should(fs.existsSync("./blackmesa/.gitignore")).be.eql(true);
     should(fs.existsSync("./blackmesa/Dockerfile")).be.eql(true);
-    should(fs.existsSync("./blackmesa/docker-compose.yml")).be.eql(true);
+    should(fs.existsSync("./blackmesa/compose.yml")).be.eql(true);
     should(fs.existsSync("./blackmesa/app.ts")).be.eql(true);
     should(fs.existsSync("./blackmesa/package.json")).be.eql(true);
     should(fs.existsSync("./blackmesa/README.md")).be.eql(true);
@@ -31,7 +31,7 @@ describe("app:scaffold", () => {
     should(fs.existsSync("./blackmesa/.eslintrc.json")).be.eql(true);
     should(fs.existsSync("./blackmesa/.gitignore")).be.eql(true);
     should(fs.existsSync("./blackmesa/Dockerfile")).be.eql(true);
-    should(fs.existsSync("./blackmesa/docker-compose.yml")).be.eql(true);
+    should(fs.existsSync("./blackmesa/compose.yml")).be.eql(true);
     should(fs.existsSync("./blackmesa/app.ts")).be.eql(true);
     should(fs.existsSync("./blackmesa/package.json")).be.eql(true);
     should(fs.existsSync("./blackmesa/README.md")).be.eql(true);
